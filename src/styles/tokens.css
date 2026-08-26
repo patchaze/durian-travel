@@ -32,6 +32,7 @@
   /* ── Borders & Surfaces ── */
   --color-border: #E2E6EB;
   --color-border-light: #EFF1F4;
+  --color-border-focus: #2A5580;
   --color-surface: #FFFFFF;
   --color-surface-raised: #FFFFFF;
 
@@ -42,7 +43,7 @@
 
   /* ── Typography ── */
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
 
   --text-xs: 0.75rem;
   /* 12px */
@@ -92,6 +93,11 @@
   --space-16: 4rem;
   --space-20: 5rem;
   --space-24: 6rem;
+
+  /* ── Layout widths ── */
+  --max-width-content: 1200px;
+  --max-width-narrow: 48rem;
+  --max-width-prose: 65ch;
 
   /* ── Radii ── */
   --radius-sm: 6px;
