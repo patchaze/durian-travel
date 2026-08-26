@@ -1,9 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import avatarImg from '../assets/images/chatbot-avatar.png';
-
-// Pass the API key at build time so client JS can use it
-const geminiApiKey = import.meta.env.PUBLIC_GEMINI_API_KEY || '';
 ---
 
 <div id="chatbot-container" class="chatbot-container">
@@ -63,11 +60,6 @@ const geminiApiKey = import.meta.env.PUBLIC_GEMINI_API_KEY || '';
   </div>
 </div>
 
-<!-- Inject the API key as a data attribute on the container -->
-<script define:vars={{ geminiApiKey }}>
-  window.__DURIAN_GEMINI_KEY = geminiApiKey;
-</script>
-
 <style>
   .chatbot-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; font-family: var(--font-sans, system-ui, sans-serif); }
   .chatbot-toggle { width: 60px; height: 60px; border-radius: 50%; background: var(--color-navy, #0F2138); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.2); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
@@ -123,10 +115,10 @@ const geminiApiKey = import.meta.env.PUBLIC_GEMINI_API_KEY || '';
 <script>
   const SYSTEM_PROMPT = "You are the DURIAN Travel Assistant, a friendly and practical travel concierge for Durian Travel at duriantravel.com. You help users plan smoother Europe trips with strong Schengen visa guidance, realistic itineraries, and health-aware preparation. Keep responses concise and helpful, usually 2 short paragraphs max. Durian Travel now uses package-based support rather than old single-service pages. The main packages are: [The Schengen Blueprint](/services/schengen-visa-help/), [The First Journey Package](/services/first-international-trip/), [The Nomad Infrastructure Plan](/services/digital-nomad-visa-strategy/), [The Family Expedition Bundle](/services/family-travel-planning/), [The Recovery Route](/services/visa-refusal-reapplication/), [The Wellness Journey](/services/travel-health-planning/), and [The Grand Circuit](/services/multi-region-trip-planning/). If asked about non-European destinations, politely redirect to Europe-focused help unless the question is about transit or comparative planning.\n\nIMPORTANT: When mentioning pages or services on the site, always embed a clickable markdown link on a relevant keyword or phrase. Do not display raw URLs. Use this format: [anchor text](url). Available pages include: [Services](/services), [Schengen Visa Guide](/schengen-visa-guide), [Free Visa Audit](/free-visa-audit), [Destinations](/destinations), [Blog](/blog), [Contact](/contact), [FAQ](/faq), and [About Us](/about-us). Never display a raw URL like /services. Always wrap it in a descriptive markdown link.";
 
-  // Pollinations AI — free, no API key required
+  // Pollinations AI — free, no API key required.
+  // Never call a keyed API from here: this script ships to every visitor, so any
+  // key embedded in it is public. A keyed model would need a server-side endpoint.
   const POLLINATIONS_URL = "https://text.pollinations.ai/openai";
-  // Gemini as secondary option if key is provided
-  const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
   const toggleBtn = document.getElementById('chatbot-toggle');
   const closeBtn = document.getElementById('chatbot-close');
@@ -194,21 +186,9 @@ const geminiApiKey = import.meta.env.PUBLIC_GEMINI_API_KEY || '';
     typingIndicator?.classList.remove('hidden');
     if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    const geminiKey = (window as any).__DURIAN_GEMINI_KEY;
-    const hasGeminiKey = geminiKey && geminiKey !== 'your_gemini_api_key_here';
-
     try {
-      let responseText: string | null = null;
-
-      if (hasGeminiKey) {
-        // Use Gemini if a valid key is provided
-        responseText = await callGeminiAPI(geminiKey);
-      }
-
-      if (!responseText) {
-        // Primary: use Pollinations AI (free, no key needed)
-        responseText = await callPollinationsAPI();
-      }
+      // Pollinations AI (free, no key needed); built-in answers if it fails.
+      const responseText: string | null = await callPollinationsAPI();
 
       typingIndicator?.classList.add('hidden');
 
@@ -260,43 +240,6 @@ const geminiApiKey = import.meta.env.PUBLIC_GEMINI_API_KEY || '';
       return data?.choices?.[0]?.message?.content || null;
     } catch (err) {
       console.warn('Pollinations API failed:', err);
-      return null;
-    }
-  }
-
-  async function callGeminiAPI(apiKey: string): Promise<string | null> {
-    try {
-      // Convert OpenAI format to Gemini format
-      const geminiContents = chatHistory.map(msg => ({
-        role: msg.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: msg.content }]
-      }));
-
-      const requestBody = {
-        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-        contents: geminiContents,
-        generationConfig: {
-          temperature: 0.7,
-          topP: 0.9,
-          maxOutputTokens: 512
-        }
-      };
-
-      const response = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody)
-      });
-
-      if (!response.ok) {
-        console.warn('Gemini API error:', response.status);
-        return null;
-      }
-
-      const data = await response.json();
-      return data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
-    } catch (err) {
-      console.warn('Gemini API failed:', err);
       return null;
     }
   }
