@@ -4,7 +4,7 @@ title: "Schengen Visa Requirements: The Complete Guide for Non-European Traveler
 seoTitle: "Schengen Visa Requirements: The Complete Guide for Non-European Travelers (2026)"
 description: "Everything non-European travelers need to know about the Schengen visa process: document checklist, financial proof, embassy selection, cover letter strategy, and the mistakes that trigger refusals. Updated April 2026."
 pubDate: "2026-03-29"
-modDate: "2026-04-10"
+modDate: "2026-08-27"
 author: "Patricia Azevedo"
 tags: ["Schengen", "Visa", "Non-European Travelers", "Visa Strategy"]
 readTime: 15
@@ -39,7 +39,7 @@ If your dates are fixed, do not leave the appointment for the last minute.
 | Schengen visa fee | EUR 90 for adults, EUR 45 for children aged 6 to 12 |
 | Visa timing | Apply no earlier than 6 months before travel and at least 15 days before departure |
 | Processing time | Usually 15 days, up to 45 days in complex cases |
-| EES | Operational since 12 October 2025, with full implementation by 10 April 2026 |
+| EES | Fully operational across all Schengen countries since 10 April 2026 |
 | ETIAS | Starts in the last quarter of 2026 for visa-exempt travelers only |
 
 ETIAS applies only to visa-exempt travelers. If you require a Schengen visa, ETIAS does not apply to you.
@@ -256,4 +256,4 @@ Make the route, the money, the bookings, and the cover letter tell the same stor
 
 ---
 
-*Sources: European Commission visa policy and applying-for-a-Schengen-visa guidance; Schengen visa fee update from the European Commission; EES and ETIAS official EU pages. Educational guidance only. Requirements can change by consulate, nationality, and travel purpose. Always confirm on the official site of the embassy, consulate, or visa center handling your application.*
+*Sources: European Commission visa policy and applying-for-a-Schengen-visa guidance; Schengen visa fee update from the European Commission; EES and ETIAS official EU pages. EES and ETIAS status last checked against the European Commission's Migration and Home Affairs pages on 27 August 2026. Educational guidance only. Requirements can change by consulate, nationality, and travel purpose. Always confirm on the official site of the embassy, consulate, or visa center handling your application.*
