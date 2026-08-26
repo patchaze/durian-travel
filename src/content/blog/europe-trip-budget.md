@@ -14,6 +14,8 @@ A Europe budget is not about denying yourself joy. It is about preventing the sp
 
 If you budget in euros first, the trip gets easier to understand and much harder to mess up.
 
+If you would rather put your own numbers straight into something that does the arithmetic, use the [free budget calculator](/tools/budget/). It follows the same method as this guide: fixed costs, daily costs, buffer. The rest of this page explains why it is built that way.
+
 ## Budget Categories That Matter
 
 Your trip budget should include at least these lines:
