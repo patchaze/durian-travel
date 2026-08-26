@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const canonical = 'https://www.duriantravel.com/tools/';
+
+// One entry today. The other two are named in CLAUDE.md as planned work; they
+// are listed as "in progress" rather than linked, so the page is honest about
+// what exists. Add to `tools` when each is built.
+const tools = [
+  {
+    name: 'Budget calculator',
+    href: '/tools/budget/',
+    summary:
+      'Put in your own figures and see what the trip actually costs: total, per person, and per day. Separates the costs you pay once from the ones that repeat every night.',
+    ready: true,
+  },
+  {
+    name: 'Cost-per-country estimator',
+    summary: 'Compare what a week costs in one country against another, so the route can be chosen with the budget in mind.',
+    ready: false,
+  },
+  {
+    name: 'Visa readiness checklist',
+    summary: 'Work through what you have and what is missing before you book an appointment.',
+    ready: false,
+  },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Free travel planning tools',
+  url: canonical,
+  description: 'Free, self-contained tools for planning a trip to Europe from outside it.',
+};
+---
+
+<BaseLayout
+  title="Free Europe Trip Planning Tools | DURIAN Travel"
+  description="Free tools for planning a trip to Europe from outside it. No sign-up, nothing sent anywhere, your figures stay in your browser."
+  canonical={canonical}
+  schema={schema}
+  keywords="europe trip planning tools, free travel budget calculator"
+  breadcrumb={[{ name: 'Tools', url: canonical }]}
+>
+  <div class="container">
+    <Breadcrumb items={[{ name: 'Tools' }]} />
+  </div>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <span class="section-label">Free tools</span>
+      <h1 class="tools-title">Tools for planning from outside Europe</h1>
+      <p class="tools-intro">
+        Small, free things that answer one question properly. No sign-up, no account, nothing
+        sent anywhere. What you type stays in your browser.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <ul class="tool-list" role="list">
+        {tools.map(tool => (
+          <li class={`tool-card ${tool.ready ? '' : 'tool-card--soon'}`}>
+            <div class="tool-card__head">
+              <h2 class="tool-card__name">
+                {tool.ready ? <a href={tool.href}>{tool.name}</a> : tool.name}
+              </h2>
+              {!tool.ready && <span class="tool-card__badge">Being built</span>}
+            </div>
+            <p class="tool-card__summary">{tool.summary}</p>
+            {tool.ready && (
+              <a href={tool.href} class="tool-card__link">Open the {tool.name.toLowerCase()} →</a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tools-title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    margin: var(--space-3) 0 var(--space-4);
+  }
+  .tools-intro {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    max-width: 58ch;
+  }
+
+  .tool-list { display: flex; flex-direction: column; gap: var(--space-4); }
+
+  .tool-card {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    background: var(--color-surface);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+  .tool-card:not(.tool-card--soon):hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+  }
+  .tool-card--soon { background: var(--color-bg-alt); border-style: dashed; }
+
+  .tool-card__head { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+  .tool-card__name {
+    font-family: var(--font-serif);
+    font-size: var(--text-2xl);
+    color: var(--color-navy);
+  }
+  .tool-card__name a { color: inherit; text-decoration: none; }
+  .tool-card__name a:hover { color: var(--color-accent-dark); }
+
+  .tool-card__badge {
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-light);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 3px 10px;
+    background: var(--color-surface);
+  }
+
+  .tool-card__summary {
+    margin: var(--space-3) 0 0;
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    max-width: 62ch;
+  }
+  .tool-card--soon .tool-card__summary { color: var(--color-text-light); }
+
+  .tool-card__link {
+    display: inline-block;
+    margin-top: var(--space-4);
+    font-weight: var(--font-semibold);
+    color: var(--color-accent-dark);
+    text-decoration: none;
+  }
+  .tool-card__link:hover { color: var(--color-accent); }
+</style>
