@@ -36,7 +36,7 @@
     <div id="chatbot-messages" class="chatbot-messages">
       <div class="message ai">
         <div class="message-content">
-          Hello. Ask about Schengen visas, documents, budgets or routes, and I will point you to the right guide. Pick a question below or type your own.
+          Hello. Ask me about planning your trip — routes, budgets, where to go — or about Schengen visas. Pick a question below or type your own.
         </div>
         <span class="message-time">Just now</span>
       </div>
@@ -76,10 +76,10 @@
   .pulse { position: absolute; inset: 0; border-radius: 50%; background: var(--color-navy, #0F2138); opacity: 0.6; z-index: -1; animation: pulse 2s infinite; }
   @keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.5); opacity: 0; } }
 
-  .chatbot-window { position: absolute; bottom: 80px; right: 0; width: 380px; height: 550px; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden; transform-origin: bottom right; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease; border: 1px solid rgba(255,255,255,0.3); }
+  .chatbot-window { position: absolute; bottom: 80px; right: 0; width: 380px; height: 560px; background: var(--color-bg-alt, #F4F6F8); border-radius: 20px; box-shadow: 0 24px 60px rgba(15, 33, 56, 0.22); display: flex; flex-direction: column; overflow: hidden; transform-origin: bottom right; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease; border: 1px solid rgba(15, 33, 56, 0.08); }
   .chatbot-window.hidden { opacity: 0; transform: scale(0.8) translateY(20px); pointer-events: none; }
 
-  .chatbot-header { padding: 20px; background: var(--color-navy, #0F2138); color: white; display: flex; align-items: center; justify-content: space-between; }
+  .chatbot-header { padding: 16px 18px; background: var(--color-navy, #0F2138); color: white; display: flex; align-items: center; justify-content: space-between; }
   .chatbot-info { display: flex; align-items: center; gap: 12px; }
   .avatar-container { width: 40px; height: 40px; border-radius: 50%; position: relative; flex-shrink: 0; }
   .avatar-mark { width: 100%; height: 100%; display: block; border-radius: 50%; }
@@ -89,17 +89,18 @@
   .close-btn { background: none; border: none; color: white; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; border-radius: 6px; transition: background 0.2s; }
   .close-btn:hover { background: rgba(255,255,255,0.15); }
 
-  .chatbot-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-  .message { max-width: 85%; display: flex; flex-direction: column; gap: 4px; animation: slideUp 0.3s ease forwards; }
+  .chatbot-messages { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+  .message { max-width: 88%; display: flex; flex-direction: column; gap: 3px; animation: slideUp 0.3s ease forwards; }
   @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   .message.ai { align-self: flex-start; }
   .message.user { align-self: flex-end; }
-  .message-content { padding: 12px 16px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; }
-  .message.ai .message-content { background: white; color: #1a1a1a; border-bottom-left-radius: 4px; border: 1px solid #eee; }
-  .message.ai .message-content a { color: #2563eb; text-decoration: none; font-weight: 500; border-bottom: 1px solid rgba(37,99,235,0.3); transition: color 0.2s, border-color 0.2s; }
-  .message.ai .message-content a:hover { color: #1d4ed8; border-bottom-color: #1d4ed8; }
-  .message.user .message-content { background: var(--color-navy, #0F2138); color: white; border-bottom-right-radius: 4px; }
-  .message-time { font-size: 0.7rem; color: #999; padding: 0 4px; }
+  .message-content { padding: 11px 14px; border-radius: 14px; font-size: 0.875rem; line-height: 1.55; white-space: pre-wrap; }
+  .message.ai .message-content { background: #FFFFFF; color: var(--color-text, #1A1A2E); border-bottom-left-radius: 4px; box-shadow: 0 1px 2px rgba(15, 33, 56, 0.06); }
+  .message.ai .message-content a { color: var(--color-accent-dark, #A33D2B); text-decoration: none; font-weight: 600; border-bottom: 1px solid rgba(196, 75, 54, 0.35); transition: color 0.2s, border-color 0.2s; }
+  .message.ai .message-content a:hover { color: var(--color-accent, #C44B36); border-bottom-color: var(--color-accent, #C44B36); }
+  .message.ai .message-content strong { color: var(--color-navy, #0F2138); }
+  .message.user .message-content { background: var(--color-primary, #1B3A5C); color: white; border-bottom-right-radius: 4px; }
+  .message-time { font-size: 0.66rem; color: var(--color-text-light, #8892A0); padding: 0 4px; }
   .message.user .message-time { text-align: right; }
 
   .typing-indicator { padding: 12px 20px; display: flex; gap: 4px; align-items: center; }
@@ -108,24 +109,26 @@
   .typing-indicator span:nth-child(3) { animation-delay: 0.32s; }
   @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
-  .chatbot-input-area { padding: 16px; background: white; border-top: 1px solid #eee; display: flex; gap: 12px; }
-  .chatbot-input-area input { flex: 1; border: none; background: #f4f4f5; padding: 12px; border-radius: 12px; outline: none; font-size: 0.9rem; }
-  .chatbot-input-area input:focus { box-shadow: 0 0 0 2px var(--color-navy, #0F2138); }
-  .chatbot-input-area button { background: var(--color-navy, #0F2138); color: white; border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.2s; }
-  .chatbot-input-area button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .chatbot-input-area { padding: 12px 14px; background: #FFFFFF; border-top: 1px solid var(--color-border-light, #EFF1F4); display: flex; gap: 10px; }
+  .chatbot-input-area input { flex: 1; border: 1px solid var(--color-border, #E2E6EB); background: var(--color-bg-alt, #F4F6F8); padding: 10px 12px; border-radius: 10px; outline: none; font-size: 0.85rem; color: var(--color-text, #1A1A2E); transition: border-color 0.15s, background 0.15s; }
+  .chatbot-input-area input::placeholder { color: var(--color-text-light, #8892A0); }
+  .chatbot-input-area input:focus { background: #FFFFFF; border-color: var(--color-primary, #1B3A5C); }
+  .chatbot-input-area button { background: var(--color-primary, #1B3A5C); color: white; border: none; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s, opacity 0.2s; }
+  .chatbot-input-area button:hover:not(:disabled) { background: var(--color-navy, #0F2138); }
+  .chatbot-input-area button:disabled { opacity: 0.45; cursor: not-allowed; }
 
-  .chatbot-quick { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 16px 10px; }
+  .chatbot-quick { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 14px 10px; background: var(--color-bg-alt, #F4F6F8); }
   .chatbot-quick button {
-    background: #fff; border: 1px solid #d9dee5; color: var(--color-navy, #0F2138);
-    font-size: 0.74rem; line-height: 1.25; padding: 6px 10px; border-radius: 999px;
-    cursor: pointer; transition: background 0.15s, border-color 0.15s;
+    background: #FFFFFF; border: 1px solid var(--color-border, #E2E6EB); color: var(--color-primary, #1B3A5C);
+    font-size: 0.74rem; font-weight: 500; line-height: 1.25; padding: 6px 11px; border-radius: 999px;
+    cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s;
   }
-  .chatbot-quick button:hover { background: var(--color-navy, #0F2138); border-color: var(--color-navy, #0F2138); color: #fff; }
+  .chatbot-quick button:hover { background: var(--color-primary, #1B3A5C); border-color: var(--color-primary, #1B3A5C); color: #fff; }
   .chatbot-quick button:focus-visible { outline: 2px solid var(--color-accent, #C44B36); outline-offset: 2px; }
 
   .chatbot-disclaimer {
-    margin: 0; padding: 0 16px 14px; background: white;
-    font-size: 0.68rem; line-height: 1.45; color: #6b7280; text-align: center;
+    margin: 0; padding: 0 14px 12px; background: #FFFFFF;
+    font-size: 0.66rem; line-height: 1.45; color: var(--color-text-light, #8892A0); text-align: center;
   }
 
   .hidden { display: none !important; }
@@ -229,7 +232,7 @@
     },
     {
       id: 'countries',
-      label: 'Which countries do you cover?',
+      label: 'Where should I go?',
       keywords: ['which countries', 'destination', 'destinations', 'country guide', 'italy', 'france', 'spain', 'portugal', 'greece', 'germany', 'sweden', 'netherlands', 'switzerland', 'croatia'],
       answer: "There is a guide for each Schengen country, covering what to expect and how it fits into a wider route.\n\nBrowse them all on the [destinations page](/destinations/)."
     },
@@ -262,10 +265,11 @@
     }
   ];
 
-  // Questions offered as buttons. Deliberately only four: the widget is 380px
-  // wide, so each button takes its own row and more than four crowds out the
-  // conversation itself. Everything else is reachable by typing.
-  const QUICK_IDS = ['documents', 'guarantee', 'refusal', 'human'];
+  // Questions offered as buttons. Trip planning first, deliberately: the visa
+  // topics are all still reachable by typing, but leading with them framed the
+  // whole business as visa admin. Four only — the widget is 380px wide, so each
+  // button takes its own row and more than four crowds out the conversation.
+  const QUICK_IDS = ['itinerary', 'budget', 'countries', 'human'];
 
   const FALLBACK =
     "I can only answer from what is published on this site, and I do not have anything on that.\n\n" +
