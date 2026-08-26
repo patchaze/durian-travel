@@ -25,7 +25,7 @@
         </div>
         <div>
           <h3 class="chatbot-name">Durian Assistant</h3>
-          <p class="chatbot-status">Online • AI Powered</p>
+          <p class="chatbot-status">Answers from our published guides</p>
         </div>
       </div>
       <button id="chatbot-close" class="close-btn" aria-label="Close chat">
@@ -36,7 +36,7 @@
     <div id="chatbot-messages" class="chatbot-messages">
       <div class="message ai">
         <div class="message-content">
-          Welcome! How can I assist with your European travel plans today? 🌍
+          Hello. Ask me about planning your trip — routes, budgets, where to go — or about Schengen visas. Pick a question below or type your own.
         </div>
         <span class="message-time">Just now</span>
       </div>
@@ -48,11 +48,13 @@
       <span></span>
     </div>
 
+    <div id="chatbot-quick" class="chatbot-quick" aria-label="Suggested questions"></div>
+
     <form id="chatbot-form" class="chatbot-input-area">
-      <input 
-        type="text" 
-        id="chatbot-input" 
-        placeholder="Ask me anything about Europe..." 
+      <input
+        type="text"
+        id="chatbot-input"
+        placeholder="Ask about visas, documents, budget..."
         autocomplete="off"
         required
       />
@@ -60,6 +62,10 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
       </button>
     </form>
+
+    <p class="chatbot-disclaimer">
+      Educational information only. Not legal advice. Always check the official embassy or consulate source.
+    </p>
   </div>
 </div>
 
@@ -70,10 +76,10 @@
   .pulse { position: absolute; inset: 0; border-radius: 50%; background: var(--color-navy, #0F2138); opacity: 0.6; z-index: -1; animation: pulse 2s infinite; }
   @keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.5); opacity: 0; } }
 
-  .chatbot-window { position: absolute; bottom: 80px; right: 0; width: 380px; height: 550px; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden; transform-origin: bottom right; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease; border: 1px solid rgba(255,255,255,0.3); }
+  .chatbot-window { position: absolute; bottom: 80px; right: 0; width: 380px; height: 560px; background: var(--color-bg-alt, #F4F6F8); border-radius: 20px; box-shadow: 0 24px 60px rgba(15, 33, 56, 0.22); display: flex; flex-direction: column; overflow: hidden; transform-origin: bottom right; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease; border: 1px solid rgba(15, 33, 56, 0.08); }
   .chatbot-window.hidden { opacity: 0; transform: scale(0.8) translateY(20px); pointer-events: none; }
 
-  .chatbot-header { padding: 20px; background: var(--color-navy, #0F2138); color: white; display: flex; align-items: center; justify-content: space-between; }
+  .chatbot-header { padding: 16px 18px; background: var(--color-navy, #0F2138); color: white; display: flex; align-items: center; justify-content: space-between; }
   .chatbot-info { display: flex; align-items: center; gap: 12px; }
   .avatar-container { width: 40px; height: 40px; border-radius: 50%; position: relative; flex-shrink: 0; }
   .avatar-mark { width: 100%; height: 100%; display: block; border-radius: 50%; }
@@ -83,17 +89,18 @@
   .close-btn { background: none; border: none; color: white; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; border-radius: 6px; transition: background 0.2s; }
   .close-btn:hover { background: rgba(255,255,255,0.15); }
 
-  .chatbot-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-  .message { max-width: 85%; display: flex; flex-direction: column; gap: 4px; animation: slideUp 0.3s ease forwards; }
+  .chatbot-messages { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+  .message { max-width: 88%; display: flex; flex-direction: column; gap: 3px; animation: slideUp 0.3s ease forwards; }
   @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   .message.ai { align-self: flex-start; }
   .message.user { align-self: flex-end; }
-  .message-content { padding: 12px 16px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; }
-  .message.ai .message-content { background: white; color: #1a1a1a; border-bottom-left-radius: 4px; border: 1px solid #eee; }
-  .message.ai .message-content a { color: #2563eb; text-decoration: none; font-weight: 500; border-bottom: 1px solid rgba(37,99,235,0.3); transition: color 0.2s, border-color 0.2s; }
-  .message.ai .message-content a:hover { color: #1d4ed8; border-bottom-color: #1d4ed8; }
-  .message.user .message-content { background: var(--color-navy, #0F2138); color: white; border-bottom-right-radius: 4px; }
-  .message-time { font-size: 0.7rem; color: #999; padding: 0 4px; }
+  .message-content { padding: 11px 14px; border-radius: 14px; font-size: 0.875rem; line-height: 1.55; white-space: pre-wrap; }
+  .message.ai .message-content { background: #FFFFFF; color: var(--color-text, #1A1A2E); border-bottom-left-radius: 4px; box-shadow: 0 1px 2px rgba(15, 33, 56, 0.06); }
+  .message.ai .message-content a { color: var(--color-accent-dark, #A33D2B); text-decoration: none; font-weight: 600; border-bottom: 1px solid rgba(196, 75, 54, 0.35); transition: color 0.2s, border-color 0.2s; }
+  .message.ai .message-content a:hover { color: var(--color-accent, #C44B36); border-bottom-color: var(--color-accent, #C44B36); }
+  .message.ai .message-content strong { color: var(--color-navy, #0F2138); }
+  .message.user .message-content { background: var(--color-primary, #1B3A5C); color: white; border-bottom-right-radius: 4px; }
+  .message-time { font-size: 0.66rem; color: var(--color-text-light, #8892A0); padding: 0 4px; }
   .message.user .message-time { text-align: right; }
 
   .typing-indicator { padding: 12px 20px; display: flex; gap: 4px; align-items: center; }
@@ -102,11 +109,27 @@
   .typing-indicator span:nth-child(3) { animation-delay: 0.32s; }
   @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
-  .chatbot-input-area { padding: 16px; background: white; border-top: 1px solid #eee; display: flex; gap: 12px; }
-  .chatbot-input-area input { flex: 1; border: none; background: #f4f4f5; padding: 12px; border-radius: 12px; outline: none; font-size: 0.9rem; }
-  .chatbot-input-area input:focus { box-shadow: 0 0 0 2px var(--color-navy, #0F2138); }
-  .chatbot-input-area button { background: var(--color-navy, #0F2138); color: white; border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.2s; }
-  .chatbot-input-area button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .chatbot-input-area { padding: 12px 14px; background: #FFFFFF; border-top: 1px solid var(--color-border-light, #EFF1F4); display: flex; gap: 10px; }
+  .chatbot-input-area input { flex: 1; border: 1px solid var(--color-border, #E2E6EB); background: var(--color-bg-alt, #F4F6F8); padding: 10px 12px; border-radius: 10px; outline: none; font-size: 0.85rem; color: var(--color-text, #1A1A2E); transition: border-color 0.15s, background 0.15s; }
+  .chatbot-input-area input::placeholder { color: var(--color-text-light, #8892A0); }
+  .chatbot-input-area input:focus { background: #FFFFFF; border-color: var(--color-primary, #1B3A5C); }
+  .chatbot-input-area button { background: var(--color-primary, #1B3A5C); color: white; border: none; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s, opacity 0.2s; }
+  .chatbot-input-area button:hover:not(:disabled) { background: var(--color-navy, #0F2138); }
+  .chatbot-input-area button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .chatbot-quick { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 14px 10px; background: var(--color-bg-alt, #F4F6F8); }
+  .chatbot-quick button {
+    background: #FFFFFF; border: 1px solid var(--color-border, #E2E6EB); color: var(--color-primary, #1B3A5C);
+    font-size: 0.74rem; font-weight: 500; line-height: 1.25; padding: 6px 11px; border-radius: 999px;
+    cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .chatbot-quick button:hover { background: var(--color-primary, #1B3A5C); border-color: var(--color-primary, #1B3A5C); color: #fff; }
+  .chatbot-quick button:focus-visible { outline: 2px solid var(--color-accent, #C44B36); outline-offset: 2px; }
+
+  .chatbot-disclaimer {
+    margin: 0; padding: 0 14px 12px; background: #FFFFFF;
+    font-size: 0.66rem; line-height: 1.45; color: var(--color-text-light, #8892A0); text-align: center;
+  }
 
   .hidden { display: none !important; }
 
@@ -116,12 +139,141 @@
 </style>
 
 <script>
-  const SYSTEM_PROMPT = "You are the DURIAN Travel Assistant, a friendly and practical travel concierge for Durian Travel at duriantravel.com. You help users plan smoother Europe trips with strong Schengen visa guidance, realistic itineraries, and health-aware preparation. Keep responses concise and helpful, usually 2 short paragraphs max. Durian Travel now uses package-based support rather than old single-service pages. The main packages are: [The Schengen Blueprint](/services/schengen-visa-help/), [The First Journey Package](/services/first-international-trip/), [The Nomad Infrastructure Plan](/services/digital-nomad-visa-strategy/), [The Family Expedition Bundle](/services/family-travel-planning/), [The Recovery Route](/services/visa-refusal-reapplication/), [The Wellness Journey](/services/travel-health-planning/), and [The Grand Circuit](/services/multi-region-trip-planning/). If asked about non-European destinations, politely redirect to Europe-focused help unless the question is about transit or comparative planning.\n\nIMPORTANT: When mentioning pages or services on the site, always embed a clickable markdown link on a relevant keyword or phrase. Do not display raw URLs. Use this format: [anchor text](url). Available pages include: [Services](/services), [Schengen Visa Guide](/schengen-visa-guide), [Free Visa Audit](/free-visa-audit), [Destinations](/destinations), [Blog](/blog), [Contact](/contact), [FAQ](/faq), and [About Us](/about-us). Never display a raw URL like /services. Always wrap it in a descriptive markdown link.";
+  // ---------------------------------------------------------------------------
+  // Curated assistant — no model, no API key, no network calls.
+  //
+  // Every answer below is drawn from copy already published on this site
+  // (mostly /faq/ and the guides). That is deliberate: the widget cannot invent
+  // a rule, a fee, or an outcome, because it can only repeat vetted wording.
+  // When nothing matches it says so and points to a human, rather than guessing.
+  //
+  // Adding a topic: add an entry to TOPICS. `keywords` are matched as
+  // lowercase substrings against the visitor's message. Put the more specific
+  // topics first — ties are broken by array order.
+  //
+  // Deliberately NOT answered here: anything that states a fee, a processing
+  // time, or a border-rule date. Those go stale. Link to the guide instead, so
+  // there is one place to keep current.
+  // ---------------------------------------------------------------------------
 
-  // Pollinations AI — free, no API key required.
-  // Never call a keyed API from here: this script ships to every visitor, so any
-  // key embedded in it is public. A keyed model would need a server-side endpoint.
-  const POLLINATIONS_URL = "https://text.pollinations.ai/openai";
+  type Topic = {
+    id: string;
+    label?: string;
+    keywords: string[];
+    answer: string;
+  };
+
+  const TOPICS: Topic[] = [
+    {
+      id: 'guarantee',
+      label: 'Can you guarantee approval?',
+      keywords: ['guarantee', 'guaranteed', 'approval rate', 'approved', 'will i get', 'chances', 'odds', 'success rate', 'sure thing'],
+      answer: "No, and no honest service can. Visa decisions are made by embassy and consulate officers based on their assessment of your application. We help you prepare the strongest possible application, but we have no influence over consular decisions.\n\nMore in the [FAQ](/faq/)."
+    },
+    {
+      id: 'lawyer',
+      label: 'Are you immigration lawyers?',
+      keywords: ['lawyer', 'attorney', 'law firm', 'legal advice', 'solicitor', 'legally'],
+      answer: "No. DURIAN is an educational visa application strategy consultancy. We do not provide legal advice, legal representation, or any service that constitutes the practice of immigration law. For legal advice, consult a qualified immigration attorney.\n\nSee the [FAQ](/faq/) and the [disclaimer](/disclaimer/)."
+    },
+    {
+      id: 'submit',
+      label: 'Do you submit my application?',
+      keywords: ['submit', 'on my behalf', 'apply for me', 'lodge', 'file it for me', 'send my application'],
+      answer: "No. We provide educational guidance on how to prepare your application. You submit it yourself to the relevant embassy or consulate.\n\nThat is the main way we differ from a visa agency: lower cost, more transparency, more control for you. More in the [FAQ](/faq/)."
+    },
+    {
+      id: 'refusal',
+      label: 'I was refused before',
+      keywords: ['refused', 'refusal', 'rejected', 'rejection', 'denied', 'reapply', 'reapplication', 'appeal'],
+      answer: "Yes, this is one of the areas we cover. We can help you decode your refusal letter and build a stronger application for resubmission.\n\nStart with [the most common refusal reasons](/blog/visa-refusal-reasons/), then [get in touch](/contact/) if you want it looked at properly."
+    },
+    {
+      id: 'documents',
+      label: 'What documents do I need?',
+      keywords: ['document', 'documents', 'checklist', 'paperwork', 'what do i need', 'requirements', 'financial proof', 'bank statement', 'insurance', 'cover letter'],
+      answer: "The core set is usually a valid passport, travel insurance, proof of accommodation, financial evidence, and a credible itinerary, but the exact list varies by consulate and nationality.\n\nWork through the [Schengen document checklist](/blog/schengen-document-checklist/) and the [full Schengen visa guide](/schengen-visa-guide/). For the cover letter specifically, there is [a walkthrough with templates](/blog/how-to-write-visa-cover-letter/)."
+    },
+    {
+      id: 'selfemployed',
+      label: "I'm self-employed",
+      keywords: ['self-employed', 'self employed', 'freelance', 'freelancer', 'contractor', 'business owner', 'nomad', 'remote work'],
+      answer: "Yes. Self-employed applicants often face particular challenges with financial proof. We help freelancers, contractors and business owners work out which documents to gather and how to present them.\n\nMore in the [FAQ](/faq/), or [get in touch](/contact/)."
+    },
+    {
+      id: 'visa_cost',
+      label: 'What does a visa cost?',
+      keywords: ['visa fee', 'visa cost', 'how much is the visa', 'application fee', 'consulate fee', 'price of the visa'],
+      answer: "Fees change, so rather than quote a number that might be out of date, here is the page kept current: [how much a Schengen visa costs](/blog/how-much-does-schengen-visa-cost/).\n\nAlways confirm the current fee on the official site of the embassy or visa centre handling your application."
+    },
+    {
+      id: 'budget',
+      label: 'How much will my trip cost?',
+      keywords: ['budget', 'how much', 'daily cost', 'spending', 'afford', 'expensive', 'cheap', 'money'],
+      answer: "Build the budget in euros first, separating fixed costs from daily spending. That is the part most people get wrong.\n\nThe [Europe trip budget guide](/blog/europe-trip-budget/) walks through it, and [train travel](/blog/train-travel-europe/) is usually where the savings are."
+    },
+    {
+      id: 'ees_etias',
+      label: 'What are EES and ETIAS?',
+      keywords: ['ees', 'etias', 'entry exit', 'entry/exit', 'border system', 'biometric', 'new border'],
+      answer: "Two different things, often confused.\n\n**EES** is the Entry/Exit System, which records short-stay entries and exits electronically. It has been fully operational across all Schengen countries since 10 April 2026.\n\n**ETIAS** is a travel authorisation for visa-exempt travellers only. If you need a Schengen visa, ETIAS does not apply to you. It is scheduled to start in the last quarter of 2026; the exact date has not been announced yet.\n\nDetail in the [requirements guide](/blog/schengen-visa-requirements-non-european-travelers/). Confirm current status on the official EU pages before you rely on it."
+    },
+    {
+      id: 'timeline',
+      label: 'When should I apply?',
+      keywords: ['when should i apply', 'how early', 'timeline', 'how long does it take', 'processing time', 'months before', 'lead time', 'how soon'],
+      answer: "There is a window: not too early, not too late, and it is tighter than most people expect once appointments are factored in.\n\nThe [trip planning timeline](/blog/europe-trip-planning-timeline/) lays out the order to do things in, and the [Schengen visa guide](/schengen-visa-guide/) covers current timings."
+    },
+    {
+      id: 'itinerary',
+      label: 'Help me plan a route',
+      keywords: ['itinerary', 'route', 'plan my trip', 'multi-country', 'multi country', 'how many days', 'where should i go', 'sequence'],
+      answer: "Route logic matters more than most people realise, both for the trip itself and for how coherent your application looks.\n\nStart with the [multi-country itinerary guide](/blog/multi-country-europe-itinerary/), or the [10-day Europe itinerary](/blog/10-day-europe-itinerary/) if you are short on time."
+    },
+    {
+      id: 'countries',
+      label: 'Where should I go?',
+      keywords: ['which countries', 'destination', 'destinations', 'country guide', 'italy', 'france', 'spain', 'portugal', 'greece', 'germany', 'sweden', 'netherlands', 'switzerland', 'croatia'],
+      answer: "There is a guide for each Schengen country, covering what to expect and how it fits into a wider route.\n\nBrowse them all on the [destinations page](/destinations/)."
+    },
+    {
+      id: 'audit',
+      label: 'What is the free audit?',
+      keywords: ['free audit', 'readiness', 'free consultation', 'free call', 'audit'],
+      answer: "A free 20-minute consultation where we review your current visa preparation strategy and identify the specific areas you need to strengthen before you submit.\n\nDetails on the [free visa audit page](/free-visa-audit/). It is not a guarantee of visa approval."
+    },
+    {
+      id: 'human',
+      label: 'I want to talk to a person',
+      keywords: ['talk to', 'speak to', 'human', 'real person', 'contact', 'email', 'phone', 'book a call', 'consultation', 'someone'],
+      answer: "Of course. Everything runs online via video call, and you can reach Patricia through the [contact page](/contact/)."
+    },
+    {
+      id: 'language',
+      keywords: ['language', 'portuguese', 'spanish', 'french', 'english', 'idioma'],
+      answer: "Services are available in English, Portuguese, Spanish and French. Mention your preferred language when you book. More in the [FAQ](/faq/)."
+    },
+    {
+      id: 'location',
+      keywords: ['where are you', 'located', 'location', 'office', 'in person', 'online', 'video call'],
+      answer: "All sessions are conducted online via video call, with clients worldwide. More in the [FAQ](/faq/)."
+    },
+    {
+      id: 'visa_types',
+      keywords: ['what visa', 'type c', 'tourist visa', 'uk visa', 'us visa', 'student visa', 'work visa', 'which visas'],
+      answer: "The main focus is the Schengen tourist visa (Type C). Many of the same document principles apply to UK visitor visas and US tourist visas, but we will tell you plainly if your visa type is outside what we cover.\n\nMore in the [FAQ](/faq/)."
+    }
+  ];
+
+  // Questions offered as buttons. Trip planning first, deliberately: the visa
+  // topics are all still reachable by typing, but leading with them framed the
+  // whole business as visa admin. Four only — the widget is 380px wide, so each
+  // button takes its own row and more than four crowds out the conversation.
+  const QUICK_IDS = ['itinerary', 'budget', 'countries', 'human'];
+
+  const FALLBACK =
+    "I can only answer from what is published on this site, and I do not have anything on that.\n\n" +
+    "Try the [blog](/blog/) or the [Schengen visa guide](/schengen-visa-guide/), or [ask Patricia directly](/contact/) — she will give you a straight answer.";
 
   const toggleBtn = document.getElementById('chatbot-toggle');
   const closeBtn = document.getElementById('chatbot-close');
@@ -131,9 +283,8 @@
   const chatMessages = document.getElementById('chatbot-messages');
   const typingIndicator = document.getElementById('typing-indicator');
   const sendBtn = document.getElementById('chatbot-send') as HTMLButtonElement;
+  const quickWrap = document.getElementById('chatbot-quick');
 
-  // OpenAI-compatible message format (used by Pollinations)
-  let chatHistory: Array<{role: string, content: string}> = [];
   let isProcessing = false;
 
   toggleBtn?.addEventListener('click', () => {
@@ -143,172 +294,94 @@
 
   closeBtn?.addEventListener('click', () => chatWindow?.classList.add('hidden'));
 
-  chatForm?.addEventListener('submit', async (e) => {
+  chatForm?.addEventListener('submit', (e) => {
     e.preventDefault();
     if (isProcessing) return;
     const message = chatInput?.value.trim();
     if (!message) return;
-
-    addMessage(message, 'user');
     chatInput.value = '';
-    
-    chatHistory.push({ role: 'user', content: message });
-
-    await handleAIResponse();
+    ask(message);
   });
 
+  function renderQuickReplies() {
+    if (!quickWrap) return;
+    quickWrap.innerHTML = '';
+    QUICK_IDS.forEach(id => {
+      const topic = TOPICS.find(t => t.id === id);
+      if (!topic?.label) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = topic.label;
+      btn.addEventListener('click', () => ask(topic.label as string));
+      quickWrap.appendChild(btn);
+    });
+  }
+
+  // Score each topic by how many of its keywords appear in the message.
+  // Longer keyword matches count for more, so "visa fee" beats a stray "visa".
+  function findTopic(message: string): Topic | null {
+    const text = ' ' + message.toLowerCase().replace(/[^a-z0-9\s/-]/g, ' ') + ' ';
+    let best: Topic | null = null;
+    let bestScore = 0;
+    for (const topic of TOPICS) {
+      let score = 0;
+      for (const kw of topic.keywords) {
+        if (text.includes(kw.toLowerCase())) score += kw.length;
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        best = topic;
+      }
+    }
+    return bestScore > 0 ? best : null;
+  }
+
+  function ask(message: string) {
+    isProcessing = true;
+    if (sendBtn) sendBtn.disabled = true;
+
+    addMessage(message, 'user');
+    typingIndicator?.classList.remove('hidden');
+    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Brief pause so the exchange reads as a conversation rather than a jump cut.
+    window.setTimeout(() => {
+      typingIndicator?.classList.add('hidden');
+      const topic = findTopic(message);
+      addMessage(topic ? topic.answer : FALLBACK, 'ai');
+      isProcessing = false;
+      if (sendBtn) sendBtn.disabled = false;
+      if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 350);
+  }
+
   function formatMessageContent(text: string, sender: string): string {
-    // First, sanitize all HTML
+    // Escape everything first; nothing here is trusted as HTML.
     let safe = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
     if (sender === 'ai') {
-      // Convert markdown-style links [text](url) to clickable <a> tags
-      // Only allow relative links (starting with /) to keep it safe
-      safe = safe.replace(/\[([^\]]+)\]\((\/[^)]+)\)/g, (_, linkText, url) => {
-        return `<a href="${url}" target="_self" rel="noopener">${linkText}</a>`;
+      // **bold**
+      safe = safe.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      // [label](/path) — relative links only, so nothing can point off-site.
+      safe = safe.replace(/\[([^\]]+)\]\((\/[^)]*)\)/g, (_m, label, url) => {
+        return '<a href="' + url + '" target="_self" rel="noopener">' + label + '</a>';
       });
+      safe = safe.replace(/\n/g, '<br>');
     }
     return safe;
   }
 
   function addMessage(text: string, sender: string) {
     const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}`;
-    const formatted = formatMessageContent(text, sender);
-    messageDiv.innerHTML = `
-      <div class="message-content">${formatted}</div>
-      <span class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-    `;
+    messageDiv.className = 'message ' + sender;
+    messageDiv.innerHTML =
+      '<div class="message-content">' + formatMessageContent(text, sender) + '</div>' +
+      '<span class="message-time">' +
+      new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) +
+      '</span>';
     chatMessages?.appendChild(messageDiv);
     if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  async function handleAIResponse() {
-    isProcessing = true;
-    if (sendBtn) sendBtn.disabled = true;
-    typingIndicator?.classList.remove('hidden');
-    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    try {
-      // Pollinations AI (free, no key needed); built-in answers if it fails.
-      const responseText: string | null = await callPollinationsAPI();
-
-      typingIndicator?.classList.add('hidden');
-
-      if (responseText) {
-        addMessage(responseText, 'ai');
-        chatHistory.push({ role: 'assistant', content: responseText });
-      } else {
-        throw new Error('No response from AI');
-      }
-    } catch (error) {
-      console.error('Chat error:', error);
-      typingIndicator?.classList.add('hidden');
-      // Fall back to built-in responses
-      const lastMsg = chatHistory[chatHistory.length - 1]?.content || '';
-      const fallbackResponse = getFallbackResponse(lastMsg);
-      addMessage(fallbackResponse, 'ai');
-      chatHistory.push({ role: 'assistant', content: fallbackResponse });
-    } finally {
-      isProcessing = false;
-      if (sendBtn) sendBtn.disabled = false;
-    }
-  }
-
-  async function callPollinationsAPI(): Promise<string | null> {
-    try {
-      const messages = [
-        { role: 'system', content: SYSTEM_PROMPT },
-        ...chatHistory
-      ];
-
-      const response = await fetch(POLLINATIONS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'openai',
-          messages: messages,
-          temperature: 0.7,
-          max_tokens: 400,
-          referrer: 'duriantravel.com'
-        })
-      });
-
-      if (!response.ok) {
-        console.warn('Pollinations API error:', response.status);
-        return null;
-      }
-
-      const data = await response.json();
-      return data?.choices?.[0]?.message?.content || null;
-    } catch (err) {
-      console.warn('Pollinations API failed:', err);
-      return null;
-    }
-  }
-
-  function getFallbackResponse(userMessage: string): string {
-    const msg = userMessage.toLowerCase();
-
-    if (msg.includes('visa') || msg.includes('schengen')) {
-      return "Great question about visas! 🛂 For Schengen applications, you will usually need a valid passport, travel insurance, proof of accommodation, financial documents, and a credible itinerary. Our [Schengen Visa Guide](/schengen-visa-guide) is the best place to start, and our [Schengen Blueprint package](/services/schengen-visa-help/) is the right fit if you want hands-on support with documents, cover letters, and route logic.";
-    }
-    if (msg.includes('itinerar') || msg.includes('plan') || msg.includes('trip')) {
-      return "I can help with that! ✈️ If this is your first big international trip, the [First Journey package](/services/first-international-trip/) is usually the best match. If the route is more complex or spans multiple regions, compare it with the [Grand Circuit](/services/multi-region-trip-planning/) on our [services page](/services).";
-    }
-    if (msg.includes('hotel') || msg.includes('stay') || msg.includes('accommodat') || msg.includes('where to')) {
-      return "We specialize in finding the most charming boutique hotels and unique stays across Europe! 🏨 From converted castles in Portugal to cozy alpine chalets in Switzerland, we'll match you with the perfect accommodation. Browse our [destinations](/destinations) and let us know your budget — we'll curate the best options for you.";
-    }
-    if (msg.includes('price') || msg.includes('cost') || msg.includes('how much') || msg.includes('service')) {
-      return "We now organize support as packages rather than the old single-service menu. The easiest next step is to compare the packages on our [services page](/services) or start with a [Free Visa Audit](/free-visa-audit) if you want help figuring out which one fits your situation.";
-    }
-    if (msg.includes('health') || msg.includes('insurance') || msg.includes('medical') || msg.includes('vaccine')) {
-      return "Travel health matters more than most people expect. 🏥 Our [Wellness Journey package](/services/travel-health-planning/) is built for medication rules, insurance fit, vaccines, and destination-specific health prep. If you mainly need Schengen insurance and visa compliance, the [Schengen Blueprint](/services/schengen-visa-help/) may also be relevant.";
-    }
-    if (msg.includes('portugal') || msg.includes('lisbon') || msg.includes('porto')) {
-      return "Portugal is a great choice. 🇵🇹 Lisbon, Porto, and the Algarve can work beautifully in one trip if the pacing is right. For route help, compare the [First Journey package](/services/first-international-trip/) and the [Grand Circuit](/services/multi-region-trip-planning/), then browse our [destinations](/destinations) for ideas.";
-    }
-    if (msg.includes('italy') || msg.includes('rome') || msg.includes('florence') || msg.includes('venice')) {
-      return "Italy is one of the easiest places to fall in love with on a first Europe trip. 🇮🇹 Rome, Florence, and Venice can work well together if your transit days are realistic. If you want help shaping the route, start with the [First Journey package](/services/first-international-trip/) and browse [all our destinations](/destinations).";
-    }
-    if (msg.includes('france') || msg.includes('paris') || msg.includes('french')) {
-      return "France gives you a lot of range, from Paris and Normandy to Provence and the Riviera. 🇫🇷 If you want help balancing city time, train legs, and budget, the [First Journey package](/services/first-international-trip/) is a strong place to start. You can also explore our [destinations](/destinations) for more inspiration.";
-    }
-    if (msg.includes('spain') || msg.includes('barcelona') || msg.includes('madrid')) {
-      return "Spain can be fantastic for first-timers because the cities feel distinct without being hard to combine. 🇪🇸 If you want help building a route that actually breathes, have a look at the [First Journey package](/services/first-international-trip/) and browse our [destinations](/destinations).";
-    }
-    if (msg.includes('greece') || msg.includes('athens') || msg.includes('santorini') || msg.includes('greek')) {
-      return "Greece is beautiful, especially if you want a mix of cities, islands, and slower pacing. 🇬🇷 Because ferry timing and seasonal logistics matter, the [Grand Circuit package](/services/multi-region-trip-planning/) is useful for more layered routes. You can also compare options on our [services page](/services).";
-    }
-    if (msg.includes('germany') || msg.includes('berlin') || msg.includes('munich') || msg.includes('bavaria')) {
-      return "Germany works well when you want strong rail infrastructure and very different city personalities in one trip. 🇩🇪 If you want help structuring the route cleanly, start with the [First Journey package](/services/first-international-trip/) or compare it with the [Grand Circuit](/services/multi-region-trip-planning/).";
-    }
-    if (msg.includes('netherlands') || msg.includes('amsterdam') || msg.includes('dutch')) {
-      return "The Netherlands is a strong pick if you want an easy-moving first Europe trip with great rail links. 🇳🇱 Amsterdam, Utrecht, and The Hague combine well. If you want help building the route, the [First Journey package](/services/first-international-trip/) is a good fit.";
-    }
-    if (msg.includes('switzerland') || msg.includes('zurich') || msg.includes('geneva') || msg.includes('alps')) {
-      return "Switzerland is stunning, but the pacing and budget need to be handled carefully because transport and hotels add up fast. 🇨🇭 If you want help shaping the route around cost and movement, look at the [First Journey package](/services/first-international-trip/) or the [Grand Circuit](/services/multi-region-trip-planning/).";
-    }
-    if (msg.includes('croatia') || msg.includes('dubrovnik') || msg.includes('split')) {
-      return "Croatia is a great route-building destination because you can mix coast, cities, and ferry or overland legs. 🇭🇷 If you want help structuring a cleaner multi-stop trip, the [Grand Circuit package](/services/multi-region-trip-planning/) is the closest fit. You can also browse our [destinations](/destinations).";
-    }
-    if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey') || msg.includes('good')) {
-      return "Hello there! 👋 I can help with [Schengen visa guidance](/schengen-visa-guide), Europe trip planning, and finding the right [travel package](/services) for your situation. Tell me where you're thinking of going or what part of the process feels confusing right now.";
-    }
-    if (msg.includes('thank') || msg.includes('thanks')) {
-      return "You're very welcome! 😊 It's my pleasure to help. If you have any more questions about European travel, visas, or our [services](/services), don't hesitate to ask. Happy travels! ✈️🌍";
-    }
-    if (msg.includes('blog') || msg.includes('read') || msg.includes('article') || msg.includes('tips')) {
-      return "We have a wonderful [travel blog](/blog) full of tips and inspiration! 📝 From packing guides to insider tips on the best European destinations, our blog has you covered. Head over to explore the latest articles!";
-    }
-    if (msg.includes('contact') || msg.includes('email') || msg.includes('phone') || msg.includes('reach')) {
-      return "We'd love to hear from you! 📬 You can reach us through our [Contact page](/contact), where you'll find our email and a contact form. Our team typically responds within 24 hours. We look forward to helping you with your European travel plans!";
-    }
-    if (msg.includes('book') || msg.includes('reserv') || msg.includes('order')) {
-      return "Ready to book? Wonderful! 🎉 Head over to our [Services page](/services) to choose the service that's right for you, or visit our [Contact page](/contact) to get in touch directly with our travel experts. We'll take it from there!";
-    }
-
-    // Default response
-    return "That is a great question! 🌟 I can help with [Schengen visa guidance](/schengen-visa-guide), Europe trip planning, and choosing the right [travel package](/services). Try asking about a destination, a visa concern, or which package best fits your trip.";
-  }
+  renderQuickReplies();
 </script>
