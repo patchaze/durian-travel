@@ -122,32 +122,42 @@
         },
         {
             "source": "/blog/visaeuro-pro-vs-schengenmasters",
-            "destination": "/blog/best-schengen-travel-agency/",
+            "destination": "/blog/",
             "permanent": true
         },
         {
             "source": "/blog/visaeuro-pro-vs-schengenmasters/",
-            "destination": "/blog/best-schengen-travel-agency/",
+            "destination": "/blog/",
             "permanent": true
         },
         {
             "source": "/blog/best-schengen-travel-agency-for-digital-nomads",
-            "destination": "/blog/best-schengen-travel-agency/",
+            "destination": "/blog/",
             "permanent": true
         },
         {
             "source": "/blog/best-schengen-travel-agency-for-digital-nomads/",
-            "destination": "/blog/best-schengen-travel-agency/",
+            "destination": "/blog/",
             "permanent": true
         },
         {
             "source": "/blog/best-schengen-travel-agency-for-families",
-            "destination": "/blog/best-schengen-travel-agency/",
+            "destination": "/blog/",
             "permanent": true
         },
         {
             "source": "/blog/best-schengen-travel-agency-for-families/",
-            "destination": "/blog/best-schengen-travel-agency/",
+            "destination": "/blog/",
+            "permanent": true
+        },
+        {
+            "source": "/blog/best-schengen-travel-agency",
+            "destination": "/blog/",
+            "permanent": true
+        },
+        {
+            "source": "/blog/best-schengen-travel-agency/",
+            "destination": "/blog/",
             "permanent": true
         },
         {

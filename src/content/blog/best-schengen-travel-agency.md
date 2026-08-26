@@ -8,7 +8,25 @@ modDate: "2026-04-08"
 author: "Patricia Azevedo"
 tags: ["Schengen", "Travel Agency", "Comparison", "Europe"]
 readTime: 16
+draft: true
 ---
+
+<!--
+UNPUBLISHED 2026-08-26. Do not republish as-is.
+
+This post presents a comparison of five named agencies with a "Visa Success
+Rate (Claimed/Verified)" column, introduced as "based on hands-on testing
+from real usage over the past month", under a title reading "[With Real
+Data]". The same claims are repeated to Google in its Schema.org markup.
+
+Three "*Screenshot placeholder:*" strings were visible to readers on the
+live page, which indicates the testing described did not take place.
+
+/blog/best-schengen-travel-agency/ now 301s to /blog/ in vercel.json, and
+the six redirects that previously pointed here were repointed to /blog/ so
+they do not chain into a 404.
+-->
+
 
 # The 2026 Best schengen travel agency Guide for Schengen Travelers
 
