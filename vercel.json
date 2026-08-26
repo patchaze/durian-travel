@@ -221,6 +221,11 @@
             "permanent": true
         },
         {
+            "source": "/sitemap.xml",
+            "destination": "/sitemap-index.xml",
+            "permanent": true
+        },
+        {
             "source": "/:path((?!_assets|api|_next).*[^/])$",
             "destination": "/:path/",
             "permanent": true
