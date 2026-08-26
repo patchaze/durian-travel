@@ -13,11 +13,11 @@ const testimonials = [
     author: "Emily & James — London-based expats traveling on non-EU passports"
   },
   {
-    quote: "The document review saved my visa application. They caught a critical error in my financial proof that would have led to a refusal. Approved first try.",
+    quote: "They caught a critical error in my financial proof before I submitted anything. I would never have spotted it myself.",
     author: "Sarah M. — New York, USA"
   },
   {
-    quote: "Fast responses and genuinely deep local knowledge. They didn't just book hotels — they built a story for our family trip to Portugal. Worth every peso.",
+    quote: "Fast responses and genuinely deep local knowledge. They didn't just book hotels — they built a story for our family trip to Portugal.",
     author: "Mark T. — Sydney, Australia"
   }
 ];
@@ -446,6 +446,10 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
           <p>No agency, consultant, or immigration lawyer can legally guarantee a Schengen visa approval, as the final decision rests solely with the consular officers of the European embassy. <strong>Working with an experienced consultant for document review significantly reduces refusal risk by ensuring your application is logically consistent and complete before submission.</strong></p>
         </div>
       </div>
+      <p class="visa-disclaimer">
+        Educational information only. Not legal advice. Always check the official embassy or consulate source.
+        <a href="/disclaimer/">Read the full disclaimer →</a>
+      </p>
     </div>
   </section>
 
@@ -475,6 +479,25 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
 </BaseLayout>
 
 <style>
+/* ══════════════════════════════════════════
+   VISA DISCLAIMER — required on all visa content
+   ══════════════════════════════════════════ */
+.visa-disclaimer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+.visa-disclaimer a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+
 /* ══════════════════════════════════════════
    HERO — Full-bleed with floating glass cards
    ══════════════════════════════════════════ */
