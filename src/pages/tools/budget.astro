@@ -1,0 +1,642 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const canonical = 'https://www.duriantravel.com/tools/budget/';
+
+// Daily ranges come from our own published guide at /blog/europe-trip-budget/.
+// Nothing here is invented: the preset buttons fill in the low end of each
+// published range, the full range is shown next to the field, and every figure
+// stays editable. There are no exchange rates anywhere in this tool, because a
+// hardcoded rate goes stale and a live one needs a server.
+const styles = [
+  { id: 'budget', label: 'Budget', low: 70, high: 130 },
+  { id: 'mid', label: 'Mid-range', low: 140, high: 240 },
+  { id: 'comfortable', label: 'Comfortable', low: 260, high: 380 },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Europe Trip Budget Calculator',
+  url: canonical,
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Any',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  description:
+    'A free calculator that turns your own numbers into a realistic Europe trip budget, separating fixed costs from daily costs and adding a buffer.',
+};
+---
+
+<BaseLayout
+  title="Europe Trip Budget Calculator | DURIAN Travel"
+  description="Work out what your Europe trip will actually cost. Separate fixed costs from daily costs, add a buffer, and see the total per person and per day. Free, no sign-up."
+  canonical={canonical}
+  schema={schema}
+  keywords="europe trip budget calculator, how much does a europe trip cost, schengen trip budget"
+  breadcrumb={[{ name: 'Budget calculator', url: canonical }]}
+>
+  <div class="container">
+    <Breadcrumb items={[{ name: 'Budget calculator' }]} />
+  </div>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <span class="section-label">Free tool</span>
+      <h1 class="tool-title">Europe Trip Budget Calculator</h1>
+      <p class="tool-intro">
+        Most trips do not go wrong because of one big expense. They go wrong because the small
+        daily ones were never counted. Put your own numbers in below and you will see the real
+        total, what it costs per person, and what you are spending each day.
+      </p>
+      <p class="tool-intro tool-intro--muted">
+        Nothing is sent anywhere. Everything stays in your browser, and your figures are still
+        here when you come back.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--sm tool-section">
+    <div class="container">
+      <div class="tool-grid">
+        <!-- ─────────── Inputs ─────────── -->
+        <form class="tool-form" id="budget-form" novalidate>
+          <fieldset class="tool-block">
+            <legend class="tool-block__title">The trip</legend>
+            <div class="field-row">
+              <label class="field">
+                <span class="field__label">Nights</span>
+                <input type="number" id="nights" min="1" max="365" step="1" value="10" inputmode="numeric" />
+              </label>
+              <label class="field">
+                <span class="field__label">Travellers</span>
+                <input type="number" id="travellers" min="1" max="20" step="1" value="1" inputmode="numeric" />
+              </label>
+              <label class="field">
+                <span class="field__label">Currency</span>
+                <select id="currency">
+                  <option value="€" selected>EUR €</option>
+                  <option value="$">USD $</option>
+                  <option value="£">GBP £</option>
+                  <option value="₱">PHP ₱</option>
+                  <option value="R$">BRL R$</option>
+                  <option value="">Other</option>
+                </select>
+              </label>
+            </div>
+            <p class="field-note">
+              Enter every figure in one currency. Our guide suggests working in euros first, since
+              that is what you will actually be spending. This tool does not convert between
+              currencies — a built-in exchange rate would be out of date by the time you used it.
+            </p>
+          </fieldset>
+
+          <fieldset class="tool-block">
+            <legend class="tool-block__title">Fixed costs</legend>
+            <p class="tool-block__hint">Paid once for the whole trip, not per night.</p>
+            <label class="field">
+              <span class="field__label">Flights <em>(total, everyone)</em></span>
+              <input type="number" class="money fixed" id="f-flights" min="0" step="1" value="0" inputmode="decimal" />
+            </label>
+            <label class="field">
+              <span class="field__label">Visa and application fees</span>
+              <input type="number" class="money fixed" id="f-visa" min="0" step="1" value="0" inputmode="decimal" />
+            </label>
+            <label class="field">
+              <span class="field__label">Travel insurance</span>
+              <input type="number" class="money fixed" id="f-insurance" min="0" step="1" value="0" inputmode="decimal" />
+            </label>
+            <label class="field">
+              <span class="field__label">Intercity trains, buses, internal flights</span>
+              <input type="number" class="money fixed" id="f-intercity" min="0" step="1" value="0" inputmode="decimal" />
+            </label>
+            <label class="field">
+              <span class="field__label">Anything prebooked <em>(tours, passes)</em></span>
+              <input type="number" class="money fixed" id="f-prebooked" min="0" step="1" value="0" inputmode="decimal" />
+            </label>
+          </fieldset>
+
+          <fieldset class="tool-block">
+            <legend class="tool-block__title">Daily costs</legend>
+            <p class="tool-block__hint">Per person, per night. Not sure? Start from a travel style.</p>
+
+            <div class="style-picker" role="group" aria-label="Travel style presets">
+              {styles.map(s => (
+                <button type="button" class="style-btn" data-style={s.id} data-low={s.low}>
+                  <span class="style-btn__label">{s.label}</span>
+                  <span class="style-btn__range">{s.low}–{s.high === 380 ? '380+' : s.high}/day</span>
+                </button>
+              ))}
+            </div>
+            <p class="field-note">
+              Ranges are for Western Europe, from our
+              <a href="/blog/europe-trip-budget/">Europe budget guide</a>. Eastern and Southern
+              Europe run lower. A preset fills the four fields below — change any of them.
+            </p>
+
+            <label class="field">
+              <span class="field__label">Accommodation <em>(per person, per night)</em></span>
+              <input type="number" class="money daily" id="d-stay" min="0" step="1" value="0" inputmode="decimal" />
+            </label>
+            <label class="field">
+              <span class="field__label">Food and drink</span>
+              <input type="number" class="money daily" id="d-food" min="0" step="1" value="0" inputmode="decimal" />
+            </label>
+            <label class="field">
+              <span class="field__label">Local transport</span>
+              <input type="number" class="money daily" id="d-transport" min="0" step="1" value="0" inputmode="decimal" />
+            </label>
+            <label class="field">
+              <span class="field__label">Attractions and activities</span>
+              <input type="number" class="money daily" id="d-activities" min="0" step="1" value="0" inputmode="decimal" />
+            </label>
+          </fieldset>
+
+          <fieldset class="tool-block">
+            <legend class="tool-block__title">Buffer</legend>
+            <p class="tool-block__hint">
+              Laundry, a missed train, a pharmacy visit, one taxi you did not plan. This is the
+              line that turns a small problem into a non-problem.
+            </p>
+            <div class="buffer-picker" role="group" aria-label="Buffer percentage">
+              <button type="button" class="buffer-btn" data-buffer="10">10%</button>
+              <button type="button" class="buffer-btn is-active" data-buffer="15">15%</button>
+              <button type="button" class="buffer-btn" data-buffer="20">20%</button>
+            </div>
+            <p class="field-note">
+              Our guide suggests 10% for a tight single-country trip, and 15 to 20% once you are
+              crossing borders.
+            </p>
+          </fieldset>
+
+          <button type="button" class="btn btn--ghost btn--sm reset-btn" id="reset-btn">Clear and start again</button>
+        </form>
+
+        <!-- ─────────── Results ─────────── -->
+        <aside class="tool-results" aria-live="polite">
+          <div class="results-card">
+            <p class="results-label">Total trip cost</p>
+            <p class="results-total" id="r-total">—</p>
+
+            <div class="results-split">
+              <div>
+                <span class="results-split__label">Per person</span>
+                <span class="results-split__value" id="r-person">—</span>
+              </div>
+              <div>
+                <span class="results-split__label">Per person, per night</span>
+                <span class="results-split__value" id="r-perday">—</span>
+              </div>
+            </div>
+
+            <div class="bar" id="r-bar" role="img" aria-label="Share of budget by fixed costs, daily costs and buffer">
+              <span class="bar__seg bar__seg--fixed" id="bar-fixed"></span>
+              <span class="bar__seg bar__seg--daily" id="bar-daily"></span>
+              <span class="bar__seg bar__seg--buffer" id="bar-buffer"></span>
+            </div>
+
+            <ul class="legend">
+              <li><i class="dot dot--fixed"></i> Fixed <b id="r-fixed">—</b></li>
+              <li><i class="dot dot--daily"></i> Daily <b id="r-daily">—</b></li>
+              <li><i class="dot dot--buffer"></i> Buffer <b id="r-buffer">—</b></li>
+            </ul>
+
+            <p class="results-empty" id="r-empty">Add your first figure and the total appears here.</p>
+
+            <button type="button" class="btn btn--primary btn--sm copy-btn" id="copy-btn">Copy the breakdown</button>
+            <p class="copy-status" id="copy-status" aria-live="polite"></p>
+          </div>
+
+          <div class="results-aside">
+            <h2 class="results-aside__title">If the number looks wrong</h2>
+            <p>
+              Two things are usually behind it. Long-haul flights are often the single biggest
+              line, and people forget the days at either end that are half travel and still cost a
+              full day. Check both before you decide the trip is unaffordable.
+            </p>
+            <p>
+              The <a href="/blog/europe-trip-budget/">Europe budget guide</a> explains the method
+              behind this calculator. <a href="/blog/train-travel-europe/">Train travel</a> is
+              usually where a route gets cheaper.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <p class="visa-disclaimer">
+        Estimates only, based on the figures you enter. Prices change constantly and vary by
+        season, city and how far ahead you book. Educational information only. Not legal advice.
+        Always check the official embassy or consulate source for visa fees.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tool-title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    margin: var(--space-3) 0 var(--space-4);
+  }
+  .tool-intro {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+  .tool-intro--muted {
+    font-size: var(--text-sm);
+    margin-top: var(--space-3);
+    color: var(--color-text-light);
+  }
+
+  .tool-section { padding-top: 0; }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: var(--space-10);
+    align-items: start;
+  }
+
+  /* ── Inputs ── */
+  .tool-form { display: flex; flex-direction: column; gap: var(--space-6); }
+
+  .tool-block {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-5) var(--space-4);
+    background: var(--color-surface);
+  }
+  .tool-block__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    color: var(--color-navy);
+    padding: 0 var(--space-2);
+    margin-left: calc(var(--space-2) * -1);
+  }
+  .tool-block__hint {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: var(--space-2) 0 var(--space-4);
+    line-height: var(--leading-relaxed);
+  }
+
+  .field-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+
+  .field { display: block; margin-bottom: var(--space-3); }
+  .field__label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+  .field__label em { font-style: normal; color: var(--color-text-light); font-weight: var(--font-normal); }
+
+  .field input,
+  .field select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-alt);
+    font-size: var(--text-base);
+    color: var(--color-text);
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+  .field input:focus,
+  .field select:focus {
+    outline: none;
+    background: var(--color-surface);
+    border-color: var(--color-primary);
+  }
+
+  .field-note {
+    font-size: var(--text-xs);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-light);
+    margin: var(--space-2) 0 var(--space-4);
+  }
+  .field-note a { color: var(--color-accent-dark); }
+
+  .style-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+  .style-btn {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+  .style-btn:hover { border-color: var(--color-primary); }
+  .style-btn.is-active { border-color: var(--color-primary); background: var(--color-primary-bg); }
+  .style-btn__label { font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-navy); }
+  .style-btn__range { font-size: var(--text-xs); color: var(--color-text-light); }
+
+  .buffer-picker { display: flex; gap: var(--space-2); }
+  .buffer-btn {
+    flex: 1;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--color-navy);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+  .buffer-btn:hover { border-color: var(--color-primary); }
+  .buffer-btn.is-active { border-color: var(--color-primary); background: var(--color-primary-bg); }
+
+  .reset-btn { align-self: flex-start; }
+
+  /* ── Results ── */
+  .tool-results { position: sticky; top: 88px; display: flex; flex-direction: column; gap: var(--space-5); }
+
+  .results-card {
+    background: var(--color-navy);
+    color: var(--color-text-inverse);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+  }
+  .results-label {
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .results-total {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.1;
+    margin: var(--space-2) 0 var(--space-5);
+  }
+
+  .results-split {
+    display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  }
+  .results-split__label {
+    display: block;
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.55);
+    margin-bottom: 2px;
+  }
+  .results-split__value { font-size: var(--text-lg); font-weight: var(--font-semibold); }
+
+  .bar {
+    display: flex; height: 8px; border-radius: var(--radius-full);
+    overflow: hidden; margin: var(--space-5) 0 var(--space-4);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .bar__seg { display: block; height: 100%; width: 0; transition: width var(--transition-normal); }
+  .bar__seg--fixed { background: var(--color-accent); }
+  .bar__seg--daily { background: #6E9BC5; }
+  .bar__seg--buffer { background: rgba(255, 255, 255, 0.38); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: var(--space-4); font-size: var(--text-sm); }
+  .legend li { display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.75); }
+  .legend b { color: #fff; font-weight: var(--font-semibold); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .dot--fixed { background: var(--color-accent); }
+  .dot--daily { background: #6E9BC5; }
+  .dot--buffer { background: rgba(255, 255, 255, 0.38); }
+
+  .results-empty { font-size: var(--text-sm); color: rgba(255, 255, 255, 0.55); margin-top: var(--space-4); }
+
+  .copy-btn { margin-top: var(--space-5); width: 100%; }
+  .copy-status { font-size: var(--text-xs); color: rgba(255, 255, 255, 0.7); margin-top: var(--space-2); min-height: 1em; text-align: center; }
+
+  .results-aside {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+  }
+  .results-aside__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    color: var(--color-navy);
+    margin-bottom: var(--space-3);
+  }
+  .results-aside p {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+  .results-aside a { color: var(--color-accent-dark); }
+
+  .visa-disclaimer {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    .tool-grid { grid-template-columns: 1fr; gap: var(--space-8); }
+    .tool-results { position: static; }
+  }
+  @media (max-width: 560px) {
+    .field-row { grid-template-columns: 1fr; }
+    .style-picker { grid-template-columns: 1fr; }
+    .results-split { grid-template-columns: 1fr; gap: var(--space-3); }
+  }
+
+  @media print {
+    .tool-form, .results-aside, .copy-btn, .reset-btn, .visa-disclaimer { display: none; }
+  }
+</style>
+
+<script>
+  // Entirely client side. No fetch, no analytics beyond what the layout already
+  // loads, no dependencies. Works with the network off once the page is cached.
+  const STORAGE_KEY = 'durian-budget-v1';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement | null;
+
+  const nights = $('nights');
+  const travellers = $('travellers');
+  const currencySel = document.getElementById('currency') as HTMLSelectElement | null;
+  const form = document.getElementById('budget-form');
+  const fixedInputs = Array.from(document.querySelectorAll<HTMLInputElement>('.money.fixed'));
+  const dailyInputs = Array.from(document.querySelectorAll<HTMLInputElement>('.money.daily'));
+  const styleBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.style-btn'));
+  const bufferBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.buffer-btn'));
+
+  let buffer = 15;
+
+  const num = (el: HTMLInputElement | null) => {
+    const v = parseFloat(el?.value ?? '');
+    return Number.isFinite(v) && v > 0 ? v : 0;
+  };
+
+  function money(value: number): string {
+    const symbol = currencySel?.value ?? '';
+    const rounded = Math.round(value);
+    const formatted = rounded.toLocaleString('en-GB');
+    return symbol ? symbol + formatted : formatted;
+  }
+
+  function calculate() {
+    const n = Math.max(1, Math.round(num(nights) || 1));
+    const p = Math.max(1, Math.round(num(travellers) || 1));
+
+    const fixedTotal = fixedInputs.reduce((sum, el) => sum + num(el), 0);
+    const dailyPerPerson = dailyInputs.reduce((sum, el) => sum + num(el), 0);
+    const dailyTotal = dailyPerPerson * n * p;
+
+    const subtotal = fixedTotal + dailyTotal;
+    const bufferTotal = subtotal * (buffer / 100);
+    const total = subtotal + bufferTotal;
+
+    const empty = document.getElementById('r-empty');
+    if (total <= 0) {
+      ['r-total', 'r-person', 'r-perday', 'r-fixed', 'r-daily', 'r-buffer'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '—';
+      });
+      ['bar-fixed', 'bar-daily', 'bar-buffer'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) (el as HTMLElement).style.width = '0%';
+      });
+      if (empty) empty.style.display = '';
+      return;
+    }
+    if (empty) empty.style.display = 'none';
+
+    const set = (id: string, text: string) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    };
+
+    set('r-total', money(total));
+    set('r-person', money(total / p));
+    set('r-perday', money(total / p / n));
+    set('r-fixed', money(fixedTotal));
+    set('r-daily', money(dailyTotal));
+    set('r-buffer', money(bufferTotal));
+
+    const pct = (part: number) => (total > 0 ? (part / total) * 100 : 0);
+    const widths: Array<[string, number]> = [
+      ['bar-fixed', pct(fixedTotal)],
+      ['bar-daily', pct(dailyTotal)],
+      ['bar-buffer', pct(bufferTotal)],
+    ];
+    widths.forEach(([id, w]) => {
+      const el = document.getElementById(id);
+      if (el) (el as HTMLElement).style.width = w + '%';
+    });
+
+    save();
+  }
+
+  function applyStyle(low: number) {
+    // Spread the published daily figure across the four fields, weighted the way
+    // most trips actually break down. Every field stays editable afterwards.
+    const split = { 'd-stay': 0.45, 'd-food': 0.3, 'd-transport': 0.1, 'd-activities': 0.15 };
+    (Object.keys(split) as Array<keyof typeof split>).forEach(id => {
+      const el = $(id);
+      if (el) el.value = String(Math.round(low * split[id]));
+    });
+    calculate();
+  }
+
+  styleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      styleBtns.forEach(b => b.classList.toggle('is-active', b === btn));
+      applyStyle(parseFloat(btn.dataset.low ?? '0'));
+    });
+  });
+
+  bufferBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      bufferBtns.forEach(b => b.classList.toggle('is-active', b === btn));
+      buffer = parseFloat(btn.dataset.buffer ?? '15');
+      calculate();
+    });
+  });
+
+  form?.addEventListener('input', calculate);
+  currencySel?.addEventListener('change', calculate);
+
+  document.getElementById('reset-btn')?.addEventListener('click', () => {
+    [...fixedInputs, ...dailyInputs].forEach(el => (el.value = '0'));
+    if (nights) nights.value = '10';
+    if (travellers) travellers.value = '1';
+    styleBtns.forEach(b => b.classList.remove('is-active'));
+    bufferBtns.forEach(b => b.classList.toggle('is-active', b.dataset.buffer === '15'));
+    buffer = 15;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* private mode */ }
+    calculate();
+  });
+
+  document.getElementById('copy-btn')?.addEventListener('click', async () => {
+    const line = (label: string, id: string) =>
+      label + ': ' + (document.getElementById(id)?.textContent ?? '—');
+    const text = [
+      'Europe trip budget',
+      '',
+      line('Total', 'r-total'),
+      line('Per person', 'r-person'),
+      line('Per person per night', 'r-perday'),
+      '',
+      line('Fixed costs', 'r-fixed'),
+      line('Daily costs', 'r-daily'),
+      line('Buffer (' + buffer + '%)', 'r-buffer'),
+      '',
+      (nights?.value ?? '?') + ' nights, ' + (travellers?.value ?? '?') + ' traveller(s)',
+      'Estimated with duriantravel.com/tools/budget/',
+    ].join('\n');
+
+    const status = document.getElementById('copy-status');
+    try {
+      await navigator.clipboard.writeText(text);
+      if (status) status.textContent = 'Copied.';
+    } catch (e) {
+      if (status) status.textContent = 'Could not copy — select the figures above instead.';
+    }
+    window.setTimeout(() => { if (status) status.textContent = ''; }, 3000);
+  });
+
+  function save() {
+    const data: Record<string, string> = { buffer: String(buffer) };
+    [nights, travellers, ...fixedInputs, ...dailyInputs].forEach(el => {
+      if (el?.id) data[el.id] = el.value;
+    });
+    if (currencySel) data.currency = currencySel.value;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { /* private mode */ }
+  }
+
+  function restore() {
+    let data: Record<string, string> | null = null;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) data = JSON.parse(raw);
+    } catch (e) { data = null; }
+    if (!data) return;
+
+    [nights, travellers, ...fixedInputs, ...dailyInputs].forEach(el => {
+      if (el?.id && typeof data![el.id] === 'string') el.value = data![el.id];
+    });
+    if (currencySel && typeof data.currency === 'string') currencySel.value = data.currency;
+    if (typeof data.buffer === 'string') {
+      buffer = parseFloat(data.buffer) || 15;
+      bufferBtns.forEach(b => b.classList.toggle('is-active', b.dataset.buffer === String(buffer)));
+    }
+  }
+
+  restore();
+  calculate();
+</script>
