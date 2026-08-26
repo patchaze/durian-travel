@@ -1,6 +1,21 @@
 ---
 // The avatar is an inline SVG rather than an image: it is a sibling of the
 // logo mark in Header.astro, stays legible at 40px, and costs no bytes.
+
+// Suggested questions are rendered here rather than created in the client
+// script. Astro scopes component styles by appending [data-astro-cid-*] to the
+// selector, and elements built with document.createElement() never carry that
+// attribute — so JS-created buttons silently received none of the styling below
+// and fell back to the browser default. Rendering them in the template fixes
+// that, and means they exist before the script runs.
+//
+// `id` must match an entry in TOPICS in the script below.
+const quickReplies = [
+  { id: 'itinerary', label: 'Help me plan a route' },
+  { id: 'budget', label: 'What will it cost?' },
+  { id: 'countries', label: 'Where should I go?' },
+  { id: 'human', label: 'Talk to a person' },
+];
 ---
 
 <div id="chatbot-container" class="chatbot-container">
@@ -48,7 +63,11 @@
       <span></span>
     </div>
 
-    <div id="chatbot-quick" class="chatbot-quick" aria-label="Suggested questions"></div>
+    <div id="chatbot-quick" class="chatbot-quick" role="group" aria-label="Suggested questions">
+      {quickReplies.map(q => (
+        <button type="button" class="quick-pill" data-topic={q.id}>{q.label}</button>
+      ))}
+    </div>
 
     <form id="chatbot-form" class="chatbot-input-area">
       <input
@@ -117,14 +136,30 @@
   .chatbot-input-area button:hover:not(:disabled) { background: var(--color-navy, #0F2138); }
   .chatbot-input-area button:disabled { opacity: 0.45; cursor: not-allowed; }
 
-  .chatbot-quick { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 14px 10px; background: var(--color-bg-alt, #F4F6F8); }
-  .chatbot-quick button {
-    background: #FFFFFF; border: 1px solid var(--color-border, #E2E6EB); color: var(--color-primary, #1B3A5C);
-    font-size: 0.74rem; font-weight: 500; line-height: 1.25; padding: 6px 11px; border-radius: 999px;
-    cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s;
+  .chatbot-quick { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 14px 12px; background: var(--color-bg-alt, #F4F6F8); }
+  .quick-pill {
+    background: rgba(27, 58, 92, 0.9);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 1px 3px rgba(15, 33, 56, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.25;
+    padding: 7px 13px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
   }
-  .chatbot-quick button:hover { background: var(--color-primary, #1B3A5C); border-color: var(--color-primary, #1B3A5C); color: #fff; }
-  .chatbot-quick button:focus-visible { outline: 2px solid var(--color-accent, #C44B36); outline-offset: 2px; }
+  .quick-pill:hover {
+    background: rgba(15, 33, 56, 0.97);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(15, 33, 56, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  }
+  .quick-pill:active { transform: translateY(0); }
+  .quick-pill:focus-visible { outline: 2px solid var(--color-accent, #C44B36); outline-offset: 2px; }
 
   .chatbot-disclaimer {
     margin: 0; padding: 0 14px 12px; background: #FFFFFF;
@@ -265,11 +300,8 @@
     }
   ];
 
-  // Questions offered as buttons. Trip planning first, deliberately: the visa
-  // topics are all still reachable by typing, but leading with them framed the
-  // whole business as visa admin. Four only — the widget is 380px wide, so each
-  // button takes its own row and more than four crowds out the conversation.
-  const QUICK_IDS = ['itinerary', 'budget', 'countries', 'human'];
+  // The suggested-question buttons live in the template above, not here, so
+  // that Astro's scoped styles apply to them. This script only wires them up.
 
   const FALLBACK =
     "I can only answer from what is published on this site, and I do not have anything on that.\n\n" +
@@ -303,17 +335,16 @@
     ask(message);
   });
 
-  function renderQuickReplies() {
+  // Buttons already exist in the DOM; each carries the topic id it should
+  // answer, so a click resolves directly rather than going back through
+  // keyword matching.
+  function wireQuickReplies() {
     if (!quickWrap) return;
-    quickWrap.innerHTML = '';
-    QUICK_IDS.forEach(id => {
-      const topic = TOPICS.find(t => t.id === id);
-      if (!topic?.label) return;
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.textContent = topic.label;
-      btn.addEventListener('click', () => ask(topic.label as string));
-      quickWrap.appendChild(btn);
+    quickWrap.querySelectorAll<HTMLButtonElement>('.quick-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const topic = TOPICS.find(t => t.id === btn.dataset.topic);
+        ask(btn.textContent?.trim() ?? '', topic ?? null);
+      });
     });
   }
 
@@ -336,7 +367,10 @@
     return bestScore > 0 ? best : null;
   }
 
-  function ask(message: string) {
+  // `forced` is set when the visitor tapped a suggestion, so that answer is
+  // certain rather than dependent on the label happening to match keywords.
+  function ask(message: string, forced: Topic | null = null) {
+    if (!message) return;
     isProcessing = true;
     if (sendBtn) sendBtn.disabled = true;
 
@@ -347,7 +381,7 @@
     // Brief pause so the exchange reads as a conversation rather than a jump cut.
     window.setTimeout(() => {
       typingIndicator?.classList.add('hidden');
-      const topic = findTopic(message);
+      const topic = forced ?? findTopic(message);
       addMessage(topic ? topic.answer : FALLBACK, 'ai');
       isProcessing = false;
       if (sendBtn) sendBtn.disabled = false;
@@ -383,5 +417,5 @@
     if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  renderQuickReplies();
+  wireQuickReplies();
 </script>
