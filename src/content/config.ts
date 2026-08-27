@@ -8,7 +8,7 @@ const blogCollection = defineCollection({
         description: z.string(),
         pubDate: z.coerce.date(),
         modDate: z.coerce.date().optional(),
-        author: z.string().default('Patricia Azevedo'),
+        author: z.string().default('Durian Travel Editorial Team'),
         tags: z.array(z.string()).default([]),
         ogImage: z.string().optional(),
         readTime: z.number().default(5),

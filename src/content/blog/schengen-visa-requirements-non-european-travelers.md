@@ -5,7 +5,7 @@ seoTitle: "Schengen Visa Requirements: The Complete Guide for Non-European Trave
 description: "Everything non-European travelers need to know about the Schengen visa process: document checklist, financial proof, embassy selection, cover letter strategy, and the mistakes that trigger refusals. Updated April 2026."
 pubDate: "2026-03-29"
 modDate: "2026-08-27"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Schengen", "Visa", "Non-European Travelers", "Visa Strategy"]
 readTime: 15
 ---

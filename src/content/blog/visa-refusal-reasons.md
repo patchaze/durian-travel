@@ -5,7 +5,7 @@ seoTitle: "Top Reasons Schengen Visa Applications Are Refused"
 description: "The official refusal grounds behind Schengen visa rejections, plus the fixes that usually strengthen a reapplication."
 pubDate: "2026-02-23"
 modDate: "2026-04-08"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Refusal", "Tips", "Schengen"]
 readTime: 11
 ---
@@ -206,4 +206,4 @@ No. It means the next file needs to answer the previous one better. The refusal 
 
 *Sources: European Commission Visa Policy and Article 32 of Regulation (EC) No 810/2009; European Commission short-stay visa statistics for 2024; official embassy and visa-center guidance. Last reviewed: April 2026.*
 
-*Author: Patricia Azevedo, Visa Strategy Consultant | [About the Author](/patricia-azevedo/)*
+*By the Durian Travel editorial team | [About Durian Travel](/about-us/)*

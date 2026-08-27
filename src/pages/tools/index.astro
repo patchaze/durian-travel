@@ -41,27 +41,28 @@ const schema = {
 ---
 
 <BaseLayout
-  title="Free Europe Trip Planning Tools | DURIAN Travel"
-  description="Free tools for planning a trip to Europe from outside it. No sign-up, nothing sent anywhere, your figures stay in your browser."
+  title="Free Europe Trip Planners | DURIAN Travel"
+  description="Free Europe trip planners: a budget calculator, a cost-per-country comparison built on Eurostat data, and a Schengen document checklist. No sign-up, your figures stay in your browser."
   canonical={canonical}
   schema={schema}
-  keywords="europe trip planning tools, free travel budget calculator"
-  breadcrumb={[{ name: 'Tools', url: canonical }]}
+  keywords="europe trip planner, free europe trip budget planner, schengen document checklist, europe cost comparison by country"
+  breadcrumb={[{ name: 'Planners', url: canonical }]}
 >
-  <div class="container">
-    <Breadcrumb items={[{ name: 'Tools' }]} />
-  </div>
-
-  <section class="section section--sm">
-    <div class="container container--narrow">
-      <span class="section-label">Free tools</span>
-      <h1 class="tools-title">Tools for planning from outside Europe</h1>
-      <p class="tools-intro">
-        Small, free things that answer one question properly. No sign-up, no account, nothing
-        sent anywhere. What you type stays in your browser.
+  <section class="hero-sm hero-gradient">
+    <div class="container">
+      <span class="section-label" style="color:var(--color-accent-light)">Free Planners</span>
+      <h1 class="hero-sm__title" style="color:white">Plan the trip with real numbers, not guesses</h1>
+      <p class="hero-sm__subtitle">
+        Three free planners built for travelling to Europe from outside it: work out what the trip
+        costs, compare countries on official price data, and gather the right documents. No
+        sign-up, nothing sent anywhere — what you type stays in your browser.
       </p>
     </div>
   </section>
+
+  <div class="container">
+    <Breadcrumb items={[{ name: 'Planners' }]} />
+  </div>
 
   <section class="section section--sm">
     <div class="container container--narrow">
@@ -86,16 +87,17 @@ const schema = {
 </BaseLayout>
 
 <style>
-  .tools-title {
+  .hero-sm { padding-block: var(--space-16); }
+  .hero-sm__title {
     font-family: var(--font-serif);
-    font-weight: 700;
-    margin: var(--space-3) 0 var(--space-4);
+    font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+    margin-bottom: var(--space-4);
   }
-  .tools-intro {
+  .hero-sm__subtitle {
     font-size: var(--text-lg);
+    color: hsla(0, 0%, 100%, 0.85);
+    max-width: 60ch;
     line-height: var(--leading-relaxed);
-    color: var(--color-text-muted);
-    max-width: 58ch;
   }
 
   .tool-list { display: flex; flex-direction: column; gap: var(--space-4); }

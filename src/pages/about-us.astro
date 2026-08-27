@@ -9,11 +9,6 @@ const aboutSchema = {
   "name": "DURIAN Travel",
   "url": "https://www.duriantravel.com",
   "description": "DURIAN Travel helps non-European travelers plan smarter trips to Europe — from Schengen visa strategy to full itinerary design. Serving clients from Latin America, North America, Asia, Africa, Australia, and beyond.",
-  "founder": {
-    "@type": "Person",
-    "name": "Patricia Azevedo",
-    "url": "https://www.duriantravel.com/patricia-azevedo/"
-  },
   "areaServed": "Worldwide",
   "knowsAbout": [
     "Schengen visa applications",
@@ -45,7 +40,7 @@ const whoWeAreNot = [
 const workWithUs = [
   {
     title: 'Start with the Free Audit',
-    text: 'Use the free audit if you are not sure where you stand. Patricia reviews your situation and tells you exactly what needs attention.',
+    text: 'Use the free audit if you are not sure where you stand. We review your situation and tell you exactly what needs attention.',
     href: '/free-visa-audit/'
   },
   {
@@ -54,8 +49,8 @@ const workWithUs = [
     href: '/services/'
   },
   {
-    title: 'Contact Patricia Directly',
-    text: 'If you have a specific question first, send a message. Patricia reads every enquiry personally.',
+    title: 'Contact Us Directly',
+    text: 'If you have a specific question first, send a message. Every enquiry is read personally.',
     href: '/contact/'
   },
   {
@@ -72,7 +67,7 @@ const workWithUs = [
   canonical="https://www.duriantravel.com/about-us/"
   breadcrumb={[{ name: 'About', url: 'https://www.duriantravel.com/about-us/' }]}
   schema={aboutSchema}
-  keywords="about DURIAN Travel, Europe trip planning for non-European travelers, Schengen visa strategy, itinerary design, Patricia Azevedo"
+  keywords="about DURIAN Travel, Europe trip planning for non-European travelers, Schengen visa strategy, itinerary design"
 >
   <div class="container">
     <Breadcrumb items={[{ name: 'About DURIAN Travel' }]} />
@@ -122,13 +117,10 @@ const workWithUs = [
 
       <h2>The team</h2>
       <p>
-        DURIAN was founded by <strong><a href="/patricia-azevedo/">Patricia Azevedo</a></strong>, a European travel consultant who spent years navigating European travel personally and professionally before building a consultancy around it. She leads all client work and is the person you will speak with directly.
+        DURIAN was founded by a European travel specialist who spent years navigating European travel personally and professionally before building a consultancy around it. The founder leads all client work and is the person you will speak with directly.
       </p>
       <p>
-        She is supported by a small team contributing to research, destination content, and operational support. The destination guides on this site are grounded in real travel experience across Western, Northern, Central, and Eastern Europe.
-      </p>
-      <p>
-        <a href="/patricia-azevedo/" class="link">Meet Patricia in full →</a>
+        The founder is supported by a small team contributing to research, destination content, and operational support. The destination guides on this site are grounded in real travel experience across Western, Northern, Central, and Eastern Europe.
       </p>
     </div>
   </section>
@@ -198,7 +190,7 @@ const workWithUs = [
 }
 .hero-sm__subtitle {
   font-size: var(--text-lg);
-  color: hsl(150 30% 75%);
+  color: hsla(0, 0%, 100%, 0.85);
   max-width: 60ch;
   line-height: var(--leading-relaxed);
 }
@@ -218,7 +210,42 @@ const workWithUs = [
   background: white;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  padding: var(--space-7);
+  padding: var(--space-8);
+}
+/* Colour-coded top edges so the two columns read at a glance */
+.truth-card:first-child { border-top: 3px solid var(--color-success); }
+.truth-card:last-child { border-top: 3px solid var(--color-accent); }
+.check-list li,
+.x-list li {
+  position: relative;
+  padding-left: var(--space-8);
+  margin-bottom: var(--space-3);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+.check-list li::before,
+.x-list li::before {
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: var(--font-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.check-list li::before {
+  content: "\2713";
+  color: var(--color-success);
+  background: rgba(45, 143, 92, 0.12);
+}
+.x-list li::before {
+  content: "\2715";
+  color: var(--color-accent-dark);
+  background: var(--color-accent-bg);
 }
 .truth-card h3,
 .work-card h3 {

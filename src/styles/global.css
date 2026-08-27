@@ -287,8 +287,9 @@ p {
 }
 
 .card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+    border-color: rgba(27, 58, 92, 0.25);
 }
 
 /* ---------- Badges ---------- */
@@ -353,13 +354,35 @@ p {
 }
 
 .section-label {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
     font-size: var(--text-sm);
     font-weight: var(--font-semibold);
     color: var(--color-accent-dark);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: var(--space-3);
+}
+
+/* Editorial accent dash before every section label; centered headers get a
+   matching dash after it so the label stays symmetric. */
+.section-label::before {
+    content: "";
+    width: 28px;
+    height: 2px;
+    background: var(--color-accent);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+}
+
+.text-center .section-label::after {
+    content: "";
+    width: 28px;
+    height: 2px;
+    background: var(--color-accent);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
 }
 
 .section-title {
@@ -731,20 +754,44 @@ tr:last-child td {
     background: linear-gradient(135deg, #0F2138 0%, #1B3A5C 50%, #1E4468 100%);
 }
 
-/* ---------- Animations ---------- */
+/* ---------- Scroll reveal (opt-in via data-reveal) ----------
+   A head snippet in BaseLayout adds .js-reveal to <html> before first paint,
+   and an IntersectionObserver at the end of <body> adds .is-visible as each
+   element enters the viewport. Three safety properties, all deliberate:
+   - no JS: .js-reveal never lands, nothing is ever hidden
+   - reduced motion: the whole block is inside no-preference, so those users
+     get fully static content rather than an overridden animation
+   - only opacity/transform are animated, so there is no layout shift.
+   Never put data-reveal on the hero or anything above the fold: the reveal
+   delay would count against LCP. */
 @media (prefers-reduced-motion: no-preference) {
-    .fade-up {
+    .js-reveal [data-reveal] {
         opacity: 0;
-        transform: translateY(24px);
-        animation: fadeUp 0.6s ease forwards;
+        transform: translateY(20px);
+        transition: opacity 0.55s ease, transform 0.55s ease;
     }
 
-    @keyframes fadeUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .js-reveal [data-reveal].is-visible {
+        opacity: 1;
+        transform: none;
     }
+
+    .js-reveal [data-reveal-stagger]>* {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .js-reveal [data-reveal-stagger].is-visible>* {
+        opacity: 1;
+        transform: none;
+    }
+
+    .js-reveal [data-reveal-stagger].is-visible>*:nth-child(2) { transition-delay: 0.08s; }
+    .js-reveal [data-reveal-stagger].is-visible>*:nth-child(3) { transition-delay: 0.16s; }
+    .js-reveal [data-reveal-stagger].is-visible>*:nth-child(4) { transition-delay: 0.24s; }
+    .js-reveal [data-reveal-stagger].is-visible>*:nth-child(5) { transition-delay: 0.32s; }
+    .js-reveal [data-reveal-stagger].is-visible>*:nth-child(n+6) { transition-delay: 0.4s; }
 }
 
 /* ---------- Print ---------- */

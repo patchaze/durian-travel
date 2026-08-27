@@ -5,7 +5,7 @@ seoTitle: "10-Day Europe Itinerary for First-Time Travelers"
 description: "A realistic 10-day Europe itinerary for first-time travelers, with two strong bases, humane pacing, and route logic that works before you book."
 pubDate: "2026-04-09"
 modDate: "2026-04-10"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Itinerary", "Europe", "First-Time Travelers", "Non-European Travelers"]
 readTime: 10
 ---

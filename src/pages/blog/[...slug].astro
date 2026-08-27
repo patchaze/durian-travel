@@ -90,9 +90,9 @@ const faqSchema = post.data.faq?.length
         <p class="post-header__desc">{post.data.description}</p>
         <div class="post-header__meta">
           <div class="post-meta-author">
-            <div class="post-meta-avatar" aria-hidden="true">PA</div>
+            <div class="post-meta-avatar" aria-hidden="true">DT</div>
             <div class="post-meta-info">
-              <a href="/patricia-azevedo/" class="post-meta-name">{post.data.author}</a>
+              <a href="/about-us/" class="post-meta-name">{post.data.author}</a>
               <div class="post-meta-dates">
                 <time datetime={pubDateISO}>Published: {pubDateFormatted}</time>
                 {post.data.modDate && (
@@ -120,14 +120,13 @@ const faqSchema = post.data.faq?.length
 
       <!-- Author box -->
       <aside class="author-box" aria-label="About the author">
-        <div class="author-box__avatar" aria-hidden="true">PA</div>
+        <div class="author-box__avatar" aria-hidden="true">DT</div>
         <div class="author-box__info">
           <strong class="author-box__name">{post.data.author}</strong>
           <p class="author-box__bio">
-            Patricia Azevedo is a European travel consultant and the founder of DURIAN Travel.
-            She works with non-European travelers worldwide on Schengen visa strategy and Europe itinerary planning.
+            Written by the Durian Travel editorial team: European travel specialists working with non-European travellers worldwide on route planning, budgets, and Schengen documentation.
           </p>
-          <a href="/patricia-azevedo/" class="link" style="font-size:var(--text-sm)">Read her full bio →</a>
+          <a href="/about-us/" class="link" style="font-size:var(--text-sm)">About Durian Travel →</a>
         </div>
       </aside>
 

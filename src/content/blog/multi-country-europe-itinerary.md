@@ -4,7 +4,7 @@ title: "How to Build a Multi-Country Europe Itinerary That Actually Makes Sense"
 seoTitle: "Multi-Country Europe Itinerary That Works"
 description: "A practical method for building a Europe itinerary: pacing rules, route logic, train vs flight choices, and how to avoid the too many cities trap."
 pubDate: "2026-02-28"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Itinerary", "Europe", "Planning"]
 modDate: "2026-04-08"
 readTime: 11

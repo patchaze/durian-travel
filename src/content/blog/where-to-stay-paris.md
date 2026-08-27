@@ -6,7 +6,7 @@ seoTitle: "Where to Stay in Paris: Honest Neighbourhood Guide for First-Timers (
 description: "Marais, Montmartre, Saint-Germain — or somewhere cheaper? Here's exactly which Paris neighbourhood fits your budget, travel style, and how far you've come to get there."
 pubDate: "2026-02-25"
 modDate: "2026-04-11"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Paris", "France", "Accommodation"]
 readTime: 14
 faq:
