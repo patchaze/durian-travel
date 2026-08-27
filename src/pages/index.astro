@@ -247,7 +247,7 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
 
   <section class="section" aria-labelledby="problem-heading">
     <div class="container container--narrow">
-      <header class="section-header text-center">
+      <header data-reveal class="section-header text-center">
         <span class="section-label">The Problem We Solve</span>
         <h2 id="problem-heading" class="section-title">Planning Europe from Outside Europe Is a Different Challenge</h2>
       </header>
@@ -261,11 +261,11 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
 
   <section class="section section--alt" aria-labelledby="services-help-heading">
     <div class="container">
-      <header class="section-header">
+      <header data-reveal class="section-header">
         <span class="section-label">How We Help</span>
         <h2 id="services-help-heading" class="section-title">What We Do For You</h2>
       </header>
-      <div class="services-grid-home">
+      <div data-reveal-stagger class="services-grid-home">
         {serviceCards.map((card) => (
           <article class="service-card-home">
             <h3 class="service-card-home__title">{card.title}</h3>
@@ -279,11 +279,11 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
 
   <section id="how-it-works" class="section" aria-labelledby="process-heading">
     <div class="container">
-      <header class="section-header text-center">
+      <header data-reveal class="section-header text-center">
         <span class="section-label">Our Process</span>
         <h2 id="process-heading" class="section-title">What Working With Durian Travel Looks Like</h2>
       </header>
-      <div class="process-grid">
+      <div data-reveal-stagger class="process-grid">
         {processSteps.map((step) => (
           <article class="process-step">
             <div class="process-step__num">{step.number}</div>
@@ -299,7 +299,7 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
 
   <section class="section section--alt" aria-labelledby="audience-heading">
     <div class="container container--narrow">
-      <header class="section-header text-center">
+      <header data-reveal class="section-header text-center">
         <span class="section-label">Who We Help</span>
         <h2 id="audience-heading" class="section-title">We Specialize in One Kind of Traveler</h2>
       </header>
@@ -382,7 +382,7 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
 
   <section class="section section--alt" aria-labelledby="spotlight-heading">
     <div class="container">
-      <header class="section-header">
+      <header data-reveal class="section-header">
         <div class="flex-between" style="flex-wrap:wrap;gap:var(--space-4)">
           <div>
             <span class="section-label">Planning Spotlight</span>
@@ -390,7 +390,7 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
           </div>
         </div>
       </header>
-      <div class="spotlight-grid">
+      <div data-reveal-stagger class="spotlight-grid">
         {strategySpotlight.map(item => (
           <a href={item.href} class="spotlight-card">
             <span class="spotlight-card__label">{item.label}</span>
@@ -405,7 +405,7 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
   <!-- BLOG PREVIEW -->
   <section class="section" aria-labelledby="blog-heading">
     <div class="container">
-      <header class="section-header">
+      <header data-reveal class="section-header">
         <div class="flex-between" style="flex-wrap:wrap;gap:var(--space-4)">
           <div>
             <span class="section-label">Latest Insights</span>
@@ -414,7 +414,7 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
           <a href="/blog/" class="btn btn--secondary">View All Posts →</a>
         </div>
       </header>
-      <div class="grid-3">
+      <div data-reveal-stagger class="grid-3">
         {recentPosts.map(p => <BlogCard {...p} />)}
       </div>
     </div>
@@ -423,12 +423,12 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
   <!-- FAQ -->
   <section class="section section--alt" aria-labelledby="faq-heading">
     <div class="container">
-      <header class="section-header text-center">
+      <header data-reveal class="section-header text-center">
         <span class="section-label">FAQ</span>
         <h2 id="faq-heading" class="section-title">Common Questions</h2>
       </header>
       
-      <div class="faq-grid-custom">
+      <div data-reveal-stagger class="faq-grid-custom">
         <div class="faq-item-custom">
           <h3>What are the financial bank balance requirements for a Schengen visa?</h3>
           <p>To meet the financial proof requirements for a Schengen visa, applicants must demonstrate a stable and consistent bank balance covering at least <strong>€50 to €150 per day</strong> of their planned Europe trip. European embassies require 3 to 6 months of official bank statements showing regular income rather than sudden large deposits. <strong>A clear financial cover letter explaining any account discrepancies</strong> can help officers understand unusual account activity.</p>
@@ -460,7 +460,7 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
   <!-- TRUST / E-E-A-T -->
   <section class="section" aria-labelledby="trust-heading">
     <div class="container container--narrow">
-      <header class="section-header text-center">
+      <header data-reveal class="section-header text-center">
         <span class="section-label">Why Clients Trust Us</span>
         <h2 id="trust-heading" class="section-title">Built on Expertise</h2>
       </header>
