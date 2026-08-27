@@ -1,0 +1,381 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import costData from '../../data/country-costs.json';
+
+const canonical = 'https://www.duriantravel.com/tools/cost-per-country/';
+
+// Every figure on this page comes from Eurostat's price level index for
+// restaurants and hotels, EU27 = 100. Nothing is estimated here: the tool
+// applies that published ratio to a number the visitor supplies. See
+// src/data/country-costs.json for the source, dataset and retrieval date.
+const source = costData._source;
+const countries = costData.countries;
+
+const cheapest = [...countries].sort((a, b) => a.pli - b.pli).slice(0, 3);
+const dearest = [...countries].sort((a, b) => b.pli - a.pli).slice(0, 3);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Europe Cost-per-Country Estimator',
+  url: canonical,
+  applicationCategory: 'TravelApplication',
+  operatingSystem: 'Any',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  description:
+    'Compare what the same trip costs across European countries, using Eurostat price level indices for restaurants and hotels.',
+};
+---
+
+<BaseLayout
+  title="Europe Cost-per-Country Estimator | DURIAN Travel"
+  description="See what the same daily budget buys in each European country, based on official Eurostat price levels for restaurants and hotels. Free, no sign-up."
+  canonical={canonical}
+  schema={schema}
+  keywords="cheapest countries in europe to visit, cost of travel by country europe, europe daily budget by country"
+  breadcrumb={[{ name: 'Cost per country', url: canonical }]}
+>
+  <div class="container">
+    <Breadcrumb items={[{ name: 'Tools', href: '/tools/' }, { name: 'Cost per country' }]} />
+  </div>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <span class="section-label">Free tool</span>
+      <h1 class="tool-title">What the same trip costs, country by country</h1>
+      <p class="tool-intro">
+        The same week costs roughly three times as much in Switzerland as in Bulgaria. If your
+        route is flexible, that gap is the single biggest lever you have on the budget.
+      </p>
+      <p class="tool-intro tool-intro--muted">
+        Tell it what you expect to spend in one country you know, and it shows what the same
+        standard of trip costs everywhere else.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <form class="cpc-controls" id="cpc-form" novalidate>
+        <label class="field">
+          <span class="field__label">I would spend, per person, per day</span>
+          <div class="field-inline">
+            <select id="cpc-currency" aria-label="Currency">
+              <option value="€" selected>€</option>
+              <option value="$">$</option>
+              <option value="£">£</option>
+            </select>
+            <input type="number" id="cpc-amount" min="0" step="5" value="120" inputmode="decimal" />
+          </div>
+        </label>
+
+        <label class="field">
+          <span class="field__label">at prices like</span>
+          <select id="cpc-reference">
+            <option value="100" selected>the EU average</option>
+            {countries.map(c => <option value={c.pli}>{c.name}</option>)}
+          </select>
+        </label>
+
+        <label class="field">
+          <span class="field__label">for how many nights</span>
+          <input type="number" id="cpc-nights" min="1" max="365" step="1" value="7" inputmode="numeric" />
+        </label>
+      </form>
+
+      <p class="cpc-hint">
+        Not sure what to put? Work it out first with the
+        <a href="/tools/budget/">budget calculator</a>, then bring the per-day figure here.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <div class="cpc-head">
+        <h2 class="cpc-head__title">Cheapest first</h2>
+        <p class="cpc-head__meta" id="cpc-summary">—</p>
+      </div>
+
+      <ol class="cpc-list" id="cpc-list" role="list">
+        {countries.map(c => (
+          <li class="cpc-row" data-pli={c.pli} data-name={c.name}>
+            <div class="cpc-row__main">
+              <span class="cpc-row__name">{c.name}</span>
+              <span class="cpc-row__index">index {c.pli}</span>
+            </div>
+            <div class="cpc-row__bar"><span class="cpc-row__fill"></span></div>
+            <div class="cpc-row__figures">
+              <span class="cpc-row__day"></span>
+              <span class="cpc-row__trip"></span>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <div class="cpc-notes">
+        <h2 class="cpc-notes__title">Where these numbers come from, and what they are not</h2>
+        <p>
+          Every figure is derived from <strong>{source.publisher}</strong>'s price level index for
+          <strong>{source.category.replace('A0111 — ', '').toLowerCase()}</strong>, reference year
+          <strong>{source.referenceYear}</strong>, where the EU27 average is 100. The tool does one
+          piece of arithmetic: it scales the number you entered by the ratio between two countries'
+          published indices. Nothing on this page is our own estimate.
+        </p>
+        <p class="cpc-notes__limits">
+          <strong>What it cannot tell you.</strong> This is an economy-wide price level, not a
+          tourist basket. Capital cities and tourist districts run above their national average,
+          sometimes well above. High season and low season can differ more than two countries do.
+          Flights are not included, and they often decide the total. Treat the ranking as reliable
+          and the exact figures as a starting point.
+        </p>
+        <p class="cpc-notes__src">
+          Source: {source.publisher}, dataset <code>{source.dataset}</code>, indicator
+          {' '}<code>{source.indicator}</code>. Eurostat last updated this
+          {' '}{source.eurostatLastUpdated}; retrieved {source.retrieved}.
+          {' '}<a href={source.url} rel="nofollow noopener" target="_blank">View the dataset on Eurostat →</a>
+        </p>
+        <p class="cpc-notes__src">{source.note}</p>
+      </div>
+
+      <p class="visa-disclaimer">
+        Estimates only. Prices vary by city, season and how far ahead you book. Educational
+        information only. Not legal advice. Always check the official embassy or consulate source
+        for visa fees.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tool-title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    margin: var(--space-3) 0 var(--space-4);
+  }
+  .tool-intro {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+  .tool-intro--muted { font-size: var(--text-base); margin-top: var(--space-3); }
+
+  .cpc-controls {
+    display: grid;
+    grid-template-columns: 1.1fr 1.2fr 0.8fr;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-alt);
+  }
+  .field { display: block; margin: 0; }
+  .field__label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    margin-bottom: var(--space-2);
+    color: var(--color-text);
+  }
+  .cpc-controls input,
+  .cpc-controls select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    font-size: var(--text-base);
+    color: var(--color-text);
+  }
+  .cpc-controls input:focus,
+  .cpc-controls select:focus { outline: none; border-color: var(--color-primary); }
+
+  /* Must come after the shared rule above: same specificity, so source order
+     decides. Without this the currency select takes the full width and
+     collapses the amount field next to it. */
+  .field-inline { display: flex; gap: var(--space-2); align-items: stretch; }
+  .cpc-controls .field-inline select { width: 4.75rem; flex: 0 0 auto; padding-inline: 8px; }
+  .cpc-controls .field-inline input { flex: 1 1 auto; width: auto; min-width: 0; }
+
+  .cpc-hint { font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-3); }
+  .cpc-hint a, .cpc-notes a { color: var(--color-accent-dark); }
+
+  .cpc-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-4);
+  }
+  .cpc-head__title { font-family: var(--font-serif); font-size: var(--text-2xl); color: var(--color-navy); }
+  .cpc-head__meta { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+  .cpc-list { display: flex; flex-direction: column; gap: 2px; }
+  .cpc-row {
+    display: grid;
+    grid-template-columns: minmax(9rem, 1.1fr) minmax(0, 1.6fr) minmax(7rem, auto);
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-3);
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast);
+  }
+  .cpc-row:nth-child(odd) { background: var(--color-bg-alt); }
+  .cpc-row:hover { background: var(--color-primary-bg); }
+
+  .cpc-row__main { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .cpc-row__name { font-weight: var(--font-semibold); color: var(--color-navy); }
+  .cpc-row__index { font-size: var(--text-xs); color: var(--color-text-light); }
+
+  .cpc-row__bar {
+    height: 8px; border-radius: var(--radius-full);
+    background: rgba(27, 58, 92, 0.09); overflow: hidden;
+  }
+  .cpc-row__fill {
+    display: block; height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+    border-radius: var(--radius-full);
+    transition: width var(--transition-normal);
+  }
+
+  .cpc-row__figures { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+  .cpc-row__day { font-weight: var(--font-semibold); color: var(--color-text); }
+  .cpc-row__trip { font-size: var(--text-xs); color: var(--color-text-light); }
+
+  .cpc-notes {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-6);
+    margin-top: var(--space-8);
+  }
+  .cpc-notes__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    color: var(--color-navy);
+    margin-bottom: var(--space-3);
+  }
+  .cpc-notes p {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+  .cpc-notes__limits {
+    background: var(--color-bg-alt);
+    border-left: 3px solid var(--color-accent);
+    padding: var(--space-4);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+  .cpc-notes__src { font-size: var(--text-xs) !important; color: var(--color-text-light) !important; }
+  .cpc-notes code { font-size: 0.9em; background: var(--color-bg-alt); padding: 1px 5px; border-radius: 4px; }
+
+  .visa-disclaimer {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-top: var(--space-6);
+  }
+
+  @media (max-width: 720px) {
+    .cpc-controls { grid-template-columns: 1fr; }
+    .cpc-row { grid-template-columns: 1fr auto; gap: var(--space-2) var(--space-3); }
+    .cpc-row__bar { grid-column: 1 / -1; order: 3; }
+  }
+</style>
+
+<script>
+  // All arithmetic, no data of our own: each row carries the Eurostat index it
+  // was rendered with, and the page scales the visitor's figure by the ratio
+  // between that index and their chosen reference.
+  const amountEl = document.getElementById('cpc-amount') as HTMLInputElement | null;
+  const refEl = document.getElementById('cpc-reference') as HTMLSelectElement | null;
+  const nightsEl = document.getElementById('cpc-nights') as HTMLInputElement | null;
+  const currencyEl = document.getElementById('cpc-currency') as HTMLSelectElement | null;
+  const listEl = document.getElementById('cpc-list');
+  const summaryEl = document.getElementById('cpc-summary');
+  const rows = Array.from(document.querySelectorAll<HTMLLIElement>('.cpc-row'));
+
+  const STORAGE_KEY = 'durian-cpc-v1';
+
+  function money(v: number): string {
+    const symbol = currencyEl?.value ?? '';
+    return symbol + Math.round(v).toLocaleString('en-GB');
+  }
+
+  function update() {
+    const amount = parseFloat(amountEl?.value ?? '') || 0;
+    const reference = parseFloat(refEl?.value ?? '100') || 100;
+    const nights = Math.max(1, Math.round(parseFloat(nightsEl?.value ?? '1') || 1));
+
+    const computed = rows.map(row => {
+      const pli = parseFloat(row.dataset.pli ?? '100');
+      const perDay = amount * (pli / reference);
+      return { row, pli, perDay, trip: perDay * nights };
+    });
+
+    const maxDay = Math.max(...computed.map(c => c.perDay), 0);
+
+    computed
+      .slice()
+      .sort((a, b) => a.perDay - b.perDay)
+      .forEach(({ row }, i) => { row.style.order = String(i); });
+
+    computed.forEach(({ row, perDay, trip }) => {
+      const dayEl = row.querySelector('.cpc-row__day');
+      const tripEl = row.querySelector('.cpc-row__trip');
+      const fill = row.querySelector('.cpc-row__fill') as HTMLElement | null;
+      if (dayEl) dayEl.textContent = amount > 0 ? money(perDay) + ' / day' : '—';
+      if (tripEl) tripEl.textContent = amount > 0 ? money(trip) + ' for ' + nights + (nights === 1 ? ' night' : ' nights') : '';
+      if (fill) fill.style.width = maxDay > 0 ? (perDay / maxDay) * 100 + '%' : '0%';
+    });
+
+    if (summaryEl) {
+      if (amount > 0) {
+        const sorted = computed.slice().sort((a, b) => a.perDay - b.perDay);
+        const low = sorted[0];
+        const high = sorted[sorted.length - 1];
+        const ratio = low.perDay > 0 ? high.perDay / low.perDay : 0;
+        summaryEl.textContent =
+          high.row.dataset.name + ' costs about ' + ratio.toFixed(1) + '× ' + low.row.dataset.name +
+          ' for the same trip.';
+      } else {
+        summaryEl.textContent = 'Enter a daily figure to compare.';
+      }
+    }
+
+    if (listEl) (listEl as HTMLElement).style.display = 'flex';
+    save();
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        amount: amountEl?.value, reference: refEl?.value,
+        nights: nightsEl?.value, currency: currencyEl?.value,
+      }));
+    } catch (e) { /* private mode */ }
+  }
+
+  function restore() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      if (amountEl && d.amount) amountEl.value = d.amount;
+      if (refEl && d.reference) refEl.value = d.reference;
+      if (nightsEl && d.nights) nightsEl.value = d.nights;
+      if (currencyEl && d.currency) currencyEl.value = d.currency;
+    } catch (e) { /* ignore */ }
+  }
+
+  document.getElementById('cpc-form')?.addEventListener('input', update);
+  document.getElementById('cpc-form')?.addEventListener('change', update);
+
+  restore();
+  update();
+</script>

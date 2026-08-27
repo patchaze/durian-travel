@@ -1,0 +1,186 @@
+{
+  "_source": {
+    "publisher": "Eurostat",
+    "dataset": "prc_ppp_ind",
+    "datasetName": "Purchasing power parities, price level indices and nominal expenditures",
+    "indicator": "PLI_EU27_2020",
+    "category": "A0111 — Restaurants and hotels",
+    "meaning": "Price level index for restaurants and hotels, where the EU27 average = 100. A country at 120 is about 20 percent dearer than the EU average for the same basket; a country at 80 is about 20 percent cheaper.",
+    "referenceYear": "2024",
+    "eurostatLastUpdated": "2025-07-10",
+    "retrieved": "2026-08-27",
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/prc_ppp_ind/default/table",
+    "note": "Liechtenstein is not covered by this Eurostat dataset and is therefore excluded from the comparison rather than estimated.",
+    "refreshHint": "Eurostat publishes this annually, usually mid-year. Re-run the fetch and replace this file to update; no code changes needed."
+  },
+  "countries": [
+    {
+      "slug": "austria",
+      "name": "Austria",
+      "iso": "AT",
+      "pli": 110.0
+    },
+    {
+      "slug": "belgium",
+      "name": "Belgium",
+      "iso": "BE",
+      "pli": 124.2
+    },
+    {
+      "slug": "bulgaria",
+      "name": "Bulgaria",
+      "iso": "BG",
+      "pli": 53.2
+    },
+    {
+      "slug": "croatia",
+      "name": "Croatia",
+      "iso": "HR",
+      "pli": 95.4
+    },
+    {
+      "slug": "czech-republic",
+      "name": "Czech Republic",
+      "iso": "CZ",
+      "pli": 74.1
+    },
+    {
+      "slug": "denmark",
+      "name": "Denmark",
+      "iso": "DK",
+      "pli": 147.6
+    },
+    {
+      "slug": "estonia",
+      "name": "Estonia",
+      "iso": "EE",
+      "pli": 98.3
+    },
+    {
+      "slug": "finland",
+      "name": "Finland",
+      "iso": "FI",
+      "pli": 126.8
+    },
+    {
+      "slug": "france",
+      "name": "France",
+      "iso": "FR",
+      "pli": 110.0
+    },
+    {
+      "slug": "germany",
+      "name": "Germany",
+      "iso": "DE",
+      "pli": 112.1
+    },
+    {
+      "slug": "greece",
+      "name": "Greece",
+      "iso": "EL",
+      "pli": 86.4
+    },
+    {
+      "slug": "hungary",
+      "name": "Hungary",
+      "iso": "HU",
+      "pli": 71.8
+    },
+    {
+      "slug": "iceland",
+      "name": "Iceland",
+      "iso": "IS",
+      "pli": 167.3
+    },
+    {
+      "slug": "italy",
+      "name": "Italy",
+      "iso": "IT",
+      "pli": 106.9
+    },
+    {
+      "slug": "latvia",
+      "name": "Latvia",
+      "iso": "LV",
+      "pli": 90.9
+    },
+    {
+      "slug": "lithuania",
+      "name": "Lithuania",
+      "iso": "LT",
+      "pli": 86.1
+    },
+    {
+      "slug": "luxembourg",
+      "name": "Luxembourg",
+      "iso": "LU",
+      "pli": 123.6
+    },
+    {
+      "slug": "malta",
+      "name": "Malta",
+      "iso": "MT",
+      "pli": 88.7
+    },
+    {
+      "slug": "netherlands",
+      "name": "Netherlands",
+      "iso": "NL",
+      "pli": 124.6
+    },
+    {
+      "slug": "norway",
+      "name": "Norway",
+      "iso": "NO",
+      "pli": 140.0
+    },
+    {
+      "slug": "poland",
+      "name": "Poland",
+      "iso": "PL",
+      "pli": 91.7
+    },
+    {
+      "slug": "portugal",
+      "name": "Portugal",
+      "iso": "PT",
+      "pli": 75.5
+    },
+    {
+      "slug": "romania",
+      "name": "Romania",
+      "iso": "RO",
+      "pli": 68.5
+    },
+    {
+      "slug": "slovakia",
+      "name": "Slovakia",
+      "iso": "SK",
+      "pli": 91.3
+    },
+    {
+      "slug": "slovenia",
+      "name": "Slovenia",
+      "iso": "SI",
+      "pli": 90.1
+    },
+    {
+      "slug": "spain",
+      "name": "Spain",
+      "iso": "ES",
+      "pli": 83.9
+    },
+    {
+      "slug": "sweden",
+      "name": "Sweden",
+      "iso": "SE",
+      "pli": 116.7
+    },
+    {
+      "slug": "switzerland",
+      "name": "Switzerland",
+      "iso": "CH",
+      "pli": 170.8
+    }
+  ]
+}
