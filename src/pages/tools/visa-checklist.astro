@@ -1,0 +1,460 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const canonical = 'https://www.duriantravel.com/tools/visa-checklist/';
+
+// Every item and every figure below is taken from our own published guide at
+// /blog/schengen-document-checklist/. Nothing here is a new requirement of our
+// invention, and nothing predicts an outcome: this counts documents gathered,
+// which is a fact, rather than scoring "readiness", which would imply odds we
+// have no business implying.
+//
+// `when` limits an item to a situation. Items with no `when` always apply.
+//   status: employed | self-employed | student | retired
+//   flags:  sponsored | married | children
+const groups = [
+  {
+    id: 'passport',
+    title: 'Passport and photos',
+    items: [
+      { id: 'passport-validity', label: 'Passport valid at least 3 months beyond the date you leave the Schengen Area' },
+      { id: 'passport-pages', label: 'At least 2 blank pages for stamps' },
+      { id: 'passport-age', label: 'Passport issued within the last 10 years' },
+      { id: 'photos', label: 'Two identical photos taken in the last 6 months', note: 'White or off-white background. Size varies by embassy, commonly 35mm × 45mm.' },
+    ],
+  },
+  {
+    id: 'application',
+    title: 'The application itself',
+    items: [
+      { id: 'form', label: 'Completed application form' },
+      { id: 'cover-letter', label: 'Cover letter', note: 'Purpose of travel, your itinerary, how you are funding it, and why you will return home.' },
+    ],
+  },
+  {
+    id: 'insurance',
+    title: 'Insurance',
+    items: [
+      { id: 'insurance', label: 'Travel health insurance', note: 'Needs to cover the whole Schengen Area, not just your main destination, with at least €30,000 for emergency medical care and repatriation, valid for your entire stay.' },
+    ],
+  },
+  {
+    id: 'plans',
+    title: 'Travel plans',
+    items: [
+      { id: 'flight', label: 'Flight reservation', note: 'A reservation, not a purchased ticket. You do not need to buy flights before a decision.' },
+      { id: 'accommodation', label: 'Accommodation proof covering every night', note: 'Hotel bookings, an Airbnb confirmation showing the host address, or an invitation letter if you are staying with someone.' },
+      { id: 'itinerary', label: 'Day-by-day itinerary', note: 'Which cities and when, the address for each stay, and why you are going to each place.' },
+    ],
+  },
+  {
+    id: 'money',
+    title: 'Money',
+    items: [
+      { id: 'bank-statements', label: 'Bank statements from the last 3 to 6 months' },
+      { id: 'funds', label: 'Enough balance to cover the trip', note: 'Varies by country. Commonly in the range of €50 to €100 per day of stay.' },
+      { id: 'income-proof', label: 'Proof of employment or income', note: 'Salary slips or an employment letter.', when: { status: ['employed'] } },
+      { id: 'sponsor-docs', label: "Your sponsor's bank statements and signed sponsor declaration", when: { flag: 'sponsored' } },
+    ],
+  },
+  {
+    id: 'ties',
+    title: 'Ties to your home country',
+    items: [
+      { id: 'employment-letter', label: 'Employment contract or letter from your employer', when: { status: ['employed'] } },
+      { id: 'business-ownership', label: 'Business ownership documents', when: { status: ['self-employed'] } },
+      { id: 'property', label: 'Property deed or rental agreement' },
+      { id: 'enrollment', label: 'Proof of enrolment at your school or university', when: { status: ['student'] } },
+    ],
+  },
+  {
+    id: 'civil',
+    title: 'Civil status',
+    items: [
+      { id: 'marriage', label: 'Marriage certificate', when: { flag: 'married' } },
+      { id: 'children-birth', label: 'Birth certificates for dependent children', when: { flag: 'children' } },
+    ],
+  },
+  {
+    id: 'situation',
+    title: 'For your situation',
+    items: [
+      { id: 'self-emp-docs', label: 'Business registration, tax returns and an accountant letter', when: { status: ['self-employed'] } },
+      { id: 'student-permission', label: 'Permission letter from your school', when: { status: ['student'] } },
+      { id: 'pension', label: 'Pension statement', when: { status: ['retired'] } },
+    ],
+  },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Schengen Visa Document Checklist',
+  url: canonical,
+  applicationCategory: 'TravelApplication',
+  operatingSystem: 'Any',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  description:
+    'A free checklist of the documents a Schengen visa application usually needs, adapted to whether you are employed, self-employed, a student or retired.',
+};
+---
+
+<BaseLayout
+  title="Schengen Visa Document Checklist | DURIAN Travel"
+  description="Work through the documents a Schengen visa application usually needs. Adapts to your situation, remembers what you have ticked, and stays in your browser."
+  canonical={canonical}
+  schema={schema}
+  keywords="schengen visa document checklist, schengen visa requirements checklist"
+  breadcrumb={[{ name: 'Visa document checklist', url: canonical }]}
+>
+  <div class="container">
+    <Breadcrumb items={[{ name: 'Tools', href: '/tools/' }, { name: 'Visa document checklist' }]} />
+  </div>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <span class="section-label">Free tool</span>
+      <h1 class="tool-title">Schengen visa document checklist</h1>
+      <p class="tool-intro">
+        Most refusals come down to something missing or inconsistent, not something dramatic.
+        Work through this before you book an appointment, and you will know exactly where the
+        gaps are.
+      </p>
+
+      <div class="callout callout--warning">
+        <p>
+          <strong>A complete file is not an approved visa.</strong> This tool counts what you have
+          gathered. It cannot tell you whether your application will succeed, and nothing here
+          should be read as a prediction. Consular officers decide, on their own assessment.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <form class="situation" id="situation">
+        <fieldset class="situation__block">
+          <legend class="situation__legend">Your situation</legend>
+          <div class="chip-row" role="radiogroup" aria-label="Employment status">
+            <label class="chip"><input type="radio" name="status" value="employed" checked /><span>Employed</span></label>
+            <label class="chip"><input type="radio" name="status" value="self-employed" /><span>Self-employed</span></label>
+            <label class="chip"><input type="radio" name="status" value="student" /><span>Student</span></label>
+            <label class="chip"><input type="radio" name="status" value="retired" /><span>Retired</span></label>
+          </div>
+          <div class="chip-row">
+            <label class="chip"><input type="checkbox" name="flag" value="sponsored" /><span>Someone is sponsoring my trip</span></label>
+            <label class="chip"><input type="checkbox" name="flag" value="married" /><span>I am married</span></label>
+            <label class="chip"><input type="checkbox" name="flag" value="children" /><span>Travelling with children</span></label>
+          </div>
+        </fieldset>
+      </form>
+
+      <div class="progress" aria-live="polite">
+        <p class="progress__count" id="progress-count">—</p>
+        <div class="progress__track"><span class="progress__fill" id="progress-fill"></span></div>
+        <p class="progress__note">Documents gathered. This is a count, not an assessment.</p>
+      </div>
+
+      {groups.map(group => (
+        <section class="group" data-group={group.id}>
+          <h2 class="group__title">{group.title}</h2>
+          <ul class="group__list" role="list">
+            {group.items.map(item => (
+              <li
+                class="item"
+                data-item={item.id}
+                data-status={item.when && 'status' in item.when ? (item.when as any).status.join(',') : ''}
+                data-flag={item.when && 'flag' in item.when ? (item.when as any).flag : ''}
+              >
+                <label class="item__label">
+                  <input type="checkbox" class="item__box" data-id={item.id} />
+                  <span class="item__text">
+                    <span class="item__title">{item.label}</span>
+                    {item.note && <span class="item__note">{item.note}</span>}
+                  </span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <div class="actions">
+        <button type="button" class="btn btn--primary btn--sm" id="copy-missing">Copy what is still missing</button>
+        <button type="button" class="btn btn--ghost btn--sm" id="reset">Clear all ticks</button>
+        <p class="actions__status" id="action-status" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <div class="closing">
+        <h2 class="closing__title">Before you book the appointment</h2>
+        <p>
+          Requirements vary by consulate, nationality and the purpose of your trip, and they
+          change. Every item here comes from our
+          {' '}<a href="/blog/schengen-document-checklist/">Schengen document checklist</a>, and the
+          {' '}<a href="/schengen-visa-guide/">full visa guide</a> explains why each one matters.
+          Confirm the final list on the official site of the embassy, consulate or visa centre
+          handling your application.
+        </p>
+        <p>
+          If the money side is what you are unsure about, the
+          {' '}<a href="/tools/budget/">budget calculator</a> will give you a defensible figure to
+          show. If something here does not fit your circumstances,
+          {' '}<a href="/contact/">ask Patricia</a>.
+        </p>
+      </div>
+
+      <p class="visa-disclaimer">
+        Educational information only. Not legal advice. Always check the official embassy or
+        consulate source. Nothing on this page predicts or influences the outcome of an
+        application.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tool-title { font-family: var(--font-serif); font-weight: 700; margin: var(--space-3) 0 var(--space-4); }
+  .tool-intro {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .callout {
+    margin-top: var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--color-accent);
+    background: var(--color-accent-bg);
+  }
+  .callout p { font-size: var(--text-sm); line-height: var(--leading-relaxed); color: var(--color-text); }
+
+  .situation__block { border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-5); }
+  .situation__legend {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    color: var(--color-navy);
+    padding: 0 var(--space-2);
+    margin-left: calc(var(--space-2) * -1);
+  }
+  .chip-row { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }
+  .chip { position: relative; }
+  .chip input { position: absolute; opacity: 0; pointer-events: none; }
+  .chip span {
+    display: inline-block;
+    padding: 7px 13px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  .chip span:hover { border-color: var(--color-primary); }
+  .chip input:checked + span {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+    font-weight: var(--font-medium);
+  }
+  .chip input:focus-visible + span { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+  .progress { margin: var(--space-6) 0 var(--space-4); }
+  .progress__count { font-family: var(--font-serif); font-size: var(--text-2xl); color: var(--color-navy); }
+  .progress__track {
+    height: 6px; border-radius: var(--radius-full);
+    background: var(--color-border-light); overflow: hidden; margin: var(--space-2) 0;
+  }
+  .progress__fill {
+    display: block; height: 100%; width: 0;
+    background: var(--color-primary); border-radius: var(--radius-full);
+    transition: width var(--transition-normal);
+  }
+  .progress__note { font-size: var(--text-xs); color: var(--color-text-light); }
+
+  .group { margin-top: var(--space-6); }
+  .group[hidden] { display: none; }
+  .group__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    color: var(--color-navy);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .group__list { margin-top: var(--space-2); }
+
+  .item { border-bottom: 1px solid var(--color-border-light); }
+  .item[hidden] { display: none; }
+  .item__label {
+    display: flex; gap: var(--space-3); align-items: flex-start;
+    padding: var(--space-4) var(--space-2);
+    cursor: pointer;
+  }
+  .item__label:hover { background: var(--color-bg-alt); }
+  .item__box {
+    width: 19px; height: 19px; margin-top: 2px; flex-shrink: 0;
+    accent-color: var(--color-primary); cursor: pointer;
+  }
+  .item__text { display: flex; flex-direction: column; gap: 3px; }
+  .item__title { font-size: var(--text-base); color: var(--color-text); line-height: var(--leading-snug); }
+  .item__note { font-size: var(--text-sm); color: var(--color-text-light); line-height: var(--leading-relaxed); }
+  .item__box:checked ~ .item__text .item__title { color: var(--color-text-light); text-decoration: line-through; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin-top: var(--space-6); }
+  .actions__status { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+  .closing {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-6);
+    margin-top: var(--space-6);
+  }
+  .closing__title { font-family: var(--font-serif); font-size: var(--text-xl); color: var(--color-navy); margin-bottom: var(--space-3); }
+  .closing p {
+    font-size: var(--text-sm); line-height: var(--leading-relaxed);
+    color: var(--color-text-muted); margin-bottom: var(--space-3);
+  }
+  .closing a { color: var(--color-accent-dark); }
+
+  .visa-disclaimer {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-top: var(--space-6);
+  }
+
+  @media print {
+    .situation, .actions, .callout { display: none; }
+    .item__label:hover { background: none; }
+  }
+</style>
+
+<script>
+  const STORAGE_KEY = 'durian-visa-checklist-v1';
+
+  const items = Array.from(document.querySelectorAll<HTMLLIElement>('.item'));
+  const boxes = Array.from(document.querySelectorAll<HTMLInputElement>('.item__box'));
+  const groups = Array.from(document.querySelectorAll<HTMLElement>('.group'));
+  const countEl = document.getElementById('progress-count');
+  const fillEl = document.getElementById('progress-fill');
+  const statusEl = document.getElementById('action-status');
+
+  function currentStatus(): string {
+    const el = document.querySelector<HTMLInputElement>('input[name="status"]:checked');
+    return el?.value ?? 'employed';
+  }
+  function currentFlags(): string[] {
+    return Array.from(document.querySelectorAll<HTMLInputElement>('input[name="flag"]:checked')).map(f => f.value);
+  }
+
+  // An item shows when its status list includes the chosen status (or it has
+  // none) and its flag is set (or it has none).
+  function applies(item: HTMLLIElement): boolean {
+    const statuses = (item.dataset.status ?? '').split(',').filter(Boolean);
+    const flag = item.dataset.flag ?? '';
+    if (statuses.length && !statuses.includes(currentStatus())) return false;
+    if (flag && !currentFlags().includes(flag)) return false;
+    return true;
+  }
+
+  function refresh() {
+    items.forEach(item => { item.hidden = !applies(item); });
+
+    // Hide a group once every item in it is hidden, so empty headings do not
+    // sit there looking like something failed to load.
+    groups.forEach(group => {
+      const visible = Array.from(group.querySelectorAll<HTMLLIElement>('.item')).some(i => !i.hidden);
+      group.hidden = !visible;
+    });
+
+    const visibleBoxes = boxes.filter(b => !(b.closest('.item') as HTMLLIElement)?.hidden);
+    const done = visibleBoxes.filter(b => b.checked).length;
+    const total = visibleBoxes.length;
+
+    if (countEl) countEl.textContent = done + ' of ' + total + ' gathered';
+    if (fillEl) fillEl.style.width = total > 0 ? (done / total) * 100 + '%' : '0%';
+
+    save();
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        status: currentStatus(),
+        flags: currentFlags(),
+        checked: boxes.filter(b => b.checked).map(b => b.dataset.id),
+      }));
+    } catch (e) { /* private mode */ }
+  }
+
+  function restore() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      if (d.status) {
+        const el = document.querySelector<HTMLInputElement>('input[name="status"][value="' + d.status + '"]');
+        if (el) el.checked = true;
+      }
+      if (Array.isArray(d.flags)) {
+        document.querySelectorAll<HTMLInputElement>('input[name="flag"]').forEach(f => {
+          f.checked = d.flags.includes(f.value);
+        });
+      }
+      if (Array.isArray(d.checked)) {
+        boxes.forEach(b => { b.checked = d.checked.includes(b.dataset.id); });
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  document.getElementById('situation')?.addEventListener('change', refresh);
+  boxes.forEach(b => b.addEventListener('change', refresh));
+
+  document.getElementById('reset')?.addEventListener('click', () => {
+    boxes.forEach(b => { b.checked = false; });
+    refresh();
+    if (statusEl) statusEl.textContent = 'Cleared.';
+    window.setTimeout(() => { if (statusEl) statusEl.textContent = ''; }, 2500);
+  });
+
+  document.getElementById('copy-missing')?.addEventListener('click', async () => {
+    const missing: string[] = [];
+    groups.forEach(group => {
+      if (group.hidden) return;
+      const rows = Array.from(group.querySelectorAll<HTMLLIElement>('.item'))
+        .filter(i => !i.hidden)
+        .filter(i => !(i.querySelector('.item__box') as HTMLInputElement)?.checked)
+        .map(i => '- ' + (i.querySelector('.item__title')?.textContent ?? '').trim());
+      if (rows.length) {
+        missing.push((group.querySelector('.group__title')?.textContent ?? '').trim(), ...rows, '');
+      }
+    });
+
+    const text = missing.length
+      ? ['Schengen visa documents still to gather', '', ...missing,
+         'From duriantravel.com/tools/visa-checklist/',
+         'A complete file is not an approved visa. Confirm the final list with your consulate.'].join('\n')
+      : 'Everything on the checklist is ticked. Confirm the final list with your consulate before you submit.';
+
+    try {
+      await navigator.clipboard.writeText(text);
+      if (statusEl) statusEl.textContent = missing.length ? 'Copied the outstanding items.' : 'Nothing outstanding — copied a note.';
+    } catch (e) {
+      if (statusEl) statusEl.textContent = 'Could not copy. Select the list above instead.';
+    }
+    window.setTimeout(() => { if (statusEl) statusEl.textContent = ''; }, 3500);
+  });
+
+  restore();
+  refresh();
+</script>
