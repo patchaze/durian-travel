@@ -22,11 +22,15 @@ const testimonials = [
   }
 ];
 
+// Counts are real and checked against the build: 29 destination pages, 20 blog
+// posts, 3 tools. If you add or remove any, update these — a wrong number here
+// is worse than no number. Each one links, so this row also carries internal
+// links from the highest-authority page on the site.
 const trustStats = [
-  { value: 'Clear', label: 'Requirements, Not Guesswork' },
-  { value: 'Human', label: 'Reviewed Strategy' },
-  { value: 'Custom', label: 'Itineraries, Not Templates' },
-  { value: 'Real', label: 'Support When Plans Change' }
+  { value: '29', label: 'Country guides', href: '/destinations/' },
+  { value: '20', label: 'Planning guides', href: '/blog/' },
+  { value: '3', label: 'Free tools', href: '/tools/' },
+  { value: '0', label: 'Applications we submit for you', href: '/faq/' }
 ];
 
 const serviceCards = [
@@ -172,8 +176,8 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
 ---
 
 <BaseLayout
-  title="Europe Trip Planning & Visa Support | DURIAN Travel"
-  description="Custom Europe itineraries and Schengen visa strategy for non-European travelers - wherever in the world you're planning from."
+  title="Europe Trip Planning From Outside Europe | DURIAN Travel"
+  description="Plan a Europe trip from anywhere in the world. 29 country guides, route and budget planning, and free tools for working out what it actually costs."
   ogImage="https://www.duriantravel.com/dolomites-sunset.webp"
   schema={faqSchema}
   lcpImageSrcset={lcpAvifSrcset}
@@ -197,10 +201,10 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
         </div>
         <h1 id="hero-heading" class="hero__title">
           Europe Trip Planning
-          <span class="hero__title-glow">&amp; Visa Support</span>
+          <span class="hero__title-glow">From Outside Europe</span>
         </h1>
         <p class="hero__description">
-          Custom Europe itineraries and Schengen visa strategy for non-European travelers - wherever in the world you're planning from.
+          Routes, budgets and country guides built for travellers planning from the other side of the world - where the distance, the timing and the paperwork all work differently.
         </p>
         <div class="hero__buttons">
           <a href="/contact/" class="btn-primary">Get a Custom Itinerary</a>
@@ -232,10 +236,10 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
     <div class="container">
       <div class="trust-strip__grid">
         {trustStats.map((item) => (
-          <div class="trust-strip__item">
+          <a class="trust-strip__item" href={item.href}>
             <strong class="trust-strip__value">{item.value}</strong>
             <span class="trust-strip__label">{item.label}</span>
-          </div>
+          </a>
         ))}
       </div>
     </div>
@@ -710,6 +714,18 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
   gap: 0.25rem;
   align-items: center;
   text-align: center;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.trust-strip__item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-2px);
+}
+.trust-strip__item:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .trust-strip__value {
