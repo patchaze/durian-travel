@@ -26,10 +26,19 @@ const testimonials = [
 // posts, 3 tools. If you add or remove any, update these — a wrong number here
 // is worse than no number. Each one links, so this row also carries internal
 // links from the highest-authority page on the site.
+import costData from '../data/country-costs.json';
+// Eight countries spanning the published Eurostat range, cheapest to dearest.
+// Figures come from country-costs.json (source and dates recorded there).
+const costPick = ['bulgaria', 'portugal', 'greece', 'croatia', 'italy', 'france', 'netherlands', 'switzerland'];
+const costSample = costPick
+  .map(slug => costData.countries.find(c => c.slug === slug))
+  .filter(Boolean)
+  .sort((a, b) => a.pli - b.pli);
+
 const trustStats = [
   { value: '29', label: 'Country guides', href: '/destinations/' },
   { value: '20', label: 'Planning guides', href: '/blog/' },
-  { value: '3', label: 'Free tools', href: '/tools/' },
+  { value: '3', label: 'Free planners', href: '/tools/' },
   { value: '0', label: 'Applications we submit for you', href: '/faq/' }
 ];
 
@@ -242,6 +251,34 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
           </a>
         ))}
       </div>
+    </div>
+  </section>
+
+  <!-- Interactive cost strip: real Eurostat indices, hover to read them.
+       Data from src/data/country-costs.json, same source as the estimator. -->
+  <section class="section section--sm cost-strip" aria-labelledby="cost-strip-heading">
+    <div class="container">
+      <header data-reveal class="section-header text-center">
+        <span class="section-label">Try It Yourself</span>
+        <h2 id="cost-strip-heading" class="section-title">Same Trip, Very Different Price Tag</h2>
+        <p class="section-subtitle" style="margin-inline:auto">
+          Hover a country. The bars are official Eurostat price levels for restaurants and hotels,
+          where the EU average is 100 — the gap between your cheapest and dearest option is the
+          biggest budget lever you have.
+        </p>
+      </header>
+      <div data-reveal class="cost-strip__row" role="list">
+        {costSample.map(c => (
+          <a role="listitem" class="cost-chip" href="/tools/cost-per-country/" style={`--h:${Math.round(c.pli / 1.75)}%`} aria-label={`${c.name}: price index ${c.pli}, EU average is 100`}>
+            <span class="cost-chip__value">{c.pli}</span>
+            <span class="cost-chip__bar" aria-hidden="true"></span>
+            <span class="cost-chip__name">{c.name}</span>
+          </a>
+        ))}
+      </div>
+      <p class="cost-strip__cta text-center">
+        <a href="/tools/cost-per-country/" class="link">Compare all 28 countries with your own budget →</a>
+      </p>
     </div>
   </section>
 
@@ -483,6 +520,95 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
 </BaseLayout>
 
 <style>
+/* ══════════════════════════════════════════
+   HERO MOTION — slow Ken Burns zoom on the background.
+   Transform only, so the LCP paint is unaffected; guarded for
+   reduced motion.
+   ══════════════════════════════════════════ */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__bg-full img {
+    animation: hero-zoom 24s ease-out forwards;
+    transform-origin: center;
+  }
+  @keyframes hero-zoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+  }
+}
+
+/* ══════════════════════════════════════════
+   COST STRIP — interactive Eurostat bars
+   ══════════════════════════════════════════ */
+.cost-strip { background: var(--color-bg-alt); }
+.cost-strip__row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(6px, 1.6vw, 18px);
+  height: 240px;
+  margin-bottom: var(--space-6);
+}
+.cost-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  height: 100%;
+  flex: 0 1 96px;
+  min-width: 0;
+  text-decoration: none;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+.cost-chip__bar {
+  width: 100%;
+  max-width: 56px;
+  height: var(--h);
+  border-radius: 6px 6px 2px 2px;
+  background: linear-gradient(180deg, var(--color-primary-light), var(--color-primary));
+  transition: transform var(--transition-normal), background var(--transition-normal);
+  transform-origin: bottom;
+}
+.cost-chip__value {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  color: var(--color-navy);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+.cost-chip__name {
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--color-text-muted);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.cost-chip:hover, .cost-chip:focus-visible { background: rgba(27, 58, 92, 0.06); }
+.cost-chip:hover .cost-chip__bar, .cost-chip:focus-visible .cost-chip__bar {
+  transform: scaleY(1.06);
+  background: linear-gradient(180deg, var(--color-accent-light), var(--color-accent));
+}
+.cost-chip:hover .cost-chip__value, .cost-chip:focus-visible .cost-chip__value {
+  opacity: 1;
+  transform: none;
+}
+.cost-chip:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.cost-strip__cta { margin-top: var(--space-2); }
+.cost-strip__cta .link { color: var(--color-accent-dark); font-weight: var(--font-semibold); }
+@media (max-width: 640px) {
+  .cost-strip__row { height: 190px; }
+  .cost-chip { flex-basis: 44px; }
+  .cost-chip__name { font-size: 0.62rem; }
+  /* Touch has no hover: keep values visible on small screens */
+  .cost-chip__value { opacity: 1; transform: none; font-size: var(--text-sm); }
+}
+
 /* ══════════════════════════════════════════
    VISA DISCLAIMER — required on all visa content
    ══════════════════════════════════════════ */
@@ -1306,3 +1432,26 @@ details[open] .faq-item__q::after {
   }
 }
 </style>
+
+<script is:inline>
+  // Count the trust-strip numbers up from zero on first view. Purely visual:
+  // the real values are server-rendered, so crawlers and no-JS visitors see
+  // them untouched. Skipped entirely under reduced motion.
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var els = document.querySelectorAll('.trust-strip__value');
+    els.forEach(function (el) {
+      var target = parseInt(el.textContent, 10);
+      if (isNaN(target)) return;
+      var start = null, dur = 900;
+      el.textContent = '0';
+      function step(ts) {
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  })();
+</script>

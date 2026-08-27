@@ -5,7 +5,7 @@ seoTitle: "Europe Packing List + Airport Rules"
 description: "A practical Europe packing list with carry-on rules for liquids, batteries, and meds. Capsule wardrobe approach that won't ruin you."
 pubDate: "2026-03-15"
 modDate: "2026-04-08"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Packing", "Europe", "Airport"]
 readTime: 11
 ---

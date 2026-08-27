@@ -4,7 +4,7 @@ title: "10-Day Italy Itinerary for First-Timers: Rome, Florence, Venice (With Bo
 seoTitle: "10-Day Italy Itinerary for First-Timers"
 description: "A first-timers 10-day Italy itinerary with pacing, Schengen entry logic, train timing, and realistic budget notes."
 pubDate: "2026-03-05"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Italy", "Itinerary", "Rome"]
 modDate: "2026-04-08"
 readTime: 14

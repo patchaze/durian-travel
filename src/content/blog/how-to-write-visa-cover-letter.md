@@ -5,7 +5,7 @@ seoTitle: "How to Write a Schengen Visa Cover Letter (3 Templates, 2026)"
 description: "Write a cover letter that embassy officers actually read. Three annotated templates for tourists, employed applicants, and self-sponsored travelers."
 pubDate: "2026-02-18"
 modDate: "2026-04-07"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Cover Letter", "Strategy", "Schengen"]
 readTime: 11
 faq:

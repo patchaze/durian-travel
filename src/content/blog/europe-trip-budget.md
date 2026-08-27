@@ -4,7 +4,7 @@ title: "Europe Budget Blueprint: Build a Realistic Daily Budget (Without Becomin
 seoTitle: "Europe Trip Budget: Real Daily Costs"
 description: "Build a Europe trip budget with fixed costs, daily spending, pre-trip fees, and a simple spreadsheet approach to prevent surprise poverty."
 pubDate: "2026-03-02"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Budget", "Europe", "Planning"]
 modDate: "2026-04-08"
 readTime: 12

@@ -5,7 +5,7 @@ seoTitle: "Flights to Europe: Middle East Conflict Impact Guide (Updated April 2
 description: "The EASA advisory runs to April 10. Here is what is closed, which airlines are affected, how rerouting adds time and cost, and what to do if your booking is hit."
 pubDate: "2026-03-18"
 modDate: "2026-04-07"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Aviation", "Travel Advisory", "Middle East", "Europe"]
 readTime: 15
 faq:

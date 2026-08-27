@@ -4,7 +4,7 @@ title: "Europe Trip Planning Timeline: A Week-by-Week Plan for First-Time Travel
 seoTitle: "Europe Trip Planning Timeline for First-Timers"
 description: "A realistic week-by-week Europe planning timeline for first-time travelers from outside Europe."
 pubDate: "2026-03-10"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Planning", "Europe", "Itinerary"]
 modDate: "2026-04-09"
 readTime: 13

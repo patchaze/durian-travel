@@ -5,7 +5,7 @@ seoTitle: "How Much Does a Schengen Visa Cost? Full 2026 Breakdown"
 description: "The full cost of a Schengen visa in 2026: EUR 90 application fee, VFS service charges, travel insurance, flight reservation, and total pre-departure costs. What to budget before you fly."
 pubDate: "2026-04-01"
 modDate: "2026-04-10"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Schengen", "Costs", "Non-European Travelers", "Visa Fees"]
 readTime: 9
 faq:

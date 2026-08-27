@@ -5,7 +5,7 @@ seoTitle: "Schengen Visa Document Checklist 2026"
 description: "Everything you need in your Schengen visa document package, explained step by step with official embassy references. Updated February 2026."
 pubDate: "2026-02-15"
 modDate: "2026-04-06"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Schengen", "Documents", "Checklist"]
 readTime: 8
 faq:
@@ -143,4 +143,4 @@ Before submitting, review your complete package for:
 
 *This guide is updated regularly based on publicly available embassy requirements. Last reviewed: February 2026. This is educational guidance only — not legal advice.*
 
-*Author: Patricia Azevedo, Visa Strategy Consultant | [About the Author](/patricia-azevedo/)*
+*By the Durian Travel editorial team | [About Durian Travel](/about-us/)*

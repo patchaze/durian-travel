@@ -4,7 +4,7 @@ title: "Travel Insurance for Europe: What to Buy, What to Skip, and How to Compa
 seoTitle: "Europe Travel Insurance: What to Buy and Skip"
 description: "How to choose Europe travel insurance: coverage types, exclusions, Schengen medical requirements, and a comparison checklist that actually helps."
 pubDate: "2026-03-13"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Insurance", "Europe", "Schengen"]
 modDate: "2026-04-08"
 readTime: 12

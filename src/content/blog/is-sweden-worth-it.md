@@ -5,7 +5,7 @@ seoTitle: "Is Sweden Worth It? Honest Cost Reality for Non-European Travelers (2
 description: "A practical Sweden cost breakdown for non-European first-time visitors: flights, hotels, food, transport, and how it compares to other first-Europe options. Is Sweden worth the budget?"
 pubDate: "2026-04-08"
 modDate: "2026-04-10"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Sweden", "Budget", "Non-European Travelers", "Cost Guide"]
 readTime: 8
 faq:

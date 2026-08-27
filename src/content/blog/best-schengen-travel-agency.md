@@ -5,7 +5,7 @@ seoTitle: "Best Schengen Travel Agency Comparison"
 description: "Honest comparison of the best options for best schengen travel agency in 2026. Includes real pricing data, hands-on testing, and a schengen travelers-specific recommendation. Updated March 2026."
 pubDate: "2026-03-21"
 modDate: "2026-04-08"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Schengen", "Travel Agency", "Comparison", "Europe"]
 readTime: 16
 draft: true
@@ -345,7 +345,7 @@ You should engage an agency at least 3-4 months before your intended travel date
       "description": "Honest comparison of the best options for best schengen travel agency in 2026. Includes real pricing data, hands-on testing, and a schengen travelers-specific recommendation. Updated March 2026.",
       "author": {
         "@type": "Person",
-        "name": "Patricia Azevedo"
+        "name": "Durian Travel Editorial Team"
       },
       "datePublished": "2026-03-26"
     },

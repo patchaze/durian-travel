@@ -5,7 +5,7 @@ seoTitle: "Sweden Itinerary: 10 Days for First-Time Visitors (2026 Route Guide)"
 description: "A practical 10-day Sweden itinerary with route logic for Stockholm, Gothenburg, and Lapland — including Schengen application notes for non-European travelers. Updated 2026."
 pubDate: "2026-04-06"
 modDate: "2026-04-10"
-author: "Patricia Azevedo"
+author: "Durian Travel Editorial Team"
 tags: ["Sweden", "Itinerary", "First-Time Travelers", "Schengen"]
 readTime: 9
 faq:
