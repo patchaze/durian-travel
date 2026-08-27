@@ -49,7 +49,7 @@ const tierByName = Object.fromEntries(
 
 const seoByUrlSlug: Record<string, SeoConfig> = {
   'schengen-visa-help': {
-    h1: 'Schengen Visa Help - From Application to Approval',
+    h1: 'Schengen Application Support - Documents, Route and Cover Letter',
     metaTitle: 'Schengen Visa Help + Itinerary Planning | Durian Travel',
     metaDescription:
       'Expert Schengen visa strategy, document review, and itinerary planning. Cover letters, financial proof coaching, and embassy-specific guidance. Contact us.',
@@ -88,7 +88,7 @@ const seoByUrlSlug: Record<string, SeoConfig> = {
   },
   'first-international-trip': {
     h1: 'First International Trip Planning - Step by Step',
-    metaTitle: 'First International Trip Help | Visa + Planning | Durian Travel',
+    metaTitle: 'First International Trip Planning | Durian Travel',
     metaDescription:
       'Planning your first international trip? We handle visa strategy, itinerary planning, and pre-departure prep - with pharmacist-backed health guidance included.',
     personas: [
@@ -120,7 +120,7 @@ const seoByUrlSlug: Record<string, SeoConfig> = {
     ],
   },
   'family-travel-planning': {
-    h1: 'International Family Travel Planning - Visas, Itineraries & Health',
+    h1: 'Family Travel Planning - Routes, Timing and Paperwork',
     metaTitle: 'Family International Travel Planning | Durian Travel',
     metaDescription:
       'International travel planning for families of 2-6, including children and elderly travelers. Coordinated visa strategy, group itineraries, and pharmacist-reviewed health planning.',
@@ -153,8 +153,8 @@ const seoByUrlSlug: Record<string, SeoConfig> = {
     ],
   },
   'digital-nomad-visa-strategy': {
-    h1: 'Digital Nomad Visa Strategy - Long-Stay Travel Planning',
-    metaTitle: 'Digital Nomad Visa Consultant | Long-Stay Planning | Durian Travel',
+    h1: 'Long-Stay Planning for Digital Nomads',
+    metaTitle: 'Digital Nomad Long-Stay Trip Planning | Durian Travel',
     metaDescription:
       'Solve the 90-day Schengen limit. Multi-entry visa strategy, remote work visa options, and 3+ month medication planning for long-stay digital nomads.',
     personas: [
@@ -186,7 +186,7 @@ const seoByUrlSlug: Record<string, SeoConfig> = {
     ],
   },
   'visa-refusal-reapplication': {
-    h1: 'Visa Refusal Recovery - Reapplication Strategy That Works',
+    h1: 'After a Visa Refusal - Reading the Reasons and Reapplying',
     metaTitle: 'Visa Refusal Reapplication Help | Durian Travel',
     metaDescription:
       "Got a visa refusal? We decode the real reason, fix the application, and build a stronger reapplication strategy. Don't guess - get a plan.",
@@ -219,8 +219,8 @@ const seoByUrlSlug: Record<string, SeoConfig> = {
     ],
   },
   'travel-health-planning': {
-    h1: "Schengen Travel Health Planning - For Travelers Who Can't Afford to Wing It",
-    metaTitle: 'Schengen Travel Health Planning | Medication & Chronic Conditions | Durian Travel',
+    h1: "Travel Health Planning - Medication, Insurance and Chronic Conditions",
+    metaTitle: 'Travel Health Planning for Europe | Medication & Chronic Conditions | Durian Travel',
     metaDescription:
       'Planning a Europe trip with chronic conditions or prescription medication? We align Schengen health prep, insurance, medication documents, and safer itinerary pacing.',
     personas: [
@@ -252,8 +252,8 @@ const seoByUrlSlug: Record<string, SeoConfig> = {
     ],
   },
   'multi-region-trip-planning': {
-    h1: 'Multi-Region Trip Planning - Visa Architecture Across Jurisdictions',
-    metaTitle: 'Multi-Country Trip Planning | Visa + Health + Itinerary | Durian Travel',
+    h1: 'Multi-Country Trip Planning - Routes That Hold Together',
+    metaTitle: 'Multi-Country Europe Trip Planning | Durian Travel',
     metaDescription:
       'Planning a trip across multiple regions and visa zones? We map the full visa architecture, manage health continuity, and coordinate itinerary logic across every destination.',
     personas: [
