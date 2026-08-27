@@ -236,6 +236,16 @@
             "permanent": true
         },
         {
+            "source": "/patricia-azevedo",
+            "destination": "/about-us/",
+            "permanent": true
+        },
+        {
+            "source": "/patricia-azevedo/",
+            "destination": "/about-us/",
+            "permanent": true
+        },
+        {
             "source": "/:path((?!_assets|api|_next).*[^/])$",
             "destination": "/:path/",
             "permanent": true
