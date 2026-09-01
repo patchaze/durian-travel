@@ -4,7 +4,7 @@
     "dataset": "prc_ppp_ind",
     "datasetName": "Purchasing power parities, price level indices and nominal expenditures",
     "indicator": "PLI_EU27_2020",
-    "category": "A0111 — Restaurants and hotels",
+    "category": "A0111, restaurants and hotels",
     "meaning": "Price level index for restaurants and hotels, where the EU27 average = 100. A country at 120 is about 20 percent dearer than the EU average for the same basket; a country at 80 is about 20 percent cheaper.",
     "referenceYear": "2024",
     "eurostatLastUpdated": "2025-07-10",

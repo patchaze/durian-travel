@@ -1,0 +1,327 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import costData from '../data/country-costs.json';
+
+const canonical = 'https://www.duriantravel.com/sources/';
+
+// Provenance is read from the same file that feeds the estimator, so this page
+// cannot drift from the data it describes. Update country-costs.json and this
+// page updates with it.
+const cost = costData._source;
+const countryCount = costData.countries.length;
+
+const borderSources = [
+  {
+    name: 'ETIAS, official EU site',
+    url: 'https://travel-europe.europa.eu/etias_en',
+    covers: 'What ETIAS is, who needs it, and the current launch timetable.'
+  },
+  {
+    name: 'Entry/Exit System (EES), official EU site',
+    url: 'https://travel-europe.europa.eu/ees_en',
+    covers: 'How the entry and exit register works at the border.'
+  },
+  {
+    name: 'European Commission, Schengen borders and visa policy',
+    url: 'https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa_en',
+    covers: 'The policy source behind visa rules, and where changes are announced first.'
+  },
+  {
+    name: 'Visa policy and applying for a Schengen visa',
+    url: 'https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy_en',
+    covers: 'Who needs a visa, what the application requires, and the fee.'
+  }
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Sources and data',
+  url: canonical,
+  description:
+    'Where the figures on Durian Travel come from, when each was last checked, what is missing, and where two official sources disagree.',
+  publisher: { '@type': 'Organization', name: 'DURIAN Travel', url: 'https://www.duriantravel.com' }
+};
+---
+
+<BaseLayout
+  title="Sources and Data | DURIAN Travel"
+  description="Where every figure on this site comes from, when it was last checked, what is missing and why, and where two official sources disagree."
+  canonical={canonical}
+  schema={schema}
+  keywords="durian travel sources, europe travel data sources, eurostat price level index travel"
+  breadcrumb={[{ name: 'Sources', url: canonical }]}
+>
+  <section class="hero-sm hero-gradient">
+    <div class="container container--narrow">
+      <span class="section-label" style="color:var(--color-accent-light)">Sources</span>
+      <h1 class="hero-sm__title" style="color:white">Where these numbers come from</h1>
+      <p class="hero-sm__subtitle">
+        Every figure on this site should be checkable. This page says where each one comes from,
+        when it was last verified, what is missing, and where two official sources say different
+        things.
+      </p>
+    </div>
+  </section>
+
+  <div class="container">
+    <Breadcrumb items={[{ name: 'Sources' }]} />
+  </div>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <div class="prose">
+        <h2>Cost comparisons between countries</h2>
+        <p>
+          The <a href="/tools/cost-per-country/">cost-per-country planner</a> does one piece of
+          arithmetic: it scales a figure you enter by the ratio between two countries' published
+          price levels. The price levels are not ours. They come from Eurostat.
+        </p>
+      </div>
+
+      <dl class="prov">
+        <div><dt>Publisher</dt><dd>{cost.publisher}</dd></div>
+        <div><dt>Dataset</dt><dd><code>{cost.dataset}</code>, {cost.datasetName}</dd></div>
+        <div><dt>Indicator</dt><dd><code>{cost.indicator}</code></dd></div>
+        <div><dt>Category</dt><dd>{cost.category}</dd></div>
+        <div><dt>Reference year</dt><dd>{cost.referenceYear}</dd></div>
+        <div><dt>Eurostat last updated it</dt><dd>{cost.eurostatLastUpdated}</dd></div>
+        <div><dt>We last retrieved it</dt><dd>{cost.retrieved}</dd></div>
+        <div><dt>Countries covered</dt><dd>{countryCount}</dd></div>
+        <div><dt>Source</dt><dd><a href={cost.url} rel="nofollow noopener" target="_blank">View the dataset on Eurostat</a></dd></div>
+      </dl>
+
+      <div class="prose">
+        <p class="prov__meaning">{cost.meaning}</p>
+
+        <h3>What is missing, and why</h3>
+        <p>
+          <strong>Liechtenstein is not in the comparison.</strong> Eurostat does not cover it in
+          this dataset. We could have estimated it from Switzerland, which it shares a customs
+          union and a currency with, and nobody would have noticed. We left it out instead,
+          because an estimate presented alongside measured figures is indistinguishable from one,
+          and that is the kind of thing this page exists to prevent.
+        </p>
+
+        <h3>What it does not tell you</h3>
+        <p>
+          This is an economy-wide price level, not a basket of tourist prices. Capital cities and
+          tourist districts run above their national average. High season and low season can
+          differ by more than two countries do. Flights are not in it at all, and they often
+          decide the total. Treat the ranking as reliable and the exact figures as a starting
+          point.
+        </p>
+
+        <h3>How often it is refreshed</h3>
+        <p>
+          Eurostat publishes this annually, usually mid-year. When new figures appear we replace
+          the data file and the retrieval date on this page changes with it. The reference year is
+          shown on the planner itself, so you can see how current it is without coming here.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sm section--alt">
+    <div class="container container--narrow">
+      <div class="prose">
+        <h2>Where two official sources disagree</h2>
+        <p>
+          It happens more than you would expect, and the honest thing is to show it rather than
+          quietly pick the one that suits. Here is the live example.
+        </p>
+      </div>
+
+      <div class="conflict">
+        <h3 class="conflict__title">How much ETIAS will cost</h3>
+        <div class="conflict__pair">
+          <div class="conflict__side">
+            <span class="conflict__amount">EUR 7</span>
+            <p class="conflict__who">European External Action Service</p>
+            <p class="conflict__note">
+              Still stated on the EEAS travelling to Europe page, checked 2 September 2026.
+            </p>
+            <a class="conflict__link" href="https://www.eeas.europa.eu/eeas/coming-visa-free-country-and-travelling-europe_en" rel="nofollow noopener" target="_blank">Read the page</a>
+          </div>
+          <div class="conflict__side">
+            <span class="conflict__amount">EUR 20</span>
+            <p class="conflict__who">European Commission</p>
+            <p class="conflict__note">
+              Announced 17 July 2025, adopted as Commission Delegated Regulation (EU) 2025/1411.
+            </p>
+            <a class="conflict__link" href="https://travel-europe.europa.eu/etias/ltr/about-etias/news-corner/ETIAS-will-cost-EUR-20" rel="nofollow noopener" target="_blank">Read the announcement</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>
+          <strong>What we think is going on, stated as an opinion rather than a fact.</strong>
+          These are not two equally current figures. EUR 7 was the original amount, and the
+          Commission raised it to EUR 20 in July 2025. The EEAS page appears not to have been
+          updated since. We are not telling you the EEAS is wrong, because we are not the
+          authority on that. We are showing you both, with their dates, so you can see which one
+          is more recent and decide what to plan around.
+        </p>
+        <p>
+          Two things worth knowing either way. ETIAS is not operational yet, so no fee is being
+          charged to anyone today. And the Commission has said some travellers, including those
+          under 18 and over 70, are exempt. Check the official ETIAS site before you budget for
+          it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <div class="prose">
+        <h2>Border rules</h2>
+        <p>
+          We do not publish border rules as though they were ours. Where this site describes EES,
+          ETIAS or Schengen visa requirements, it is summarising these sources, and they are the
+          ones to check before you rely on anything:
+        </p>
+      </div>
+
+      <ul class="srclist" role="list">
+        {borderSources.map(s => (
+          <li class="srclist__item">
+            <a href={s.url} rel="nofollow noopener" target="_blank" class="srclist__name">{s.name}</a>
+            <span class="srclist__covers">{s.covers}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div class="prose">
+        <h3>Dates we have checked, and when</h3>
+        <p>
+          The EES and ETIAS status quoted across this site was last verified against the European
+          Commission on <strong>27 August 2026</strong>. The ETIAS fee comparison above was
+          checked on <strong>2 September 2026</strong>. Border rules change, and a page that does
+          not say when it was last read is asking you to trust it blindly.
+        </p>
+
+        <h2>Why this page exists</h2>
+        <p>
+          Most travel sites ask you to trust an author. We publish under a company name rather
+          than a personal one, so that is not on offer here. What we can offer instead is that
+          every number has a source, a date, and a link, and that where something is missing or
+          contested we say so on the page rather than hoping you do not look.
+        </p>
+        <p>
+          If you find a figure on this site without a source, or one that has gone out of date,
+          <a href="/contact/">tell us</a> and we will fix it.
+        </p>
+      </div>
+
+      <p class="visa-disclaimer">
+        Educational information only. Not legal advice. Always check the official embassy or
+        consulate source.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero-sm { padding-block: var(--space-16); }
+  .hero-sm__title {
+    font-family: var(--font-serif);
+    font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+    margin-bottom: var(--space-4);
+  }
+  .hero-sm__subtitle {
+    font-size: var(--text-lg);
+    color: hsla(0, 0%, 100%, 0.85);
+    max-width: 60ch;
+    line-height: var(--leading-relaxed);
+  }
+
+  /* Provenance table */
+  .prov {
+    margin: var(--space-6) 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .prov > div {
+    display: grid;
+    grid-template-columns: minmax(11rem, 34%) 1fr;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+  .prov > div:last-child { border-bottom: 0; }
+  .prov > div:nth-child(odd) { background: var(--color-bg-alt); }
+  .prov dt { font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-navy); }
+  .prov dd { font-size: var(--text-sm); color: var(--color-text-muted); margin: 0; }
+  .prov code { font-size: 0.9em; background: var(--color-surface); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--color-border); }
+  .prov a { color: var(--color-accent-dark); }
+  .prov__meaning {
+    font-size: var(--text-sm) !important;
+    color: var(--color-text-light) !important;
+    border-left: 3px solid var(--color-border);
+    padding-left: var(--space-4);
+  }
+
+  /* Conflicting sources */
+  .conflict {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    background: var(--color-surface);
+    margin: var(--space-6) 0;
+  }
+  .conflict__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    color: var(--color-navy);
+    margin-bottom: var(--space-4);
+  }
+  .conflict__pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .conflict__side {
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    background: var(--color-bg-alt);
+  }
+  .conflict__amount {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    color: var(--color-navy);
+    line-height: 1.1;
+  }
+  .conflict__who { font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-text); margin-top: var(--space-2); }
+  .conflict__note { font-size: var(--text-xs); color: var(--color-text-muted); line-height: var(--leading-relaxed); margin-top: var(--space-2); }
+  .conflict__link { display: inline-block; margin-top: var(--space-3); font-size: var(--text-xs); font-weight: var(--font-semibold); color: var(--color-accent-dark); }
+
+  /* Source list */
+  .srclist { display: flex; flex-direction: column; gap: var(--space-3); margin: var(--space-5) 0; }
+  .srclist__item {
+    border-left: 3px solid var(--color-primary);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-bg-alt);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+  .srclist__name { display: block; font-weight: var(--font-semibold); color: var(--color-primary); text-decoration: none; }
+  .srclist__name:hover { color: var(--color-accent-dark); }
+  .srclist__covers { display: block; font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 2px; }
+
+  .visa-disclaimer {
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .prov > div { grid-template-columns: 1fr; gap: 2px; }
+    .conflict__pair { grid-template-columns: 1fr; }
+  }
+</style>

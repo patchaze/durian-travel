@@ -122,7 +122,7 @@ const schema = {
         <h2 class="cpc-notes__title">Where these numbers come from, and what they are not</h2>
         <p>
           Every figure is derived from <strong>{source.publisher}</strong>'s price level index for
-          <strong>{source.category.replace('A0111 — ', '').toLowerCase()}</strong>, reference year
+          <strong>{source.category.replace('A0111, ', '')}</strong>, reference year
           <strong>{source.referenceYear}</strong>, where the EU27 average is 100. The tool does one
           piece of arithmetic: it scales the number you entered by the ratio between two countries'
           published indices. Nothing on this page is our own estimate.
@@ -139,6 +139,7 @@ const schema = {
           {' '}<code>{source.indicator}</code>. Eurostat last updated this
           {' '}{source.eurostatLastUpdated}; retrieved {source.retrieved}.
           {' '}<a href={source.url} rel="nofollow noopener" target="_blank">View the dataset on Eurostat →</a>
+          {' '}<a href="/sources/">See all sources and how often they are checked →</a>
         </p>
         <p class="cpc-notes__src">{source.note}</p>
       </div>
