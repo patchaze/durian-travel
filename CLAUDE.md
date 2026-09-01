@@ -4,7 +4,8 @@
 Durian Travel (duriantravel.com) helps people from outside Europe plan a trip to Europe. Patricia owns it. She is European, has travelled widely inside the continent, and builds her own web tools. She is not a professional developer — explain things in plain language and skip the jargon.
 
 ## Stack
-- Astro, deployed on Vercel (Vercel project `my-website`, GitHub repo `patchaze/my-website`)
+- Astro, deployed on Vercel
+- **GitHub repo: `patchaze/durian-travel`. Vercel project: `my-website`.** These are two different names for the same thing and are easy to confuse. The repo was renamed from `my-website`; GitHub still redirects the old name, which is why stale references appear to work.
 - Domains: duriantravel.com and [www.duriantravel.com](https://www.duriantravel.com)
 - Local preview: `npm run dev`, then open localhost:4321
 
@@ -18,7 +19,7 @@ Moving TOWARDS three things:
 
 ## Hard rules — never break these
 - Never write copy that promises or implies a visa will be approved.
-- No approval-rate numbers unless Patricia gives the real figure and where it came from. The homepage currently claims "98% Schengen Approval Rate" while the services page says outcomes are not guaranteed — flag that contradiction, and never copy the claim onto new pages.
+- No approval-rate numbers, ever, unless Patricia supplies the real figure and its source. The former "98% Schengen Approval Rate" claim was removed from the homepage on 26 August 2026 along with two service-page H1s implying outcomes. Do not reintroduce anything of that shape.
 - Every piece of visa content carries: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
 - Never invent statistics, prices, laws or dates. Look them up, or say you don't know.
 - Border rules change often (EES, ETIAS). Check the date and the official EU or embassy source before stating a rule.
@@ -37,13 +38,20 @@ Calm, direct, useful. A friend in Europe explaining how the system actually work
 - Always work on a branch. Never commit straight to the production branch.
 - Show the diff and wait for approval before applying changes.
 
+## Anonymity is a hard constraint
+Decided 27 August 2026, confirmed 1 September 2026.
+
+- The founder's name appears nowhere in the built output. Verify with a grep over `dist/` before pushing, not just over `src/`.
+- Authorship is **Organization, not Person**. Blog posts, the visa guide and article schema all credit "Durian Travel Editorial Team".
+- Do not add a byline, an author page or `Person` schema. `/patricia-azevedo/` is retired and 301s to `/about-us/` in `vercel.json`.
+- Copy says "we". Describe experience without naming anyone.
+- This costs some E-E-A-T signal. That trade was made deliberately; do not undo it to chase authority.
+
 ## Design
 Match the existing site. Editorial and hand-built, never generic or template-looking. Mobile first. New standalone tools should be self-contained and work offline where possible.
 
 ## Current priorities
-1. This CLAUDE.md, including the Project map.
-2. Resolve the 98% approval-rate contradiction between the homepage and the services page.
-3. Add a free trip budget calculator at /tools/budget.
+Tracked in `BUILD-BRIEF-001.md` at the repo root. The three original priorities (this file, the 98% contradiction, and the budget calculator) were completed on 26 and 27 August 2026.
 
 ---
 
@@ -161,9 +169,9 @@ npm run preview    # serves what's in dist/, to check the real build
 
 - Node version used on Vercel is 24.x (from `.vercel/project.json`).
 - `npm run build` runs `astro build`. It type-checks the content frontmatter against `src/content/config.ts`, optimises the images in `src/assets/`, and writes everything to `dist/`. Build assets land in `dist/_assets/`.
-- **Deployment is automatic.** Push to `main` on `patchaze/my-website` and Vercel builds and deploys. Nothing to run by hand.
-- `vercel.json` at the root holds 45 redirects (mostly old service URLs) and 3 header rules. Add new redirects there.
-- There's also a `netlify.toml` and a second, stale `public/vercel.json` (only 3 redirects, out of date). Whether Netlify is still used at all is **unclear** — treat root `vercel.json` as the live one and ask before touching the other two.
+- **Deployment is automatic.** Push to `main` on `patchaze/durian-travel` (the Vercel project it feeds is named `my-website`) and Vercel builds and deploys. Nothing to run by hand.
+- `vercel.json` at the root holds the redirects (50 at the time of writing, mostly retired service and blog URLs) and 4 header rules, including the Content-Security-Policy. Add new redirects there, before the trailing-slash catch-all at the end of the array.
+- `netlify.toml` and the stale `public/vercel.json` were both deleted on 26 August 2026. Netlify is not used. The root `vercel.json` is the only deployment config.
 
 Two housekeeping notes:
 - `.gitignore` contains `*.html`, which means any `.html` file you create anywhere in the repo is silently ignored by git.
