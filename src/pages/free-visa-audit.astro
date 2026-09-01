@@ -4,8 +4,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const auditSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": "Free Visa Audit",
-  "description": "A free 20-minute consultation with a senior travel specialist to review your Schengen visa documents, identify gaps specific to your nationality and situation, and clarify your next steps.",
+  "name": "Free Europe Trip Planning Call",
+  "description": "A free call about planning a trip to Europe from outside it: route, budget, timing, and how the current border rules work. No documents are reviewed and no opinion is given on the outcome of any application.",
   "provider": {
     "@type": "Organization",
     "name": "DURIAN Travel",
@@ -15,54 +15,54 @@ const auditSchema = {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD",
-    "description": "Free visa audit call"
+    "description": "Free Europe trip planning call"
   },
   "areaServed": "Worldwide",
   "url": "https://www.duriantravel.com/free-visa-audit/"
 };
 
 const callCovers = [
-  'Your document stack and what is missing for your nationality and embassy',
-  'Whether your financial documents tell the right story to a visa officer',
-  'Whether your itinerary logic supports the embassy you are applying to',
-  'Whether your timeline is realistic given current appointment pressure',
-  'The specific weak points most likely to cause problems in your situation'
+  'What a realistic budget looks like for the route you have in mind',
+  'How the 90 days in any 180 rule applies to the trip you are planning',
+  'Which countries fit your pace and your budget, and which to leave out',
+  'How the current border systems work in practice, and who they apply to',
+  'Where the official sources are for your own nationality and situation'
 ];
 
 const scenarios = [
   {
-    title: "You're planning your first Europe trip",
-    text: 'You have read online guides, but they feel generic, contradictory, or clearly written for a different audience. You want someone to look at your actual case.'
+    title: 'You are planning your first Europe trip',
+    text: 'You have read plenty of guides, but they feel generic, contradictory, or written for someone travelling from somewhere else entirely. You want to talk it through with someone who plans these routes.'
   },
   {
-    title: "You're preparing to apply",
-    text: 'You have gathered documents but want a second opinion before you submit. It is better to find gaps now than after a refusal letter.'
+    title: 'You have a budget and no route',
+    text: 'You know roughly what you can spend and how long you have, but not which countries that actually buys you. The order you visit them in changes the number more than most people expect.'
   },
   {
-    title: "You've been refused before",
-    text: 'You have a refusal letter with a specific ground and want help understanding what it means and how a stronger reapplication would look.'
+    title: 'You want to stay a while',
+    text: 'A longer trip runs into the 90 days in any 180 limit, and how you count those days decides whether the plan works at all.'
   },
   {
-    title: "Your situation is not straightforward",
-    text: 'A recent job change, irregular income, a complicated multi-country route, or unusual travel history can all change what matters in your file.'
+    title: 'Your route has too many moving parts',
+    text: 'Several countries, a few transfer days, and a fixed return flight. Sequencing is the difference between a trip that breathes and one spent in transit.'
   }
 ];
 ---
 
 <BaseLayout
-  title="Free Visa Audit | Europe Trip Review for Non-European Travelers"
-  description="Book a free 20-minute call with a senior travel specialist. We'll review your Schengen documents, flag what's missing for your nationality, and tell you exactly what to fix before you apply."
+  title="Free Europe Trip Planning Call | DURIAN Travel"
+  description="A free call about your Europe trip: route, budget, timing, and how the border rules work. No documents reviewed, no opinion on any application outcome."
   canonical="https://www.duriantravel.com/free-visa-audit/"
-  breadcrumb={[{ name: 'Free Audit', url: 'https://www.duriantravel.com/free-visa-audit/' }]}
+  breadcrumb={[{ name: 'Free planning call', url: 'https://www.duriantravel.com/free-visa-audit/' }]}
   schema={auditSchema}
-  keywords="free visa audit, Schengen visa review, Europe trip review, free travel consultation"
+  keywords="free europe trip planning call, europe travel consultation, schengen 90 180 rule, europe route planning"
 >
   <section class="hero-sm hero-gradient">
     <div class="container container--narrow">
       <span class="section-label" style="color:var(--color-accent-light)">Free Call</span>
-      <h1 class="hero-sm__title" style="color:white">Free Visa Audit: Find Out Where Your Application Stands</h1>
+      <h1 class="hero-sm__title" style="color:white">Free planning call for your Europe trip</h1>
       <p class="hero-sm__subtitle">
-        A free 20-minute call with a senior travel specialist. Your nationality, your itinerary, your documents — reviewed directly.
+        A free call, usually 15 to 20 minutes, about the trip itself. Your route, your budget, your timing, and how the rules apply to where you are travelling from.
       </p>
     </div>
   </section>
@@ -72,12 +72,12 @@ const scenarios = [
       <div class="audit-layout">
         <div>
           <div class="prose">
-            <h2>What the audit is</h2>
+            <h2>What the call is</h2>
             <p>
-              Schengen visa requirements are not the same for everyone. The documents an embassy asks for, the financial benchmarks it applies, and the weight it gives to employment, property, or travel history vary depending on where you are from and where you are applying.
+              Planning Europe from outside it is a different problem from planning it from inside. The distances are longer, the timing is tighter, the border rules apply to you in ways they do not apply to someone crossing by train, and the advice you find online is usually written for that other person.
             </p>
             <p>
-              The Free Visa Audit is a focused review of your specific situation. We look at your nationality, destination, document stack, and timeline, then tells you what looks solid, what looks weak, and what to fix before you submit.
+              This is a free conversation about the trip. We talk through where you want to go, what you can spend, how long you have, and how the current rules shape all three. You leave with a clearer route and the official sources for your own situation.
             </p>
 
             <h2>What the call covers</h2>
@@ -90,10 +90,18 @@ const scenarios = [
         </div>
 
         <aside class="audit-sidebar">
+          <div class="boundary-card">
+            <h3>What this call does not do</h3>
+            <ul class="x-list">
+              <li>No documents are reviewed. We do not look at your passport, bank statements, or application forms.</li>
+              <li>No opinion is given on whether an application will succeed.</li>
+              <li>Consular officers alone decide the outcome, on their own assessment.</li>
+            </ul>
+          </div>
           <div class="audit-card">
-            <h3>Book your audit</h3>
+            <h3>Book the call</h3>
             <p>
-              The call is scheduled through Calendly and kept focused around the information you share before booking.
+              The call is scheduled through Calendly and kept focused around the short summary you share before booking.
             </p>
             <div class="calendly-inline-widget" data-url="https://calendly.com/contact-duriantravel/durian-travel-15-minute-audit?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:320px;height:700px;"></div>
             <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
@@ -124,29 +132,49 @@ const scenarios = [
     <div class="container container--narrow prose">
       <h2>What happens</h2>
       <p>
-        Before the call, you will be asked for a short summary: your nationality, destination, travel dates, employment status, and any specific concerns. That gives us enough context to spend the call diagnosing your file rather than collecting basics.
+        Before the call, you will be asked for a short summary: where you are travelling from, roughly when, how long you have, and what you want out of the trip. That way the call is spent on your route rather than on collecting basics.
       </p>
       <p>
-        The conversation itself is direct. She will tell you what looks strong, what worries her, and what she would change. If your case needs more than a short audit, such as a full document review or deeper strategy support, she will explain which <a href="/services/">service package</a> fits and what it includes. There is no pressure to book further support.
+        The conversation is direct. We will tell you what we would do with your dates and your budget, which parts of the plan look tight, and where to read the rules for yourself. If you want more than a conversation, we will explain which <a href="/services/">service package</a> fits and what it includes. There is no pressure to book anything.
       </p>
 
-      <h2>What the audit doesn't include</h2>
-      <ul class="x-list">
-        <li>It is a review and diagnosis, not a document preparation service</li>
-        <li>It does not include rewriting documents live on the call</li>
-        <li>It is not a guarantee of visa approval</li>
-        <li>It is not legal advice</li>
-      </ul>
+      <h2>Where to go next</h2>
+      <p>
+        Before the call, it is worth putting real numbers on the trip. The <a href="/tools/budget/">budget planner</a> turns your own figures into a total, and the <a href="/tools/cost-per-country/">cost-per-country planner</a> shows what the same trip costs across 28 countries using official Eurostat price data. Both are free and neither asks for anything.
+      </p>
 
       <div class="notice notice--info" style="margin-top:var(--space-8)">
         <span aria-hidden="true">ℹ️</span>
         <span>If you have a question before booking, <a href="/contact/" class="link">contact us directly</a>. Sessions are conducted in English.</span>
       </div>
+
+      <p class="visa-disclaimer">
+        Educational information only. Not legal advice. Always check the official embassy or consulate source.
+      </p>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+.boundary-card {
+  background: var(--color-accent-bg);
+  border: 1px solid rgba(196, 75, 54, 0.28);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin-bottom: var(--space-5);
+}
+.boundary-card h3 { margin-bottom: var(--space-4); color: var(--color-navy); }
+.boundary-card .x-list li { margin-bottom: var(--space-3); font-size: var(--text-sm); line-height: var(--leading-relaxed); }
+.boundary-card .x-list li:last-child { margin-bottom: 0; }
+.visa-disclaimer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  text-align: center;
+}
 .hero-sm { padding-block: var(--space-16); }
 .hero-sm__title {
   font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
