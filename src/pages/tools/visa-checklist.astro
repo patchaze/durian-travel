@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
+import PassportSelect from '../../components/PassportSelect.astro';
+import ToolCapture from '../../components/ToolCapture.astro';
 
 const canonical = 'https://www.duriantravel.com/tools/visa-checklist/';
 
@@ -148,6 +150,7 @@ const schema = {
             <label class="chip"><input type="checkbox" name="flag" value="married" /><span>I am married</span></label>
             <label class="chip"><input type="checkbox" name="flag" value="children" /><span>Travelling with children</span></label>
           </div>
+          <PassportSelect />
         </fieldset>
       </form>
 
@@ -186,6 +189,8 @@ const schema = {
         <button type="button" class="btn btn--ghost btn--sm" id="reset">Clear all ticks</button>
         <p class="actions__status" id="action-status" aria-live="polite"></p>
       </div>
+
+      <ToolCapture source="visa checklist" resultNoun="checklist" />
     </div>
   </section>
 
