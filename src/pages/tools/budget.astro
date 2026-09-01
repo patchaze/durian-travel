@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
+import PassportSelect from '../../components/PassportSelect.astro';
+import ToolCapture from '../../components/ToolCapture.astro';
 
 const canonical = 'https://www.duriantravel.com/tools/budget/';
 
@@ -84,6 +86,7 @@ const schema = {
                 </select>
               </label>
             </div>
+            <PassportSelect />
             <p class="field-note">
               Enter every figure in one currency. Our guide suggests working in euros first, since
               that is what you will actually be spending. This tool does not convert between
@@ -222,6 +225,10 @@ const schema = {
             </p>
           </div>
         </aside>
+      </div>
+
+      <div class="container--narrow">
+        <ToolCapture source="budget planner" resultNoun="breakdown" />
       </div>
     </div>
   </section>
