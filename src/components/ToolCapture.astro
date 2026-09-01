@@ -128,26 +128,18 @@ const { source, resultNoun = 'breakdown' } = Astro.props;
   // ───────────────────────────────────────────────────────────────────────
   // PROVIDER ADAPTER
   //
-  // Everything provider specific is in submitCapture. To move to Brevo,
-  // rewrite this one function to POST to their endpoint and leave the rest
-  // of the file alone. The contract is fixed:
+  // Everything provider specific is in submitCapture. The contract is fixed:
   //
   //   submitCapture({ email, passport, source }) -> Promise<{ok, error?}>
   //
-  // Currently: FormSubmit, matching the contact form in contact.astro, using
-  // their /ajax/ endpoint so the result stays on screen instead of navigating
-  // to a thank you page.
+  // Currently: our own endpoint at /api/subscribe, which talks to Brevo with a
+  // key that stays on the server. Nothing secret reaches the browser, which is
+  // the whole reason this route exists rather than posting to Brevo directly.
   //
-  // Known limitation, and the reason this is a bridge rather than a
-  // destination: FormSubmit emails one message per submission and builds no
-  // list. It solves the form, not the problem.
-  //
-  // Note the address is visible in the built output. That is how FormSubmit
-  // works without an account, and it matches contact.astro. It is an address,
-  // not a credential. FormSubmit also issues a hashed endpoint once an address
-  // is activated; switching to it means changing ENDPOINT only.
+  // Same origin, so the existing connect-src 'self' already permits it and no
+  // CSP change is needed.
   // ───────────────────────────────────────────────────────────────────────
-  const ENDPOINT = 'https://formsubmit.co/ajax/contact@duriantravel.com';
+  const ENDPOINT = '/api/subscribe';
 
   type CaptureInput = { email: string; passport: string; source: string };
 
@@ -156,16 +148,10 @@ const { source, resultNoun = 'breakdown' } = Astro.props;
       const res = await fetch(ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          email: input.email,
-          passport: input.passport || 'not given',
-          source: input.source,
-          _subject: `Planner signup: ${input.source}`,
-          _template: 'table',
-          _captcha: 'false',
-        }),
+        body: JSON.stringify(input),
       });
-      if (!res.ok) return { ok: false, error: `status ${res.status}` };
+      const data = await res.json().catch(() => ({}) as { message?: string });
+      if (!res.ok) return { ok: false, error: data.message ?? 'That did not go through.' };
       return { ok: true };
     } catch (e) {
       return { ok: false, error: 'network' };
@@ -224,7 +210,13 @@ const { source, resultNoun = 'breakdown' } = Astro.props;
         if (formWrap) formWrap.hidden = true;
         if (done) done.hidden = false;
       } else {
-        fail('That did not go through. Try again in a moment, or email us from the contact page.');
+        // The endpoint returns a message written for the visitor; prefer it,
+        // and fall back only when the request never reached us.
+        const msg =
+          result.error && result.error !== 'network'
+            ? result.error + ' Or email us from the contact page.'
+            : 'That did not go through. Try again in a moment, or email us from the contact page.';
+        fail(msg);
       }
     });
   });
