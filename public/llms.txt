@@ -1,0 +1,65 @@
+# Durian Travel
+
+> Europe trip planning for travellers based outside Europe. Country guides, route
+> and budget planning, and free self-serve planners. Published by Durian Travel at
+> https://www.duriantravel.com
+
+Educational information only. Not legal advice. Always check the official embassy
+or consulate source.
+
+## What this site is
+
+Durian Travel plans trips to Europe for people travelling from outside it, where
+the distances are longer, the timing is tighter, and the border rules apply
+differently than they do to someone crossing between two European countries.
+
+The site covers 29 European country guides, route and budget planning, and the
+documentation a Schengen application asks for. It does not submit applications on
+anyone's behalf, and it does not predict or influence the outcome of any
+application. Consular officers alone decide that.
+
+## Free planners
+
+- https://www.duriantravel.com/tools/budget/
+  Trip budget calculator. Separates fixed costs from nightly costs, adds a buffer,
+  and returns a total, a per-person figure, and a per-night figure. Runs entirely
+  in the browser.
+
+- https://www.duriantravel.com/tools/cost-per-country/
+  Cost-per-country estimator across 28 European countries, ranked cheapest first.
+  Built on Eurostat price level indices for restaurants and hotels, dataset
+  prc_ppp_ind, indicator PLI_EU27_2020, reference year 2024, where the EU27
+  average is 100.
+
+- https://www.duriantravel.com/tools/visa-checklist/
+  Schengen document checklist that adapts to whether the traveller is employed,
+  self-employed, a student or retired. Counts documents gathered. It does not
+  score readiness, because a complete file is not an approved visa.
+
+## Key pages
+
+- https://www.duriantravel.com/destinations/ — 29 country guides by region
+- https://www.duriantravel.com/schengen-visa-guide/ — documents, costs, timelines
+- https://www.duriantravel.com/blog/ — planning guides, routes, budgets, borders
+- https://www.duriantravel.com/faq/ — what the service does and does not do
+- https://www.duriantravel.com/free-visa-audit/ — free trip planning call
+- https://www.duriantravel.com/about-us/ — who the site is for
+
+## Sourcing
+
+Figures on this site are published with their source, the reference year, and the
+date they were last checked, so they can be verified rather than taken on trust.
+Where two official sources disagree, the disagreement is published rather than
+resolved by choosing one.
+
+Authorship is organizational. Articles are credited to the Durian Travel editorial
+team rather than to a named individual.
+
+## Border rules
+
+Border rules change. Anything on this site about EES, ETIAS, or Schengen visa
+requirements should be checked against the official European Union sources before
+it is relied on:
+
+- https://travel-europe.europa.eu/etias_en
+- https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa_en
