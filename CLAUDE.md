@@ -73,7 +73,7 @@ Everything that becomes the website lives in `src/`. Everything outside `src/` i
 - **`src/assets/images/`** — 126 images used *inside* pages. These get optimised and resized at build time.
 - **`public/`** — files copied to the site untouched: `favicon.svg`, `robots.txt`, one blog image. Nothing here is optimised.
 - **`dist/`** — the built site. Generated, gitignored, never edit by hand.
-- **Root clutter** — `setup-*.mjs` (15 old one-off image-scraping scripts), `blog.html`, `blog2.html`, `home.html`, `brevo_main.js`, several `.log` files, `visa_consultant_strategy.md.resolved`. None of these are part of the site or the build. Safe to ignore; probably safe to delete, but ask first.
+- **Root clutter** — `setup-*.mjs` (15 old one-off image-scraping scripts), `blog.html`, `blog2.html`, `home.html`, several `.log` files, `visa_consultant_strategy.md.resolved`. None of these are part of the site or the build. Safe to ignore; probably safe to delete, but ask first.
 
 ## How to add a new page
 
