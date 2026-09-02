@@ -1,8 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
-import PassportSelect from '../../components/PassportSelect.astro';
-import ToolCapture from '../../components/ToolCapture.astro';
 import costData from '../../data/country-costs.json';
 
 const canonical = 'https://www.duriantravel.com/tools/cost-per-country/';
@@ -84,7 +82,6 @@ const schema = {
           <span class="field__label">for how many nights</span>
           <input type="number" id="cpc-nights" min="1" max="365" step="1" value="7" inputmode="numeric" />
         </label>
-        <PassportSelect />
       </form>
 
       <p class="cpc-hint">
@@ -116,8 +113,6 @@ const schema = {
           </li>
         ))}
       </ol>
-
-      <ToolCapture source="cost-per-country planner" resultNoun="comparison" />
     </div>
   </section>
 
