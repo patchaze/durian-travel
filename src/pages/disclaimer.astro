@@ -16,19 +16,27 @@ const lastUpdated = '19 February 2026';
     <Breadcrumb items={[{ name: 'Disclaimer' }]} />
   </div>
 
+  <section class="hero-sm hero-gradient">
+    <div class="container container--narrow">
+      <span class="section-label" style="color:var(--color-accent-light)">Legal</span>
+      <h1 class="hero-sm__title" style="color:white">Important Disclaimer</h1>
+      <p class="hero-sm__subtitle">
+        What this site is for, and what it is not. Read this before using anything here.
+      </p>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container container--narrow">
-      <header class="legal-header">
-        <h1 class="legal-header__title">Important Disclaimer</h1>
-        <p class="legal-header__meta">Last updated: {lastUpdated}</p>
-        <div class="notice notice--warning">
-          <span aria-hidden="true">⚠️</span>
-          <span>
-            <strong>Please read this disclaimer carefully before using any service provided by DURIAN.</strong>
-            By using our website or services, you acknowledge that you have read and understood these limitations.
-          </span>
-        </div>
-      </header>
+      <p class="legal-meta">Last updated: {lastUpdated}</p>
+
+      <div class="notice notice--warning">
+        <span aria-hidden="true">⚠️</span>
+        <span>
+          <strong>Please read this disclaimer carefully before using any service provided by DURIAN.</strong>
+          By using our website or services, you acknowledge that you have read and understood these limitations.
+        </span>
+      </div>
 
       <div class="prose">
         <h2>1. Educational Purpose Only</h2>
@@ -110,7 +118,17 @@ const lastUpdated = '19 February 2026';
 </BaseLayout>
 
 <style>
-.legal-header { margin-bottom: var(--space-10); }
-.legal-header__title { font-size: clamp(var(--text-3xl), 4vw, var(--text-4xl)); margin-bottom: var(--space-2); }
-.legal-header__meta  { color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-5); }
+.hero-sm { padding-block: var(--space-16); }
+.hero-sm__title {
+  font-family: var(--font-serif);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+  margin-bottom: var(--space-4);
+}
+.hero-sm__subtitle {
+  font-size: var(--text-lg);
+  color: hsla(0, 0%, 100%, 0.85);
+  max-width: 60ch;
+  line-height: var(--leading-relaxed);
+}
+.legal-meta { color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-5); }
 </style>

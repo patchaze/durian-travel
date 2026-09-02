@@ -9,29 +9,56 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   keywords="cookie policy, DURIAN travel cookies, website tracking policy"
   noindex={true}
 >
+  <section class="hero-sm hero-gradient">
+    <div class="container container--narrow">
+      <span class="section-label" style="color:var(--color-accent-light)">Legal</span>
+      <h1 class="hero-sm__title" style="color:white">Cookie Policy</h1>
+      <p class="hero-sm__subtitle">
+        Which cookies this site sets, what they do, and how to turn them off.
+      </p>
+    </div>
+  </section>
+
   <section class="section">
-    <div class="container container--narrow prose">
-      <h1>Cookie Policy</h1>
-      <p><strong>Last updated:</strong> February 2026</p>
+    <div class="container container--narrow">
+      <p class="legal-meta">Last updated: February 2026</p>
 
-      <h2>What Are Cookies?</h2>
-      <p>Cookies are small text files placed on your device when you visit our website. They help us understand how you use the site and improve your experience.</p>
+      <div class="prose">
+        <h2>What Are Cookies?</h2>
+        <p>Cookies are small text files placed on your device when you visit our website. They help us understand how you use the site and improve your experience.</p>
 
-      <h2>Cookies We Use</h2>
-      <h3>Essential Cookies</h3>
-      <p>Required for the website to function. Includes session management and security tokens. These cannot be disabled.</p>
+        <h2>Cookies We Use</h2>
+        <h3>Essential Cookies</h3>
+        <p>Required for the website to function. Includes session management and security tokens. These cannot be disabled.</p>
 
-      <h3>Analytics Cookies</h3>
-      <p>We may use anonymised analytics to understand page views and visitor behaviour. No personal data is collected. You can opt out via your browser settings.</p>
+        <h3>Analytics Cookies</h3>
+        <p>We may use anonymised analytics to understand page views and visitor behaviour. No personal data is collected. You can opt out via your browser settings.</p>
 
-      <h3>Third-Party Cookies</h3>
-      <p>Some embedded content (e.g. Google Fonts, booking forms) may set their own cookies. We do not control these cookies. Refer to the respective third-party privacy policies.</p>
+        <h3>Third-Party Cookies</h3>
+        <p>Some embedded content (e.g. Google Fonts, booking forms) may set their own cookies. We do not control these cookies. Refer to the respective third-party privacy policies.</p>
 
-      <h2>Managing Cookies</h2>
-      <p>Most browsers allow you to clear or block cookies through their settings. Note that blocking essential cookies may impair website functionality.</p>
+        <h2>Managing Cookies</h2>
+        <p>Most browsers allow you to clear or block cookies through their settings. Note that blocking essential cookies may impair website functionality.</p>
 
-      <h2>Contact</h2>
-      <p>Questions about our cookie usage? <a href="/contact/">Contact us</a>.</p>
+        <h2>Contact</h2>
+        <p>Questions about our cookie usage? <a href="/contact/">Contact us</a>.</p>
+      </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+.hero-sm { padding-block: var(--space-16); }
+.hero-sm__title {
+  font-family: var(--font-serif);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+  margin-bottom: var(--space-4);
+}
+.hero-sm__subtitle {
+  font-size: var(--text-lg);
+  color: hsla(0, 0%, 100%, 0.85);
+  max-width: 60ch;
+  line-height: var(--leading-relaxed);
+}
+.legal-meta { color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-8); }
+</style>
