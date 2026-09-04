@@ -1,0 +1,53 @@
+# Cloudflare Pages redirects. Translated from vercel.json, do not edit by hand.
+# Source of truth is vercel.json while both hosts are live.
+# Cloudflare defaults to 302, so every permanent rule states 301 explicitly.
+
+/services/document-review  /services/schengen-visa-help/  301
+/services/document-review/  /services/schengen-visa-help/  301
+/services/cover-letter-strategy  /services/schengen-visa-help/  301
+/services/cover-letter-strategy/  /services/schengen-visa-help/  301
+/services/financial-proof-review  /services/schengen-visa-help/  301
+/services/financial-proof-review/  /services/schengen-visa-help/  301
+/services/visa-strategy-call  /services/schengen-visa-help/  301
+/services/visa-strategy-call/  /services/schengen-visa-help/  301
+/services/strategy-call  /services/schengen-visa-help/  301
+/services/strategy-call/  /services/schengen-visa-help/  301
+/services/itinerary-building  /services/first-international-trip/  301
+/services/itinerary-building/  /services/first-international-trip/  301
+/services/itinerary-structuring  /services/first-international-trip/  301
+/services/itinerary-structuring/  /services/first-international-trip/  301
+/services/refusal-analysis  /services/visa-refusal-reapplication/  301
+/services/refusal-analysis/  /services/visa-refusal-reapplication/  301
+/services/travel-health-consult  /services/travel-health-planning/  301
+/services/travel-health-consult/  /services/travel-health-planning/  301
+/blog/europe-travel-guide  /blog/  301
+/blog/europe-travel-guide/  /blog/  301
+/blog/most-visited-countries-in-europe  /blog/  301
+/blog/most-visited-countries-in-europe/  /blog/  301
+/blog/planning-first-europe-trip  /blog/europe-trip-planning-timeline/  301
+/blog/planning-first-europe-trip/  /blog/europe-trip-planning-timeline/  301
+/blog/visaeuro-pro-vs-schengenmasters  /blog/  301
+/blog/visaeuro-pro-vs-schengenmasters/  /blog/  301
+/blog/best-schengen-travel-agency-for-digital-nomads  /blog/  301
+/blog/best-schengen-travel-agency-for-digital-nomads/  /blog/  301
+/blog/best-schengen-travel-agency-for-families  /blog/  301
+/blog/best-schengen-travel-agency-for-families/  /blog/  301
+/blog/best-schengen-travel-agency  /blog/  301
+/blog/best-schengen-travel-agency/  /blog/  301
+/blog/eu-airport-liquids-batteries-rules  /blog/europe-packing-list/  301
+/blog/eu-airport-liquids-batteries-rules/  /blog/europe-packing-list/  301
+/blog/schengen-visa-requirements-philippine-passport-holders  /blog/schengen-visa-requirements-non-european-travelers/  301
+/blog/schengen-visa-requirements-philippine-passport-holders/  /blog/schengen-visa-requirements-non-european-travelers/  301
+/blog/10-day-europe-itinerary-from-the-philippines  /blog/10-day-europe-itinerary/  301
+/blog/10-day-europe-itinerary-from-the-philippines/  /blog/10-day-europe-itinerary/  301
+/blog/sweden-itinerary  /blog/sweden-itinerary-first-time-visitors/  301
+/blog/sweden-itinerary/  /blog/sweden-itinerary-first-time-visitors/  301
+/blog/sweden-itinerary-from-the-philippines  /blog/sweden-itinerary-first-time-visitors/  301
+/blog/sweden-itinerary-from-the-philippines/  /blog/sweden-itinerary-first-time-visitors/  301
+/blog/is-sweden-worth-it-for-filipino-travelers  /blog/is-sweden-worth-it/  301
+/blog/is-sweden-worth-it-for-filipino-travelers/  /blog/is-sweden-worth-it/  301
+/blog/how-much-does-schengen-visa-cost-philippines  /blog/how-much-does-schengen-visa-cost/  301
+/blog/how-much-does-schengen-visa-cost-philippines/  /blog/how-much-does-schengen-visa-cost/  301
+/sitemap.xml  /sitemap-index.xml  301
+/patricia-azevedo  /about-us/  301
+/patricia-azevedo/  /about-us/  301
