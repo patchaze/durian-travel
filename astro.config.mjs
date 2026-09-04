@@ -15,7 +15,8 @@ export default defineConfig({
         page !== 'https://www.duriantravel.com/cookie-policy/' &&
         page !== 'https://www.duriantravel.com/disclaimer/' &&
         page !== 'https://www.duriantravel.com/thank-you/' &&
-        page !== 'https://www.duriantravel.com/about/'
+        page !== 'https://www.duriantravel.com/about/' &&
+        page !== 'https://www.duriantravel.com/patricia-azevedo/'
     }),
   ],
   markdown: {
