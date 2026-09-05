@@ -129,7 +129,7 @@ const faqSchema = {
         </section>
 
         <section class="service-section">
-          <span class="section-label">Geo-Based Customization</span>
+          <span class="section-label">Tailored By Region</span>
           <div class="geo-grid">
             {pkg.geo_customization.map((segment) => (
               <div class="geo-card">
@@ -156,13 +156,6 @@ const faqSchema = {
       </article>
 
       <aside class="service-sidebar">
-        <div class="service-card service-card--sticky">
-          <span class="section-label">SEO Targets</span>
-          <div class="keyword-row">
-            {pkg.seo_keywords.map((keyword) => <span class="keyword-pill">{keyword}</span>)}
-          </div>
-        </div>
-
         <div class="service-card">
           <span class="section-label">Optional Add-ons</span>
           <div class="addon-row">
@@ -343,23 +336,16 @@ const faqSchema = {
   font-weight: var(--font-bold);
 }
 
-.keyword-row,
 .addon-row {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
 }
 
-.keyword-pill,
 .addon-pill {
   border-radius: var(--radius-full);
   padding: 0.45rem 0.85rem;
   font-size: var(--text-sm);
-}
-
-.keyword-pill {
-  background: rgb(15 33 56 / 0.08);
-  color: var(--color-navy);
 }
 
 .addon-pill {
