@@ -4,15 +4,16 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
 
 const canonical = 'https://www.duriantravel.com/tools/budget/';
 
-// Daily ranges come from our own published guide at /blog/europe-trip-budget/.
-// Nothing here is invented: the preset buttons fill in the low end of each
-// published range, the full range is shown next to the field, and every figure
-// stays editable. There are no exchange rates anywhere in this tool, because a
-// hardcoded rate goes stale and a live one needs a server.
+// Daily ranges are our own estimate, from our published guide at
+// /blog/europe-trip-budget/. Nothing here is invented: the preset buttons fill in
+// the middle of each published range rather than the floor, the full range is
+// shown next to the field, and every figure stays editable. There are no exchange
+// rates anywhere in this tool, because a hardcoded rate goes stale and a live one
+// needs a server.
 const styles = [
-  { id: 'budget', label: 'Budget', low: 70, high: 130 },
-  { id: 'mid', label: 'Mid-range', low: 140, high: 240 },
-  { id: 'comfortable', label: 'Comfortable', low: 260, high: 380 },
+  { id: 'budget', label: 'Budget', low: 70, high: 130, typical: 100 },
+  { id: 'mid', label: 'Mid-range', low: 140, high: 240, typical: 190 },
+  { id: 'comfortable', label: 'Comfortable', low: 260, high: 380, typical: 320 },
 ];
 
 const schema = {
@@ -122,16 +123,17 @@ const schema = {
 
             <div class="style-picker" role="group" aria-label="Travel style presets">
               {styles.map(s => (
-                <button type="button" class="style-btn" data-style={s.id} data-low={s.low}>
+                <button type="button" class="style-btn" data-style={s.id} data-typical={s.typical}>
                   <span class="style-btn__label">{s.label}</span>
                   <span class="style-btn__range">{s.low}–{s.high === 380 ? '380+' : s.high}/day</span>
                 </button>
               ))}
             </div>
             <p class="field-note">
-              Ranges are for Western Europe, from our
+              Ranges are for Western Europe and are our own estimate, from our
               <a href="/blog/europe-trip-budget/">Europe budget guide</a>. Eastern and Southern
-              Europe run lower. A preset fills the four fields below — change any of them.
+              Europe run lower. A preset fills the four fields below with the middle of the
+              range. Change any of them.
             </p>
 
             <label class="field">
@@ -543,13 +545,13 @@ const schema = {
     save();
   }
 
-  function applyStyle(low: number) {
-    // Spread the published daily figure across the four fields, weighted the way
-    // most trips actually break down. Every field stays editable afterwards.
+  function applyStyle(typical: number) {
+    // Spread the middle of the published daily range across the four fields, weighted
+    // the way most trips actually break down. Every field stays editable afterwards.
     const split = { 'd-stay': 0.45, 'd-food': 0.3, 'd-transport': 0.1, 'd-activities': 0.15 };
     (Object.keys(split) as Array<keyof typeof split>).forEach(id => {
       const el = $(id);
-      if (el) el.value = String(Math.round(low * split[id]));
+      if (el) el.value = String(Math.round(typical * split[id]));
     });
     calculate();
   }
@@ -557,7 +559,7 @@ const schema = {
   styleBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       styleBtns.forEach(b => b.classList.toggle('is-active', b === btn));
-      applyStyle(parseFloat(btn.dataset.low ?? '0'));
+      applyStyle(parseFloat(btn.dataset.typical ?? '0'));
     });
   });
 
