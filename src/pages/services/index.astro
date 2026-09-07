@@ -564,13 +564,6 @@ const breadcrumb = [{ name: 'Services', url: 'https://www.duriantravel.com/servi
                 <p class="package-panel__target">{pkg.target}</p>
               </div>
 
-              <div class="package-panel__section">
-                <span class="section-label">SEO Targets For This Package Page</span>
-                <div class="package-seo-row">
-                  {pkg.seoKeywords.map((keyword) => <span class="package-seo-pill">{keyword}</span>)}
-                </div>
-              </div>
-
               <div class="package-health">
                 <div class="package-health__heading">
                   <span class="package-health__credential">{pkg.healthCredential}</span>
@@ -599,7 +592,7 @@ const breadcrumb = [{ name: 'Services', url: 'https://www.duriantravel.com/servi
               </div>
 
               <div class="package-panel__section">
-                <span class="section-label">Geo-Based Customization Inside This Package</span>
+                <span class="section-label">Tailored By Region</span>
                 <div class="package-geo-grid">
                   {pkg.geo.map((region) => (
                     <div class="package-geo-card">
@@ -951,23 +944,6 @@ const breadcrumb = [{ name: 'Services', url: 'https://www.duriantravel.com/servi
     color: color-mix(in srgb, var(--package-accent) 76%, black 24%);
     line-height: var(--leading-relaxed);
     font-size: var(--text-sm);
-  }
-
-  .package-seo-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
-  .package-seo-pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.3rem 0.7rem;
-    border-radius: var(--radius-full);
-    border: 1px solid var(--color-border);
-    background: var(--color-surface);
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
   }
 
   .package-panel__columns {

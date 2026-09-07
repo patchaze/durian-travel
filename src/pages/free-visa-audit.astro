@@ -101,10 +101,9 @@ const scenarios = [
           <div class="audit-card">
             <h3>Book the call</h3>
             <p>
-              The call is scheduled through Calendly and kept focused around the short summary you share before booking.
+              Ask for a time through the contact form. Send a short summary with it: where you are travelling from, roughly when, how long you have, and what you want out of the trip. We reply with times that suit your hours.
             </p>
-            <div class="calendly-inline-widget" data-url="https://calendly.com/contact-duriantravel/durian-travel-15-minute-audit?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:320px;height:700px;"></div>
-            <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+            <a class="btn btn--primary audit-book" href="/contact/">Ask for a time</a>
           </div>
         </aside>
       </div>
@@ -208,6 +207,9 @@ const scenarios = [
 .scenario-card p,
 .audit-card p {
   color: var(--color-text-muted);
+}
+.audit-book {
+  margin-top: var(--space-5);
 }
 @media (max-width: 960px) {
   .audit-layout,
