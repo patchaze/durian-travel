@@ -85,6 +85,20 @@ Nothing on the live site can take money yet, and the fixes that unblock that are
 5. **Item 3. Patricia chose PORT**, over parking it or moving generation into Make. The handler is now `functions/api/report.ts`, which Pages routes at `/api/report`, the same URL as before, so the existing `Disallow: /api/` in `robots.txt` still covers it. The calculation is now `src/lib/report.ts`, byte identical to `api/_report.ts` below the header comment, placed outside `functions/` because Pages routes every file under it. Measured before committing, as the brief asked: **0.082 ms of CPU per report against the 10 ms free tier limit**, so the USD 5 Workers plan is not needed. The generated report carries the required disclaimer, is `noindex`, names nobody, and contains no approval or readiness language. `isPaidRequest` still returns false, so the endpoint answers 402 to every caller. Astro stays `output: 'static'` with no adapter, still 77 pages. Merge `a9de9a7`.
 6. **Item 4a.** Nothing in `public/` is being silently ignored. Ran `git check-ignore` over every file in `public/`: no matches, and all six files are tracked. `public/` contains no `.html` file at all, so the `*.html` rule currently bites nothing there. It would still bite a new standalone HTML tool, so the warning in `CLAUDE.md` stays true.
 
+**Verified on the live site after deploy:**
+
+| Check | Result |
+| --- | --- |
+| `POST /api/report` | 402 with the JSON refusal body, so the Pages Function is routing and `isPaidRequest` is doing its job |
+| `GET /api/report` | 405, so the method check is running |
+| `/patricia-azevedo/` | 404, the redirect is gone as decided |
+| `/about-us/`, `/free-visa-audit/` | 200 |
+| `economy-wide` on `/tools/cost-per-country/` and `/sources/` | 0 on both |
+| `calendly` on `/free-visa-audit/` | 0 |
+| Founder name across the homepage, about, services, sources, cost tool and audit page | 0 |
+
+The Function did not answer for the first few minutes after the push. That was Cloudflare still building, not a fault. It came up on its own.
+
 **Could not do, and why:**
 
 - **The folder rename was not performed.** Patricia asked for `durian-travel`. Renaming the folder changes the working directory of the running session and the path Claude Code keys its history to, so doing it mid session would break the session that is doing it. It has to happen with no session open in the folder.
@@ -98,6 +112,7 @@ Nothing on the live site can take money yet, and the fixes that unblock that are
 - **`api/report.ts` and `api/_report.ts` were never committed anywhere.** The brief's "park it" option assumed they were safe on `feat/report-generation`. They were not on that branch, and `git log --all --diff-filter=A` finds them in no commit. They existed only as untracked files on one disk. They are now in git for the first time, at the new paths.
 - **`package.json` carries dependencies the site does not use.** `@google/generative-ai` is dead weight now the chatbot is confirmed to be a keyword matcher with no model. `puppeteer`, `puppeteer-extra` and `puppeteer-extra-plugin-stealth` are only used by the root `setup-*.mjs` scrapers, and `vercel` is still a devDependency. All four install on every Cloudflare build.
 - **Local Node is 22.14.0 while `.node-version` pins 24.20.0.** Local builds are not running the deploy runtime. It built clean on both here, but the two are not the same check.
+- **`npx wrangler` cannot run on this machine.** `~/.npm/_cacache` contains root owned files, so any `npx` install fails with EACCES. That is why the Pages Function was verified against the live deploy rather than locally first. The fix needs a password, so it was not run: `sudo chown -R 501:20 ~/.npm`.
 - **A stale `.git/index.lock` dated 6 September was blocking every git write** in the folder. Empty file, no git process running, left over from an interrupted command. Removed.
 - **The branch was tracking `origin/main` rather than itself** before it was pushed, which is why `git status` reported "ahead 5" while the brief said 9. Both were right: 9 ahead of local `main`, 5 ahead of `origin/main`, because local `main` was 4 behind.
 - **Five review agents went over the branch before the merge** on hard rules, anonymity, code correctness, deploy config and copy. They raised 14 findings; every one was traced back to `origin/main` and refuted as pre-existing rather than introduced here. The two worth knowing about are the document review add-on above and the budget tool's `Comfortable` 380 ceiling, which is not published in the guide the page links to. Both pre-existing, both untouched.
