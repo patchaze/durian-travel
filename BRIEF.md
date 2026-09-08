@@ -285,11 +285,13 @@ appear in `dist/`.
 
 Nothing in the brief was skipped. Two notes rather than blockers:
 
-- The endpoint could not be exercised through a real Worker. There is no wrangler in this repo and
-  the brief forbids new dependencies, and `npm run dev` is Astro only, so it does not serve
-  `functions/`. The handler was bundled with the esbuild already present and called directly with
-  mock requests instead, which tested the access logic and the generator but not Cloudflare's own
-  routing of `/api/report`.
+- The endpoint could not be exercised through a real Worker *locally*. There is no wrangler in
+  this repo and the brief forbids new dependencies, and `npm run dev` is Astro only, so it does
+  not serve `functions/`. The handler was bundled with the esbuild already present and called
+  directly with mock requests instead. Since deploying, the live endpoint has been confirmed:
+  `/api/report` answers 405 to a GET and 402 to a POST with no code and to a POST with a wrong
+  code, so Cloudflare's routing and the refusal paths are verified in production. The 200 path
+  cannot be verified from here without the code.
 - The `overall` key (A01) is stored as instructed but no weight uses it. Kept for later.
 
 **For Cowork:**
