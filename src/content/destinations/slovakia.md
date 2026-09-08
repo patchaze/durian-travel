@@ -40,7 +40,7 @@ Slovakia's landscape is dotted with ruined and restored medieval castles of rema
 ## Top Things to Do
 
 ### 1. Bratislava: Compact, Friendly Capital
-Bratislava's old town is small enough to walk in 2–3 hours — but rewards a full day. Bratislava Castle (rebuilt, with excellent Slovak History Museum) watches from above the Danube. The old town's St Martin's Cathedral (where Hungarian kings were crowned 1563–1830), the Main Square, and the UFO Bridge observation deck are the main sights. The Eurovea waterfront promenade has excellent restaurants and bars. Bratislava is only 60km from Vienna — the combination of both cities in one trip is seamless.
+Bratislava's old town is small enough to walk in 2 to 3 hours, but it rewards a full day. Bratislava Castle (rebuilt, with excellent Slovak History Museum) watches from above the Danube. The old town's St Martin's Cathedral (where Hungarian kings were crowned 1563–1830), the Main Square, and the UFO Bridge observation deck are the main sights. The Eurovea waterfront promenade has excellent restaurants and bars. Bratislava is only 60km from Vienna, so combining both cities in one trip is easy.
 
 ### 2. High Tatras Hiking
 The High Tatras trail network is extensive, well-marked, and offers everything from easy valley walks (Studené doliny) to challenging ridge hikes (the Tatranská Magistrala runs the length of the range). Rysy peak (2,503m, the Slovak side of the highest point accessible without a guide) takes 6–7 hours return from Štrbské Pleso. The Belianske Tatras section (less visited, in the eastern High Tatras) has some of the finest scenery.

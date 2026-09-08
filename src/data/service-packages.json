@@ -1,18 +1,27 @@
 {
   "brand": "Durian Travel",
-  "positioning": "Visa strategy + itinerary planning, backed by a licensed pharmacist.",
+  "positioning": "Europe trip planning and published visa guidance, with a licensed pharmacist on the health side.",
   "tiers": [
     {
       "tier": "Starting a journey",
-      "packages": ["The Schengen Blueprint", "The First Journey Package", "The Family Expedition Bundle"]
+      "packages": [
+        "The Schengen Blueprint",
+        "The First Journey Package",
+        "The Family Expedition Bundle"
+      ]
     },
     {
       "tier": "Managing complexity",
-      "packages": ["The Nomad Infrastructure Plan", "The Recovery Route", "The Wellness Journey"]
+      "packages": [
+        "The Nomad Infrastructure Plan",
+        "The Wellness Journey"
+      ]
     },
     {
       "tier": "Premium & multi-region",
-      "packages": ["The Grand Circuit"]
+      "packages": [
+        "The Grand Circuit"
+      ]
     }
   ],
   "packages": [
@@ -22,22 +31,26 @@
       "sub": "Europe visa + itinerary",
       "url_slug": "schengen-visa-help",
       "badge": null,
-      "target": "First-time Schengen applicants from any passport facing complex embassy requirements, financial proof scrutiny, and unfamiliar European itinerary logic.",
-      "tagline": "Europe, planned to the document. Your visa application, itinerary, and trip architecture handled by people who understand both the embassy and the destination.",
-      "seo_keywords": ["schengen visa help", "schengen visa application service", "europe visa itinerary planning"],
+      "target": "First-time Schengen applicants who want to understand the process themselves, plan a route that fits the 90/180 rule, and know where the official requirements are published.",
+      "tagline": "Europe, planned properly. You get the route, the budget and a preparation checklist you work through yourself, with the official source linked beside every item.",
+      "seo_keywords": [
+        "schengen visa help",
+        "schengen visa application service",
+        "europe visa itinerary planning"
+      ],
       "included": [
-        "Full Schengen visa strategy session (60 min)",
-        "Document stack review + written gap report",
-        "Cover letter written and reviewed",
-        "Itinerary built for visa compliance + actual travel",
-        "Financial proof coaching (bank statement structure, balance guidance)",
-        "Multi-country routing + 90/180-day planning",
-        "Unlimited email Q&A through submission date"
+        "Schengen planning session (60 min): route, timing, and how the application process works",
+        "A preparation checklist you complete yourself, with the official embassy or consulate source linked beside each item",
+        "The published document list for the consulate handling your application, located and linked for you",
+        "Itinerary built around the 90/180 rule and the trip you actually want",
+        "Multi-country routing and appointment timing",
+        "Written trip budget in euros, fixed costs separated from daily spending",
+        "Email Q&A on the published guidance up to your submission date"
       ],
       "differentiators": [
-        "Embassy-specific coaching — France, Germany, and Italy differ significantly",
-        "Cover letter that reads like a human wrote it",
-        "Real refusal-prevention review, not just a checklist"
+        "Consulate by consulate. France, Germany and Italy publish different requirements, and the checklist points at each one",
+        "Every item links to the official source, so you can check it yourself and see when it changes",
+        "You keep your own paperwork. Nothing is sent to us and nothing of yours is reviewed"
       ],
       "health_layer": {
         "label": "Travel health layer",
@@ -49,27 +62,26 @@
         ]
       },
       "addons": [
-        "Refusal analysis + reapplication strategy",
-        "Additional destination added to itinerary",
-        "Express 48-hour document review",
-        "Airport transit visa coaching",
-        "Group application bundle (2+ travelers)"
+        "Additional destination added to the itinerary",
+        "Airport transit visa rules for your specific route",
+        "Second planning session closer to your travel dates",
+        "Group planning session (2+ travellers)"
       ],
       "geo_customization": [
         {
-          "segment": "Southeast & South Asian applicants",
+          "segment": "Southeast and South Asian applicants",
           "items": [
-            "VFS Global appointment preparation",
-            "Employment + financial document structuring",
-            "First-time traveler scrutiny — common flags and how to address them"
+            "How VFS Global appointments work and where they are booked",
+            "Where your consulate publishes its own financial requirements",
+            "What the official guidance says about first-time travellers"
           ]
         },
         {
           "segment": "North American applicants",
           "items": [
-            "Embassy-in-country vs. abroad filing options",
-            "US/Canadian financial equivalence documentation",
-            "ESTA vs. Schengen overlap planning"
+            "Which consulate handles your application when you live outside your home country",
+            "Where US and Canadian applicants find the official requirement list",
+            "ESTA and Schengen sequencing across one trip"
           ]
         }
       ]
@@ -80,20 +92,24 @@
       "sub": "First-time international traveler",
       "url_slug": "first-international-trip",
       "badge": null,
-      "target": "Someone taking their first international trip — anxious, overwhelmed by visa logistics, unsure what 'enough money in the bank' means, and likely to abandon the process without clear guidance.",
-      "tagline": "From passport in hand to boarding gate — step by step, no jargon, no guessing. Designed for the traveler who's never done this before.",
-      "seo_keywords": ["first time international travel help", "travel planning service beginners", "how to plan first international trip"],
+      "target": "Someone taking their first international trip. Overwhelmed by the logistics, unsure what 'enough money in the bank' means, and likely to abandon the process without clear guidance.",
+      "tagline": "From passport in hand to boarding gate, step by step. No jargon, no guessing. Designed for the traveller who has never done this before.",
+      "seo_keywords": [
+        "first time international travel help",
+        "travel planning service beginners",
+        "how to plan first international trip"
+      ],
       "included": [
-        "Trip readiness assessment (what you have, what you're missing)",
-        "Destination selection based on passport, budget, and timeline",
-        "Full visa application strategy for chosen destination",
-        "First-timer itinerary: pacing, realistic costs, what to book vs. leave flexible",
+        "A plain list of what a first international trip needs, in the order you need it",
+        "Destination selection based on your passport, your budget and your timeline",
+        "How the visa process works for your chosen destination, with the official source",
+        "First-timer itinerary: pacing, realistic costs, what to book and what to leave flexible",
         "Pre-departure checklist: documents, currency, insurance, health prep",
-        "WhatsApp/email support: 2 weeks before + 1 week after departure",
-        "Emergency contact list + what-to-do-if guide"
+        "WhatsApp and email support: 2 weeks before departure and 1 week after",
+        "Emergency contact list plus a what-to-do-if guide"
       ],
       "differentiators": [
-        "Starts from zero — no assumed knowledge",
+        "Starts from zero, with no assumed knowledge",
         "Travel anxiety addressed directly, not glossed over",
         "Jargon-free communication throughout"
       ],
@@ -117,16 +133,16 @@
         {
           "segment": "Applicants from visa-required passports",
           "items": [
-            "High-scrutiny embassy preparation coaching",
-            "Financial proof structuring for first-time applicants",
-            "Common first-timer flags and how to pre-empt them"
+            "Where your consulate publishes its own requirements, and how often it changes them",
+            "What the official guidance asks first-time applicants for",
+            "How appointment booking works in your country"
           ]
         },
         {
           "segment": "Travelers from low-restriction passports",
           "items": [
-            "Destination optimization by visa-free access",
-            "Entry requirement + e-visa route mapping",
+            "Destination options ranked by visa-free access",
+            "Entry requirement and e-visa route mapping",
             "Travel insurance selection for first trips"
           ]
         }
@@ -138,22 +154,26 @@
       "sub": "Multi-member + family groups",
       "url_slug": "family-travel-planning",
       "badge": null,
-      "target": "Families of 2–6 traveling internationally, especially those with children, elderly members, or health-specific needs — where one missed document or medication gap affects the entire group.",
-      "tagline": "When one person's document or health issue grounds the whole family, you need a plan built for everyone — not just the primary applicant.",
-      "seo_keywords": ["family international travel planning", "travel visa help family", "traveling internationally with children"],
+      "target": "Families of 2 to 6 travelling internationally, especially with children, elderly members, or health-specific needs, where one missed document or medication gap affects the whole group.",
+      "tagline": "When one person's document or health issue grounds the whole family, you need a plan built for everyone, not just the lead traveller.",
+      "seo_keywords": [
+        "family international travel planning",
+        "travel visa help family",
+        "traveling internationally with children"
+      ],
       "included": [
-        "Group visa strategy for all applicants (coordinated timelines)",
-        "Minor travel documentation: parental consent, guardian requirements",
-        "Elderly traveler health and mobility planning",
-        "Group itinerary with realistic pacing (not optimized for solo speed)",
-        "Family-appropriate destination + accommodation research",
+        "Group planning for all travellers, with the application timeline coordinated across the family",
+        "Where the official rules on minors sit: parental consent and guardian requirements, linked per country",
+        "Elderly traveller health and mobility planning",
+        "Group itinerary with realistic pacing, not optimised for solo speed",
+        "Family-appropriate destination and accommodation research",
         "Insurance coordination for multi-member groups",
-        "Emergency contact + split-group contingency planning"
+        "Emergency contact and split-group contingency planning"
       ],
       "differentiators": [
-        "Designed for the family as a system, not just the lead traveler",
+        "Designed for the family as a system, not just the lead traveller",
         "Pediatric and elderly health considerations built in as standard",
-        "Minor travel authorization process — rarely covered by other services"
+        "Minor travel authorisation rules, rarely covered by other services"
       ],
       "health_layer": {
         "label": "Family health layer",
@@ -175,16 +195,16 @@
         {
           "segment": "Families from visa-required passports",
           "items": [
-            "Coordinated multi-member appointment scheduling",
-            "Sponsorship + invitation letter documentation",
-            "Dependent applicant financial proof strategies"
+            "Coordinating appointment slots for several people at once",
+            "Where the official rules on invitation and sponsorship are published",
+            "What consulates publish about dependent applicants"
           ]
         },
         {
-          "segment": "Diaspora families / abroad sponsors",
+          "segment": "Diaspora families and sponsors abroad",
           "items": [
-            "Sponsor financial proof structure",
-            "Family reunion visa documentation",
+            "Where sponsor requirements are published by each consulate",
+            "Family reunion routes and the official source for each",
             "Dual-origin itinerary planning"
           ]
         }
@@ -196,22 +216,26 @@
       "sub": "Long-stay + digital nomads",
       "url_slug": "digital-nomad-visa-strategy",
       "badge": null,
-      "target": "Remote workers and digital nomads planning extended stays in Europe, Southeast Asia, or South America — needing multi-entry visa strategies and health logistics that survive a 3+ month trip.",
+      "target": "Remote workers and digital nomads planning extended stays in Europe, Southeast Asia or South America, who need multi-entry planning and health logistics that survive a trip of three months or more.",
       "tagline": "Built for people who travel for months, not weeks. Visa architecture, health continuity, and itinerary logic designed for the long haul.",
-      "seo_keywords": ["digital nomad visa consultant", "schengen 90 day limit planning", "long stay international travel planning"],
+      "seo_keywords": [
+        "digital nomad visa consultant",
+        "schengen 90 day limit planning",
+        "long stay international travel planning"
+      ],
       "included": [
-        "Multi-destination Schengen 90/180-day calculation + planning",
+        "Multi-destination Schengen 90/180-day calculation and planning",
         "Non-Schengen buffer destination strategy (Balkans, Georgia, Morocco, UK)",
-        "Multi-entry visa strategy per passport type",
-        "Health coverage gap analysis for extended stays",
-        "Prescription medication supply planning for 3+ month trips",
-        "Remote work visa options assessment (Portugal D8, Spain Nómada, etc.)",
+        "Multi-entry planning by passport type",
+        "Health coverage gap check for extended stays",
+        "Prescription medication supply planning for trips of three months or more",
+        "Overview of remote work visa routes and where each is published (Portugal D8, Spain Nomada, and others)",
         "Accommodation-type strategy: short-term rental, co-living, hostel logic"
       ],
       "differentiators": [
         "The 90-day Schengen limit solved, not just acknowledged",
-        "Medication supply continuity across borders — almost no travel service addresses this",
-        "Built by someone who understands both visa law and pharmacy logistics"
+        "Medication supply continuity across borders, which almost no travel service addresses",
+        "Built by people who understand both the published entry rules and pharmacy logistics"
       ],
       "health_layer": {
         "label": "Extended-stay health protocol",
@@ -233,74 +257,17 @@
         {
           "segment": "Asian passport nomads",
           "items": [
-            "Portugal D8 + Spain Nómada eligibility check",
-            "Schengen entry-point optimization by visa type",
-            "Proving income + remote employment for visa applications"
+            "Where Portugal D8 and Spain Nomada publish their eligibility rules",
+            "Schengen entry-point planning by visa type",
+            "Where the official guidance on remote income sits for each route"
           ]
         },
         {
           "segment": "North American nomads",
           "items": [
-            "US FBAR + overseas reporting awareness brief",
-            "Canadian provincial health insurance gap analysis",
-            "ESTA + Schengen sequencing strategy"
-          ]
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "name": "The Recovery Route",
-      "sub": "Post-refusal reapplication",
-      "url_slug": "visa-refusal-reapplication",
-      "badge": "High intent",
-      "target": "Travelers who received a Schengen or other visa refusal and need to understand exactly what went wrong, fix it, and reapply with a materially stronger application — without guessing.",
-      "tagline": "A refusal isn't the end. Most are fixable — if you understand the real reason and address it correctly. This package starts where your rejection letter stops.",
-      "seo_keywords": ["visa refusal reapplication help", "schengen visa denied what to do", "how to appeal visa refusal"],
-      "included": [
-        "Refusal letter interpretation (decoding embassy-speak)",
-        "Root cause analysis of your specific refusal: financial, itinerary, ties, documentation",
-        "Reapplication strategy with revised document plan",
-        "New cover letter specifically addressing the refusal reason",
-        "Strengthened financial proof coaching",
-        "Ties-to-home documentation upgrade plan",
-        "Timing advice: when to reapply and to which embassy"
-      ],
-      "differentiators": [
-        "Only package that treats a refusal as diagnostic data",
-        "Embassy-code refusal reason interpretation — the letter rarely says what it means",
-        "Reapplication timing strategy (applying too soon is a common second mistake)"
-      ],
-      "health_layer": {
-        "label": "Health documentation check",
-        "credential": "Rph",
-        "items": [
-          "Travel insurance review for compliance with refusal grounds",
-          "Medical condition documentation coaching (if health was flagged)",
-          "Reapplication travel health insurance sourcing guidance"
-        ]
-      },
-      "addons": [
-        "Legal referral (if grounds require professional legal advice)",
-        "Alternative destination strategy (if target country is temporarily inadvisable)",
-        "Expedited 48-hour turnaround for urgent reapplication timelines",
-        "Appeal letter drafting (where permitted)"
-      ],
-      "geo_customization": [
-        {
-          "segment": "Applicants from high-scrutiny passports",
-          "items": [
-            "Common refusal patterns by passport origin",
-            "Embassy-switching strategy (which consulate to try next)",
-            "Employment + financial document restructuring after refusal"
-          ]
-        },
-        {
-          "segment": "Applicants with thin travel history",
-          "items": [
-            "Building a credible travel profile from scratch",
-            "Invitation + sponsor documentation rebuild",
-            "Strong ties-to-home documentation strategy"
+            "US FBAR and overseas reporting awareness brief",
+            "Canadian provincial health insurance gap check",
+            "ESTA and Schengen sequencing strategy"
           ]
         }
       ]
@@ -312,10 +279,15 @@
       "url_slug": "travel-health-planning",
       "badge": "Rx exclusive",
       "target": "Travelers with chronic conditions, complex medication needs, post-surgery travel plans, elderly travelers, or anyone told 'you should be careful traveling' who wants a plan that actually takes health seriously.",
-      "tagline": "Travel planning from the inside out. Built for travelers whose health isn't an afterthought — it's the starting point.",
-      "seo_keywords": ["travel planning chronic illness", "traveling with prescription medication internationally", "medical travel consultation service", "travel health pharmacist consultation"],
+      "tagline": "Travel planning from the inside out. Built for travellers whose health is the starting point rather than an afterthought.",
+      "seo_keywords": [
+        "travel planning chronic illness",
+        "traveling with prescription medication internationally",
+        "medical travel consultation service",
+        "travel health pharmacist consultation"
+      ],
       "included": [
-        "Medical travel readiness assessment (condition vs. destination risk)",
+        "Medical travel review: your condition against the destination",
         "Europe health risk briefing: altitude, heat, food safety, hydration, and walking-load planning",
         "Prescription medication travel authorization documentation for Schengen travel",
         "Controlled substance travel documentation for Schengen and transit rules",
@@ -325,12 +297,12 @@
         "Vaccine status review and recommended updates"
       ],
       "differentiators": [
-        "Designed with a licensed pharmacist — not a Google search",
+        "Designed with a licensed pharmacist, not assembled from a search engine",
         "Controlled substance + prescription import rules per country (genuinely dangerous to get wrong)",
         "Treats your pre-existing conditions as a planning input, not a disclaimer"
       ],
       "health_layer": {
-        "label": "This IS the health package — full pharmacist layer",
+        "label": "This is the health package, with the full pharmacist layer",
         "credential": "Rph",
         "items": [
           "Complete medication review for travel suitability",
@@ -373,8 +345,12 @@
       "url_slug": "multi-region-trip-planning",
       "badge": null,
       "target": "Experienced travelers planning a multi-region trip who need coherent visa architecture, health continuity, and itinerary logic across multiple visa jurisdictions without gaps or expensive mistakes.",
-      "tagline": "For travelers who don't stay in one region. Visa logic, health coverage, and itinerary design that works across jurisdictions — without gaps, overlaps, or expensive mistakes.",
-      "seo_keywords": ["multi country trip planning service", "multi visa planning consultant", "round the world travel planning"],
+      "tagline": "For travellers who do not stay in one region. Entry rules, health coverage and itinerary design that work across jurisdictions, without gaps, overlaps or expensive mistakes.",
+      "seo_keywords": [
+        "multi country trip planning service",
+        "multi visa planning consultant",
+        "round the world travel planning"
+      ],
       "included": [
         "Full multi-region visa architecture (all required visas mapped and timed)",
         "Passport validity + entry requirement check across all destinations",
@@ -386,7 +362,7 @@
         "Complete trip health brief spanning all destination health profiles"
       ],
       "differentiators": [
-        "Most travel services think in single trips — this is built for the arc of a whole journey",
+        "Most travel services think in single trips. This is built for the arc of a whole journey",
         "Visa sequencing: which country to apply for first, and why it matters",
         "Health continuity across climate zones, altitude changes, and food environments"
       ],
@@ -412,7 +388,7 @@
           "segment": "Asian passport holders (multi-region)",
           "items": [
             "Visa sequencing strategy across multiple jurisdictions",
-            "Proving financial standing across multiple currencies",
+            "Where each jurisdiction publishes its financial requirements, currency by currency",
             "Re-entry requirement tracking for home country"
           ]
         },

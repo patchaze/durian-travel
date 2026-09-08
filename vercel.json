@@ -1,320 +1,340 @@
 {
-    "redirects": [
+  "redirects": [
+    {
+      "source": "/services/document-review",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/services/document-review/",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/services/cover-letter-strategy",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/services/cover-letter-strategy/",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/services/financial-proof-review",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/services/financial-proof-review/",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/services/visa-strategy-call",
+      "destination": "/services/schengen-visa-help/",
+      "permanent": true
+    },
+    {
+      "source": "/services/visa-strategy-call/",
+      "destination": "/services/schengen-visa-help/",
+      "permanent": true
+    },
+    {
+      "source": "/services/strategy-call",
+      "destination": "/services/schengen-visa-help/",
+      "permanent": true
+    },
+    {
+      "source": "/services/strategy-call/",
+      "destination": "/services/schengen-visa-help/",
+      "permanent": true
+    },
+    {
+      "source": "/services/itinerary-building",
+      "destination": "/services/first-international-trip/",
+      "permanent": true
+    },
+    {
+      "source": "/services/itinerary-building/",
+      "destination": "/services/first-international-trip/",
+      "permanent": true
+    },
+    {
+      "source": "/services/itinerary-structuring",
+      "destination": "/services/first-international-trip/",
+      "permanent": true
+    },
+    {
+      "source": "/services/itinerary-structuring/",
+      "destination": "/services/first-international-trip/",
+      "permanent": true
+    },
+    {
+      "source": "/services/refusal-analysis",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/services/refusal-analysis/",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/services/travel-health-consult",
+      "destination": "/services/travel-health-planning/",
+      "permanent": true
+    },
+    {
+      "source": "/services/travel-health-consult/",
+      "destination": "/services/travel-health-planning/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/europe-travel-guide",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/europe-travel-guide/",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/most-visited-countries-in-europe",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/most-visited-countries-in-europe/",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/planning-first-europe-trip",
+      "destination": "/blog/europe-trip-planning-timeline/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/planning-first-europe-trip/",
+      "destination": "/blog/europe-trip-planning-timeline/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/visaeuro-pro-vs-schengenmasters",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/visaeuro-pro-vs-schengenmasters/",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/best-schengen-travel-agency-for-digital-nomads",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/best-schengen-travel-agency-for-digital-nomads/",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/best-schengen-travel-agency-for-families",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/best-schengen-travel-agency-for-families/",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/best-schengen-travel-agency",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/best-schengen-travel-agency/",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/eu-airport-liquids-batteries-rules",
+      "destination": "/blog/europe-packing-list/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/eu-airport-liquids-batteries-rules/",
+      "destination": "/blog/europe-packing-list/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/schengen-visa-requirements-philippine-passport-holders",
+      "destination": "/blog/schengen-visa-requirements-non-european-travelers/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/schengen-visa-requirements-philippine-passport-holders/",
+      "destination": "/blog/schengen-visa-requirements-non-european-travelers/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/10-day-europe-itinerary-from-the-philippines",
+      "destination": "/blog/10-day-europe-itinerary/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/10-day-europe-itinerary-from-the-philippines/",
+      "destination": "/blog/10-day-europe-itinerary/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/sweden-itinerary",
+      "destination": "/blog/sweden-itinerary-first-time-visitors/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/sweden-itinerary/",
+      "destination": "/blog/sweden-itinerary-first-time-visitors/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/sweden-itinerary-from-the-philippines",
+      "destination": "/blog/sweden-itinerary-first-time-visitors/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/sweden-itinerary-from-the-philippines/",
+      "destination": "/blog/sweden-itinerary-first-time-visitors/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/is-sweden-worth-it-for-filipino-travelers",
+      "destination": "/blog/is-sweden-worth-it/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/is-sweden-worth-it-for-filipino-travelers/",
+      "destination": "/blog/is-sweden-worth-it/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-much-does-schengen-visa-cost-philippines",
+      "destination": "/blog/how-much-does-schengen-visa-cost/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-much-does-schengen-visa-cost-philippines/",
+      "destination": "/blog/how-much-does-schengen-visa-cost/",
+      "permanent": true
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/sitemap-index.xml",
+      "permanent": true
+    },
+    {
+      "source": "/patricia-azevedo",
+      "destination": "/about-us/",
+      "permanent": true
+    },
+    {
+      "source": "/patricia-azevedo/",
+      "destination": "/about-us/",
+      "permanent": true
+    },
+    {
+      "source": "/services/visa-refusal-reapplication",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/services/visa-refusal-reapplication/",
+      "destination": "/services/",
+      "permanent": true
+    },
+    {
+      "source": "/free-visa-audit",
+      "destination": "/book-a-call/",
+      "permanent": true
+    },
+    {
+      "source": "/free-visa-audit/",
+      "destination": "/book-a-call/",
+      "permanent": true
+    },
+    {
+      "source": "/:path((?!_assets|api|_next).*[^/])$",
+      "destination": "/:path/",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
         {
-            "source": "/services/document-review",
-            "destination": "/services/schengen-visa-help/",
-            "permanent": true
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         },
         {
-            "source": "/services/document-review/",
-            "destination": "/services/schengen-visa-help/",
-            "permanent": true
+          "key": "X-Frame-Options",
+          "value": "DENY"
         },
         {
-            "source": "/services/cover-letter-strategy",
-            "destination": "/services/schengen-visa-help/",
-            "permanent": true
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
         },
         {
-            "source": "/services/cover-letter-strategy/",
-            "destination": "/services/schengen-visa-help/",
-            "permanent": true
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
         },
         {
-            "source": "/services/financial-proof-review",
-            "destination": "/services/schengen-visa-help/",
-            "permanent": true
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=()"
         },
         {
-            "source": "/services/financial-proof-review/",
-            "destination": "/services/schengen-visa-help/",
-            "permanent": true
-        },
-        {
-            "source": "/services/visa-strategy-call",
-            "destination": "/services/schengen-visa-help/",
-            "permanent": true
-        },
-        {
-            "source": "/services/visa-strategy-call/",
-            "destination": "/services/schengen-visa-help/",
-            "permanent": true
-        },
-        {
-            "source": "/services/strategy-call",
-            "destination": "/services/schengen-visa-help/",
-            "permanent": true
-        },
-        {
-            "source": "/services/strategy-call/",
-            "destination": "/services/schengen-visa-help/",
-            "permanent": true
-        },
-        {
-            "source": "/services/itinerary-building",
-            "destination": "/services/first-international-trip/",
-            "permanent": true
-        },
-        {
-            "source": "/services/itinerary-building/",
-            "destination": "/services/first-international-trip/",
-            "permanent": true
-        },
-        {
-            "source": "/services/itinerary-structuring",
-            "destination": "/services/first-international-trip/",
-            "permanent": true
-        },
-        {
-            "source": "/services/itinerary-structuring/",
-            "destination": "/services/first-international-trip/",
-            "permanent": true
-        },
-        {
-            "source": "/services/refusal-analysis",
-            "destination": "/services/visa-refusal-reapplication/",
-            "permanent": true
-        },
-        {
-            "source": "/services/refusal-analysis/",
-            "destination": "/services/visa-refusal-reapplication/",
-            "permanent": true
-        },
-        {
-            "source": "/services/travel-health-consult",
-            "destination": "/services/travel-health-planning/",
-            "permanent": true
-        },
-        {
-            "source": "/services/travel-health-consult/",
-            "destination": "/services/travel-health-planning/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/europe-travel-guide",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/europe-travel-guide/",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/most-visited-countries-in-europe",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/most-visited-countries-in-europe/",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/planning-first-europe-trip",
-            "destination": "/blog/europe-trip-planning-timeline/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/planning-first-europe-trip/",
-            "destination": "/blog/europe-trip-planning-timeline/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/visaeuro-pro-vs-schengenmasters",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/visaeuro-pro-vs-schengenmasters/",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/best-schengen-travel-agency-for-digital-nomads",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/best-schengen-travel-agency-for-digital-nomads/",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/best-schengen-travel-agency-for-families",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/best-schengen-travel-agency-for-families/",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/best-schengen-travel-agency",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/best-schengen-travel-agency/",
-            "destination": "/blog/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/eu-airport-liquids-batteries-rules",
-            "destination": "/blog/europe-packing-list/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/eu-airport-liquids-batteries-rules/",
-            "destination": "/blog/europe-packing-list/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/schengen-visa-requirements-philippine-passport-holders",
-            "destination": "/blog/schengen-visa-requirements-non-european-travelers/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/schengen-visa-requirements-philippine-passport-holders/",
-            "destination": "/blog/schengen-visa-requirements-non-european-travelers/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/10-day-europe-itinerary-from-the-philippines",
-            "destination": "/blog/10-day-europe-itinerary/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/10-day-europe-itinerary-from-the-philippines/",
-            "destination": "/blog/10-day-europe-itinerary/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/sweden-itinerary",
-            "destination": "/blog/sweden-itinerary-first-time-visitors/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/sweden-itinerary/",
-            "destination": "/blog/sweden-itinerary-first-time-visitors/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/sweden-itinerary-from-the-philippines",
-            "destination": "/blog/sweden-itinerary-first-time-visitors/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/sweden-itinerary-from-the-philippines/",
-            "destination": "/blog/sweden-itinerary-first-time-visitors/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/is-sweden-worth-it-for-filipino-travelers",
-            "destination": "/blog/is-sweden-worth-it/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/is-sweden-worth-it-for-filipino-travelers/",
-            "destination": "/blog/is-sweden-worth-it/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/how-much-does-schengen-visa-cost-philippines",
-            "destination": "/blog/how-much-does-schengen-visa-cost/",
-            "permanent": true
-        },
-        {
-            "source": "/blog/how-much-does-schengen-visa-cost-philippines/",
-            "destination": "/blog/how-much-does-schengen-visa-cost/",
-            "permanent": true
-        },
-        {
-            "source": "/sitemap.xml",
-            "destination": "/sitemap-index.xml",
-            "permanent": true
-        },
-        {
-            "source": "/patricia-azevedo",
-            "destination": "/about-us/",
-            "permanent": true
-        },
-        {
-            "source": "/patricia-azevedo/",
-            "destination": "/about-us/",
-            "permanent": true
-        },
-        {
-            "source": "/:path((?!_assets|api|_next).*[^/])$",
-            "destination": "/:path/",
-            "permanent": true
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://stats.g.doubleclick.net; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests"
         }
-    ],
-    "headers": [
+      ]
+    },
+    {
+      "source": "/images/(.*)",
+      "headers": [
         {
-            "source": "/(.*)",
-            "headers": [
-                {
-                    "key": "X-Content-Type-Options",
-                    "value": "nosniff"
-                },
-                {
-                    "key": "X-Frame-Options",
-                    "value": "DENY"
-                },
-                {
-                    "key": "Strict-Transport-Security",
-                    "value": "max-age=63072000; includeSubDomains; preload"
-                },
-                {
-                    "key": "Referrer-Policy",
-                    "value": "strict-origin-when-cross-origin"
-                },
-                {
-                    "key": "Permissions-Policy",
-                    "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=()"
-                },
-                {
-                    "key": "Content-Security-Policy",
-                    "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://stats.g.doubleclick.net; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests"
-                }
-            ]
-        },
-        {
-            "source": "/images/(.*)",
-            "headers": [
-                {
-                    "key": "Cache-Control",
-                    "value": "public, max-age=86400"
-                }
-            ]
-        },
-        {
-            "source": "/_assets/(.*)",
-            "headers": [
-                {
-                    "key": "Cache-Control",
-                    "value": "public, max-age=31536000, immutable"
-                },
-                {
-                    "key": "X-Robots-Tag",
-                    "value": "noindex, nofollow"
-                }
-            ]
-        },
-        {
-            "source": "/_astro/(.*)",
-            "headers": [
-                {
-                    "key": "Cache-Control",
-                    "value": "public, max-age=31536000, immutable"
-                },
-                {
-                    "key": "X-Robots-Tag",
-                    "value": "noindex, nofollow"
-                }
-            ]
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
         }
-    ]
+      ]
+    },
+    {
+      "source": "/_assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/_astro/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ]
 }

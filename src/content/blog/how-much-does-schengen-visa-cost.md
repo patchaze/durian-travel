@@ -108,23 +108,23 @@ That is before you even book the actual flight.
 
 The visa fee is non-refundable. The visa-centre fee is also usually non-refundable. If you bought non-refundable bookings too early, that is where the painful losses happen.
 
-This is why a clean application matters so much. A refused file can easily cost more than the application fee alone.
+A refused application can easily cost more than the fee alone, because the flights, the insurance and the time are usually already spent.
 
-If you want to reduce that risk, start with our [Schengen visa requirements guide for non-European travelers](/blog/schengen-visa-requirements-non-european-travelers/), then check the [Schengen document checklist](/blog/schengen-document-checklist/). If you want a second set of eyes before you submit, our [Schengen Blueprint package](/services/schengen-visa-help/) is built for exactly that.
+To understand what is being asked of you, start with our [Schengen visa requirements guide for non-European travelers](/blog/schengen-visa-requirements-non-european-travelers/), then work through the [Schengen document checklist](/blog/schengen-document-checklist/) against the official list your own consulate publishes.
 
-## Does paying more improve your approval chances?
+## What does the fee actually buy?
 
-No. Paying more for optional services does not make your application stronger.
+The fee buys one thing: the processing of your application. It does not buy a decision, a faster decision, or a better one. Paying more for optional services sold alongside it does not change that either.
 
-What actually improves your chances is:
+The fee also does not cover the things you still have to pay for separately:
 
-- complete documents
-- consistent dates and purpose
-- enough financial proof
-- a clear return story
-- a clean cover letter
+- the visa-centre service fee, if you apply through one
+- travel insurance meeting the Schengen requirement
+- printing, copies and any certified translations
+- courier return of your passport, where that is offered
+- reservations you hold while the application is processed
 
-That is why the visa fee should be treated as the start of the application budget, not the whole budget.
+That is why the visa fee should be treated as the start of the application budget, not the whole of it. Check the current fee and what your own consulate includes on its official page before you plan around any of these numbers.
 
 ## Frequently asked questions
 

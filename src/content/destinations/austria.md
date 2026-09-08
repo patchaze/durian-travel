@@ -117,7 +117,7 @@ Book accommodation in Hallstatt itself 6+ months ahead for summer; the village i
 
 ## Getting Around Austria
 
-**ÖBB (Austrian Federal Railways):** Excellent connections between all major cities. Vienna to Salzburg: 2h30m (Railjet). Vienna to Innsbruck: 4h. Vienna to Graz: 2h40m. Booking in advance unlocks Sparschiene (advance purchase) fares at significant discounts.
+**ÖBB (Austrian Federal Railways):** Excellent connections between all major cities. Vienna to Salzburg: 2h30m (Railjet). Vienna to Innsbruck: 4h. Vienna to Graz: 2h40m. Booking in advance opens up Sparschiene (advance purchase) fares at significant discounts.
 
 **Vienna U-Bahn:** Five metro lines cover all major tourist areas. A 24h, 48h, or 72h pass is the best value for visitors.
 

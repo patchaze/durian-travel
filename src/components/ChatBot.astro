@@ -73,7 +73,7 @@ const quickReplies = [
       <input
         type="text"
         id="chatbot-input"
-        placeholder="Ask about visas, documents, budget..."
+        placeholder="Ask about routes, budgets, or Schengen rules..."
         autocomplete="off"
         required
       />
@@ -203,25 +203,25 @@ const quickReplies = [
       id: 'guarantee',
       label: 'Can you guarantee approval?',
       keywords: ['guarantee', 'guaranteed', 'approval rate', 'approved', 'will i get', 'chances', 'odds', 'success rate', 'sure thing'],
-      answer: "No, and no honest service can. Visa decisions are made by embassy and consulate officers based on their assessment of your application. We help you prepare the strongest possible application, but we have no influence over consular decisions.\n\nMore in the [FAQ](/faq/)."
+      answer: "No, and no honest service can. Visa decisions are made by embassy and consulate officers, and nobody outside the consulate has any influence over them.\n\nWhat we publish is educational: how the process works, what the official sources say, and how to plan the trip itself. We never look at your documents.\n\nMore in the [FAQ](/faq/)."
     },
     {
       id: 'lawyer',
       label: 'Are you immigration lawyers?',
       keywords: ['lawyer', 'attorney', 'law firm', 'legal advice', 'solicitor', 'legally'],
-      answer: "No. DURIAN is an educational visa application strategy consultancy. We do not provide legal advice, legal representation, or any service that constitutes the practice of immigration law. For legal advice, consult a qualified immigration attorney.\n\nSee the [FAQ](/faq/) and the [disclaimer](/disclaimer/)."
+      answer: "No. Durian Travel publishes educational travel guides. We do not provide legal advice, legal representation, or any service that constitutes the practice of immigration law. For legal advice, consult a qualified immigration attorney.\n\nSee the [FAQ](/faq/) and the [disclaimer](/disclaimer/)."
     },
     {
       id: 'submit',
       label: 'Do you submit my application?',
       keywords: ['submit', 'on my behalf', 'apply for me', 'lodge', 'file it for me', 'send my application'],
-      answer: "No. We provide educational guidance on how to prepare your application. You submit it yourself to the relevant embassy or consulate.\n\nThat is the main way we differ from a visa agency: lower cost, more transparency, more control for you. More in the [FAQ](/faq/)."
+      answer: "No. Everything here is published guidance you read and use yourself. You submit your application yourself to the relevant embassy or consulate.\n\nThat is the main way we differ from a visa agency: lower cost, more transparency, and your paperwork never leaves your hands. More in the [FAQ](/faq/)."
     },
     {
       id: 'refusal',
       label: 'I was refused before',
       keywords: ['refused', 'refusal', 'rejected', 'rejection', 'denied', 'reapply', 'reapplication', 'appeal'],
-      answer: "Yes, this is one of the areas we cover. We can help you decode your refusal letter and build a stronger application for resubmission.\n\nStart with [the most common refusal reasons](/blog/visa-refusal-reasons/), then [get in touch](/contact/) if you want it looked at properly."
+      answer: "A refusal letter normally names a reason from a standard list. [The most common refusal reasons](/blog/visa-refusal-reasons/) explains what each one refers to and where the official wording comes from.\n\nWhat you do next is between you and the consulate. The letter itself sets out the appeal route and the deadline, so start there and check the official embassy or consulate source."
     },
     {
       id: 'documents',
@@ -233,7 +233,7 @@ const quickReplies = [
       id: 'selfemployed',
       label: "I'm self-employed",
       keywords: ['self-employed', 'self employed', 'freelance', 'freelancer', 'contractor', 'business owner', 'nomad', 'remote work'],
-      answer: "Yes. Self-employed applicants often face particular challenges with financial proof. We help freelancers, contractors and business owners work out which documents to gather and how to present them.\n\nMore in the [FAQ](/faq/), or [get in touch](/contact/)."
+      answer: "Financial proof works differently when there is no employment contract behind it. Consulates generally want to see the same thing either way: where the money comes from and that it is yours.\n\nThe [Schengen document checklist](/blog/schengen-document-checklist/) lists the core set, and the [FAQ](/faq/) covers the self-employed case. The exact list is set by the consulate handling your application, so confirm it on their official site."
     },
     {
       id: 'visa_cost',
@@ -263,7 +263,7 @@ const quickReplies = [
       id: 'itinerary',
       label: 'Help me plan a route',
       keywords: ['itinerary', 'route', 'plan my trip', 'multi-country', 'multi country', 'how many days', 'where should i go', 'sequence'],
-      answer: "Route logic matters more than most people realise, both for the trip itself and for how coherent your application looks.\n\nStart with the [multi-country itinerary guide](/blog/multi-country-europe-itinerary/), or the [10-day Europe itinerary](/blog/10-day-europe-itinerary/) if you are short on time."
+      answer: "Route logic matters more than most people realise. Doubling back across the continent quietly eats days and money.\n\nStart with the [multi-country itinerary guide](/blog/multi-country-europe-itinerary/), or the [10-day Europe itinerary](/blog/10-day-europe-itinerary/) if you are short on time."
     },
     {
       id: 'countries',
@@ -272,16 +272,10 @@ const quickReplies = [
       answer: "There is a guide for each Schengen country, covering what to expect and how it fits into a wider route.\n\nBrowse them all on the [destinations page](/destinations/)."
     },
     {
-      id: 'audit',
-      label: 'What is the free audit?',
-      keywords: ['free audit', 'readiness', 'free consultation', 'free call', 'audit'],
-      answer: "A free 20-minute consultation where we review your current visa preparation strategy and identify the specific areas you need to strengthen before you submit.\n\nDetails on the [free visa audit page](/free-visa-audit/). It is not a guarantee of visa approval."
-    },
-    {
       id: 'human',
       label: 'I want to talk to a person',
       keywords: ['talk to', 'speak to', 'human', 'real person', 'contact', 'email', 'phone', 'book a call', 'consultation', 'someone'],
-      answer: "Of course. Everything runs online via video call, and you can reach us through the [contact page](/contact/)."
+      answer: "Of course. Everything runs online via video call. You can [book a call](/book-a-call/) or reach us through the [contact page](/contact/)."
     },
     {
       id: 'language',
@@ -296,7 +290,7 @@ const quickReplies = [
     {
       id: 'visa_types',
       keywords: ['what visa', 'type c', 'tourist visa', 'uk visa', 'us visa', 'student visa', 'work visa', 'which visas'],
-      answer: "The main focus is the Schengen tourist visa (Type C). Many of the same document principles apply to UK visitor visas and US tourist visas, but we will tell you plainly if your visa type is outside what we cover.\n\nMore in the [FAQ](/faq/)."
+      answer: "The guides here cover the Schengen tourist visa (Type C). Some of the same ideas carry over to UK visitor visas and US tourist visas, but the rules are different and we do not publish on them.\n\nMore in the [FAQ](/faq/)."
     }
   ];
 

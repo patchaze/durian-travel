@@ -7,12 +7,12 @@
 # Trailing slashes are handled by Cloudflare Pages itself (308), which replaces
 # the catch-all regex rule that vercel.json needs at the end of its array.
 
-/services/document-review  /services/schengen-visa-help/  301
-/services/document-review/  /services/schengen-visa-help/  301
-/services/cover-letter-strategy  /services/schengen-visa-help/  301
-/services/cover-letter-strategy/  /services/schengen-visa-help/  301
-/services/financial-proof-review  /services/schengen-visa-help/  301
-/services/financial-proof-review/  /services/schengen-visa-help/  301
+/services/document-review  /services/  301
+/services/document-review/  /services/  301
+/services/cover-letter-strategy  /services/  301
+/services/cover-letter-strategy/  /services/  301
+/services/financial-proof-review  /services/  301
+/services/financial-proof-review/  /services/  301
 /services/visa-strategy-call  /services/schengen-visa-help/  301
 /services/visa-strategy-call/  /services/schengen-visa-help/  301
 /services/strategy-call  /services/schengen-visa-help/  301
@@ -21,8 +21,10 @@
 /services/itinerary-building/  /services/first-international-trip/  301
 /services/itinerary-structuring  /services/first-international-trip/  301
 /services/itinerary-structuring/  /services/first-international-trip/  301
-/services/refusal-analysis  /services/visa-refusal-reapplication/  301
-/services/refusal-analysis/  /services/visa-refusal-reapplication/  301
+/services/refusal-analysis  /services/  301
+/services/refusal-analysis/  /services/  301
+/services/visa-refusal-reapplication  /services/  301
+/services/visa-refusal-reapplication/  /services/  301
 /services/travel-health-consult  /services/travel-health-planning/  301
 /services/travel-health-consult/  /services/travel-health-planning/  301
 /blog/europe-travel-guide  /blog/  301
@@ -53,4 +55,6 @@
 /blog/is-sweden-worth-it-for-filipino-travelers/  /blog/is-sweden-worth-it/  301
 /blog/how-much-does-schengen-visa-cost-philippines  /blog/how-much-does-schengen-visa-cost/  301
 /blog/how-much-does-schengen-visa-cost-philippines/  /blog/how-much-does-schengen-visa-cost/  301
+/free-visa-audit  /book-a-call/  301
+/free-visa-audit/  /book-a-call/  301
 /sitemap.xml  /sitemap-index.xml  301

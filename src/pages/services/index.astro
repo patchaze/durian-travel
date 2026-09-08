@@ -1,436 +1,36 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CTABanner from '../../components/CTABanner.astro';
-import { serviceHrefByOldSlug, servicePositioning } from '../../data/service-pages';
+import { serviceHrefByOldSlug, servicePackages, servicePositioning } from '../../data/service-pages';
 
-const packages = [
-  {
-    slug: 'schengen-blueprint',
-    tier: 'Starting a journey',
-    name: 'The Schengen Blueprint',
-    sub: 'Europe visa + itinerary',
-    icon: '✦',
-    tone: 'blueprint',
-    badge: null,
-    target:
-      'First-time Schengen applicants from any passport facing complex embassy requirements, financial proof scrutiny, and unfamiliar European itinerary logic.',
-    tagline:
-      'Europe, planned to the document. Your visa application, itinerary, and trip architecture handled by people who understand both the embassy and the destination.',
-    seoKeywords: [
-      'schengen visa help',
-      'schengen visa application service',
-      'europe visa itinerary planning',
-    ],
-    included: [
-      'Full Schengen visa strategy session (60 min)',
-      'Document stack review + written gap report',
-      'Cover letter written and reviewed',
-      'Itinerary built for visa compliance + actual travel',
-      'Financial proof coaching (bank statement structure, balance guidance)',
-      'Multi-country routing + 90/180-day planning',
-      'Unlimited email Q&A through submission date',
-    ],
-    differentiators: [
-      'Embassy-specific coaching - France, Germany, and Italy differ significantly',
-      'Cover letter that reads like a human wrote it',
-      'Real refusal-prevention review, not just a checklist',
-    ],
-    healthLabel: 'Travel health layer',
-    healthCredential: 'Rph',
-    healthItems:
-      'Pre-departure pharmacist briefing on Schengen health insurance requirements, OTC medication allowances by country, and EU medication import checklist for prescription travelers.',
-    addons: [
-      'Refusal analysis + reapplication strategy',
-      'Additional destination added to itinerary',
-      'Express 48-hour document review',
-      'Airport transit visa coaching',
-      'Group application bundle (2+ travelers)',
-    ],
-    geo: [
-      {
-        region: 'Southeast & South Asian applicants',
-        items: [
-          'VFS Global appointment preparation',
-          'Employment + financial document structuring',
-          'First-time traveler scrutiny - common flags and how to address them',
-        ],
-      },
-      {
-        region: 'North American applicants',
-        items: [
-          'Embassy-in-country vs. abroad filing options',
-          'US/Canadian financial equivalence documentation',
-          'ESTA vs. Schengen overlap planning',
-        ],
-      },
-    ],
-  },
-  {
-    slug: 'first-journey',
-    tier: 'Starting a journey',
-    name: 'The First Journey Package',
-    sub: 'First-time international traveler',
-    icon: '◈',
-    tone: 'journey',
-    badge: null,
-    target:
-      "Someone taking their first international trip - anxious, overwhelmed by visa logistics, unsure what 'enough money in the bank' means, and likely to abandon the process without clear guidance.",
-    tagline:
-      "From passport in hand to boarding gate - step by step, no jargon, no guessing. Designed for the traveler who's never done this before.",
-    seoKeywords: [
-      'first time international travel help',
-      'travel planning service beginners',
-      'how to plan first international trip',
-    ],
-    included: [
-      'Trip readiness assessment (what you have, what you\'re missing)',
-      'Destination selection based on passport, budget, and timeline',
-      'Full visa application strategy for chosen destination',
-      'First-timer itinerary: pacing, realistic costs, what to book vs. leave flexible',
-      'Pre-departure checklist: documents, currency, insurance, health prep',
-      'WhatsApp/email support: 2 weeks before + 1 week after departure',
-      'Emergency contact list + what-to-do-if guide',
-    ],
-    differentiators: [
-      'Starts from zero - no assumed knowledge',
-      'Travel anxiety addressed directly, not glossed over',
-      'Jargon-free communication throughout',
-    ],
-    healthLabel: 'First-timer health briefing',
-    healthCredential: 'Rph',
-    healthItems:
-      'Destination-specific vaccine status check, travel pharmacy starter kit guidance, jet lag protocol for long-haul first-timers, and motion sickness, altitude, and food safety briefing by a licensed pharmacist.',
-    addons: [
-      'Travel SIM guidance + setup',
-      'Luggage allowance + airline rule coaching',
-      'Currency exchange strategy session',
-      'Post-trip debrief for next-trip planning',
-    ],
-    geo: [
-      {
-        region: 'Applicants from visa-required passports',
-        items: [
-          'High-scrutiny embassy preparation coaching',
-          'Financial proof structuring for first-time applicants',
-          'Common first-timer flags and how to pre-empt them',
-        ],
-      },
-      {
-        region: 'Travelers from low-restriction passports',
-        items: [
-          'Destination optimization by visa-free access',
-          'Entry requirement + e-visa route mapping',
-          'Travel insurance selection for first trips',
-        ],
-      },
-    ],
-  },
-  {
-    slug: 'family-expedition',
-    tier: 'Starting a journey',
-    name: 'The Family Expedition Bundle',
-    sub: 'Multi-member + family groups',
-    icon: '⬡',
-    tone: 'family',
-    badge: null,
-    target:
-      'Families of 2-6 traveling internationally, especially those with children, elderly members, or health-specific needs - where one missed document or medication gap affects the entire group.',
-    tagline:
-      "When one person's document or health issue grounds the whole family, you need a plan built for everyone - not just the primary applicant.",
-    seoKeywords: [
-      'family international travel planning',
-      'travel visa help family',
-      'traveling internationally with children',
-    ],
-    included: [
-      'Group visa strategy for all applicants (coordinated timelines)',
-      'Minor travel documentation: parental consent, guardian requirements',
-      'Elderly traveler health and mobility planning',
-      'Group itinerary with realistic pacing (not optimized for solo speed)',
-      'Family-appropriate destination + accommodation research',
-      'Insurance coordination for multi-member groups',
-      'Emergency contact + split-group contingency planning',
-    ],
-    differentiators: [
-      'Designed for the family as a system, not just the lead traveler',
-      'Pediatric and elderly health considerations built in as standard',
-      'Minor travel authorization process - rarely covered by other services',
-    ],
-    healthLabel: 'Family health layer',
-    healthCredential: 'Rph',
-    healthItems:
-      'Per-member medication review and travel pack guidance, pediatric travel health brief (vaccines, OTC dosing for children, food safety), elderly traveler assessment: mobility, chronic condition management, medical alert documentation, and family-sized first aid kit guidance with pharmacist recommendations.',
-    addons: [
-      'Accessible accommodation research (mobility needs)',
-      'Child-friendly itinerary add-on for specific cities',
-      'Family travel insurance comparison brief',
-      'Multi-generational trip coordination (when grandparents are joining)',
-    ],
-    geo: [
-      {
-        region: 'Families from visa-required passports',
-        items: [
-          'Coordinated multi-member appointment scheduling',
-          'Sponsorship + invitation letter documentation',
-          'Dependent applicant financial proof strategies',
-        ],
-      },
-      {
-        region: 'Diaspora families / abroad sponsors',
-        items: [
-          'Sponsor financial proof structure',
-          'Family reunion visa documentation',
-          'Dual-origin itinerary planning',
-        ],
-      },
-    ],
-  },
-  {
-    slug: 'nomad-infrastructure',
-    tier: 'Managing complexity',
-    name: 'The Nomad Infrastructure Plan',
-    sub: 'Long-stay + digital nomads',
-    icon: '◎',
-    tone: 'nomad',
-    badge: null,
-    target:
-      'Remote workers and digital nomads planning extended stays in Europe, Southeast Asia, or South America - needing multi-entry visa strategies and health logistics that survive a 3+ month trip.',
-    tagline:
-      'Built for people who travel for months, not weeks. Visa architecture, health continuity, and itinerary logic designed for the long haul.',
-    seoKeywords: [
-      'digital nomad visa consultant',
-      'schengen 90 day limit planning',
-      'long stay international travel planning',
-    ],
-    included: [
-      'Multi-destination Schengen 90/180-day calculation + planning',
-      'Non-Schengen buffer destination strategy (Balkans, Georgia, Morocco, UK)',
-      'Multi-entry visa strategy per passport type',
-      'Health coverage gap analysis for extended stays',
-      'Prescription medication supply planning for 3+ month trips',
-      'Remote work visa options assessment (Portugal D8, Spain Nomada, etc.)',
-      'Accommodation-type strategy: short-term rental, co-living, hostel logic',
-    ],
-    differentiators: [
-      'The 90-day Schengen limit solved, not just acknowledged',
-      'Medication supply continuity across borders - almost no travel service addresses this',
-      'Built by someone who understands both visa law and pharmacy logistics',
-    ],
-    healthLabel: 'Extended-stay health protocol',
-    healthCredential: 'Rph',
-    healthItems:
-      '3-6 month medication supply strategy across borders, European pharmacy equivalents for common medications, long-stay travel insurance analysis (standard policies expire at 90 days), and a mental wellness brief for long-haul remote workers.',
-    addons: [
-      'Tax residency awareness brief (not legal advice)',
-      'International banking and multi-currency guide',
-      'Co-working space + coliving research for target cities',
-      'Emergency repatriation planning',
-    ],
-    geo: [
-      {
-        region: 'Asian passport nomads',
-        items: [
-          'Portugal D8 + Spain Nomada eligibility check',
-          'Schengen entry-point optimization by visa type',
-          'Proving income + remote employment for visa applications',
-        ],
-      },
-      {
-        region: 'North American nomads',
-        items: [
-          'US FBAR + overseas reporting awareness brief',
-          'Canadian provincial health insurance gap analysis',
-          'ESTA + Schengen sequencing strategy',
-        ],
-      },
-    ],
-  },
-  {
-    slug: 'recovery-route',
-    tier: 'Managing complexity',
-    name: 'The Recovery Route',
-    sub: 'Post-refusal reapplication',
-    icon: '◇',
-    tone: 'recovery',
-    badge: 'High intent',
-    target:
-      'Travelers who received a Schengen or other visa refusal and need to understand exactly what went wrong, fix it, and reapply with a materially stronger application - without guessing.',
-    tagline:
-      "A refusal isn't the end. Most are fixable - if you understand the real reason and address it correctly. This package starts where your rejection letter stops.",
-    seoKeywords: [
-      'visa refusal reapplication help',
-      'schengen visa denied what to do',
-      'how to appeal visa refusal',
-    ],
-    included: [
-      'Refusal letter interpretation (decoding embassy-speak)',
-      'Root cause analysis of your specific refusal: financial, itinerary, ties, documentation',
-      'Reapplication strategy with revised document plan',
-      'New cover letter specifically addressing the refusal reason',
-      'Strengthened financial proof coaching',
-      'Ties-to-home documentation upgrade plan',
-      'Timing advice: when to reapply and to which embassy',
-    ],
-    differentiators: [
-      'Only package that treats a refusal as diagnostic data',
-      'Embassy-code refusal reason interpretation - the letter rarely says what it means',
-      'Reapplication timing strategy (applying too soon is a common second mistake)',
-    ],
-    healthLabel: 'Health documentation check',
-    healthCredential: 'Rph',
-    healthItems:
-      'Travel insurance review for compliance with refusal grounds, medical condition documentation coaching (if health was flagged), and reapplication travel health insurance sourcing guidance.',
-    addons: [
-      'Legal referral (if grounds require professional legal advice)',
-      'Alternative destination strategy (if target country is temporarily inadvisable)',
-      'Expedited 48-hour turnaround for urgent reapplication timelines',
-      'Appeal letter drafting (where permitted)',
-    ],
-    geo: [
-      {
-        region: 'Applicants from high-scrutiny passports',
-        items: [
-          'Common refusal patterns by passport origin',
-          'Embassy-switching strategy (which consulate to try next)',
-          'Employment + financial document restructuring after refusal',
-        ],
-      },
-      {
-        region: 'Applicants with thin travel history',
-        items: [
-          'Building a credible travel profile from scratch',
-          'Invitation + sponsor documentation rebuild',
-          'Strong ties-to-home documentation strategy',
-        ],
-      },
-    ],
-  },
-  {
-    slug: 'wellness-journey',
-    tier: 'Managing complexity',
-    name: 'The Wellness Journey',
-    sub: 'Health-led travel planning',
-    icon: '✿',
-    tone: 'wellness',
-    badge: 'Rx exclusive',
-    target:
-      "Travelers with chronic conditions, complex medication needs, post-surgery travel plans, elderly travelers, or anyone told 'you should be careful traveling' who wants a plan that actually takes health seriously.",
-    tagline:
-      "Travel planning from the inside out. Built for travelers whose health isn't an afterthought - it's the starting point.",
-    seoKeywords: [
-      'travel planning chronic illness',
-      'traveling with prescription medication internationally',
-      'medical travel consultation service',
-      'travel health pharmacist consultation',
-    ],
-    included: [
-      'Medical travel readiness assessment (condition vs. destination risk)',
-      'Europe health risk briefing: altitude, heat, food safety, hydration, and walking-load planning',
-      'Prescription medication travel authorization documentation for Schengen travel',
-      'Controlled substance travel documentation for Schengen and transit rules',
-      'Travel health insurance specification (pre-existing conditions declared correctly)',
-      'In-destination pharmacy + hospital mapping for your itinerary',
-      'Emergency medical information card (multilingual, pharmacist-prepared)',
-      'Vaccine status review and recommended updates',
-    ],
-    differentiators: [
-      'Designed with a licensed pharmacist - not a Google search',
-      'Controlled substance + prescription import rules per country (genuinely dangerous to get wrong)',
-      'Treats your pre-existing conditions as a planning input, not a disclaimer',
-    ],
-    healthLabel: 'This IS the health package - full pharmacist layer',
-    healthCredential: 'Rph',
-    healthItems:
-      "Complete medication review for travel suitability, controlled substance declaration letters (pharmacist-signed), Schengen-country OTC vs. prescription drug status, post-travel health monitoring brief, and traveler's diarrhea, altitude, dehydration, and heat illness prevention.",
-    addons: [
-      'Medevac insurance comparison brief',
-      'Specialist referral research in destination city',
-      'Custom medication packing list with pharmacy alternatives',
-      'Health condition-specific Europe route alternatives',
-      'Medical translation card (your conditions in destination language)',
-    ],
-    geo: [
-      {
-        region: 'Traveling through multiple Schengen countries',
-        items: [
-          'Prescription and controlled medication rules across your Schengen route',
-          'Schengen-compliant travel insurance review for pre-existing conditions',
-          'Pharmacy and hospital access planning by city sequence',
-        ],
-      },
-      {
-        region: 'Travelers with chronic conditions or mobility concerns',
-        items: [
-          'Flight timing, rest-day pacing, and jet-lag risk planning',
-          'Altitude, walking-load, and temperature adjustments within Europe',
-          'Multilingual medical documentation and emergency backup plan',
-        ],
-      },
-    ],
-  },
-  {
-    slug: 'grand-circuit',
-    tier: 'Premium & multi-region',
-    name: 'The Grand Circuit',
-    sub: 'Multi-region premium planning',
-    icon: '◉',
-    tone: 'circuit',
-    badge: null,
-    target:
-      'Experienced travelers planning a multi-region trip who need coherent visa architecture, health continuity, and itinerary logic across multiple visa jurisdictions without gaps or expensive mistakes.',
-    tagline:
-      "For travelers who don't stay in one region. Visa logic, health coverage, and itinerary design that works across jurisdictions - without gaps, overlaps, or expensive mistakes.",
-    seoKeywords: [
-      'multi country trip planning service',
-      'multi visa planning consultant',
-      'round the world travel planning',
-    ],
-    included: [
-      'Full multi-region visa architecture (all required visas mapped and timed)',
-      'Passport validity + entry requirement check across all destinations',
-      'Multi-jurisdiction health insurance review (coverage gaps between countries)',
-      'Overland + multi-modal transport logic (trains, ferries, land borders)',
-      '90/180-day Schengen management within the wider trip',
-      'Currency and financial logistics brief per region',
-      'Emergency contingency planning across all regions',
-      'Complete trip health brief spanning all destination health profiles',
-    ],
-    differentiators: [
-      'Most travel services think in single trips - this is built for the arc of a whole journey',
-      'Visa sequencing: which country to apply for first, and why it matters',
-      'Health continuity across climate zones, altitude changes, and food environments',
-    ],
-    healthLabel: 'Multi-region health continuity plan',
-    healthCredential: 'Rph',
-    healthItems:
-      'Cross-region vaccine + prophylaxis planning (one strategy for all destinations), medication quantity planning across the full trip duration, region-transition health brief (for example temperate Europe to tropical Southeast Asia), and multi-country medical emergency protocol.',
-    addons: [
-      'Luxury / boutique accommodation brief per region',
-      'Private guide recommendations by destination',
-      'Photography permit + restricted site guidance',
-      'Bespoke day-by-day itinerary (detailed)',
-      'Pre-trip briefing call with the full Durian team',
-    ],
-    geo: [
-      {
-        region: 'Asian passport holders (multi-region)',
-        items: [
-          'Visa sequencing strategy across multiple jurisdictions',
-          'Proving financial standing across multiple currencies',
-          'Re-entry requirement tracking for home country',
-        ],
-      },
-      {
-        region: 'Western passport holders (outbound)',
-        items: [
-          'ETIAS + Schengen + non-EU visa stacking',
-          'Visa-on-arrival vs. pre-approval mapping by region',
-          'Travel advisory monitoring across all regions',
-        ],
-      },
-    ],
-  },
-];
+// The package data has one home: src/data/service-packages.json, surfaced through
+// service-pages.ts. This page used to keep a second hand-written copy of all of
+// it, which is how the retired document-review wording survived here after it
+// was removed elsewhere. Derive it instead so the two can never drift again.
+const packages = servicePackages.map((pkg) => ({
+  slug: pkg.oldSlug,
+  tier: pkg.tier,
+  name: pkg.name,
+  sub: pkg.sub,
+  icon: pkg.icon,
+  tone: pkg.tone,
+  badge: pkg.badge,
+  target: pkg.target,
+  tagline: pkg.tagline,
+  included: pkg.included,
+  differentiators: pkg.differentiators,
+  healthLabel: pkg.health_layer.label,
+  healthCredential: pkg.health_layer.credential,
+  healthItems:
+    pkg.health_layer.items.length > 1
+      ? `${pkg.health_layer.items.slice(0, -1).join(', ')}, and ${pkg.health_layer.items.slice(-1)[0]}.`
+      : `${pkg.health_layer.items[0]}.`,
+  addons: pkg.addons,
+  geo: pkg.geo_customization.map((region) => ({
+    region: region.segment,
+    items: region.items,
+  })),
+}));
 
 const serviceSchema = packages.map((pkg) => ({
   '@context': 'https://schema.org',
@@ -466,26 +66,27 @@ const breadcrumb = [{ name: 'Services', url: 'https://www.duriantravel.com/servi
 
 <BaseLayout
   title="Trip Planning Packages for Travellers From Outside Europe | DURIAN Travel"
-  description="Compare Durian Travel packages for Schengen visa help, first international trips, family travel, refusal recovery, travel health planning, digital nomads, and multi-region journeys."
+  description="Compare Durian Travel packages for Schengen trip planning, first international trips, family travel, travel health planning, digital nomads, and multi-region journeys."
   breadcrumb={breadcrumb}
   schema={serviceSchema}
-  keywords="visa strategy package, itinerary planning package, pharmacist-backed travel planning, schengen strategy package, first-time international travel package, refusal reapplication support, travel wellness planning"
+  keywords="europe trip planning package, itinerary planning package, pharmacist-backed travel planning, schengen planning package, first-time international travel package, travel wellness planning"
 >
   <section class="hero-sm hero-gradient">
     <div class="container services-hero">
-      <span class="section-label services-hero__label">Visa Strategy + Travel Planning</span>
+      <span class="section-label services-hero__label">Trip Planning + Visa Guidance</span>
       <h1 class="hero-sm__title services-hero__title">Choose the package that fits your level of complexity</h1>
       <p class="hero-sm__subtitle services-hero__subtitle">
-        {servicePositioning} These packages group support by the kind of trip risk you are actually managing,
-        not by generic destination buckets.
+        {servicePositioning} These packages are grouped by the kind of complexity you are actually
+        managing, not by generic destination buckets.
       </p>
       <div class="services-hero__actions">
-        <a href="/free-visa-audit/" class="btn btn--primary">Start With a Free Audit</a>
+        <a href="/book-a-call/" class="btn btn--primary">Start With a Free Call</a>
         <a href="/contact/" class="btn btn--secondary">Send an Inquiry</a>
       </div>
       <p class="services-hero__note">
-        We provide educational planning support for visa files, route logic, and health-aware preparation.
-        We do not submit visa applications on your behalf and we do not guarantee embassy outcomes.
+        We provide educational planning support: route logic, budgets, timing, and health-aware
+        preparation. We do not review your documents, we do not submit applications on your behalf,
+        and the consulate alone decides the outcome.
       </p>
     </div>
   </section>
@@ -495,10 +96,10 @@ const breadcrumb = [{ name: 'Services', url: 'https://www.duriantravel.com/servi
       <div class="notice notice--info mb-8">
         <span aria-hidden="true">📍</span>
         <p>
-          <strong>Quick way to choose:</strong> start with <strong>Schengen Blueprint</strong> if your
-          biggest stress is the visa file, <strong>First Journey</strong> if this is your first
-          international trip, <strong>Family Expedition</strong> if one weak link affects the whole
-          group, <strong>Recovery Route</strong> if you already have a refusal, and
+          <strong>Quick way to choose:</strong> start with <strong>Schengen Blueprint</strong> if the
+          Schengen process itself is the confusing part, <strong>First Journey</strong> if this is your
+          first international trip, <strong>Family Expedition</strong> if you are coordinating several
+          travellers at once, <strong>Nomad Infrastructure</strong> if you are staying past 90 days, and
           <strong>Wellness Journey</strong> if health should drive the plan from day one.
         </p>
       </div>
@@ -507,7 +108,7 @@ const breadcrumb = [{ name: 'Services', url: 'https://www.duriantravel.com/servi
         <div class="package-picker__header">
           <div>
             <span class="section-label">Choose a Package</span>
-            <h2 class="package-picker__title">Seven packages, grouped by trip complexity</h2>
+            <h2 class="package-picker__title">Six packages, grouped by trip complexity</h2>
           </div>
           <p class="package-picker__copy">
             Every package combines visa logic, route planning, and a pharmacist-informed health layer.
@@ -625,23 +226,23 @@ const breadcrumb = [{ name: 'Services', url: 'https://www.duriantravel.com/servi
           <span class="services-step__num">01</span>
           <h3 class="services-step__title">Choose your track</h3>
           <p class="services-step__copy">
-            Pick the package that best matches your biggest source of risk or confusion.
+            Pick the package that best matches where you are actually stuck.
           </p>
         </div>
         <div class="services-step">
           <span class="services-step__num">02</span>
           <h3 class="services-step__title">Send context</h3>
           <p class="services-step__copy">
-            We review your passport context, route, documents, timeline, and any health or family
-            constraints before shaping the work.
+            You tell us your nationality, your dates, your route and any health or family constraints.
+            We do not ask for your documents and we do not look at them.
           </p>
         </div>
         <div class="services-step">
           <span class="services-step__num">03</span>
-          <h3 class="services-step__title">Build the strongest version</h3>
+          <h3 class="services-step__title">Get the plan</h3>
           <p class="services-step__copy">
-            The outcome is a clearer application, a cleaner itinerary, and fewer avoidable mistakes
-            before money gets locked into the trip.
+            You leave with a route that holds together, a budget in euros, and the official sources for
+            your own nationality, before money gets locked into the trip.
           </p>
         </div>
       </div>

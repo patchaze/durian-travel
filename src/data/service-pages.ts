@@ -18,7 +18,6 @@ const oldSlugByUrlSlug: Record<string, string> = {
   'first-international-trip': 'first-journey',
   'family-travel-planning': 'family-expedition',
   'digital-nomad-visa-strategy': 'nomad-infrastructure',
-  'visa-refusal-reapplication': 'recovery-route',
   'travel-health-planning': 'wellness-journey',
   'multi-region-trip-planning': 'grand-circuit',
 };
@@ -28,7 +27,6 @@ const iconByOldSlug: Record<string, string> = {
   'first-journey': '◈',
   'family-expedition': '⬡',
   'nomad-infrastructure': '◎',
-  'recovery-route': '◇',
   'wellness-journey': '✿',
   'grand-circuit': '◉',
 };
@@ -38,7 +36,6 @@ const toneByOldSlug: Record<string, string> = {
   'first-journey': 'journey',
   'family-expedition': 'family',
   'nomad-infrastructure': 'nomad',
-  'recovery-route': 'recovery',
   'wellness-journey': 'wellness',
   'grand-circuit': 'circuit',
 };
@@ -49,48 +46,48 @@ const tierByName = Object.fromEntries(
 
 const seoByUrlSlug: Record<string, SeoConfig> = {
   'schengen-visa-help': {
-    h1: 'Schengen Application Support - Documents, Route and Cover Letter',
-    metaTitle: 'Schengen Visa Help + Itinerary Planning | Durian Travel',
+    h1: 'Schengen Trip Planning: Route, Budget and Your Own Checklist',
+    metaTitle: 'Schengen Visa Planning + Itinerary Help | Durian Travel',
     metaDescription:
-      'Expert Schengen visa strategy, document review, and itinerary planning. Cover letters, financial proof coaching, and embassy-specific guidance. Contact us.',
+      'Plan a Schengen trip properly. Route, budget, timing, and a preparation checklist you work through yourself, with the official embassy source linked beside every item.',
     personas: [
-      'First-time applicants who need their visa file and itinerary to tell the same story.',
-      'Travelers facing embassy-specific financial proof or cover-letter scrutiny.',
-      'Applicants trying to avoid a refusal caused by route logic, weak documents, or vague planning.',
+      'First-time applicants who want to understand the process instead of handing it to someone else.',
+      'Travelers who cannot find the requirements their own consulate actually publishes.',
+      'People planning a multi-country route who need it to fit the 90/180 rule.',
     ],
     faq: [
       {
-        question: "What's the difference between applying at the French vs German embassy?",
+        question: "What's the difference between applying at the French vs German consulate?",
         answer:
-          'The core Schengen rules are shared, but intake style, document expectations, and how strictly officers assess context can differ by consulate. That is why embassy-specific preparation matters.',
+          'The core Schengen rules are shared, but each consulate publishes its own document list, appointment process and intake style. That is why the checklist links to the official page for the consulate handling your application rather than to a generic list.',
       },
       {
         question: 'How much money do I need in my bank account for a Schengen visa?',
         answer:
-          'There is no single safe number for every applicant. Officers look at consistency, income pattern, trip length, route, and whether the budget makes sense beside the rest of the file.',
+          'There is no single number, and anyone who quotes you one is guessing. Schengen states publish their own reference amounts for means of subsistence, and that published figure for your destination is the only reliable starting point. We show you where to find it.',
       },
       {
         question: "Can I apply for Schengen if I've never traveled internationally before?",
         answer:
-          'Yes. First-time applicants can be approved, but the file needs stronger clarity around finances, itinerary, and ties to home because there is no travel-history shortcut.',
+          'Yes. There is no travel-history requirement in the rules, and the published guidance is the same for you as for anyone else. The consulate assesses every application on its own terms.',
       },
       {
         question: 'What is a cover letter for a Schengen visa, and do I need one?',
         answer:
-          'A cover letter explains purpose, route, funding, and return logic in one readable document. Some embassies do not explicitly require it, but it often improves the file when used properly.',
+          'A cover letter sets out the purpose of the trip, the route, how it is funded, and when you return. Some consulates ask for one and some do not, so check the published list for yours. We do not write or read letters. There is a free walkthrough with templates on the blog.',
       },
       {
         question: 'How far in advance should I apply for a Schengen visa?',
         answer:
-          'The legal window is up to six months before travel and at least 15 days before departure, but strong applicants usually start much earlier so the route, bookings, and finances can be aligned properly.',
+          'The Visa Code sets the window at no more than six months before travel and no later than 15 days before departure. In practice appointment availability is the real constraint, so check your consulate booking system early. Confirm current timings on the official source.',
       },
     ],
   },
   'first-international-trip': {
-    h1: 'First International Trip Planning - Step by Step',
+    h1: 'First International Trip Planning, Step by Step',
     metaTitle: 'First International Trip Planning | Durian Travel',
     metaDescription:
-      'Planning your first international trip? We handle visa strategy, itinerary planning, and pre-departure prep - with pharmacist-backed health guidance included.',
+      'Planning your first international trip? Destination choice, itinerary planning and pre-departure prep, with pharmacist-backed health guidance included.',
     personas: [
       'Travelers who have never flown internationally and need a clean, confidence-building process.',
       'People overwhelmed by visas, insurance, airport rules, and what to book first.',
@@ -120,20 +117,20 @@ const seoByUrlSlug: Record<string, SeoConfig> = {
     ],
   },
   'family-travel-planning': {
-    h1: 'Family Travel Planning - Routes, Timing and Paperwork',
+    h1: 'Family Travel Planning: Routes, Timing and Paperwork',
     metaTitle: 'Family International Travel Planning | Durian Travel',
     metaDescription:
-      'International travel planning for families of 2-6, including children and elderly travelers. Coordinated visa strategy, group itineraries, and pharmacist-reviewed health planning.',
+      'International travel planning for families of 2 to 6, including children and elderly travellers. Coordinated timelines, group itineraries, and pharmacist-reviewed health planning.',
     personas: [
       'Families traveling with children whose documents and pacing need tighter coordination.',
       'Groups including elderly travelers, chronic medications, or mobility considerations.',
-      'Sponsors and guardians managing a multi-member visa file where one mistake affects everyone.',
+      'Sponsors and guardians coordinating several applications at once, where one missed step affects everyone.',
     ],
     faq: [
       {
-        question: 'Can you coordinate visa strategy for an entire family application?',
+        question: 'Can you coordinate the planning for a whole family at once?',
         answer:
-          'Yes. Family cases often need synchronized appointments, sponsorship logic, minor documentation, and a route that works for every traveler, not just the lead applicant.',
+          'Yes. Family trips usually need synchronised appointments, the published rules on minors and sponsors, and a route that works for every traveller rather than just the lead applicant.',
       },
       {
         question: 'What documents do children need for international travel?',
@@ -159,7 +156,7 @@ const seoByUrlSlug: Record<string, SeoConfig> = {
       'Solve the 90-day Schengen limit. Multi-entry visa strategy, remote work visa options, and 3+ month medication planning for long-stay digital nomads.',
     personas: [
       'Remote workers trying to stay in Europe longer than the basic 90/180 Schengen window.',
-      'Nomads balancing visa architecture, insurance gaps, and medication continuity across months.',
+      'Nomads balancing entry rules, insurance gaps, and medication continuity across months.',
       'Travelers comparing long-stay visa options such as Portugal D8 or Spain digital nomad pathways.',
     ],
     faq: [
@@ -185,41 +182,8 @@ const seoByUrlSlug: Record<string, SeoConfig> = {
       },
     ],
   },
-  'visa-refusal-reapplication': {
-    h1: 'After a Visa Refusal - Reading the Reasons and Reapplying',
-    metaTitle: 'Visa Refusal Reapplication Help | Durian Travel',
-    metaDescription:
-      "Got a visa refusal? We decode the real reason, fix the application, and build a stronger reapplication strategy. Don't guess - get a plan.",
-    personas: [
-      'Applicants who already have a refusal letter and need to know what it really means.',
-      'Travelers who suspect the official refusal reason does not explain the real weakness in the file.',
-      'People deciding whether to reapply, switch consulates, strengthen documents, or wait.',
-    ],
-    faq: [
-      {
-        question: 'What should I do immediately after a visa refusal?',
-        answer:
-          'Start by decoding the refusal grounds properly. Reapplying without understanding the real weakness often leads to a second refusal for the same reason.',
-      },
-      {
-        question: 'Can you tell me whether I should appeal or reapply?',
-        answer:
-          'Yes. The right next step depends on the refusal grounds, the jurisdiction, how quickly you need to travel, and whether the file can be materially strengthened.',
-      },
-      {
-        question: 'How long should I wait before reapplying after a refusal?',
-        answer:
-          'There is no universal wait period, but reapplying too quickly without changing the substance of the case is one of the most common mistakes after a refusal.',
-      },
-      {
-        question: 'Do refusal codes always explain the real problem?',
-        answer:
-          'Not always. Many refusal letters are broad or formulaic, so the real work is identifying the actual weakness behind the wording and fixing that directly.',
-      },
-    ],
-  },
   'travel-health-planning': {
-    h1: "Travel Health Planning - Medication, Insurance and Chronic Conditions",
+    h1: 'Travel Health Planning: Medication, Insurance and Chronic Conditions',
     metaTitle: 'Travel Health Planning for Europe | Medication & Chronic Conditions | Durian Travel',
     metaDescription:
       'Planning a Europe trip with chronic conditions or prescription medication? We align Schengen health prep, insurance, medication documents, and safer itinerary pacing.',
@@ -252,10 +216,10 @@ const seoByUrlSlug: Record<string, SeoConfig> = {
     ],
   },
   'multi-region-trip-planning': {
-    h1: 'Multi-Country Trip Planning - Routes That Hold Together',
+    h1: 'Multi-Country Trip Planning: Routes That Hold Together',
     metaTitle: 'Multi-Country Europe Trip Planning | Durian Travel',
     metaDescription:
-      'Planning a trip across multiple regions and visa zones? We map the full visa architecture, manage health continuity, and coordinate itinerary logic across every destination.',
+      'Planning a trip across multiple regions and visa zones? We map the entry rules, manage health continuity, and coordinate itinerary logic across every destination.',
     personas: [
       'Experienced travelers moving across multiple visa systems on one trip.',
       'Clients who need Schengen, non-Schengen, transit, and destination health rules to work together.',

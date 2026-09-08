@@ -117,7 +117,7 @@ German regional cuisine is far more diverse and interesting than the sausage-and
 
 ## Getting Around Germany
 
-**Deutsche Bahn (DB):** Germany's national rail is fast (ICE high-speed trains), extensive, and comfortable. Frankfurt to Cologne: 1h. Munich to Berlin: 3h45m (ICE). Booking in advance unlocks Sparpreis ("Saver Price") fares that are significantly cheaper. The DB Navigator app is essential.
+**Deutsche Bahn (DB):** Germany's national rail is fast (ICE high-speed trains), extensive, and comfortable. Frankfurt to Cologne: 1h. Munich to Berlin: 3h45m (ICE). Booking in advance opens up Sparpreis ("Saver Price") fares that are significantly cheaper. The DB Navigator app is essential.
 
 **Germany Ticket (Deutschlandticket):** A monthly flat-rate ticket (currently €49/month) covering all regional trains, S-Bahn, U-Bahn, trams, and buses across the entire country on a given calendar month. Outstanding value for travellers spending a week or more.
 

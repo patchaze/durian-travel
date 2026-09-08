@@ -151,7 +151,7 @@ Summer: Ferry to Visby, Gotland (3h). Medieval town exploration, beach, cycling 
 
 ## Related Guides
 - [Norway Travel Guide](/destinations/norway/) — Natural Scandinavian twin; Oslo–Stockholm train 5h
-- [Denmark Travel Guide](/destinations/denmark/) — Malmö–Copenhagen: 35 minutes by bridge; seamless pairing
+- [Denmark Travel Guide](/destinations/denmark/) — Malmö to Copenhagen: 35 minutes by bridge, and an easy pairing
 - [Finland Travel Guide](/destinations/finland/) — Stockholm–Helsinki overnight ferry is a classic Scandinavian experience
 - [Norway Travel Guide](/destinations/norway/)
 - [Iceland Travel Guide](/destinations/iceland/) — Popular Scandinavia + Iceland itineraries

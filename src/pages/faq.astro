@@ -10,12 +10,12 @@ const faqSchema = {
     {
       "@type": "Question",
       "name": "Do you only help with visas, or with the whole trip?",
-      "acceptedAnswer": { "@type": "Answer", "text": "The whole trip. Route and itinerary design, budgets, accommodation logic, travel-health planning and timing come first; Schengen documentation is one part of the work, not the point of it. If all you need is the trip itself, that is a normal engagement, not an exception." }
+      "acceptedAnswer": { "@type": "Answer", "text": "The whole trip. Route and itinerary design, budgets, accommodation logic, travel-health planning and timing are the work. We explain how the Schengen process fits around all of that and where the official requirements are published, but we do not handle anyone's paperwork." }
     },
     {
       "@type": "Question",
       "name": "Which parts of Europe do you cover?",
-      "acceptedAnswer": { "@type": "Answer", "text": "The Schengen area and its neighbours — we publish 29 country guides spanning Western, Northern, Central, Southern and Eastern Europe, and build multi-country routes across them. If a route crosses outside the Schengen area, we plan around the border implications rather than pretending they are not there." }
+      "acceptedAnswer": { "@type": "Answer", "text": "The Schengen area and its neighbours. We publish 29 country guides spanning Western, Northern, Central, Southern and Eastern Europe, and build multi-country routes across them. If a route crosses outside the Schengen area, we plan around the border implications rather than pretending they are not there." }
     },
     {
       "@type": "Question",
@@ -25,47 +25,47 @@ const faqSchema = {
     {
       "@type": "Question",
       "name": "How far in advance should I start planning?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Earlier than most people expect. Visa applications can be lodged up to six months before travel, appointment availability often adds weeks, and good accommodation in peak season goes early. Working backwards from your travel dates — route, then bookings, then documentation — is the sequence that avoids collisions." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Earlier than most people expect. Visa applications can be lodged up to six months before travel, appointment availability often adds weeks, and good accommodation in peak season goes early. Work backwards from your travel dates: route, then bookings, then documentation. That is the sequence that avoids collisions." }
     },
     {
       "@type": "Question",
       "name": "Is DURIAN a law firm or immigration lawyer?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No. DURIAN is an educational visa application strategy consultancy. We do not provide legal advice, legal representation, or any service that constitutes the practice of immigration law. For legal advice, you should consult a qualified immigration attorney." }
+      "acceptedAnswer": { "@type": "Answer", "text": "No. Durian Travel publishes educational travel guides and plans trips. We do not provide legal advice, legal representation, or any service that constitutes the practice of immigration law. For legal advice, consult a qualified immigration attorney." }
     },
     {
       "@type": "Question",
       "name": "Can you guarantee my visa will be approved?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No — and no honest service can. Visa decisions are made by embassy and consulate officers based on their assessment of your application. We help you prepare the strongest possible application, but we have no influence over consular decisions." }
+      "acceptedAnswer": { "@type": "Answer", "text": "No, and no honest service can. Visa decisions are made by embassy and consulate officers on their own assessment, and nobody outside the consulate has any influence over them. We never look at your documents and we never predict a result." }
     },
     {
       "@type": "Question",
-      "name": "What is the Free Visa Readiness Audit?",
-      "acceptedAnswer": { "@type": "Answer", "text": "A free 20-minute consultation where we review your current visa preparation strategy and identify the specific areas you need to strengthen before submitting your application." }
+      "name": "What is the free planning call?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A free call, usually 15 to 20 minutes, about the trip itself: your route, your budget, your timing, and how the current border rules apply to where you are travelling from. No documents are reviewed and no opinion is given on the outcome of any application." }
     },
     {
       "@type": "Question",
       "name": "Will you submit my visa application for me?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No. We provide educational guidance on how to prepare your application. You are responsible for submitting your own application to the relevant embassy or consulate." }
+      "acceptedAnswer": { "@type": "Answer", "text": "No. Everything we publish is guidance you read and use yourself. You submit your own application to the relevant embassy or consulate." }
     },
     {
       "@type": "Question",
       "name": "What types of visas do you cover?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Our primary focus is the Schengen tourist visa (Type C), but many of our document strategy principles apply to UK Visitor Visas, US tourist visas, and other non-immigrant visa types. We'll tell you clearly in the audit whether your specific visa type is within our expertise." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Our guides cover the Schengen tourist visa (Type C). Some of the same ideas carry over to UK visitor visas and US tourist visas, but the rules are different and we do not publish on them." }
     },
     {
       "@type": "Question",
       "name": "I was refused a visa before. Can you help?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes — refusal analysis and reapplication strategy is one of our core services. We can help you decode your refusal letter and build a stronger application for resubmission." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Not with the refusal itself. A refusal letter names a reason from a standard list, and our published guide explains what each one refers to. What happens next is between you and the consulate: the letter sets out the appeal route and the deadline. We can still help you plan the trip." }
     },
     {
       "@type": "Question",
       "name": "Do you work with self-employed or freelance applicants?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Self-employed applicants often face unique challenges with financial proof documentation. We specialise in helping freelancers, contractors, and business owners understand what financial documents to gather and how to present them." }
+      "acceptedAnswer": { "@type": "Answer", "text": "For planning the trip, yes. On the paperwork, financial proof works differently without an employment contract, and our guides explain what consulates generally ask for and where each one publishes its own list. We do not gather, structure or look at anyone's financial documents." }
     },
     {
       "@type": "Question",
       "name": "How do you differ from a visa agency?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Visa agencies typically submit applications on your behalf and may have formal relationships with embassies. We are a purely educational service — we teach you how to prepare your documents, but you submit the application yourself. This means lower cost, more transparency, and more control for you." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Visa agencies typically submit applications on your behalf and may have formal relationships with embassies. We are a purely educational service. We explain how the process works and point you at the official sources, and you do the rest yourself. That means lower cost, more transparency, and your paperwork never leaves your hands." }
     },
     {
       "@type": "Question",
@@ -83,10 +83,10 @@ const faqSchema = {
 
 <BaseLayout
   title="Frequently Asked Questions | DURIAN Travel"
-  description="Common questions about DURIAN Travel services, how our consultancy works, what to expect from a session, and how we can help plan your Europe trip."
+  description="Common questions about Durian Travel: how the planning work runs, what a session covers, what we do not do, and how we can help plan your Europe trip."
   breadcrumb={[{ name: 'FAQ', url: 'https://www.duriantravel.com/faq/' }]}
   schema={faqSchema}
-  keywords="DURIAN travel FAQ, Europe trip planning questions, Schengen visa FAQ, travel consultancy services FAQ, how DURIAN travel works"
+  keywords="DURIAN travel FAQ, Europe trip planning questions, Schengen visa FAQ, Europe travel planning FAQ, how DURIAN travel works"
 >
   <div class="container">
     <Breadcrumb items={[{ name: 'FAQ' }]} />
@@ -126,7 +126,7 @@ const faqSchema = {
         <p>Didn't find your answer?</p>
         <div style="display:flex;gap:var(--space-4);flex-wrap:wrap;justify-content:center;margin-top:var(--space-4)">
           <a href="/contact/" class="btn btn--primary">Contact Us</a>
-          <a href="/free-visa-audit/" class="btn btn--secondary">Book Free Audit →</a>
+          <a href="/book-a-call/" class="btn btn--secondary">Book a Free Call →</a>
         </div>
       </div>
     </div>

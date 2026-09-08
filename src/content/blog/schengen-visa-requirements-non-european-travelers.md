@@ -2,7 +2,7 @@
 keywords: "Schengen visa requirements, Schengen visa guide 2026, non-European travelers, visa strategy"
 title: "Schengen Visa Requirements: The Complete Guide for Non-European Travelers (2026)"
 seoTitle: "Schengen Visa Requirements: The Complete Guide for Non-European Travelers (2026)"
-description: "Everything non-European travelers need to know about the Schengen visa process: document checklist, financial proof, embassy selection, cover letter strategy, and the mistakes that trigger refusals. Updated April 2026."
+description: "Everything non-European travellers need to know about the Schengen visa process: the document checklist, financial proof, choosing the right consulate, and where each official requirement is published. Updated April 2026."
 pubDate: "2026-03-29"
 modDate: "2026-08-27"
 author: "Durian Travel Editorial Team"
@@ -106,7 +106,7 @@ The strongest financial file usually has three layers:
 
 That is why a bank statement by itself is not enough. It has to make sense next to the rest of the file.
 
-## Cover Letter Strategy
+## The cover letter
 
 Many travelers treat the cover letter like a formality. It is not.
 
