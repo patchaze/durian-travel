@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
+import costData from '../../data/country-costs.json';
 
 const canonical = 'https://www.duriantravel.com/tools/budget/';
 
@@ -10,6 +11,13 @@ const canonical = 'https://www.duriantravel.com/tools/budget/';
 // shown next to the field, and every figure stays editable. There are no exchange
 // rates anywhere in this tool, because a hardcoded rate goes stale and a live one
 // needs a server.
+
+// The destination list and the price index behind it are the same Eurostat data
+// the cost-per-country planner reads. Nothing is hand typed here, so refreshing
+// src/data/country-costs.json updates this tool with it.
+const costSource = costData._source;
+const countries = costData.countries;
+
 const styles = [
   { id: 'budget', label: 'Budget', low: 70, high: 130, typical: 100 },
   { id: 'mid', label: 'Mid-range', low: 140, high: 240, typical: 190 },
@@ -85,6 +93,13 @@ const schema = {
                 </select>
               </label>
             </div>
+            <label class="field">
+              <span class="field__label">Where in Europe</span>
+              <select id="destination">
+                <option value="" selected>Not sure yet</option>
+                {countries.map(c => <option value={c.slug} data-pli={c.pli}>{c.name}</option>)}
+              </select>
+            </label>
             <p class="field-note">
               Enter every figure in one currency. Our guide suggests working in euros first, since
               that is what you will actually be spending. This tool does not convert between
@@ -108,6 +123,10 @@ const schema = {
               <input type="number" class="money fixed" id="f-insurance" min="0" step="1" value="0" inputmode="decimal" />
             </label>
             <label class="field">
+              <span class="field__label">eSIM or mobile data <em>(total, everyone)</em></span>
+              <input type="number" class="money fixed" id="f-esim" min="0" step="1" value="0" inputmode="decimal" />
+            </label>
+            <label class="field">
               <span class="field__label">Intercity trains, buses, internal flights</span>
               <input type="number" class="money fixed" id="f-intercity" min="0" step="1" value="0" inputmode="decimal" />
             </label>
@@ -123,12 +142,15 @@ const schema = {
 
             <div class="style-picker" role="group" aria-label="Travel style presets">
               {styles.map(s => (
-                <button type="button" class="style-btn" data-style={s.id} data-typical={s.typical}>
+                <button type="button" class="style-btn" data-style={s.id} data-typical={s.typical} data-low={s.low} data-high={s.high}>
                   <span class="style-btn__label">{s.label}</span>
                   <span class="style-btn__range">{s.low}–{s.high === 380 ? '380+' : s.high}/day</span>
                 </button>
               ))}
             </div>
+            <p class="field-note" id="destination-note" data-refyear={costSource.referenceYear}>
+              The starting figures are our own estimate, not a published statistic.
+            </p>
             <p class="field-note">
               Ranges are for Western Europe and are our own estimate, from our
               <a href="/blog/europe-trip-budget/">Europe budget guide</a>. Eastern and Southern
@@ -472,6 +494,8 @@ const schema = {
   const nights = $('nights');
   const travellers = $('travellers');
   const currencySel = document.getElementById('currency') as HTMLSelectElement | null;
+  const destinationSel = document.getElementById('destination') as HTMLSelectElement | null;
+  const destinationNote = document.getElementById('destination-note');
   const form = document.getElementById('budget-form');
   const fixedInputs = Array.from(document.querySelectorAll<HTMLInputElement>('.money.fixed'));
   const dailyInputs = Array.from(document.querySelectorAll<HTMLInputElement>('.money.daily'));
@@ -479,6 +503,21 @@ const schema = {
   const bufferBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.buffer-btn'));
 
   let buffer = 15;
+
+  // What the last preset click wrote into the four daily fields. Used only to tell
+  // an untouched preset from one the reader has edited.
+  let presetWrote: Record<string, string> | null = null;
+
+  function selectedCountry(): { name: string; index: number } | null {
+    const opt = destinationSel?.selectedOptions?.[0];
+    const pli = parseFloat(opt?.dataset?.pli ?? '');
+    if (!destinationSel?.value || !Number.isFinite(pli) || pli <= 0) return null;
+    return { name: opt?.textContent?.trim() ?? '', index: pli / 100 };
+  }
+
+  // 1 when no destination is chosen, so everything below behaves exactly as it did
+  // before this field existed.
+  const countryIndex = () => selectedCountry()?.index ?? 1;
 
   const num = (el: HTMLInputElement | null) => {
     const v = parseFloat(el?.value ?? '');
@@ -547,13 +586,64 @@ const schema = {
 
   function applyStyle(typical: number) {
     // Spread the middle of the published daily range across the four fields, weighted
-    // the way most trips actually break down. Every field stays editable afterwards.
+    // the way most trips actually break down. The EU baseline is scaled to the chosen
+    // country first. Every field stays editable afterwards.
+    const scaled = typical * countryIndex();
     const split = { 'd-stay': 0.45, 'd-food': 0.3, 'd-transport': 0.1, 'd-activities': 0.15 };
+    const written: Record<string, string> = {};
     (Object.keys(split) as Array<keyof typeof split>).forEach(id => {
       const el = $(id);
-      if (el) el.value = String(Math.round(typical * split[id]));
+      const value = String(Math.round(scaled * split[id]));
+      written[id] = value;
+      if (el) el.value = value;
     });
+    presetWrote = written;
     calculate();
+  }
+
+  // The ranges printed on the buttons are the same EU baseline, scaled the same way.
+  function updateStyleRanges() {
+    const index = countryIndex();
+    styleBtns.forEach(btn => {
+      const low = parseFloat(btn.dataset.low ?? '0');
+      const high = parseFloat(btn.dataset.high ?? '0');
+      const top = high === 380;
+      const range = btn.querySelector('.style-btn__range');
+      if (range) {
+        range.textContent =
+          Math.round(low * index) + '\u2013' + Math.round(high * index) + (top ? '+' : '') + '/day';
+      }
+    });
+  }
+
+  function updateDestinationNote() {
+    if (!destinationNote) return;
+    const own = 'The starting figures are our own estimate, not a published statistic.';
+    const country = selectedCountry();
+    const refYear = destinationNote.dataset.refyear ?? '';
+    destinationNote.textContent = country
+      ? 'Adjusted for ' + country.name + " using Eurostat's price level index for restaurants " +
+        'and hotels, reference year ' + refYear + ', where the EU27 average is 100. ' + own
+      : own;
+  }
+
+  // Whether the four daily fields still hold exactly what the last preset click wrote.
+  function presetUntouched(): boolean {
+    if (!presetWrote) return false;
+    return Object.keys(presetWrote).every(id => $(id)?.value === presetWrote![id]);
+  }
+
+  function onDestinationChange() {
+    updateStyleRanges();
+    updateDestinationNote();
+    // Rescale the daily fields only if the reader has not edited them since choosing a
+    // preset. An edited figure is theirs and is never overwritten.
+    const active = styleBtns.find(b => b.classList.contains('is-active'));
+    if (active && presetUntouched()) {
+      applyStyle(parseFloat(active.dataset.typical ?? '0'));
+    } else {
+      calculate();
+    }
   }
 
   styleBtns.forEach(btn => {
@@ -562,6 +652,8 @@ const schema = {
       applyStyle(parseFloat(btn.dataset.typical ?? '0'));
     });
   });
+
+  destinationSel?.addEventListener('change', onDestinationChange);
 
   bufferBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -578,6 +670,10 @@ const schema = {
     [...fixedInputs, ...dailyInputs].forEach(el => (el.value = '0'));
     if (nights) nights.value = '10';
     if (travellers) travellers.value = '1';
+    if (destinationSel) destinationSel.value = '';
+    presetWrote = null;
+    updateStyleRanges();
+    updateDestinationNote();
     styleBtns.forEach(b => b.classList.remove('is-active'));
     bufferBtns.forEach(b => b.classList.toggle('is-active', b.dataset.buffer === '15'));
     buffer = 15;
@@ -619,6 +715,7 @@ const schema = {
       if (el?.id) data[el.id] = el.value;
     });
     if (currencySel) data.currency = currencySel.value;
+    if (destinationSel) data.destination = destinationSel.value;
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { /* private mode */ }
   }
 
@@ -634,6 +731,7 @@ const schema = {
       if (el?.id && typeof data![el.id] === 'string') el.value = data![el.id];
     });
     if (currencySel && typeof data.currency === 'string') currencySel.value = data.currency;
+    if (destinationSel && typeof data.destination === 'string') destinationSel.value = data.destination;
     if (typeof data.buffer === 'string') {
       buffer = parseFloat(data.buffer) || 15;
       bufferBtns.forEach(b => b.classList.toggle('is-active', b.dataset.buffer === String(buffer)));
@@ -641,5 +739,7 @@ const schema = {
   }
 
   restore();
+  updateStyleRanges();
+  updateDestinationNote();
   calculate();
 </script>
