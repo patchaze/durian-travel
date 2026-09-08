@@ -33,7 +33,24 @@ This is the whole loop for a brief. Run it without stopping to ask.
 4. `grep -ri "azevedo" dist/`. It must print nothing. If it prints anything, remove the cause and rebuild. Never merge with a hit.
 5. Commit with a plain message. Fill in Done. Commit `BRIEF.md`.
 6. `git push -u origin <branch>`, then `git checkout main && git merge <branch> && git push`. Cloudflare Pages builds and deploys from `main` on its own.
-7. Tell Patricia in one short message what went live.
+7. **Confirm it on the live domain before you say it is live.** Pushing is not shipping. Wait for
+   Cloudflare to finish, then fetch the real page over the internet and prove the change is in it.
+   Pick a string that only exists after this brief and poll for it:
+
+   ```bash
+   for i in $(seq 1 30); do
+     curl -s "https://www.duriantravel.com/PATH/?cachebust=$i" | grep -q "STRING_ONLY_IN_THE_NEW_VERSION"        && { echo "LIVE after ${i} tries"; break; }
+     echo "not live yet, try $i"; sleep 20
+   done
+   ```
+
+   Never report a brief as shipped on the strength of a green build or a successful push. If it is
+   still not live after ten minutes, say exactly that rather than claiming success.
+8. Tell Patricia what went live, and give her the URL she can click to see it.
+9. **Say what is still not live.** If the brief left a thing she is likely to expect, name it in the
+   same message and say why it is not there. She judges the site by what she can see on the domain,
+   not by what merged. A brief that shipped in full while the product she is waiting for is still
+   missing reads to her as nothing having shipped, and she is right to read it that way.
 
 ### What still stops you, no matter what the brief says
 
