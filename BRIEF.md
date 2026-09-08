@@ -1,286 +1,311 @@
 # BRIEF
 
 **Status: DONE**
-**Written: 8 September 2026, by Claude Code at Patricia's request**
-**Brief 003**
+**Written: 8 September 2026, by Cowork**
+**Brief 004**
 
-Promoted to the live work order by Cowork on 8 September 2026, after brief 002 was marked DONE. Number unchanged. Claude Code: read all of it, run "The automatic path to live" from `CLAUDE.md`, then fill in the Done section and set the status to DONE.
+Promoted to the live work order by Cowork on 8 September 2026, after brief 003 was marked DONE. Claude Code: read all of it, run "The automatic path to live" from `CLAUDE.md`, then fill in the Done section and set the status to DONE.
 
-**Both open questions in this brief are answered.** Patricia decided item 6 and the flagged blog post on 8 September 2026, and her answers are written into those two sections. There is nothing left in this brief to ask her about. Recorded in `claude/decision-log.md`.
+This brief turns `/tools/cost-per-country/` into the paid planner. **It does not add Stripe.** Access is by a secret code only, so Patricia can test the whole thing before any payment code exists. Stripe is brief 005.
 
-**A note to whoever runs this, because the wording could trip the halt rule.** `CLAUDE.md` says to stop if a brief asks for a readiness score, an approval claim, or document review. This brief asks you to **remove** all three. That is the opposite of the halt condition. Do not stop over it.
-
-**Overlap with brief 002.** Brief 002 adds a section to `src/pages/sources.astro`. This brief does not touch that file. Run them in order and there is no conflict.
-
----
-
-## Why
-
-The site is still selling the hands-on Schengen document review business that Patricia retired. Not in one forgotten corner: in **151 places across 23 files**, including the chatbot on 76 of the 77 built pages, the template behind all 30 destination pages, and the homepage FAQ schema that Google and AI assistants quote directly.
-
-Some of it is worse than stale copy. The homepage tells visitors, in bold, that document review "significantly reduces refusal risk". That is a claim about changing an embassy outcome, attached to a service that no longer exists.
-
-Found by a seven-angle audit on 7 September 2026. Line numbers are from that date. If a line has moved, search for the quoted text instead.
+Full reasoning: `claude/paid-cost-per-country-spec.md` in the Claude project. Read it if a decision here seems arbitrary.
 
 ---
 
 ## What to do
 
-### 1. The chatbot, which offers the retired service on 76 of 77 pages
+### 1. Extend the data file to seven categories
 
-`src/components/ChatBot.astro`. It is a keyword matcher with hand written answers and no model behind it. Keep it that way.
+`src/data/country-costs.json`. Today each country carries one `pli`. It needs eight figures.
 
-| Line | The problem |
-| --- | --- |
-| 278 | "we review your current visa preparation strategy and identify the specific areas you need to strengthen before you submit" |
-| 277 | `keywords: ['free audit', 'readiness', ...]` makes readiness a thing the site sells. Retire the trigger with the answer. |
-| 224 | "decode your refusal letter and build a stronger application for resubmission" |
-| 236 | "help freelancers, contractors and business owners work out which documents to gather and how to present them" |
-| 206 | "We help you prepare the strongest possible application" |
-| 218 | "educational guidance on how to prepare your application" |
-| 212 | "DURIAN is an educational visa application strategy consultancy" |
-| 266 | "how coherent your application looks" |
-| 299 | "we will tell you plainly if your visa type is outside what we cover" |
-| 76 | Input placeholder invites document questions: `Ask about visas, documents, budget...` |
+All values below are Eurostat, dataset `prc_ppp_ind`, indicator `PLI_EU27_2020`, reference year 2024, EU27 average = 100, Eurostat last updated 2025-07-10, retrieved by Cowork from the Eurostat API on 8 September 2026. **Type them exactly. Do not fetch, do not round, do not recalculate.**
 
-The rule to write to: the chatbot may explain how the system works and link to a published guide. It may not offer to look at anything belonging to the visitor, and it may not say anything about how strong an application is.
+The `stay` column is identical to the existing `pli` value for every country. Keep `pli` as it is so nothing that reads it breaks, and add the new keys alongside.
 
-### 2. The destination template, one sentence on 30 pages
+| ISO | stay | food | drink | shopping | transport | comms | recreation | overall |
+|---|---|---|---|---|---|---|---|---|
+| AT | 110 | 110.5 | 90.4 | 105.7 | 118.2 | 111.9 | 118.3 | 119.7 |
+| BE | 124.2 | 105.3 | 124.2 | 98.2 | 118.1 | 168.6 | 106.3 | 118.7 |
+| BG | 53.2 | 88.8 | 69 | 79.1 | 57.2 | 82.8 | 68.2 | 56.9 |
+| HR | 95.4 | 103.7 | 88.8 | 96.1 | 87 | 111 | 86.3 | 73.3 |
+| CZ | 74.1 | 89 | 90.2 | 96.4 | 73.6 | 110.2 | 84.4 | 80.2 |
+| DK | 147.6 | 120.2 | 122.4 | 132.7 | 159.9 | 108.7 | 136.7 | 142.8 |
+| EE | 98.3 | 106.2 | 105 | 116.9 | 97.9 | 108.9 | 102.1 | 96.5 |
+| FI | 126.8 | 109.8 | 175.4 | 120.7 | 141.2 | 110.4 | 124.2 | 127.2 |
+| FR | 110 | 110.1 | 137.1 | 97.8 | 116.3 | 82.2 | 105.7 | 107.9 |
+| DE | 112.1 | 102.7 | 99.6 | 101.2 | 118.7 | 136 | 107 | 109.1 |
+| EL | 86.4 | 105.8 | 96.5 | 90.1 | 89.5 | 144.1 | 86.2 | 83 |
+| HU | 71.8 | 94.8 | 85.7 | 86.6 | 61.6 | 97.3 | 72 | 68.3 |
+| IS | 167.3 | 143.9 | 219.1 | 143.4 | 169.6 | 154.4 | 154.2 | 172.7 |
+| IT | 106.9 | 101.7 | 87.7 | 106.9 | 84.8 | 85.7 | 93.9 | 98.1 |
+| LV | 90.9 | 105.4 | 102.9 | 102.2 | 71.5 | 93.9 | 91.5 | 77.2 |
+| LT | 86.1 | 101.2 | 97.1 | 106.5 | 77.4 | 98.5 | 82.1 | 78.2 |
+| LU | 123.6 | 124.8 | 94 | 109.1 | 98.4 | 154.7 | 116.8 | 150.7 |
+| MT | 88.7 | 112.2 | 99.2 | 101.5 | 89.8 | 106.7 | 94.5 | 93.1 |
+| NL | 124.6 | 98.9 | 126.9 | 93 | 118.4 | 134.2 | 112.4 | 121 |
+| NO | 140 | 131.2 | 205.3 | 117.6 | 161.6 | 178.7 | 138.5 | 134.1 |
+| PL | 91.7 | 86.8 | 82.9 | 103.1 | 68.7 | 56.1 | 69.3 | 70.2 |
+| PT | 75.5 | 101.5 | 94.2 | 93.5 | 80.6 | 115.6 | 85.9 | 85 |
+| RO | 68.5 | 75.5 | 87.1 | 87.4 | 73.4 | 52.6 | 66.5 | 57.4 |
+| SK | 91.3 | 83.4 | 83 | 97.2 | 91 | 111.4 | 81.7 | 81.1 |
+| SI | 90.1 | 100 | 88.9 | 97.8 | 98.9 | 110 | 95.4 | 91 |
+| ES | 83.9 | 95.2 | 86.3 | 90.9 | 81.5 | 94.6 | 94.2 | 90.7 |
+| SE | 116.7 | 106.4 | 121.5 | 120.6 | 144.1 | 143.1 | 118 | 123 |
+| CH | 170.8 | 158.5 | 140.3 | 138.7 | 151.7 | 186.1 | 160.6 | 184.3 |
 
-`src/pages/destinations/[slug].astro` line 194. One sentence breaks three rules at once. It sells "a comprehensive visa document review, cover letter strategy", it calls the business a "personalized consultancy", and it ends "seamlessly arranged", using a banned word.
+Extend `_source` so each key names its Eurostat category. The mapping is:
 
-Replace the whole paragraph. Suggested, adjust to fit:
+- `stay` = `A0111`, restaurants and hotels
+- `food` = `A0101`, food and non-alcoholic beverages
+- `drink` = `A0102`, alcoholic beverages and tobacco
+- `shopping` = `A0103`, clothing and footwear
+- `transport` = `A010703`, transport services
+- `comms` = `A0108`, communication
+- `recreation` = `A0109`, recreation and culture
+- `overall` = `A01`, actual individual consumption
 
-> Planning a trip to {country.name} means more than picking cities. You need to know how the border rules work, what the trip will cost, and how long to spend in each place. Our free guides cover all three. Start with the {country.name} guide above, then use the budget planner to price it.
+Add a `retrieved` date of `2026-09-08` for the new keys. Keep the existing Liechtenstein note.
 
-Also lines 68 to 71: the `instrument` block in the JSON-LD names "DURIAN Travel Consulting" as a `Service`. Repoint or remove it depending on what survives item 6.
+### 2. Stop the page calling itself free
 
-### 3. The homepage
+`/tools/cost-per-country/` and anywhere that links to it. The free comparison stays free and keeps working. The label "free planner" is now wrong for the page as a whole, because the page gains a paid layer.
 
-`src/pages/index.astro`. Every item below appears **twice**, once in the visible FAQ and once in the FAQ JSON-LD. Fix both copies or the claim stays live in the schema Google lifts.
+Wording to use for the free part: **"Free comparison"**. For the new part: **"Full report"**. Do not write a price anywhere. The price is not decided.
 
-- **Line 48.** Service card: "We review your documents, identify refusal risks, and prepare your application so it meets strict embassy requirements." Delete or rewrite for the paid call.
-- **Lines 173 and 487.** "Working with an experienced consultant for document review significantly reduces refusal risk." Cut that sentence. Keep the first half of the answer, which is accurate: no one can guarantee a Schengen visa, and the embassy decides.
-- **Lines 157 and 479.** "Expert Schengen visa document review services highly recommend using placeholder reservations."
-- **Line 86.** "Go to Europe with a clean itinerary, approved visa documents, and a support line." "Approved visa documents" implies an approval.
-- **Lines 141 and 165.** Em dashes used as punctuation.
+### 2b. Fix the free comparison, which currently rescales every country
 
-Sweep the whole `faqSchema` array rather than patching single answers.
+**This is a real defect, found by Patricia on 8 September 2026. Fix it before anything else on this page.**
 
-**Exact replacement copy for the five hard claims. Use these, do not invent your own.** Patricia approved the wording on 8 September 2026. Everything else in this brief you write yourself, against the rules in "Do not".
+Today the tool computes `perDay = amount × (countryIndex ÷ referenceIndex)`, where `referenceIndex` comes from the "at prices like" dropdown, `#cpc-reference`. So choosing Belgium rescales the bars for Bulgaria, Romania, Hungary and every other country. The ranking never changes, only the scale, and a visitor reads it as the tool being broken.
 
-*Line 48, the "Schengen Visa Strategy" service card.* Retitle it "Schengen Visa Preparation" and replace the body with:
+Make these changes to the free layer.
 
-> A checklist of every document the consulate asks for, with the official source linked beside each one, so you can check your own paperwork before you book an appointment. We never see your application and the embassy decides the outcome.
+1. **Delete the `#cpc-reference` dropdown and the label "at prices like".** The reference is now permanently the EU average, which is 100. The arithmetic becomes `perDay = base × countryIndex ÷ 100`. Picking a country can no longer change anything, because there is nothing to pick.
 
-*Line 81, the "We Build Your Plan" step.* Replace the body with:
+2. **Replace the free amount input with the three style buttons**, matching `/tools/budget/` exactly: Budget, Mid-range, Comfortable, using the same `typical` values that page already uses, 100, 190 and 320. That figure becomes `base`. Mid-range is selected by default so the page shows real bars on first load. Reuse the existing button styling from the budget tool rather than inventing a new control.
 
-> We design your route, tell you which border rules apply to your passport, and show you where the official sources are. Written by a person who lives here, not generated from a template.
+3. **Add one number input labelled "Your daily budget, per person"**, optional, empty by default. It does not scale anything. It draws a line across the comparison: every country whose `perDay` is at or below it is highlighted, every country above it is not. If it is empty, nothing is highlighted and the tool behaves as it does now.
 
-*Line 86, the "Travel With Confidence" step.* Replace the body with:
+4. **Keep the nights input.** It multiplies into the trip total exactly as it does today.
 
-> Go to Europe knowing your route, what each day costs, and how the border rules apply to your passport. If something changes on the ground, you already know where to check.
+5. The summary sentence stays, and the ordering stays: cheapest first.
 
-*Lines 157 and 479, the flight reservation answer.* Keep the answer, replace only the last sentence with:
+6. **Say where `base` comes from, on the page.** One line under the style buttons, exact wording:
 
-> A refundable reservation covers the requirement without putting your money at risk before the decision comes back.
+   > Daily figures are our own estimate for a Western European trip, then scaled to each country using Eurostat's price level index for restaurants and hotels, reference year 2024, where the EU27 average is 100.
 
-*Lines 173 and 487, the guarantee answer.* Replace the whole answer with:
+7. `localStorage` under `durian-cpc-v1` now stores the chosen style, the nights, the budget line and the currency. The old `reference` key is gone. **A saved state from the old version must not break the page.** Ignore any key you do not recognise and fall back to Mid-range.
 
-> No agency, consultant, or immigration lawyer can legally guarantee a Schengen visa approval, as the final decision rests solely with the consular officers of the European embassy. Anyone who quotes you an approval rate is selling you something they cannot deliver. What you can control is whether your own paperwork is complete and consistent, and the official consulate checklist for your country is the only list that counts.
+**Why this is right and not a downgrade.** The Eurostat figure is a ratio, not a price, so euros on the bars have to come from somewhere. Anchoring them to the visitor's own number let them anchor to a country and rescale everything, which is the bug. Anchoring them to the editorial band is stable, it matches the budget calculator, and that band is already declared as Durian's own estimate on `/sources/`. The visitor's budget then has something to be compared against, which is what makes the highlight mean anything.
 
-Apply each of these to both copies, the visible one and the one inside `faqSchema`.
+### 3. Build the question form
 
+New section on `/tools/cost-per-country/`, below the existing free comparison, headed **"Get the full report"**.
 
-### 4. The FAQ page
+Every question below. Each one changes a number, so do not drop any.
 
-`src/pages/faq.astro`, same pattern, visible copy and schema both.
+**Your trip**
+- Which countries are you weighing up? Multi select from the 28. At least one required.
+- How many nights in total? Number, minimum 1.
+- Who is going? Solo, couple, family with children, group of friends.
+- How many adults? How many children? Two numbers.
+- The number you will not go over. Amount plus a currency label.
 
-- Lines 57 and 58: "refusal analysis and reapplication strategy is one of our core services"
-- Lines 41 to 43: "What is the Free Visa Readiness Audit?" and its answer
-- Lines 61 and 62: self-employed financial proof documentation
-- Lines 37 and 38: "We help you prepare the strongest possible application"
-- Lines 50 and 51: "our document strategy principles"
-- Lines 67 and 68: the visa agency comparison
-- Lines 12, 13, 18, 28: dashes as punctuation
+**Where you sleep**
+- Where do you usually stay? Hotel, apartment or rental, hostel dorm, with friends or family.
+- Is breakfast usually included? Yes, no.
 
-### 5. Retire "Readiness Audit" as a product name
+**What you eat**
+- How many meals a day do you eat out? 0, 1, 2, 3.
+- Coffee, pastries, snacks out? Rarely, once a day, several a day.
+- Drinks with dinner? No, sometimes, most nights.
 
-"Readiness" is on the banned list in `CLAUDE.md`, and this is a named product built on it. It appears in:
+**Getting around a city**
+- How do you move around a city? Mostly walking, public transport, a mix with taxis, mostly taxis and ride hailing.
+- Hiring a car anywhere? Yes, no.
 
-- `src/pages/contact.astro` lines 10 and 127
-- `src/pages/404.astro` line 27
-- `src/components/CTABanner.astro` lines 13, 14, 15: "Ready to apply with confidence?", "Book a free 15-minute visa audit. We'll review your strategy", "Book Free Audit". This banner is on many pages.
-- `src/pages/services/[slug].astro` line 78
-- `src/pages/blog/[...slug].astro` lines 150 to 163
-- `src/content/blog/europe-trip-planning-timeline.md` line 163
-- `src/data/service-packages.json` lines 87 and 318, and `src/pages/services/index.astro` lines 86 and 327: "readiness assessment" inside packages
+**Between cities**
+- How many times will you move city? Number.
+- How do you travel between them? Train, coach, budget flight.
 
-`src/pages/free-visa-audit.astro` is the page all of this points at. Decide with item 6 whether it becomes the booking page for the paid call or goes away.
+**What you actually do**
+- Museums, galleries, monuments? Rarely, a few, most days.
+- Guided tours or day trips? None, one or two, several.
+- Going out at night? No, occasionally, often.
+- Planning to shop? No, a little, a lot.
 
-`src/pages/tools/visa-checklist.astro` line 10 already carries a comment explaining why the site states facts rather than scoring readiness. That is the principle. Apply it everywhere else.
+**Staying connected**
+- Do you need an eSIM or data plan? Yes, no.
 
-### 6. The package line. **Answered by Patricia. Act on it.**
+Then an access field labelled **"Access code"** and a submit button labelled **"Generate my report"**.
 
-This part cannot be fixed by rewriting sentences. Two of the seven packages **are** the retired business, end to end.
+Save the answers to `localStorage` under `durian-cpc-report-v1` so a refresh does not lose them.
 
-- **The Recovery Route** (`src/data/service-packages.json` lines 251 to 307) is post refusal reapplication. Its deliverables include refusal letter interpretation, root cause analysis of the visitor's own refusal, a new cover letter addressing the refusal reason, strengthened financial proof coaching, appeal letter drafting, embassy switching strategy, and a 48 hour expedited turnaround. There is no version of this package that is not document review.
-- **The Schengen Blueprint** (lines 26 to 64) sells "Document stack review + written gap report", "Cover letter written and reviewed", "Financial proof coaching", "Real refusal-prevention review", "Express 48-hour document review", and "Refusal analysis + reapplication strategy".
+**Do not ask for a travel month or season.** There is no verified source for seasonality yet, so the question would change nothing in the output.
 
-The other five carry the same language in individual bullets and can be rewritten. `src/data/service-pages.ts` (26 findings) and `src/pages/services/index.astro` (12) mirror all of it in meta titles, meta descriptions and SEO fields.
+### 4. Turn the answers into weights, and the weights into a personal index
 
-**Patricia answered on 8 September 2026. Do not ask again, do not stop here.**
+Put the calculation in `src/lib/report.ts`, next to what is already there.
 
-Her decision: **retire The Recovery Route. Keep The Schengen Blueprint but rebuild what it sells. Keep the other five and rewrite their copy.** This replaces the three options that were put to her. It is recorded in `claude/decision-log.md`, 8 September 2026.
+1. The answers produce a weight for each of: accommodation, restaurant food, grocery food, drinks, city transport, intercity transport, recreation, shopping, communication. Weights sum to 1.
+2. For each chosen country, the personal index is the sum of each weight multiplied by that country's index for the matching category.
+3. Personal daily cost is the visitor's own daily figure multiplied by the personal index, divided by 100.
+4. The report's headline comparison is the personal index against the plain `stay` index, per country. That difference is the entire reason somebody pays.
 
-**The Recovery Route: retire it.**
+Choose the weight values yourself and **write them into a single named table at the top of the file with a comment saying they are Durian's editorial weighting, not a published statistic.** They are assumptions about behaviour, not measurements, and the report must say so.
 
-- Remove the package from `src/data/service-packages.json` (lines 251 to 307 as of 7 September) and from the category list at line 11 that names it.
-- Remove it from `src/pages/services/index.astro` (line 251) and from the "quick way to choose" paragraph at line 501, which currently tells people to pick it if they have already been refused.
-- Remove its entry from `src/data/service-pages.ts` if one exists there.
-- 301 its URL to `/services/`, not to another package page.
+Flights are not in the weighting. There is no free source for fares, so a flight figure stays whatever the visitor types.
 
-**The Schengen Blueprint: keep the package, rebuild what it sells.**
+### 5. Generate the report
 
-- It stays paid. Every deliverable that is document review comes out: "Document stack review + written gap report", "Cover letter written and reviewed", "Financial proof coaching", "Real refusal-prevention review", "Express 48-hour document review", "Refusal analysis + reapplication strategy".
-- What it becomes is already written and already decided, in `claude/master-strategy.md` section 5.4 and the decision of 1 September 2026: a self checked preparation checklist, with the official embassy or consulate source linked beside each document. The visitor checks their own work. Durian Travel never looks at anything belonging to them.
-- No score, no percentage, no risk analysis, no financial review. If a replacement deliverable cannot be written without one of those, drop the deliverable rather than soften the wording.
-- Rename it if "Blueprint" stops describing what it sells. Your call. Keep the URL or redirect it.
+Extend `buildReport` in `src/lib/report.ts`. HTML, returned by the existing `functions/api/report.ts`. No PDF library.
 
-**The other five: keep the packages, rewrite the copy.** The same rule applies to their bullets, meta titles, meta descriptions and SEO fields in `src/data/service-pages.ts` and `src/pages/services/index.astro`.
+Sections in this order:
 
-**The redirect chain has to be repointed either way.** `/services/document-review` and `/services/cover-letter-strategy` already 301 to `/services/schengen-visa-help/`, and that page still sells document review twice, so the retirement redirect currently leads straight back to the retired product. Either fix the destination page or repoint both redirects at `/services/`.
+1. Cover. Their trip in one line: countries, nights, who is going, the date generated.
+2. The verdict. Cheapest and dearest country for them, and how that ranking differs from the plain hotel index ranking.
+3. Your basket. One row per component: the weight, the Eurostat category used, the index, and the source in the sentence.
+4. Country by country. Per day, per trip, and the gap against their ceiling.
+5. A ranked bar chart, personal index against plain index, so the difference is visible rather than asserted.
+6. Where your money goes, for the country they lean towards.
+7. What this does not cover: flights, season, the capital city premium, and that these are national averages rather than tourist district prices.
+8. Sources, dated.
+9. The disclaimer.
 
-Record what you did in Done.
+Build it to the `durian-deliverable-design` skill: Playfair at weight 400, navy for structure, terracotta spent once. Add a `@media print` block so the browser's own save as PDF produces a clean copy with no buttons and no dark mode.
 
-### 7. Live blog posts
+### 6. The access code
 
-- `src/content/blog/how-much-does-schengen-visa-cost.md` line 115, "Does paying more improve your approval chances?", and line 119, "What actually improves your chances is:". Reframe to what the fee does and does not buy.
-- `src/content/blog/visa-refusal-reasons.md` line 5, description promises "the fixes that usually strengthen a reapplication".
-- `src/content/blog/how-to-switch-travel-agencies-schengen.md` line 5, "safely migrate your Schengen visa application to a new travel agency". Consider retiring this post entirely. It only makes sense for the retired business.
-- `src/pages/blog/index.astro` line 23 still advertises "cover letter strategy, and refusal analysis".
+`functions/api/report.ts`. `isPaidRequest` currently returns `false` to everybody. Change it to return true only when the request carries a code matching a Cloudflare environment variable.
 
-### 8. Check the disclaimer is actually on every visa page
+- Read the expected value from `env`, name it `REPORT_ACCESS_CODE`.
+- **Do not invent a code. Do not write any code value into the repo, into a comment, into a test, or into `.env`.** Patricia sets the value herself in the Cloudflare Pages dashboard.
+- If `REPORT_ACCESS_CODE` is not set, refuse every request. Never fall open.
+- Compare server side only. The code must never appear in any file that reaches `dist/`.
+- Keep the 402 refusal body exactly as it is for a wrong or missing code.
 
-Every piece of visa content must carry: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
+This is deliberate and specific, so it does not trip the halt rule about touching payments.
 
-`src/components/CTABanner.astro` line 38 currently says "Educational guidance only. Not legal advice." which is a different sentence. Standardise on the required wording and list any visa page missing it.
+### 7. Wire the form to the endpoint
 
-### 9. Dashes and banned words
+The form posts the answers as JSON to `/api/report` and renders the returned HTML. On a 402, show a plain message that the code was not accepted. On any other failure, show that something went wrong and nothing was charged.
 
-The audit counted 18 em dashes used as punctuation in `service-packages.json`, 18 spaced hyphens in `services/index.astro`, and 8 in `service-pages.ts`, plus more on the homepage and the FAQ page. `CLAUDE.md` says rewrite the sentence rather than keep the dash.
+`connect-src` in `public/_headers` is `'self'`, and `/api/report` is same origin, so no header change is needed. **Do not touch `public/_headers`.**
 
-Banned words in the built site: "seamless" on 29 pages, almost all from the destination template in item 2, and "unlock" on 2. Clear both.
+## Why
 
----
+Two things.
 
-## Flagged, and now authorised
+The free comparison has a defect that makes it look broken: choosing a reference country rescales all 28 bars. Item 2b removes the cause and gives the page a budget line that actually tells somebody something. The free comparison is the quick win people take away when they decide not to pay, so it has to stand on its own.
 
-`src/content/blog/best-schengen-travel-agency.md` is `draft: true`, so none of it is live. It contains a fabricated survey of "100 Users Surveyed" with invented percentages, a comparison table of five agencies that appear to be invented, and the sentence "the best agencies maximize your approval odds (often above 95%)". That is the same shape as the "98% Schengen Approval Rate" claim removed on 26 August 2026, sitting one `draft: false` away from publication.
+The paid layer exists because the free comparison applies the hotel index to every euro a visitor spends, and that is wrong for most people. Portugal is 24 percent below the EU average for hotels and restaurants and 1.5 percent above it for groceries, so somebody who cooks saves almost nothing there while somebody who eats out saves a quarter. Seven indices instead of one is the whole product, and the data is already free and official.
 
-Patricia's instruction, given 8 September 2026: **delete the file.** This is the authorisation `CLAUDE.md` asks for. Nothing in it is salvageable, so do not strip the fabricated parts and keep the rest. Delete it, then check nothing links to its slug.
-
----
+The access code exists so Patricia can test the finished thing without paying herself, and so brief 005 has something working to attach Stripe to.
 
 ## Do not
 
-- Do not give the chatbot a model, an API key or a network call. It stays a keyword matcher.
-- Do not write any replacement copy that promises or implies an approval, quantifies a chance, mentions refusal risk, or scores readiness. The point of this brief is removing that shape, not renaming it.
-- Do not add a byline, an author page or `Person` schema while editing schema blocks. Authorship stays "Durian Travel Editorial Team".
-- Do not invent a statistic, price, law or date in any replacement copy.
-- Do not use a dash as punctuation in anything you write.
-- Deletions authorised by Patricia on 8 September 2026, and no others: The Recovery Route package, and the file `src/content/blog/best-schengen-travel-agency.md`. Do not delete any other package or any other file.
-- Do not touch `src/pages/tools/budget.astro` or `src/pages/sources.astro`. Brief 002 owns both.
-- Do not touch the CSP in `public/_headers`, payments, or DNS.
+- Do not add Stripe, a price, a payment link, or any fulfilment code. That is brief 005.
+- Do not write a price anywhere on the page.
+- Do not invent, generate, commit or log an access code value.
+- Do not fetch the Eurostat values. Type the table above.
+- Do not change the existing `pli` key or remove any country.
+- Do not degrade the free comparison. Item 2b changes how it is anchored and nothing else. The 28 country ranking, the bars, the ordering and the summary sentence all stay.
+- Do not reintroduce a reference country dropdown in any form.
+- Do not let the daily budget input scale the bars. It highlights, it does not multiply.
+- Do not add a travel month or season question.
+- Do not add a flight price benchmark. No free source exists.
+- Do not touch `public/_headers`, the CSP, or DNS.
+- Do not touch `/tools/budget/` or `/tools/visa-checklist/`.
+- Do not add a PDF library or any new runtime dependency.
+- Nothing in the report may score, rate, predict or imply a visa outcome.
 - Do not `git add -A` or `git add .`. Stage files by name.
-- Do not commit `BUILD-BRIEF-001.md`, `CC-PROMPT-STEP-1.md`, `.claude/launch.json` or the untracked `api/` folder. `api/` is superseded by `functions/api/report.ts` and is waiting on Patricia's word to delete.
-
----
-
-## Gate before merge
-
-Added 8 September 2026. Run these after the edits and before merging to `main`, on top of the gates already in `CLAUDE.md`. Write the actual numbers into Done. **A count that is not zero means the brief is not finished.**
-
-These are the counts measured on 8 September 2026 against the `dist/` in the working tree, so you have the "before" figure without re-running it. Show both numbers in Done.
-
-| Check | Before | Target |
-| --- | --- | --- |
-| 1. Retired service named | 99 | 0 |
-| 2. Outcome claims | 12 | 0 |
-| 3. Banned words | 35 | 0 |
-| 4. Dashes in the touched files | 55 | 0 |
-| 5. Anonymity | 0 | 0 |
-| 6. Recovery Route named | 5 files | 0 |
-| Disclaimer present | 76 of 77 pages | 77 of 77, minus the exception below |
-
-Two things already known from that baseline, so you do not have to work them out:
-
-- The only built page without the disclaimer is `dist/about/index.html`, which is the three line 301 to `/about-us/`. It has no content and needs no disclaimer. Leave it alone and note it in Done.
-- The Recovery Route is named on five built pages: `contact/`, `services/`, `services/visa-refusal-reapplication/`, `blog/visa-refusal-reasons/` and `blog/how-to-write-visa-cover-letter/`. `services/visa-refusal-reapplication/` is its own page and has to be retired and redirected to `/services/`, not just unlinked.
-
-```bash
-npm run build
-
-# 1. The retired service is gone from the built site
-grep -rioE "document review|readiness audit|visa readiness|readiness assessment|refusal analysis|reapplication strategy|cover letter strategy" dist/ | wc -l
-
-# 2. Nothing claims to change an outcome
-grep -rioE "refusal risk|approval odds|approval rate|approval chances|improve your chances|stronger application|approved visa documents" dist/ | wc -l
-
-# 3. Banned words
-grep -rioE "seamless|unlock|dream trip|effortless|game.changer" dist/ | wc -l
-
-# 4. Dashes as punctuation in the files this brief touched
-grep -rnP "[\x{2013}\x{2014}]" src/pages/index.astro src/pages/faq.astro src/data/service-packages.json src/data/service-pages.ts src/pages/services/index.astro src/components/ChatBot.astro src/components/CTABanner.astro | wc -l
-
-# 5. Anonymity, the existing gate
-grep -ri "azevedo" dist/ | wc -l
-
-# 6. The retired packages are unreachable
-grep -ril "Recovery Route" dist/ | wc -l
-```
-
-**The one allowed exception.** A page may legitimately use one of these phrases while explaining that the thing is not true, for example a blog post saying no one can quote you an approval rate. If a count will not go to zero for that reason, do not force it. Write in Done the exact file, the exact line, and why it stays. Anything you cannot justify that way, remove.
-
-**Item 8, the disclaimer, checked the same way.** List every built page under `/blog/`, `/destinations/`, `/services/` and the visa guide that does **not** contain the exact sentence "Educational information only. Not legal advice. Always check the official embassy or consulate source." Add it where it is missing, and record in Done how many pages you added it to.
+- Do not commit `BUILD-BRIEF-001.md`, `CC-PROMPT-STEP-1.md`, `.claude/launch.json`, or the untracked `api/` folder.
+- Every page and the report carry: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
 
 ---
 
 ## Done
 
-*Claude Code fills this in. Keep it to facts.*
-
-**Completed on:** 8 September 2026
-**Branch:** `brief/003-retire-document-review`, merged to `main`
+**Completed on:** 9 September 2026
+**Branch:** `brief/004-paid-cost-per-country`
 
 **What changed:**
 
-1. **Chatbot.** Rewrote nine answers and the input placeholder. Retired the `audit` topic and its `readiness` / `free audit` triggers; that question now falls through to the standard fallback. Still a keyword matcher, no model, no key, no network call. Verified live: "was refused", "guarantee approval", "I am a freelancer" and "free readiness audit" all return compliant answers.
-2. **Destination template.** Replaced the paragraph on all 30 pages with the suggested wording plus links to the budget planner and the visa guide. Repointed the JSON-LD `instrument` from "DURIAN Travel Consulting" to "Durian Travel trip planning".
-3. **Homepage.** Fixed every listed claim in the visible FAQ and the `faqSchema` copy, including "significantly reduces refusal risk" and "Expert Schengen visa document review services". Rewrote the service card, the three process steps and two trust-list items. Cleared all em dashes from visible copy.
-4. **FAQ page.** The visible list renders from `faqSchema`, so there is one copy, not two. Rewrote eight answers and retired the "Free Visa Readiness Audit" question.
-5. **"Readiness Audit" retired** everywhere: CTABanner defaults, contact, 404, services/[slug], services/index, blog/[...slug], blog/index, terms-of-service, about-us, schengen-visa-guide, and the planning-timeline post.
-6. **Packages.** The Recovery Route removed from `service-packages.json`, the tier list, `service-pages.ts` (SEO block plus the slug, icon and tone maps) and the services index. Its URL and both aliases now 301 to `/services/`. The Schengen Blueprint keeps its name and URL and now sells a checklist the visitor completes themselves with the official source linked beside each item; every document-review deliverable is gone. The other five rewritten.
-7. **Blog posts.** Reframed the fee section of the cost post around what the fee buys. Rewrote the descriptions of the refusal-reasons and switch-agencies posts, and the switch-agencies summary that claimed a refusal "will stay on your Schengen record". Removed both remaining links to the Recovery Route package. Retitled the "Cover Letter Strategy" heading in the requirements post.
-8. **Disclaimer.** Standardised CTABanner on the required sentence. All 74 built pages that mention a visa carry it *visibly*, checked with the chatbot's own hidden copy excluded.
-9. **Dashes and banned words.** The five files the brief named are clear of dash-as-punctuation. "seamless" and "unlock" are both at zero pages in `dist/`.
+1. `src/data/country-costs.json`. Seven new keys per country alongside `pli`, typed from the
+   table in this brief. Verified purely additive against the previous commit: no country removed,
+   no `pli` value changed, no existing `_source` value changed. `stay` equals `pli` for all 28,
+   asserted rather than assumed. Added `categories`, `categoriesMeaning` and
+   `categoriesRetrieved` (2026-09-08) to `_source`.
 
-Two things beyond the literal instruction, both flagged rather than silent:
+2. The free comparison defect is fixed. The `#cpc-reference` dropdown and the "at prices like"
+   label are gone, from the page and from `dist/`. Arithmetic is now `perDay = base x index / 100`
+   with the reference fixed at the EU average. Three style buttons replace the amount input,
+   reusing the markup, classes and 100/190/320 values from `/tools/budget/`, Mid-range preselected
+   so the bars are populated on first load. The provenance line under them is the exact wording
+   asked for, with the reference year read from the data file. The optional daily budget input
+   highlights rows and changes no figure: confirmed by snapshotting all 28 rows before and after
+   typing a budget, zero figures moved. Nights, the summary sentence and cheapest-first ordering
+   are unchanged.
 
-- **`services/index.astro` held a second hand-written copy of all seven packages.** That duplication is why the retired wording survived there. It now derives from `service-packages.json` via `service-pages.ts`. About 430 lines of duplicated data removed; rendered output verified unchanged in shape.
-- **`/free-visa-audit/` renamed to `/book-a-call/`** with 301s from both forms. The page content was already clean; only the slug still carried the retired product name in a URL Google indexes. Deleting it was not authorised, so it moved rather than went away. Revert by renaming back and dropping two redirect lines.
+3. `durian-cpc-v1` now stores style, nights, budget and currency. Old saved states were tested:
+   one carrying `amount` and `reference` falls back to Mid-range, keeps nights and currency, and
+   drops the dead keys. Garbage and non-JSON states also fall back cleanly with all 28 bars drawn.
+
+4. The question form is on the page under "Get the full report". All 20 questions, none dropped,
+   no month or season question. Answers persist to `durian-cpc-report-v1`. The access code is
+   deliberately not persisted.
+
+5. `src/lib/report.ts` rewritten for the questionnaire. `EDITORIAL_WEIGHTS` is a single named
+   table at the top, labelled as Durian's editorial weighting and not a statistic, in the comment
+   and again in three places in the report itself. Nine components, weights normalised to 1,
+   mapped onto seven Eurostat categories. Every one of the questions was verified to move at
+   least one weight. Report sections are in the order specified, with a `@media print` block and
+   a `.no-print` action bar.
+
+6. `functions/api/report.ts`. `isPaidRequest` now reads `REPORT_ACCESS_CODE` from `env` and
+   compares it, server side, against an `x-durian-access` header, using a constant time compare.
+   No code value exists anywhere in the repo. Tested against the compiled handler: unset env,
+   empty env, undefined env, missing header, wrong code and an off-by-one-character code all
+   return 402 with the refusal body unchanged. Only the correct code returns 200.
+
+7. The form posts to `/api/report` and renders the result. `frame-src` is `'none'`, so the report
+   cannot go in an iframe and replaces the document instead. The answers are already saved, so the
+   back button returns to a filled in form. 402, other failures and network errors were each
+   tested and show the right message with the submit button re-enabled.
+
+8. Stopped the page calling itself free: "Free comparison" and "Full report" labels, meta
+   description, and the `offers` price of 0 removed from the page schema. Also corrected
+   `/sources/`, which still described the old reference-country arithmetic, plus the wording on
+   `/tools/`, `/faq/` and `/book-a-call/`.
+
+Build passes, 76 pages. `grep -ri "azevedo" dist/` returns nothing. `REPORT_ACCESS_CODE` does not
+appear in `dist/`.
 
 **Could not do, and why:**
 
-- **`claude/master-strategy.md` and `claude/decision-log.md` do not exist in this repo.** Neither does a `claude/` folder. I built the Schengen Blueprint replacement from the description in this brief instead. If section 5.4 says something more specific, the Blueprint deliverables are the thing to re-check.
-- **`how-to-switch-travel-agencies-schengen.md` was not retired.** The brief says "consider retiring this post entirely", but the Do-not list authorises exactly two deletions and this is not one. I rewrote the description and the summary instead. It still only makes sense for the retired business. Your call.
-- **1,305 em dashes remain in the 29 destination guides** (`src/content/destinations/`), between 16 and 44 per file. Item 9 scoped the dash work to `service-packages.json`, `services/index.astro`, `service-pages.ts`, the homepage and the FAQ page, and those are done. Mechanically swapping 1,305 dashes for commas would wreck the prose, so this needs its own brief.
+Nothing in the brief was skipped. Two notes rather than blockers:
+
+- The endpoint could not be exercised through a real Worker. There is no wrangler in this repo and
+  the brief forbids new dependencies, and `npm run dev` is Astro only, so it does not serve
+  `functions/`. The handler was bundled with the esbuild already present and called directly with
+  mock requests instead, which tested the access logic and the generator but not Cloudflare's own
+  routing of `/api/report`.
+- The `overall` key (A01) is stored as instructed but no weight uses it. Kept for later.
 
 **For Cowork:**
 
-- **`/patricia-azevedo/` has no rule in `public/_redirects`.** It is in `vercel.json` and in the sitemap exclusion list, but Cloudflare is the live host, so that URL 404s today instead of redirecting to `/about-us/`. It touches the anonymity constraint. One line fixes it; it was outside this brief so I left it.
-- **The homepage carries three named testimonials** (`src/pages/index.astro` lines 11 to 22): "Emily & James", "Sarah M.", "Mark T.", with quotes. Same shape as the fabricated survey Patricia ordered deleted. Not listed in the brief and not an authorised deletion, so they stand. Worth checking whether they are real.
-- **`api/` is still uncommitted and still Vercel-shaped.** Untouched, as instructed. `functions/api/report.ts` exists in the repo and supersedes it.
-- **`vercel.json` was mirrored** with the redirect changes, because it is the rollback target until 18 September 2026 and `/free-visa-audit/` would otherwise 404 there after the rename.
-- **The package count is now six, not seven.** Any copy elsewhere that says "seven packages" needs updating.
-- `src/pages/services/index.astro` has one em dash left, in CSS `content: '— '`, used as a decorative list marker rather than punctuation. Left alone deliberately.
+- **The report cannot be generated until Patricia sets `REPORT_ACCESS_CODE` in the Cloudflare
+  Pages dashboard**, on Production and, if she wants previews to work, on Preview. Until then the
+  endpoint returns 402 to everybody, including her. This is the deliberate never-fall-open
+  behaviour, not a fault. It is the one thing standing between her and seeing the report.
+- The code goes in the `x-durian-access` header, set by the form. Nothing else needs changing.
+- The weights live in `EDITORIAL_WEIGHTS` at the top of `src/lib/report.ts` and are the part worth
+  arguing with. They are assumptions, and a different set gives a different personal index.
+  Changing them needs no other edit.
+- The ranking really does move: for a couple who cook, Poland comes out 8 places cheaper than the
+  restaurants and hotels index alone suggests, because its communication index is 56.1 against a
+  hotel index of 91.7. Malta and Greece move the other way. That is the argument for the product.
+- Left alone deliberately: the homepage stat still reads "3 Free planners" and links to `/tools/`,
+  not to this page. All three planners are still free to use, so it is not a false claim, but
+  flagging it in case the wording should change when a price is set.
+- `public/_headers`, `/tools/budget/` and `/tools/visa-checklist/` were not touched.

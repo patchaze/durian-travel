@@ -5,6 +5,18 @@
     "datasetName": "Purchasing power parities, price level indices and nominal expenditures",
     "indicator": "PLI_EU27_2020",
     "category": "A0111, restaurants and hotels",
+    "categories": {
+      "stay": "A0111, restaurants and hotels",
+      "food": "A0101, food and non-alcoholic beverages",
+      "drink": "A0102, alcoholic beverages and tobacco",
+      "shopping": "A0103, clothing and footwear",
+      "transport": "A010703, transport services",
+      "comms": "A0108, communication",
+      "recreation": "A0109, recreation and culture",
+      "overall": "A01, actual individual consumption"
+    },
+    "categoriesMeaning": "Each country carries one price level index per category, on the same EU27 = 100 scale and from the same dataset, reference year and Eurostat release as the headline figure above. The `pli` key is unchanged and equals `stay`.",
+    "categoriesRetrieved": "2026-09-08",
     "meaning": "Price level index for restaurants and hotels, where the EU27 average = 100. A country at 120 is about 20 percent dearer than the EU average for the same basket; a country at 80 is about 20 percent cheaper.",
     "referenceYear": "2024",
     "eurostatLastUpdated": "2025-07-10",
@@ -18,169 +30,393 @@
       "slug": "austria",
       "name": "Austria",
       "iso": "AT",
-      "pli": 110.0
+      "pli": 110.0,
+      "stay": 110.0,
+      "food": 110.5,
+      "drink": 90.4,
+      "shopping": 105.7,
+      "transport": 118.2,
+      "comms": 111.9,
+      "recreation": 118.3,
+      "overall": 119.7
     },
     {
       "slug": "belgium",
       "name": "Belgium",
       "iso": "BE",
-      "pli": 124.2
+      "pli": 124.2,
+      "stay": 124.2,
+      "food": 105.3,
+      "drink": 124.2,
+      "shopping": 98.2,
+      "transport": 118.1,
+      "comms": 168.6,
+      "recreation": 106.3,
+      "overall": 118.7
     },
     {
       "slug": "bulgaria",
       "name": "Bulgaria",
       "iso": "BG",
-      "pli": 53.2
+      "pli": 53.2,
+      "stay": 53.2,
+      "food": 88.8,
+      "drink": 69.0,
+      "shopping": 79.1,
+      "transport": 57.2,
+      "comms": 82.8,
+      "recreation": 68.2,
+      "overall": 56.9
     },
     {
       "slug": "croatia",
       "name": "Croatia",
       "iso": "HR",
-      "pli": 95.4
+      "pli": 95.4,
+      "stay": 95.4,
+      "food": 103.7,
+      "drink": 88.8,
+      "shopping": 96.1,
+      "transport": 87.0,
+      "comms": 111.0,
+      "recreation": 86.3,
+      "overall": 73.3
     },
     {
       "slug": "czech-republic",
       "name": "Czech Republic",
       "iso": "CZ",
-      "pli": 74.1
+      "pli": 74.1,
+      "stay": 74.1,
+      "food": 89.0,
+      "drink": 90.2,
+      "shopping": 96.4,
+      "transport": 73.6,
+      "comms": 110.2,
+      "recreation": 84.4,
+      "overall": 80.2
     },
     {
       "slug": "denmark",
       "name": "Denmark",
       "iso": "DK",
-      "pli": 147.6
+      "pli": 147.6,
+      "stay": 147.6,
+      "food": 120.2,
+      "drink": 122.4,
+      "shopping": 132.7,
+      "transport": 159.9,
+      "comms": 108.7,
+      "recreation": 136.7,
+      "overall": 142.8
     },
     {
       "slug": "estonia",
       "name": "Estonia",
       "iso": "EE",
-      "pli": 98.3
+      "pli": 98.3,
+      "stay": 98.3,
+      "food": 106.2,
+      "drink": 105.0,
+      "shopping": 116.9,
+      "transport": 97.9,
+      "comms": 108.9,
+      "recreation": 102.1,
+      "overall": 96.5
     },
     {
       "slug": "finland",
       "name": "Finland",
       "iso": "FI",
-      "pli": 126.8
+      "pli": 126.8,
+      "stay": 126.8,
+      "food": 109.8,
+      "drink": 175.4,
+      "shopping": 120.7,
+      "transport": 141.2,
+      "comms": 110.4,
+      "recreation": 124.2,
+      "overall": 127.2
     },
     {
       "slug": "france",
       "name": "France",
       "iso": "FR",
-      "pli": 110.0
+      "pli": 110.0,
+      "stay": 110.0,
+      "food": 110.1,
+      "drink": 137.1,
+      "shopping": 97.8,
+      "transport": 116.3,
+      "comms": 82.2,
+      "recreation": 105.7,
+      "overall": 107.9
     },
     {
       "slug": "germany",
       "name": "Germany",
       "iso": "DE",
-      "pli": 112.1
+      "pli": 112.1,
+      "stay": 112.1,
+      "food": 102.7,
+      "drink": 99.6,
+      "shopping": 101.2,
+      "transport": 118.7,
+      "comms": 136.0,
+      "recreation": 107.0,
+      "overall": 109.1
     },
     {
       "slug": "greece",
       "name": "Greece",
       "iso": "EL",
-      "pli": 86.4
+      "pli": 86.4,
+      "stay": 86.4,
+      "food": 105.8,
+      "drink": 96.5,
+      "shopping": 90.1,
+      "transport": 89.5,
+      "comms": 144.1,
+      "recreation": 86.2,
+      "overall": 83.0
     },
     {
       "slug": "hungary",
       "name": "Hungary",
       "iso": "HU",
-      "pli": 71.8
+      "pli": 71.8,
+      "stay": 71.8,
+      "food": 94.8,
+      "drink": 85.7,
+      "shopping": 86.6,
+      "transport": 61.6,
+      "comms": 97.3,
+      "recreation": 72.0,
+      "overall": 68.3
     },
     {
       "slug": "iceland",
       "name": "Iceland",
       "iso": "IS",
-      "pli": 167.3
+      "pli": 167.3,
+      "stay": 167.3,
+      "food": 143.9,
+      "drink": 219.1,
+      "shopping": 143.4,
+      "transport": 169.6,
+      "comms": 154.4,
+      "recreation": 154.2,
+      "overall": 172.7
     },
     {
       "slug": "italy",
       "name": "Italy",
       "iso": "IT",
-      "pli": 106.9
+      "pli": 106.9,
+      "stay": 106.9,
+      "food": 101.7,
+      "drink": 87.7,
+      "shopping": 106.9,
+      "transport": 84.8,
+      "comms": 85.7,
+      "recreation": 93.9,
+      "overall": 98.1
     },
     {
       "slug": "latvia",
       "name": "Latvia",
       "iso": "LV",
-      "pli": 90.9
+      "pli": 90.9,
+      "stay": 90.9,
+      "food": 105.4,
+      "drink": 102.9,
+      "shopping": 102.2,
+      "transport": 71.5,
+      "comms": 93.9,
+      "recreation": 91.5,
+      "overall": 77.2
     },
     {
       "slug": "lithuania",
       "name": "Lithuania",
       "iso": "LT",
-      "pli": 86.1
+      "pli": 86.1,
+      "stay": 86.1,
+      "food": 101.2,
+      "drink": 97.1,
+      "shopping": 106.5,
+      "transport": 77.4,
+      "comms": 98.5,
+      "recreation": 82.1,
+      "overall": 78.2
     },
     {
       "slug": "luxembourg",
       "name": "Luxembourg",
       "iso": "LU",
-      "pli": 123.6
+      "pli": 123.6,
+      "stay": 123.6,
+      "food": 124.8,
+      "drink": 94.0,
+      "shopping": 109.1,
+      "transport": 98.4,
+      "comms": 154.7,
+      "recreation": 116.8,
+      "overall": 150.7
     },
     {
       "slug": "malta",
       "name": "Malta",
       "iso": "MT",
-      "pli": 88.7
+      "pli": 88.7,
+      "stay": 88.7,
+      "food": 112.2,
+      "drink": 99.2,
+      "shopping": 101.5,
+      "transport": 89.8,
+      "comms": 106.7,
+      "recreation": 94.5,
+      "overall": 93.1
     },
     {
       "slug": "netherlands",
       "name": "Netherlands",
       "iso": "NL",
-      "pli": 124.6
+      "pli": 124.6,
+      "stay": 124.6,
+      "food": 98.9,
+      "drink": 126.9,
+      "shopping": 93.0,
+      "transport": 118.4,
+      "comms": 134.2,
+      "recreation": 112.4,
+      "overall": 121.0
     },
     {
       "slug": "norway",
       "name": "Norway",
       "iso": "NO",
-      "pli": 140.0
+      "pli": 140.0,
+      "stay": 140.0,
+      "food": 131.2,
+      "drink": 205.3,
+      "shopping": 117.6,
+      "transport": 161.6,
+      "comms": 178.7,
+      "recreation": 138.5,
+      "overall": 134.1
     },
     {
       "slug": "poland",
       "name": "Poland",
       "iso": "PL",
-      "pli": 91.7
+      "pli": 91.7,
+      "stay": 91.7,
+      "food": 86.8,
+      "drink": 82.9,
+      "shopping": 103.1,
+      "transport": 68.7,
+      "comms": 56.1,
+      "recreation": 69.3,
+      "overall": 70.2
     },
     {
       "slug": "portugal",
       "name": "Portugal",
       "iso": "PT",
-      "pli": 75.5
+      "pli": 75.5,
+      "stay": 75.5,
+      "food": 101.5,
+      "drink": 94.2,
+      "shopping": 93.5,
+      "transport": 80.6,
+      "comms": 115.6,
+      "recreation": 85.9,
+      "overall": 85.0
     },
     {
       "slug": "romania",
       "name": "Romania",
       "iso": "RO",
-      "pli": 68.5
+      "pli": 68.5,
+      "stay": 68.5,
+      "food": 75.5,
+      "drink": 87.1,
+      "shopping": 87.4,
+      "transport": 73.4,
+      "comms": 52.6,
+      "recreation": 66.5,
+      "overall": 57.4
     },
     {
       "slug": "slovakia",
       "name": "Slovakia",
       "iso": "SK",
-      "pli": 91.3
+      "pli": 91.3,
+      "stay": 91.3,
+      "food": 83.4,
+      "drink": 83.0,
+      "shopping": 97.2,
+      "transport": 91.0,
+      "comms": 111.4,
+      "recreation": 81.7,
+      "overall": 81.1
     },
     {
       "slug": "slovenia",
       "name": "Slovenia",
       "iso": "SI",
-      "pli": 90.1
+      "pli": 90.1,
+      "stay": 90.1,
+      "food": 100.0,
+      "drink": 88.9,
+      "shopping": 97.8,
+      "transport": 98.9,
+      "comms": 110.0,
+      "recreation": 95.4,
+      "overall": 91.0
     },
     {
       "slug": "spain",
       "name": "Spain",
       "iso": "ES",
-      "pli": 83.9
+      "pli": 83.9,
+      "stay": 83.9,
+      "food": 95.2,
+      "drink": 86.3,
+      "shopping": 90.9,
+      "transport": 81.5,
+      "comms": 94.6,
+      "recreation": 94.2,
+      "overall": 90.7
     },
     {
       "slug": "sweden",
       "name": "Sweden",
       "iso": "SE",
-      "pli": 116.7
+      "pli": 116.7,
+      "stay": 116.7,
+      "food": 106.4,
+      "drink": 121.5,
+      "shopping": 120.6,
+      "transport": 144.1,
+      "comms": 143.1,
+      "recreation": 118.0,
+      "overall": 123.0
     },
     {
       "slug": "switzerland",
       "name": "Switzerland",
       "iso": "CH",
-      "pli": 170.8
+      "pli": 170.8,
+      "stay": 170.8,
+      "food": 158.5,
+      "drink": 140.3,
+      "shopping": 138.7,
+      "transport": 151.7,
+      "comms": 186.1,
+      "recreation": 160.6,
+      "overall": 184.3
     }
   ]
 }

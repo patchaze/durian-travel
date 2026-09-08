@@ -5,15 +5,118 @@ import costData from '../../data/country-costs.json';
 
 const canonical = 'https://www.duriantravel.com/tools/cost-per-country/';
 
-// Every figure on this page comes from Eurostat's price level index for
-// restaurants and hotels, EU27 = 100. Nothing is estimated here: the tool
-// applies that published ratio to a number the visitor supplies. See
-// src/data/country-costs.json for the source, dataset and retrieval date.
+// Two layers on one page.
+//
+// The free comparison scales an editorial daily figure by each country's
+// Eurostat price level index for restaurants and hotels, where the EU27
+// average is 100. There is no reference country to pick: the reference is
+// permanently the EU average, so nothing a visitor touches can rescale the
+// other 27 bars. That was a real defect and it is why the "at prices like"
+// dropdown is gone.
+//
+// The full report below asks how somebody actually travels and weights seven
+// Eurostat categories instead of one. It is generated server side by
+// /api/report and never built into this page.
 const source = costData._source;
 const countries = costData.countries;
 
-const cheapest = [...countries].sort((a, b) => a.pli - b.pli).slice(0, 3);
-const dearest = [...countries].sort((a, b) => b.pli - a.pli).slice(0, 3);
+// The same three bands as /tools/budget/, and the same typical figures.
+// Durian's own editorial estimate for Western Europe, not a statistic.
+const styles = [
+  { id: 'budget', label: 'Budget', low: 70, high: 130, typical: 100 },
+  { id: 'mid', label: 'Mid-range', low: 140, high: 240, typical: 190 },
+  { id: 'comfortable', label: 'Comfortable', low: 260, high: 380, typical: 320 },
+];
+
+// Every question the report asks. Each one changes a weight, so none is
+// decorative. There is deliberately no travel month or season: no verified
+// source for seasonality exists yet, so the answer would change nothing.
+const questions = [
+  {
+    group: 'Your trip',
+    fields: [
+      { id: 'nights', label: 'How many nights in total?', type: 'number', min: 1, max: 365, value: 10 },
+      { id: 'party', label: 'Who is going?', type: 'select', options: [
+        ['solo', 'Solo'], ['couple', 'A couple'],
+        ['family', 'A family with children'], ['friends', 'A group of friends'],
+      ] },
+      { id: 'adults', label: 'How many adults?', type: 'number', min: 0, max: 20, value: 1 },
+      { id: 'children', label: 'How many children?', type: 'number', min: 0, max: 20, value: 0 },
+    ],
+  },
+  {
+    group: 'Where you sleep',
+    fields: [
+      { id: 'stayType', label: 'Where do you usually stay?', type: 'select', options: [
+        ['hotel', 'Hotel'], ['apartment', 'Apartment or rental'],
+        ['hostel', 'Hostel dorm'], ['friends', 'With friends or family'],
+      ] },
+      { id: 'breakfast', label: 'Is breakfast usually included?', type: 'select', options: [
+        ['no', 'No'], ['yes', 'Yes'],
+      ] },
+    ],
+  },
+  {
+    group: 'What you eat',
+    fields: [
+      { id: 'mealsOut', label: 'How many meals a day do you eat out?', type: 'select', options: [
+        ['0', 'None'], ['1', 'One'], ['2', 'Two'], ['3', 'Three'],
+      ] },
+      { id: 'snacks', label: 'Coffee, pastries, snacks out?', type: 'select', options: [
+        ['rarely', 'Rarely'], ['daily', 'Once a day'], ['several', 'Several a day'],
+      ] },
+      { id: 'dinnerDrinks', label: 'Drinks with dinner?', type: 'select', options: [
+        ['no', 'No'], ['sometimes', 'Sometimes'], ['most', 'Most nights'],
+      ] },
+    ],
+  },
+  {
+    group: 'Getting around a city',
+    fields: [
+      { id: 'cityTransport', label: 'How do you move around a city?', type: 'select', options: [
+        ['walking', 'Mostly walking'], ['public', 'Public transport'],
+        ['mix', 'A mix, with some taxis'], ['taxi', 'Mostly taxis and ride hailing'],
+      ] },
+      { id: 'carHire', label: 'Hiring a car anywhere?', type: 'select', options: [
+        ['no', 'No'], ['yes', 'Yes'],
+      ] },
+    ],
+  },
+  {
+    group: 'Between cities',
+    fields: [
+      { id: 'cityMoves', label: 'How many times will you move city?', type: 'number', min: 0, max: 100, value: 2 },
+      { id: 'intercityMode', label: 'How do you travel between them?', type: 'select', options: [
+        ['train', 'Train'], ['coach', 'Coach'], ['flight', 'Budget flight'],
+      ] },
+    ],
+  },
+  {
+    group: 'What you actually do',
+    fields: [
+      { id: 'museums', label: 'Museums, galleries, monuments?', type: 'select', options: [
+        ['rarely', 'Rarely'], ['few', 'A few'], ['most', 'Most days'],
+      ] },
+      { id: 'tours', label: 'Guided tours or day trips?', type: 'select', options: [
+        ['none', 'None'], ['couple', 'One or two'], ['several', 'Several'],
+      ] },
+      { id: 'nightlife', label: 'Going out at night?', type: 'select', options: [
+        ['no', 'No'], ['occasionally', 'Occasionally'], ['often', 'Often'],
+      ] },
+      { id: 'shopping', label: 'Planning to shop?', type: 'select', options: [
+        ['no', 'No'], ['little', 'A little'], ['lot', 'A lot'],
+      ] },
+    ],
+  },
+  {
+    group: 'Staying connected',
+    fields: [
+      { id: 'esim', label: 'Do you need an eSIM or data plan?', type: 'select', options: [
+        ['no', 'No'], ['yes', 'Yes'],
+      ] },
+    ],
+  },
+];
 
 const schema = {
   '@context': 'https://schema.org',
@@ -22,7 +125,6 @@ const schema = {
   url: canonical,
   applicationCategory: 'TravelApplication',
   operatingSystem: 'Any',
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
   description:
     'Compare what the same trip costs across European countries, using Eurostat price level indices for restaurants and hotels.',
 };
@@ -30,7 +132,7 @@ const schema = {
 
 <BaseLayout
   title="Europe Cost-per-Country Estimator | DURIAN Travel"
-  description="See what the same daily budget buys in each European country, based on official Eurostat price levels for restaurants and hotels. Free, no sign-up."
+  description="See what the same daily budget buys in each European country, based on official Eurostat price levels for restaurants and hotels. Compare 28 countries, no sign-up."
   canonical={canonical}
   schema={schema}
   keywords="cheapest countries in europe to visit, cost of travel by country europe, europe daily budget by country"
@@ -42,15 +144,15 @@ const schema = {
 
   <section class="section section--sm">
     <div class="container container--narrow">
-      <span class="section-label">Free planner</span>
+      <span class="section-label">Free comparison</span>
       <h1 class="tool-title">What the same trip costs, country by country</h1>
       <p class="tool-intro">
         The same week costs roughly three times as much in Switzerland as in Bulgaria. If your
         route is flexible, that gap is the single biggest lever you have on the budget.
       </p>
       <p class="tool-intro tool-intro--muted">
-        Tell it what you expect to spend in one country you know, and it shows what the same
-        standard of trip costs everywhere else.
+        Pick how you travel and the comparison prices the same standard of trip in all 28
+        countries, cheapest first.
       </p>
     </div>
   </section>
@@ -58,36 +160,44 @@ const schema = {
   <section class="section section--sm">
     <div class="container container--narrow">
       <form class="cpc-controls" id="cpc-form" novalidate>
-        <label class="field">
-          <span class="field__label">I would spend, per person, per day</span>
-          <div class="field-inline">
-            <select id="cpc-currency" aria-label="Currency">
-              <option value="€" selected>€</option>
-              <option value="$">$</option>
-              <option value="£">£</option>
-            </select>
-            <input type="number" id="cpc-amount" min="0" step="5" value="120" inputmode="decimal" />
+        <div class="field field--full">
+          <span class="field__label">How you travel</span>
+          <div class="style-picker" role="group" aria-label="Travel style presets">
+            {styles.map(s => (
+              <button type="button" class="style-btn" data-style={s.id} data-typical={s.typical}>
+                <span class="style-btn__label">{s.label}</span>
+                <span class="style-btn__range">{s.low}–{s.high === 380 ? '380+' : s.high}/day</span>
+              </button>
+            ))}
           </div>
-        </label>
-
-        <label class="field">
-          <span class="field__label">at prices like</span>
-          <select id="cpc-reference">
-            <option value="100" selected>the EU average</option>
-            {countries.map(c => <option value={c.pli}>{c.name}</option>)}
-          </select>
-        </label>
+          <p class="cpc-provenance">
+            Daily figures are our own estimate for a Western European trip, then scaled to each
+            country using Eurostat's price level index for restaurants and hotels, reference year
+            {' '}{source.referenceYear}, where the EU27 average is 100.
+          </p>
+        </div>
 
         <label class="field">
           <span class="field__label">for how many nights</span>
           <input type="number" id="cpc-nights" min="1" max="365" step="1" value="7" inputmode="numeric" />
         </label>
-      </form>
 
-      <p class="cpc-hint">
-        Not sure what to put? Work it out first with the
-        <a href="/tools/budget/">budget calculator</a>, then bring the per-day figure here.
-      </p>
+        <label class="field">
+          <span class="field__label">Your daily budget, per person</span>
+          <div class="field-inline">
+            <select id="cpc-currency" aria-label="Currency">
+              <option value="€" selected>€</option>
+              <option value="$">$</option>
+              <option value="£">£</option>
+              <option value="₱">₱</option>
+              <option value="R$">R$</option>
+            </select>
+            <input type="number" id="cpc-budget" min="0" step="5" placeholder="optional" inputmode="decimal" />
+          </div>
+          <span class="field__hint">Optional. It draws a line across the comparison rather than
+          changing any figure: countries at or below it are marked.</span>
+        </label>
+      </form>
     </div>
   </section>
 
@@ -113,6 +223,105 @@ const schema = {
           </li>
         ))}
       </ol>
+      <p class="cpc-legend" id="cpc-legend" hidden></p>
+    </div>
+  </section>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <div class="cpc-report">
+        <span class="section-label">Full report</span>
+        <h2 class="cpc-report__title">Get the full report</h2>
+        <p class="cpc-report__intro">
+          The comparison above prices your whole trip with one index, the one for restaurants and
+          hotels. That is the wrong basket for most people. Portugal sits well below the EU average
+          for restaurants and hotels and slightly above it for food from shops, so somebody who
+          cooks saves almost nothing there while somebody who eats out saves a quarter.
+        </p>
+        <p class="cpc-report__intro">
+          Answer these and the report weights seven Eurostat categories instead of one, then ranks
+          the countries you are weighing up for the way you actually travel.
+        </p>
+
+        <form class="report-form" id="report-form" novalidate>
+          <fieldset class="tool-block">
+            <legend class="tool-block__title">Which countries are you weighing up?</legend>
+            <p class="tool-block__hint">Pick at least one.</p>
+            <div class="country-grid">
+              {countries.map(c => (
+                <label class="country-check">
+                  <input type="checkbox" name="countries" value={c.iso} />
+                  <span>{c.name}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          {questions.map(block => (
+            <fieldset class="tool-block">
+              <legend class="tool-block__title">{block.group}</legend>
+              <div class="field-grid">
+                {block.fields.map(f => (
+                  <label class="field">
+                    <span class="field__label">{f.label}</span>
+                    {f.type === 'number' ? (
+                      <input
+                        type="number"
+                        id={`r-${f.id}`}
+                        data-answer={f.id}
+                        min={f.min}
+                        max={f.max}
+                        step="1"
+                        value={f.value}
+                        inputmode="numeric"
+                      />
+                    ) : (
+                      <select id={`r-${f.id}`} data-answer={f.id}>
+                        {f.options.map(([value, label]) => (
+                          <option value={value}>{label}</option>
+                        ))}
+                      </select>
+                    )}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ))}
+
+          <fieldset class="tool-block">
+            <legend class="tool-block__title">The number you will not go over</legend>
+            <p class="tool-block__hint">For the whole trip, everyone included.</p>
+            <label class="field">
+              <span class="field__label">Your ceiling</span>
+              <div class="field-inline">
+                <select id="r-currency" aria-label="Currency">
+                  <option value="€" selected>€</option>
+                  <option value="$">$</option>
+                  <option value="£">£</option>
+                  <option value="₱">₱</option>
+                  <option value="R$">R$</option>
+                </select>
+                <input type="number" id="r-ceiling" data-answer="ceiling" min="0" step="50" placeholder="0" inputmode="decimal" />
+              </div>
+            </label>
+          </fieldset>
+
+          <fieldset class="tool-block">
+            <legend class="tool-block__title">Access code</legend>
+            <p class="tool-block__hint">
+              The report is not on sale yet. Access is by code while it is being tested.
+            </p>
+            <label class="field">
+              <span class="field__label">Access code</span>
+              <input type="text" id="r-access" autocomplete="off" spellcheck="false" />
+            </label>
+            <button type="submit" class="btn btn--primary btn--lg report-submit" id="report-submit">
+              Generate my report
+            </button>
+            <p class="report-status" id="report-status" role="status" aria-live="polite"></p>
+          </fieldset>
+        </form>
+      </div>
     </div>
   </section>
 
@@ -121,11 +330,13 @@ const schema = {
       <div class="cpc-notes">
         <h2 class="cpc-notes__title">Where these numbers come from, and what they are not</h2>
         <p>
-          Every figure is derived from <strong>{source.publisher}</strong>'s price level index for
+          The comparison above does one piece of arithmetic: it takes a daily figure and scales it
+          by each country's published price level index, where the EU27 average is 100. The indices
+          are <strong>{source.publisher}</strong>'s, for
           <strong>{source.category.replace('A0111, ', '')}</strong>, reference year
-          <strong>{source.referenceYear}</strong>, where the EU27 average is 100. The tool does one
-          piece of arithmetic: it scales the number you entered by the ratio between two countries'
-          published indices. Nothing on this page is our own estimate.
+          <strong>{source.referenceYear}</strong>. The daily figure being scaled is ours: an
+          editorial estimate for a Western European trip, the same band the
+          {' '}<a href="/tools/budget/">budget calculator</a> uses. There is no survey behind it.
         </p>
         <p class="cpc-notes__limits">
           <strong>What it cannot tell you.</strong> This is the price level for restaurants and
@@ -137,7 +348,9 @@ const schema = {
         <p class="cpc-notes__src">
           Source: {source.publisher}, dataset <code>{source.dataset}</code>, indicator
           {' '}<code>{source.indicator}</code>. Eurostat last updated this
-          {' '}{source.eurostatLastUpdated}; retrieved {source.retrieved}.
+          {' '}{source.eurostatLastUpdated}; retrieved {source.retrieved}. The seven category
+          indices behind the full report come from the same dataset and release, retrieved
+          {' '}{source.categoriesRetrieved}.
           {' '}<a href={source.url} rel="nofollow noopener" target="_blank">View the dataset on Eurostat →</a>
           {' '}<a href="/sources/">See all sources and how often they are checked →</a>
         </p>
@@ -169,7 +382,7 @@ const schema = {
 
   .cpc-controls {
     display: grid;
-    grid-template-columns: 1.1fr 1.2fr 0.8fr;
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-4);
     padding: var(--space-5);
     border: 1px solid var(--color-border);
@@ -177,6 +390,7 @@ const schema = {
     background: var(--color-bg-alt);
   }
   .field { display: block; margin: 0; }
+  .field--full { grid-column: 1 / -1; }
   .field__label {
     display: block;
     font-size: var(--text-sm);
@@ -184,8 +398,17 @@ const schema = {
     margin-bottom: var(--space-2);
     color: var(--color-text);
   }
+  .field__hint {
+    display: block;
+    font-size: var(--text-xs);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-light);
+    margin-top: var(--space-2);
+  }
   .cpc-controls input,
-  .cpc-controls select {
+  .cpc-controls select,
+  .report-form input,
+  .report-form select {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid var(--color-border);
@@ -195,17 +418,42 @@ const schema = {
     color: var(--color-text);
   }
   .cpc-controls input:focus,
-  .cpc-controls select:focus { outline: none; border-color: var(--color-primary); }
+  .cpc-controls select:focus,
+  .report-form input:focus,
+  .report-form select:focus { outline: none; border-color: var(--color-primary); }
 
   /* Must come after the shared rule above: same specificity, so source order
      decides. Without this the currency select takes the full width and
      collapses the amount field next to it. */
   .field-inline { display: flex; gap: var(--space-2); align-items: stretch; }
-  .cpc-controls .field-inline select { width: 4.75rem; flex: 0 0 auto; padding-inline: 8px; }
-  .cpc-controls .field-inline input { flex: 1 1 auto; width: auto; min-width: 0; }
+  .cpc-controls .field-inline select,
+  .report-form .field-inline select { width: 4.75rem; flex: 0 0 auto; padding-inline: 8px; }
+  .cpc-controls .field-inline input,
+  .report-form .field-inline input { flex: 1 1 auto; width: auto; min-width: 0; }
 
-  .cpc-hint { font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-3); }
-  .cpc-hint a, .cpc-notes a { color: var(--color-accent-dark); }
+  .style-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+  .style-btn {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+  .style-btn:hover { border-color: var(--color-primary); }
+  .style-btn.is-active { border-color: var(--color-primary); background: var(--color-primary-bg); }
+  .style-btn__label { font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-navy); }
+  .style-btn__range { font-size: var(--text-xs); color: var(--color-text-light); }
+
+  .cpc-provenance {
+    font-size: var(--text-xs);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-light);
+    margin-top: var(--space-3);
+    max-width: 62ch;
+  }
 
   .cpc-head {
     display: flex; align-items: baseline; justify-content: space-between;
@@ -222,10 +470,18 @@ const schema = {
     gap: var(--space-4);
     padding: var(--space-3) var(--space-3);
     border-radius: var(--radius-md);
+    border-left: 3px solid transparent;
     transition: background var(--transition-fast);
   }
   .cpc-row:nth-child(odd) { background: var(--color-bg-alt); }
   .cpc-row:hover { background: var(--color-primary-bg); }
+  /* After the striping rule on purpose: the budget line has to win. */
+  .cpc-row.is-under,
+  .cpc-row.is-under:nth-child(odd) {
+    background: var(--color-primary-bg);
+    border-left-color: var(--color-primary);
+  }
+  .cpc-row.is-over .cpc-row__fill { opacity: 0.4; }
 
   .cpc-row__main { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
   .cpc-row__name { font-weight: var(--font-semibold); color: var(--color-navy); }
@@ -246,6 +502,87 @@ const schema = {
   .cpc-row__day { font-weight: var(--font-semibold); color: var(--color-text); }
   .cpc-row__trip { font-size: var(--text-xs); color: var(--color-text-light); }
 
+  .cpc-legend {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-4);
+    padding-left: var(--space-3);
+    border-left: 3px solid var(--color-primary);
+  }
+
+  .cpc-report {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-6);
+    margin-top: var(--space-4);
+  }
+  .cpc-report__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-2xl);
+    color: var(--color-navy);
+    margin: var(--space-3) 0 var(--space-4);
+  }
+  .cpc-report__intro {
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    max-width: 62ch;
+    margin-bottom: var(--space-3);
+  }
+
+  .report-form { margin-top: var(--space-6); }
+  .tool-block {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-bottom: var(--space-4);
+    background: var(--color-bg-alt);
+  }
+  .tool-block__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    color: var(--color-navy);
+    padding: 0 var(--space-2);
+  }
+  .tool-block__hint {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: var(--space-2) 0 var(--space-4);
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: var(--space-2);
+  }
+  .country-check {
+    display: flex; align-items: center; gap: var(--space-2);
+    padding: 8px 10px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    font-size: var(--text-sm);
+    cursor: pointer;
+  }
+  .country-check:hover { border-color: var(--color-primary); }
+  .country-check input { width: auto; flex: 0 0 auto; margin: 0; accent-color: var(--color-primary); }
+  .country-check:has(input:checked) { border-color: var(--color-primary); background: var(--color-primary-bg); }
+
+  .report-submit { margin-top: var(--space-5); width: 100%; }
+  .report-status {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    margin-top: var(--space-3);
+    min-height: 1.5em;
+  }
+  .report-status.is-error { color: var(--color-accent-dark); }
+
   .cpc-notes {
     border-top: 1px solid var(--color-border);
     padding-top: var(--space-6);
@@ -263,6 +600,7 @@ const schema = {
     color: var(--color-text-muted);
     margin-bottom: var(--space-3);
   }
+  .cpc-notes a, .cpc-report a { color: var(--color-accent-dark); }
   .cpc-notes__limits {
     background: var(--color-bg-alt);
     border-left: 3px solid var(--color-accent);
@@ -286,36 +624,58 @@ const schema = {
     .cpc-controls { grid-template-columns: 1fr; }
     .cpc-row { grid-template-columns: 1fr auto; gap: var(--space-2) var(--space-3); }
     .cpc-row__bar { grid-column: 1 / -1; order: 3; }
+    .field-grid { grid-template-columns: 1fr; }
   }
 </style>
 
 <script>
-  // All arithmetic, no data of our own: each row carries the Eurostat index it
-  // was rendered with, and the page scales the visitor's figure by the ratio
-  // between that index and their chosen reference.
-  const amountEl = document.getElementById('cpc-amount') as HTMLInputElement | null;
-  const refEl = document.getElementById('cpc-reference') as HTMLSelectElement | null;
+  /* ───────────────────────── the free comparison ───────────────────────── */
+  //
+  // The reference is permanently the EU average, which the dataset puts at 100.
+  // There is nothing to pick, so nothing a visitor touches can rescale the
+  // other countries. perDay = base × countryIndex ÷ 100, where base is the
+  // editorial daily figure behind the chosen style.
+  //
+  // The budget input does not appear in that arithmetic anywhere. It draws a
+  // line: countries at or below it are marked, countries above it are not.
+
+  const STORAGE_KEY = 'durian-cpc-v1';
+  const REPORT_KEY = 'durian-cpc-report-v1';
+  const DEFAULT_STYLE = 'mid';
+
   const nightsEl = document.getElementById('cpc-nights') as HTMLInputElement | null;
+  const budgetEl = document.getElementById('cpc-budget') as HTMLInputElement | null;
   const currencyEl = document.getElementById('cpc-currency') as HTMLSelectElement | null;
   const listEl = document.getElementById('cpc-list');
   const summaryEl = document.getElementById('cpc-summary');
+  const legendEl = document.getElementById('cpc-legend') as HTMLElement | null;
+  const styleBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.style-btn'));
   const rows = Array.from(document.querySelectorAll<HTMLLIElement>('.cpc-row'));
 
-  const STORAGE_KEY = 'durian-cpc-v1';
+  function activeStyle(): HTMLButtonElement | undefined {
+    return styleBtns.find(b => b.classList.contains('is-active'));
+  }
+
+  function selectStyle(id: string) {
+    const wanted = styleBtns.find(b => b.dataset.style === id)
+      ?? styleBtns.find(b => b.dataset.style === DEFAULT_STYLE)
+      ?? styleBtns[0];
+    styleBtns.forEach(b => b.classList.toggle('is-active', b === wanted));
+  }
 
   function money(v: number): string {
-    const symbol = currencyEl?.value ?? '';
-    return symbol + Math.round(v).toLocaleString('en-GB');
+    return (currencyEl?.value ?? '') + Math.round(v).toLocaleString('en-GB');
   }
 
   function update() {
-    const amount = parseFloat(amountEl?.value ?? '') || 0;
-    const reference = parseFloat(refEl?.value ?? '100') || 100;
+    const base = parseFloat(activeStyle()?.dataset.typical ?? '0') || 0;
     const nights = Math.max(1, Math.round(parseFloat(nightsEl?.value ?? '1') || 1));
+    const rawBudget = parseFloat(budgetEl?.value ?? '');
+    const budget = Number.isFinite(rawBudget) && rawBudget > 0 ? rawBudget : 0;
 
     const computed = rows.map(row => {
       const pli = parseFloat(row.dataset.pli ?? '100');
-      const perDay = amount * (pli / reference);
+      const perDay = (base * pli) / 100;
       return { row, pli, perDay, trip: perDay * nights };
     });
 
@@ -326,26 +686,41 @@ const schema = {
       .sort((a, b) => a.perDay - b.perDay)
       .forEach(({ row }, i) => { row.style.order = String(i); });
 
+    let under = 0;
     computed.forEach(({ row, perDay, trip }) => {
       const dayEl = row.querySelector('.cpc-row__day');
       const tripEl = row.querySelector('.cpc-row__trip');
       const fill = row.querySelector('.cpc-row__fill') as HTMLElement | null;
-      if (dayEl) dayEl.textContent = amount > 0 ? money(perDay) + ' / day' : '—';
-      if (tripEl) tripEl.textContent = amount > 0 ? money(trip) + ' for ' + nights + (nights === 1 ? ' night' : ' nights') : '';
+      if (dayEl) dayEl.textContent = money(perDay) + ' / day';
+      if (tripEl) tripEl.textContent = money(trip) + ' for ' + nights + (nights === 1 ? ' night' : ' nights');
       if (fill) fill.style.width = maxDay > 0 ? (perDay / maxDay) * 100 + '%' : '0%';
+
+      const isUnder = budget > 0 && perDay <= budget;
+      if (isUnder) under++;
+      row.classList.toggle('is-under', isUnder);
+      row.classList.toggle('is-over', budget > 0 && !isUnder);
     });
 
     if (summaryEl) {
-      if (amount > 0) {
-        const sorted = computed.slice().sort((a, b) => a.perDay - b.perDay);
-        const low = sorted[0];
-        const high = sorted[sorted.length - 1];
-        const ratio = low.perDay > 0 ? high.perDay / low.perDay : 0;
-        summaryEl.textContent =
-          high.row.dataset.name + ' costs about ' + ratio.toFixed(1) + '× ' + low.row.dataset.name +
-          ' for the same trip.';
+      const sorted = computed.slice().sort((a, b) => a.perDay - b.perDay);
+      const low = sorted[0];
+      const high = sorted[sorted.length - 1];
+      const ratio = low.perDay > 0 ? high.perDay / low.perDay : 0;
+      summaryEl.textContent =
+        high.row.dataset.name + ' costs about ' + ratio.toFixed(1) + '× ' + low.row.dataset.name +
+        ' for the same trip.';
+    }
+
+    if (legendEl) {
+      if (budget > 0) {
+        legendEl.hidden = false;
+        legendEl.textContent = under === 0
+          ? 'None of the 28 countries come in at or under ' + money(budget) + ' a day on this style of trip.'
+          : under + ' of 28 ' + (under === 1 ? 'country comes' : 'countries come') +
+            ' in at or under ' + money(budget) + ' a day. Those rows are marked.';
       } else {
-        summaryEl.textContent = 'Enter a daily figure to compare.';
+        legendEl.hidden = true;
+        legendEl.textContent = '';
       }
     }
 
@@ -356,27 +731,172 @@ const schema = {
   function save() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        amount: amountEl?.value, reference: refEl?.value,
-        nights: nightsEl?.value, currency: currencyEl?.value,
+        style: activeStyle()?.dataset.style ?? DEFAULT_STYLE,
+        nights: nightsEl?.value,
+        budget: budgetEl?.value,
+        currency: currencyEl?.value,
       }));
     } catch (e) { /* private mode */ }
   }
 
+  // A state saved by the old version carried an `amount` and a `reference`.
+  // Neither exists now. Every key is read by name and anything unrecognised is
+  // ignored, so an old state restores the parts that still mean something and
+  // falls back to Mid-range for the rest.
   function restore() {
+    selectStyle(DEFAULT_STYLE);
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       const d = JSON.parse(raw);
-      if (amountEl && d.amount) amountEl.value = d.amount;
-      if (refEl && d.reference) refEl.value = d.reference;
-      if (nightsEl && d.nights) nightsEl.value = d.nights;
-      if (currencyEl && d.currency) currencyEl.value = d.currency;
+      if (!d || typeof d !== 'object') return;
+      if (typeof d.style === 'string') selectStyle(d.style);
+      if (nightsEl && typeof d.nights === 'string' && d.nights) nightsEl.value = d.nights;
+      if (budgetEl && typeof d.budget === 'string') budgetEl.value = d.budget;
+      if (currencyEl && typeof d.currency === 'string') {
+        const ok = Array.from(currencyEl.options).some(o => o.value === d.currency);
+        if (ok) currencyEl.value = d.currency;
+      }
     } catch (e) { /* ignore */ }
   }
+
+  styleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      styleBtns.forEach(b => b.classList.toggle('is-active', b === btn));
+      update();
+    });
+  });
 
   document.getElementById('cpc-form')?.addEventListener('input', update);
   document.getElementById('cpc-form')?.addEventListener('change', update);
 
   restore();
   update();
+
+  /* ─────────────────────────── the full report ─────────────────────────── */
+
+  const reportForm = document.getElementById('report-form') as HTMLFormElement | null;
+  const statusEl = document.getElementById('report-status');
+  const submitEl = document.getElementById('report-submit') as HTMLButtonElement | null;
+  const accessEl = document.getElementById('r-access') as HTMLInputElement | null;
+  const reportCurrencyEl = document.getElementById('r-currency') as HTMLSelectElement | null;
+  const answerEls = Array.from(
+    document.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-answer]')
+  );
+  const countryBoxes = Array.from(
+    document.querySelectorAll<HTMLInputElement>('input[name="countries"]')
+  );
+
+  // One currency for the page. Changing either control changes both, so the
+  // comparison and the ceiling can never be in different money.
+  function syncCurrency(from: HTMLSelectElement | null, to: HTMLSelectElement | null) {
+    if (!from || !to || to.value === from.value) return;
+    to.value = from.value;
+  }
+  currencyEl?.addEventListener('change', () => { syncCurrency(currencyEl, reportCurrencyEl); saveReport(); });
+  reportCurrencyEl?.addEventListener('change', () => { syncCurrency(reportCurrencyEl, currencyEl); update(); });
+  syncCurrency(currencyEl, reportCurrencyEl);
+
+  function answers() {
+    const out: Record<string, unknown> = {};
+    answerEls.forEach(el => {
+      const key = el.dataset.answer;
+      if (key) out[key] = el.value;
+    });
+    out.countries = countryBoxes.filter(b => b.checked).map(b => b.value);
+    out.currency = currencyEl?.value ?? '€';
+    out.style = activeStyle()?.dataset.style ?? DEFAULT_STYLE;
+    out.base = parseFloat(activeStyle()?.dataset.typical ?? '0') || 0;
+    return out;
+  }
+
+  // The access code is deliberately not saved. Everything else is, so a
+  // refresh does not cost somebody the whole questionnaire.
+  function saveReport() {
+    try {
+      localStorage.setItem(REPORT_KEY, JSON.stringify(answers()));
+    } catch (e) { /* private mode */ }
+  }
+
+  function restoreReport() {
+    try {
+      const raw = localStorage.getItem(REPORT_KEY);
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      if (!d || typeof d !== 'object') return;
+      answerEls.forEach(el => {
+        const key = el.dataset.answer;
+        const saved = key ? d[key] : undefined;
+        if (typeof saved !== 'string') return;
+        if (el instanceof HTMLSelectElement) {
+          if (Array.from(el.options).some(o => o.value === saved)) el.value = saved;
+        } else {
+          el.value = saved;
+        }
+      });
+      if (Array.isArray(d.countries)) {
+        countryBoxes.forEach(b => { b.checked = d.countries.indexOf(b.value) !== -1; });
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  function say(message: string, isError: boolean) {
+    if (!statusEl) return;
+    statusEl.textContent = message;
+    statusEl.classList.toggle('is-error', isError);
+  }
+
+  reportForm?.addEventListener('input', saveReport);
+  reportForm?.addEventListener('change', saveReport);
+  restoreReport();
+
+  reportForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const payload = answers();
+    if (!Array.isArray(payload.countries) || payload.countries.length === 0) {
+      say('Pick at least one country first.', true);
+      return;
+    }
+
+    const code = accessEl?.value.trim() ?? '';
+    if (!code) {
+      say('Enter your access code.', true);
+      return;
+    }
+
+    if (submitEl) submitEl.disabled = true;
+    say('Building your report. This takes a moment.', false);
+
+    try {
+      const response = await fetch('/api/report', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-durian-access': code },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.status === 402) {
+        say('That code was not accepted. Check it and try again.', true);
+        if (submitEl) submitEl.disabled = false;
+        return;
+      }
+
+      if (!response.ok) {
+        say('Something went wrong and the report was not generated. Nothing was charged.', true);
+        if (submitEl) submitEl.disabled = false;
+        return;
+      }
+
+      // frame-src is 'none', so the report cannot go in an iframe. It replaces
+      // this document instead. The answers are already in localStorage, so the
+      // back button returns to a filled in form.
+      const html = await response.text();
+      document.open();
+      document.write(html);
+      document.close();
+    } catch (e) {
+      say('Something went wrong and the report was not generated. Nothing was charged.', true);
+      if (submitEl) submitEl.disabled = false;
+    }
+  });
 </script>

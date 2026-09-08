@@ -75,8 +75,16 @@ const schema = {
         <h2>Cost comparisons between countries</h2>
         <p>
           The <a href="/tools/cost-per-country/">cost-per-country planner</a> does one piece of
-          arithmetic: it scales a figure you enter by the ratio between two countries' published
-          price levels. The price levels are not ours. They come from Eurostat.
+          arithmetic: it takes a daily figure and scales it by each country's published price
+          level, where the EU27 average is 100. There is no reference country to choose, so
+          nothing you pick can rescale the other countries. The price levels are not ours. They
+          come from Eurostat. The daily figure being scaled is ours, and it is the same editorial
+          band described under the budget calculator below.
+        </p>
+        <p>
+          The full report on that page goes further. It weights seven Eurostat categories instead
+          of one, using assumptions about how you travel that are ours rather than published. The
+          report says so on every table that depends on them.
         </p>
       </div>
 
