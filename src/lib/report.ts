@@ -642,51 +642,37 @@ const STYLES = `
     --accent: #C44B36;
     --accent-bg: #FAECE8;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0F2138;
-      --bg-alt: #152B45;
-      --surface: #152B45;
-      --text: #EAEEF3;
-      --muted: #A3AFC0;
-      --light: #7B8798;
-      --border: #25405E;
-      --border-light: #1D3450;
-      --primary: #8FB4DA;
-      --primary-light: #8FB4DA;
-      --primary-bg: #1B3A5C;
-      --navy: #EAEEF3;
-      --accent: #E8836C;
-      --accent-bg: #3A1F19;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0F2138;
-    --bg-alt: #152B45;
-    --surface: #152B45;
-    --text: #EAEEF3;
-    --muted: #A3AFC0;
-    --light: #7B8798;
-    --border: #25405E;
-    --border-light: #1D3450;
-    --primary: #8FB4DA;
-    --primary-light: #8FB4DA;
-    --primary-bg: #1B3A5C;
-    --navy: #EAEEF3;
-    --accent: #E8836C;
-    --accent-bg: #3A1F19;
-  }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    padding: 40px 24px 72px;
+    padding: 0;
     background: var(--bg);
     color: var(--text);
     font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
     font-size: 16px;
     line-height: 1.65;
   }
-  .wrap { max-width: 780px; margin: 0 auto; }
+  .wrap { max-width: 828px; margin: 0 auto; padding: 40px 24px 72px; }
+  .masthead {
+    background: var(--primary);
+    border-bottom: 3px solid var(--accent);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .masthead__inner {
+    max-width: 828px; margin: 0 auto; padding: 16px 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .masthead__icon { flex: 0 0 auto; display: flex; }
+  .masthead__text { display: flex; flex-direction: column; line-height: 1.1; }
+  .masthead__brand {
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-weight: 400; font-size: 1.25rem; color: #FFFFFF; letter-spacing: .04em;
+  }
+  .masthead__sub {
+    font-size: .75rem; font-style: italic; font-weight: 500;
+    color: hsla(0, 0%, 100%, .65);
+  }
   h1, h2, h3 {
     font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
     color: var(--navy);
@@ -752,11 +738,11 @@ const STYLES = `
   .chart__head b { font-weight: 600; color: var(--navy); }
   .chart__head span { color: var(--muted); }
   .chart__bar { height: 10px; border-radius: 9999px; background: var(--bg-alt); overflow: hidden; margin-bottom: 3px; }
-  .chart__fill { display: block; height: 100%; border-radius: 9999px; background: var(--primary); }
+  .chart__fill { display: block; height: 100%; border-radius: 9999px; background: var(--accent); }
   .chart__fill--plain { background: var(--border); }
   .key { display: flex; flex-wrap: wrap; gap: 18px; font-size: .8125rem; color: var(--muted); margin: 0 0 18px; }
   .key i { display: inline-block; width: 22px; height: 8px; border-radius: 9999px; margin-right: 6px; vertical-align: middle; font-style: normal; }
-  .key i.personal { background: var(--primary); }
+  .key i.personal { background: var(--accent); }
   .key i.plain { background: var(--border); }
   .method {
     background: var(--bg-alt); border-left: 3px solid var(--primary);
@@ -1199,6 +1185,20 @@ export function buildReport(raw: unknown, data: CostData, options: RenderOptions
 <style>${STYLES}</style>
 </head>
 <body>
+<header class="masthead">
+  <div class="masthead__inner">
+    <span class="masthead__icon" aria-hidden="true">
+      <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="19" fill="transparent" stroke="#FFFFFF" stroke-width="2"/>
+        <text x="20" y="27" text-anchor="middle" font-family="'Playfair Display',Georgia,serif" font-size="22" font-weight="400" fill="#FFFFFF">D</text>
+      </svg>
+    </span>
+    <span class="masthead__text">
+      <span class="masthead__brand">DURIAN</span>
+      <span class="masthead__sub">Travel</span>
+    </span>
+  </div>
+</header>
 <div class="wrap">
 <div class="bar no-print">
   <a href="/tools/cost-per-country/">Back to the comparison</a>

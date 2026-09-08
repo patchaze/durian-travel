@@ -198,6 +198,11 @@ const schema = {
           changing any figure: countries at or below it are marked.</span>
         </label>
       </form>
+
+      <p class="cpc-offer">
+        <a class="cpc-offer__link" href="#report-details">This comparison uses one Eurostat
+        category. The full report weights seven, for the way you actually travel.</a>
+      </p>
     </div>
   </section>
 
@@ -230,14 +235,19 @@ const schema = {
   <section class="section section--sm">
     <div class="container container--narrow">
       <div class="cpc-report">
-        <span class="section-label">Full report</span>
-        <h2 class="cpc-report__title">Get the full report</h2>
-        <p class="cpc-report__intro">
-          The comparison above prices your whole trip with one index, the one for restaurants and
-          hotels. That is the wrong basket for most people. Portugal sits well below the EU average
-          for restaurants and hotels and slightly above it for food from shops, so somebody who
-          cooks saves almost nothing there while somebody who eats out saves a quarter.
-        </p>
+        <details class="cpc-report__disclosure" id="report-details">
+          <summary class="cpc-report__summary">
+            <span class="section-label">Full report</span>
+            <h2 class="cpc-report__title">Get the full report</h2>
+            <span class="cpc-report__intro">
+              The comparison above prices your whole trip with one index, the one for restaurants
+              and hotels. That is the wrong basket for most people. Portugal sits well below the EU
+              average for restaurants and hotels and slightly above it for food from shops, so
+              somebody who cooks saves almost nothing there while somebody who eats out saves a
+              quarter.
+            </span>
+          </summary>
+
         <p class="cpc-report__intro">
           Answer these and the report weights seven Eurostat categories instead of one, then ranks
           the countries you are weighing up for the way you actually travel.
@@ -321,6 +331,7 @@ const schema = {
             <p class="report-status" id="report-status" role="status" aria-live="polite"></p>
           </fieldset>
         </form>
+        </details>
       </div>
     </div>
   </section>
@@ -522,12 +533,71 @@ const schema = {
     margin: var(--space-3) 0 var(--space-4);
   }
   .cpc-report__intro {
+    display: block;
     font-size: var(--text-base);
     line-height: var(--leading-relaxed);
     color: var(--color-text-muted);
     max-width: 62ch;
     margin-bottom: var(--space-3);
   }
+
+  /* The questions are collapsed so the offer sits close to the comparison
+     rather than below 28 rows of it. A native <details> keeps this working
+     with JavaScript off and keyboard accessible without any code. */
+  .cpc-report__summary {
+    display: block;
+    position: relative;
+    padding: var(--space-5) var(--space-8) var(--space-5) var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-alt);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+  .cpc-report__summary::-webkit-details-marker { display: none; }
+  .cpc-report__summary::marker { content: ''; }
+  .cpc-report__summary:hover { border-color: var(--color-primary); }
+  .cpc-report__summary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  .cpc-report__summary .cpc-report__title { margin-top: var(--space-2); }
+  .cpc-report__summary .cpc-report__intro { margin-bottom: 0; }
+
+  /* A chevron rather than the default triangle, so the card reads as a button. */
+  .cpc-report__summary::after {
+    content: '';
+    position: absolute;
+    top: var(--space-6);
+    right: var(--space-5);
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+    transform: rotate(45deg);
+    transition: transform var(--transition-fast);
+  }
+  .cpc-report__disclosure[open] > .cpc-report__summary::after { transform: rotate(-135deg); }
+  .cpc-report__disclosure[open] > .cpc-report__summary {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .cpc-report__disclosure[open] > .cpc-report__intro { margin-top: var(--space-5); }
+
+  /* The same offer, one line, above the 28 rows. */
+  .cpc-offer {
+    margin-top: var(--space-5);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    max-width: 62ch;
+  }
+  .cpc-offer__link {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-accent);
+    padding-bottom: 1px;
+  }
+  .cpc-offer__link:hover { color: var(--color-accent); }
 
   .report-form { margin-top: var(--space-6); }
   .tool-block {
@@ -818,26 +888,36 @@ const schema = {
     } catch (e) { /* private mode */ }
   }
 
-  function restoreReport() {
+  function restoreReport(): boolean {
+    let answered = false;
     try {
       const raw = localStorage.getItem(REPORT_KEY);
-      if (!raw) return;
+      if (!raw) return false;
       const d = JSON.parse(raw);
-      if (!d || typeof d !== 'object') return;
+      if (!d || typeof d !== 'object') return false;
       answerEls.forEach(el => {
         const key = el.dataset.answer;
         const saved = key ? d[key] : undefined;
         if (typeof saved !== 'string') return;
         if (el instanceof HTMLSelectElement) {
-          if (Array.from(el.options).some(o => o.value === saved)) el.value = saved;
+          if (!Array.from(el.options).some(o => o.value === saved)) return;
+          // No option here carries a selected attribute, so the untouched value
+          // is the first one rather than the empty string.
+          const opts = Array.from(el.options);
+          const fallback = (opts.find(o => o.defaultSelected) ?? opts[0])?.value ?? '';
+          if (saved !== fallback) answered = true;
+          el.value = saved;
         } else {
+          if (saved !== el.defaultValue) answered = true;
           el.value = saved;
         }
       });
       if (Array.isArray(d.countries)) {
         countryBoxes.forEach(b => { b.checked = d.countries.indexOf(b.value) !== -1; });
+        if (d.countries.length > 0) answered = true;
       }
     } catch (e) { /* ignore */ }
+    return answered;
   }
 
   function say(message: string, isError: boolean) {
@@ -848,7 +928,15 @@ const schema = {
 
   reportForm?.addEventListener('input', saveReport);
   reportForm?.addEventListener('change', saveReport);
-  restoreReport();
+
+  // Closed by default. It opens for anybody who already has answers in here,
+  // for the offer line above the comparison, and for a link straight to it.
+  const reportDetails = document.getElementById('report-details') as HTMLDetailsElement | null;
+  function openReport() { if (reportDetails) reportDetails.open = true; }
+
+  if (restoreReport()) openReport();
+  if (location.hash === '#report-details') openReport();
+  document.querySelector('.cpc-offer__link')?.addEventListener('click', openReport);
 
   reportForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -866,6 +954,7 @@ const schema = {
     }
 
     if (submitEl) submitEl.disabled = true;
+    openReport();
     say('Building your report. This takes a moment.', false);
 
     try {
