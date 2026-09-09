@@ -1,122 +1,158 @@
 # BRIEF
 
 **Status: DONE**
-**Written: 8 September 2026, by Cowork**
-**Brief 005**
+**Written: 9 September 2026, by Cowork**
+**Brief 006**
 
 Claude Code: read all of it, run "The automatic path to live" from `CLAUDE.md`, then fill in the Done section and set the status to DONE. There are no questions for Patricia in this brief.
 
-Brief 004 shipped and works. Patricia has generated a real report with the access code. This brief fixes two things she found: the report renders dark, and the paid layer is buried too far down the page. **No Stripe. That is brief 006.**
+Brief 005 shipped. The report is light and the form collapses, both correct. Patricia looked at the live page and the page is still too tall, and the paid offer is still below the free comparison rather than above it. This brief is layout only. **Still no Stripe.**
+
+Everything here is `src/pages/tools/cost-per-country.astro`. Do not touch `src/lib/report.ts` or `functions/api/report.ts`.
 
 ---
 
 ## What to do
 
-### 1. The report must be light, always
+### 1. Put the full report first
 
-`src/lib/report.ts`. The report currently ships a dark palette at line 645, `@media (prefers-color-scheme: dark)`, and again at line 663, `:root[data-theme="dark"]`. Anybody whose machine is set to dark mode gets a dark navy report. Patricia did, and did not expect it.
+New section order, top to bottom:
 
-The dark set was correct guidance for a Claude artifact, which renders in the viewer's theme. **It is wrong here.** This report is a page on duriantravel.com, and that site is light only. A customer's paid deliverable should not change colour depending on their operating system.
+1. **The page title block.** Keep the existing `<h1>` where it is in the reading order, at the very top. It stays the page's only `<h1>` and it must stay first, because moving it below other content weakens the page for search and for AI assistants. Keep the first `tool-intro` paragraph. **Delete the second one**, the "Pick how you travel and the comparison prices the same standard of trip" paragraph. It describes the free comparison and it now sits too far from it. Change the `section-label` above the h1 from "Free comparison" to something that covers the whole page, since the page is no longer only the free layer.
+2. **The full report block.** The `<details>` exactly as it is today, moved up to here. Same summary, same paragraph, same questions inside, still closed by default, still reopening when saved answers exist.
+3. **The scroll cue.** One line, quiet, sending people down to the free layer. Suggested, adjust to fit: "Not ready to answer twenty questions? The free comparison below ranks all 28 countries in one click." Make it a link to the comparison. No card, no button, no image.
+4. **The free comparison.** The controls and the 28 rows, unchanged in substance.
+5. **The notes section**, unchanged.
 
-- **Delete both dark blocks.** The report is light in every context.
-- Keep the `@media print` block exactly as it is.
-- Do not add `data-theme` handling of any kind.
+The line added in brief 005 above the comparison, "This comparison uses one Eurostat category. The full report weights seven", now points backwards up the page. **Delete it.** The scroll cue in item 3 replaces it.
 
-### 2. Make the report look like the site
+### 2. Two columns for the 28 countries
 
-Patricia's words: follow the layout of the site, dark blue header, white background, terracotta accents. Right now the whole page carries the navy.
+Patricia wants the comparison to stop eating the page.
 
-- **A navy header band across the top**, `--color-primary` `#1B3A5C`, with the DURIAN Travel wordmark in white, matching `src/components/Header.astro`. Playfair for "DURIAN", the same stacked wordmark treatment the site header uses. No navigation links, this is a document.
-- **Everything below the band sits on white.** `#FFFFFF` ground, `#1A1A2E` body text.
-- **Terracotta `#C44B36` is the accent and appears sparingly**: the rule under the wordmark, the section eyebrows, and the personal index bars in the chart. Navy carries structure, headings and table rules.
-- The chart currently uses navy for the personal bar and border grey for the plain bar. Switch the personal bar to terracotta so the number that matters is the one that stands out, and leave the plain bar grey.
-- Headings stay Playfair at weight 400, per the `durian-deliverable-design` skill.
+- Above 900px, lay the rows out in **two columns**, reading top to bottom down the first column and then the second. Below that, one column as now.
+- **The sort currently uses CSS `order`, which cannot work with a multi column layout.** Change it: reorder the actual DOM nodes into the sorted sequence with `appendChild`, then drop the `order` assignments. The visible ordering must stay exactly what it is today, cheapest first.
+- Keep every row's content: name, index, bar, per day and per trip figures, and the highlight when a row is inside the budget line.
+- Make the rows shorter. The bar and the figures can sit on one line at this width rather than stacking.
 
-### 3. Collapse the question form so the page stops being a scroll
+### 3. The style buttons read "0–0/day", and the cause is a script from another page
 
-`src/pages/tools/cost-per-country.astro`. The 28 country rows sit between the controls and "Get the full report", so the paid layer is a long way down. The report is the point of the page and most visitors never see it.
+**Diagnosed by Cowork on 9 September 2026, reproduced on the live site. Do not spend time rediscovering it.**
 
-- Wrap the whole `#report-form` in a native `<details>` element. Use `<details>` and `<summary>`, not a JavaScript accordion, so it still opens with JavaScript off and stays keyboard accessible for free.
-- **Closed by default.** The `<summary>` is the visible invitation: the "Full report" eyebrow, the "Get the full report" heading, and the first intro paragraph only. Style the summary as a card so it reads as a button rather than a bare disclosure triangle.
-- The second intro paragraph, every question, the access code block and the generate button all live inside, hidden until opened.
-- If a visitor has answers saved in `durian-cpc-report-v1`, open the `<details>` on load so they are not hunting for what they typed.
-- Once a report has been generated, keep it open.
+The server sends the correct HTML. A fresh fetch of `/tools/cost-per-country/` contains `70–130/day`, `140–240/day` and `260–380+/day`. By the time the page has rendered, all three read `0–0/day`.
 
-### 4. Put the offer above the comparison as well
+`src/pages/tools/budget.astro` around lines 606 to 612 does this:
 
-One compact line between the style buttons and the 28 country rows, linking down to the report section. Something close to:
+```
+const low = parseFloat(btn.dataset.low ?? '0');
+const high = parseFloat(btn.dataset.high ?? '0');
+...
+const range = btn.querySelector('.style-btn__range');
+```
 
-> This comparison uses one Eurostat category. The full report weights seven, for the way you actually travel.
+It selects `.style-btn` across the whole document. Astro bundles page scripts together, so that script also runs on `/tools/cost-per-country/`, where the style buttons carry `data-typical` but no `data-low` or `data-high`. Both `parseFloat` calls fall back to `0`, and the budget script overwrites the cost per country labels with `0–0/day`.
 
-Make it a link to the `<details>`, and open the element when it is followed. One line, no card, no image, no repetition of the longer intro further down.
+The fix:
+
+- **Scope the budget script to its own page.** Query inside `#budget-form`, or return early when that element is absent. Do not add `data-low` and `data-high` to the cost per country buttons to paper over it, because the two pages scale their ranges differently and that would put the budget page's country scaling on the wrong tool.
+- **Then check the rest of both tool scripts for the same class of bug.** Any `document.querySelector` or `document.querySelectorAll` in a page script that could match an element on another tool page is the same defect waiting to happen. `.style-btn`, `.money`, `.item`, `.cpc-row` and `.buffer-btn` are the ones to look at. Scope each one to its own page root.
+- Verify in a browser on all three tool pages, not just this one. The label must read `140–240/day` on the cost per country page with Mid-range selected, and the budget page's own scaled ranges must still work.
+
+### 4. Tighten the spacing everywhere on this page
+
+Five stacked `section section--sm` blocks is what is making the page long.
+
+- Collapse the five sections into fewer. The title block, the report block and the scroll cue belong to one section, not three.
+- Reduce the vertical padding between blocks, and reduce the internal padding on the cards, `--space-5` and `--space-8` are doing too much work here.
+- Reduce the gap under headings and between form fields inside the disclosure.
+
+**The target, and it is testable:** on a 1440 by 900 laptop the `<h1>`, the first paragraph and the whole "Get the full report" summary card must all be visible without scrolling. The finished page should be meaningfully shorter than it is now, not trimmed by a few pixels. Check it in the browser before you commit, do not assume.
+
+Use the existing spacing tokens. Do not invent new ones and do not edit `src/styles/tokens.css`, which every other page reads.
 
 ## Why
 
-Two visitor problems, both found by Patricia on the live site.
+The report is what this page sells and it was still below 28 rows of free comparison, so most visitors never reached it. The free comparison is the thing people take away when they decide not to buy, so it stays complete and free, just below the offer instead of in front of it.
 
-A paid deliverable that turns dark because of an operating system setting looks broken rather than designed, and it is the first thing a customer sees after paying.
-
-The report is what this page exists to sell, and it currently sits below 28 rows of free comparison. The free comparison is the quick win people take away, so it stays exactly as it is, but the offer has to be visible before it.
+The height is the same problem in another form. A page that takes four screens to read buries whichever part comes last.
 
 ## Do not
 
-- Do not add Stripe, a price, a payment link, or any fulfilment code. That is brief 006.
-- Do not change `isPaidRequest` or anything else in `functions/api/report.ts`. The access code works and is verified live.
-- Do not change the report's content, sections, arithmetic, weights or wording. This brief is appearance and page structure only.
-- Do not change the seven Eurostat categories or any figure in `src/data/country-costs.json`.
-- Do not degrade the free comparison. The 28 rows, the ordering, the style buttons and the budget line all stay.
-- Do not use a JavaScript accordion where `<details>` will do.
-- Do not add a dark palette back to the report in any form.
+- Do not add Stripe, a price, or a payment link. The price is not decided.
+- Do not change `isPaidRequest`, `functions/api/report.ts`, or `src/lib/report.ts`. The report and the access code both work and are verified live.
+- Do not change the report's appearance. Brief 005 settled that.
+- Do not change any question, any answer option, or the weighting.
+- Do not remove a country, change a figure, or touch `src/data/country-costs.json`.
+- Do not change what the free comparison computes. This is layout only.
+- Do not move the `<h1>` below other content, and do not add a second `<h1>`.
+- Do not replace the `<details>` with a JavaScript accordion.
+- Do not edit `src/styles/tokens.css` or `src/styles/global.css`. Other pages depend on both.
 - Do not touch `public/_headers`, the CSP, or DNS.
-- Do not touch `/tools/budget/` or `/tools/visa-checklist/`.
-- Do not add a PDF library or any new runtime dependency.
+- Item 3 is the only reason to open `src/pages/tools/budget.astro`, and the only change allowed there is scoping its selectors. Do not change what that page computes, shows or stores. Do not touch `/tools/visa-checklist/` beyond the same selector check.
+- Do not fix item 3 by adding `data-low` or `data-high` to the cost per country buttons.
+- Do not add a library or any new runtime dependency.
 - Do not `git add -A` or `git add .`. Stage files by name.
 - Do not commit `BUILD-BRIEF-001.md`, `CC-PROMPT-STEP-1.md`, `.claude/launch.json`, the untracked `api/` folder, or any `.xlsx` file in the repo root.
-- Every page and the report carry: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
+- The page keeps: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
 
 ---
 
 ## Done
 
 **Completed on:** 9 September 2026
-**Branch:** `brief/005-light-report-and-collapsed-form`
+**Branch:** `brief/006-report-first-layout`
 
 **What changed:**
 
-1. **The report is light everywhere.** Both dark blocks are deleted from
-   `src/lib/report.ts`: the `@media (prefers-color-scheme: dark)` block and the
-   `:root[data-theme="dark"]` block. Verified in a browser reporting dark mode: body stays
-   `#FFFFFF`, text stays `#1A1A2E`. The `@media print` block is untouched, so it still
-   contains one `data-theme="dark"` selector that can no longer match anything. No
-   `data-theme` handling was added.
+1. **The report is first.** Order is now: title block, the `<details>`, the scroll cue, the free
+   comparison, the notes. The `<h1>` is still first in the reading order and is still the only
+   one. The second `tool-intro` paragraph is deleted. The eyebrow above the `<h1>` reads "Cost
+   per country" instead of "Free comparison". The brief 005 offer line above the comparison is
+   deleted and the scroll cue replaces it, linking down to `#cpc-compare` on the comparison
+   section.
 
-2. **The report looks like the site.** A navy `#1B3A5C` masthead runs across the top with the
-   stacked DURIAN Travel wordmark and the circle D, all in white, and a 3px terracotta rule
-   under it. No navigation links. Everything below sits on white. The page padding moved off
-   `body` onto `.wrap` so the band can be full width; the reading column is still 780px.
-   Headings are still Playfair at weight 400.
+2. **Two columns above 900px.** `.cpc-list` becomes `column-count: 2`, so the first column fills
+   top to bottom before the second starts, which is the sorted order. Below 900px it is one
+   column exactly as before. The sort no longer sets `row.style.order`; it moves the DOM nodes
+   through a document fragment instead. Verified across repeated style, nights, currency and
+   budget changes: always 28 rows, no duplicates, always cheapest first, budget highlighting
+   intact. The inline `listEl.style.display = 'flex'` was removed as well, because an inline
+   style would have beaten the media query.
 
-3. **Terracotta is the accent.** The chart's personal index bar and its key swatch moved from
-   navy to terracotta `#C44B36`; the plain bar stays grey. Navy still carries headings, table
-   rules and the verdict box.
+3. **Rows are shorter.** In two column mode the name sits beside the index and the two figures
+   sit beside the bar, so each row is two lines rather than three. List height at 1440 wide is
+   868px against 1930px. No row overflows its column at any width tested.
 
-4. **The question form is collapsed.** `#report-form` now sits inside a native `<details>`,
-   closed by default, no JavaScript accordion. The `<summary>` holds the "Full report"
-   eyebrow, the "Get the full report" heading and the first intro paragraph only, styled as a
-   card with a chevron instead of a disclosure triangle. The second paragraph, all questions,
-   the access code and the generate button are inside. The page is 4514px closed against
-   7092px open at 1100px wide, so the collapse removes about a third of it.
+4. **The 0-0/day bug is fixed, both directions.** `budget.astro` now queries inside
+   `#budget-form` rather than the document, so its `.style-btn`, `.money.fixed`, `.money.daily`
+   and `.buffer-btn` collections cannot reach another page. The same defect ran the other way:
+   `cost-per-country.astro` was attaching its own click handlers to the budget planner's style
+   buttons, so its `.style-btn` is now scoped to `#cpc-form` and `.cpc-row` to `#cpc-list`.
+   `visa-checklist.astro` is scoped too: status and flag inputs to the existing `#situation`,
+   and `.item`, `.item__box` and `.group` to the container, which needed an `id="checklist"`.
+   That is the only markup change on that page.
 
-5. **It opens when it should.** On load if there are real saved answers in
-   `durian-cpc-report-v1`, on a click of the new offer line, on a `#report-details` link, and
-   when a report is generated. All four verified in the browser.
+5. **Spacing.** Five `section--sm` blocks became three, and this page overrides `section--sm`
+   block padding from `--space-12` to `--space-8` with no padding between adjacent sections.
+   Card padding, field gaps and heading margins came down a step each. All existing tokens, no
+   new ones, and neither `tokens.css` nor `global.css` was touched.
 
-6. **The offer sits above the comparison too.** One line between the controls and the 28
-   country rows, linking to `#report-details` and opening it: "This comparison uses one
-   Eurostat category. The full report weights seven, for the way you actually travel."
+**The target, measured at 1440 by 900:**
 
-The free comparison is untouched: 28 rows, ordering, three style buttons and the budget line
-all still there. Both the page and the report still carry the educational information notice.
+| | before, live | after |
+|---|---|---|
+| Page height | 4514px | 2934px |
+| Bottom of the report card | 3506px | 707px |
+| Country list height | 1930px | 868px |
+
+The `<h1>` (311px), the first paragraph (412px) and the whole report card (707px) are all above
+the fold, and the comparison starts at 801px. On mobile the page is 5347px against 6057px and
+stays one column.
+
+Verified in a browser on all three tool pages: the cost per country buttons read `140–240/day`
+with Mid-range selected, the budget planner still rescales its own ranges by destination
+(Croatia gives 67–124) and still computes totals and the buffer correctly, and the visa
+checklist still filters by employment status. No console errors on any of them.
 
 **Could not do, and why:**
 
@@ -124,24 +160,14 @@ Nothing in the brief was skipped.
 
 **For Cowork:**
 
-- **The printed report still has a navy personal bar.** The brief said to keep the
-  `@media print` block exactly as it is, and that block hard codes
-  `.chart__fill { background: #1B3A5C !important; }`. So on screen the bar that matters is
-  terracotta and on paper it is navy. The report's only button is "Print or save as PDF", so
-  this is worth a decision. One line fixes it whenever you want it fixed.
-- The masthead is white on navy rather than the site's terracotta circle D, because the brief
-  asked for the wordmark in white and listed the three places terracotta should appear. Easy
-  to switch the D back to terracotta if you would rather it matched the site header exactly.
-- **A real bug was found and fixed while testing.** `saveReport()` also runs when the currency
-  dropdown above the comparison changes, so "something is in localStorage" was not evidence
-  that anybody had answered anything, and the panel would have opened for visitors who only
-  used the free comparison. It now opens only when a saved answer differs from the control's
-  own default. None of the selects mark an option as `selected`, so the untouched value is the
-  first option, not the empty string; the first version of this check got that wrong and was
-  corrected.
-- Unrelated to this brief: the three style buttons render as "0-0/day" in some browsers even
-  though the served HTML says "70-130/day". It reproduces identically on the live site today,
-  so it predates this work and is client side, not a build problem. Flagging it in case
-  Patricia sees it and thinks brief 005 caused it.
-- Untouched as instructed: `functions/api/report.ts`, `public/_headers`, the Eurostat data,
-  `/tools/budget/`, `/tools/visa-checklist/`. No Stripe, no price, no new dependency.
+- **One sentence had to change that the brief said to keep.** The report summary opened with
+  "The comparison above prices your whole trip with one index". Moving the report above the
+  comparison made that false, so it now reads "The free comparison below". Same reason the brief
+  gave for deleting the offer line. No other wording changed.
+- `visa-checklist.astro` needed one new attribute, `id="checklist"` on the container that holds
+  the progress bar and the groups, because there was no existing element to scope `.item` and
+  `.group` to. Nothing that page computes, shows or stores changed.
+- The two column layout uses CSS columns rather than grid. Grid would need an explicit row count
+  to fill down and then across; columns do it natively and reflow on their own.
+- Untouched as instructed: `src/lib/report.ts`, `functions/api/report.ts`, `src/styles/`,
+  `src/data/`, `public/`. No Stripe, no price, no new dependency.
