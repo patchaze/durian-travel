@@ -497,10 +497,17 @@ const schema = {
   const destinationSel = document.getElementById('destination') as HTMLSelectElement | null;
   const destinationNote = document.getElementById('destination-note');
   const form = document.getElementById('budget-form');
-  const fixedInputs = Array.from(document.querySelectorAll<HTMLInputElement>('.money.fixed'));
-  const dailyInputs = Array.from(document.querySelectorAll<HTMLInputElement>('.money.daily'));
-  const styleBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.style-btn'));
-  const bufferBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.buffer-btn'));
+
+  // Scoped to this page's own form, not the document. Astro bundles page
+  // scripts together, so a bare document.querySelectorAll('.style-btn') here
+  // also matched the cost per country buttons and overwrote their labels with
+  // 0-0/day, because those buttons carry data-typical but no data-low or
+  // data-high. Every collection below lives inside #budget-form, so scoping to
+  // it keeps this script on its own page.
+  const fixedInputs = Array.from(form?.querySelectorAll<HTMLInputElement>('.money.fixed') ?? []);
+  const dailyInputs = Array.from(form?.querySelectorAll<HTMLInputElement>('.money.daily') ?? []);
+  const styleBtns = Array.from(form?.querySelectorAll<HTMLButtonElement>('.style-btn') ?? []);
+  const bufferBtns = Array.from(form?.querySelectorAll<HTMLButtonElement>('.buffer-btn') ?? []);
 
   let buffer = 15;
 

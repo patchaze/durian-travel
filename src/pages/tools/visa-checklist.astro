@@ -133,7 +133,7 @@ const schema = {
   </section>
 
   <section class="section section--sm">
-    <div class="container container--narrow">
+    <div class="container container--narrow" id="checklist">
       <form class="situation" id="situation">
         <fieldset class="situation__block">
           <legend class="situation__legend">Your situation</legend>
@@ -343,19 +343,25 @@ const schema = {
 <script>
   const STORAGE_KEY = 'durian-visa-checklist-v1';
 
-  const items = Array.from(document.querySelectorAll<HTMLLIElement>('.item'));
-  const boxes = Array.from(document.querySelectorAll<HTMLInputElement>('.item__box'));
-  const groups = Array.from(document.querySelectorAll<HTMLElement>('.group'));
+  // Scoped to this page's own roots rather than the document. Astro bundles
+  // page scripts together, so a document wide selector here would reach into
+  // whichever other tool page happened to use the same class name.
+  const situationEl = document.getElementById('situation');
+  const checklistEl = document.getElementById('checklist');
+
+  const items = Array.from(checklistEl?.querySelectorAll<HTMLLIElement>('.item') ?? []);
+  const boxes = Array.from(checklistEl?.querySelectorAll<HTMLInputElement>('.item__box') ?? []);
+  const groups = Array.from(checklistEl?.querySelectorAll<HTMLElement>('.group') ?? []);
   const countEl = document.getElementById('progress-count');
   const fillEl = document.getElementById('progress-fill');
   const statusEl = document.getElementById('action-status');
 
   function currentStatus(): string {
-    const el = document.querySelector<HTMLInputElement>('input[name="status"]:checked');
+    const el = situationEl?.querySelector<HTMLInputElement>('input[name="status"]:checked');
     return el?.value ?? 'employed';
   }
   function currentFlags(): string[] {
-    return Array.from(document.querySelectorAll<HTMLInputElement>('input[name="flag"]:checked')).map(f => f.value);
+    return Array.from(situationEl?.querySelectorAll<HTMLInputElement>('input[name="flag"]:checked') ?? []).map(f => f.value);
   }
 
   // An item shows when its status list includes the chosen status (or it has
@@ -404,11 +410,11 @@ const schema = {
       if (!raw) return;
       const d = JSON.parse(raw);
       if (d.status) {
-        const el = document.querySelector<HTMLInputElement>('input[name="status"][value="' + d.status + '"]');
+        const el = situationEl?.querySelector<HTMLInputElement>('input[name="status"][value="' + d.status + '"]');
         if (el) el.checked = true;
       }
       if (Array.isArray(d.flags)) {
-        document.querySelectorAll<HTMLInputElement>('input[name="flag"]').forEach(f => {
+        situationEl?.querySelectorAll<HTMLInputElement>('input[name="flag"]').forEach(f => {
           f.checked = d.flags.includes(f.value);
         });
       }

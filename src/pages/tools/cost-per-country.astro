@@ -14,7 +14,7 @@ const canonical = 'https://www.duriantravel.com/tools/cost-per-country/';
 // other 27 bars. That was a real defect and it is why the "at prices like"
 // dropdown is gone.
 //
-// The full report below asks how somebody actually travels and weights seven
+// The full report asks how somebody actually travels and weights seven
 // Eurostat categories instead of one. It is generated server side by
 // /api/report and never built into this page.
 const source = costData._source;
@@ -144,105 +144,21 @@ const schema = {
 
   <section class="section section--sm">
     <div class="container container--narrow">
-      <span class="section-label">Free comparison</span>
+      <span class="section-label">Cost per country</span>
       <h1 class="tool-title">What the same trip costs, country by country</h1>
       <p class="tool-intro">
         The same week costs roughly three times as much in Switzerland as in Bulgaria. If your
         route is flexible, that gap is the single biggest lever you have on the budget.
       </p>
-      <p class="tool-intro tool-intro--muted">
-        Pick how you travel and the comparison prices the same standard of trip in all 28
-        countries, cheapest first.
-      </p>
-    </div>
-  </section>
-
-  <section class="section section--sm">
-    <div class="container container--narrow">
-      <form class="cpc-controls" id="cpc-form" novalidate>
-        <div class="field field--full">
-          <span class="field__label">How you travel</span>
-          <div class="style-picker" role="group" aria-label="Travel style presets">
-            {styles.map(s => (
-              <button type="button" class="style-btn" data-style={s.id} data-typical={s.typical}>
-                <span class="style-btn__label">{s.label}</span>
-                <span class="style-btn__range">{s.low}–{s.high === 380 ? '380+' : s.high}/day</span>
-              </button>
-            ))}
-          </div>
-          <p class="cpc-provenance">
-            Daily figures are our own estimate for a Western European trip, then scaled to each
-            country using Eurostat's price level index for restaurants and hotels, reference year
-            {' '}{source.referenceYear}, where the EU27 average is 100.
-          </p>
-        </div>
-
-        <label class="field">
-          <span class="field__label">for how many nights</span>
-          <input type="number" id="cpc-nights" min="1" max="365" step="1" value="7" inputmode="numeric" />
-        </label>
-
-        <label class="field">
-          <span class="field__label">Your daily budget, per person</span>
-          <div class="field-inline">
-            <select id="cpc-currency" aria-label="Currency">
-              <option value="€" selected>€</option>
-              <option value="$">$</option>
-              <option value="£">£</option>
-              <option value="₱">₱</option>
-              <option value="R$">R$</option>
-            </select>
-            <input type="number" id="cpc-budget" min="0" step="5" placeholder="optional" inputmode="decimal" />
-          </div>
-          <span class="field__hint">Optional. It draws a line across the comparison rather than
-          changing any figure: countries at or below it are marked.</span>
-        </label>
-      </form>
-
-      <p class="cpc-offer">
-        <a class="cpc-offer__link" href="#report-details">This comparison uses one Eurostat
-        category. The full report weights seven, for the way you actually travel.</a>
-      </p>
-    </div>
-  </section>
-
-  <section class="section section--sm">
-    <div class="container container--narrow">
-      <div class="cpc-head">
-        <h2 class="cpc-head__title">Cheapest first</h2>
-        <p class="cpc-head__meta" id="cpc-summary">—</p>
-      </div>
-
-      <ol class="cpc-list" id="cpc-list" role="list">
-        {countries.map(c => (
-          <li class="cpc-row" data-pli={c.pli} data-name={c.name}>
-            <div class="cpc-row__main">
-              <span class="cpc-row__name">{c.name}</span>
-              <span class="cpc-row__index">index {c.pli}</span>
-            </div>
-            <div class="cpc-row__bar"><span class="cpc-row__fill"></span></div>
-            <div class="cpc-row__figures">
-              <span class="cpc-row__day"></span>
-              <span class="cpc-row__trip"></span>
-            </div>
-          </li>
-        ))}
-      </ol>
-      <p class="cpc-legend" id="cpc-legend" hidden></p>
-    </div>
-  </section>
-
-  <section class="section section--sm">
-    <div class="container container--narrow">
       <div class="cpc-report">
         <details class="cpc-report__disclosure" id="report-details">
           <summary class="cpc-report__summary">
             <span class="section-label">Full report</span>
             <h2 class="cpc-report__title">Get the full report</h2>
             <span class="cpc-report__intro">
-              The comparison above prices your whole trip with one index, the one for restaurants
-              and hotels. That is the wrong basket for most people. Portugal sits well below the EU
-              average for restaurants and hotels and slightly above it for food from shops, so
+              The free comparison below prices your whole trip with one index, the one for
+              restaurants and hotels. That is the wrong basket for most people. Portugal sits well
+              below the EU average for restaurants and hotels and slightly above it for food from shops, so
               somebody who cooks saves almost nothing there while somebody who eats out saves a
               quarter.
             </span>
@@ -333,6 +249,77 @@ const schema = {
         </form>
         </details>
       </div>
+
+      <p class="cpc-cue">
+        <a class="cpc-cue__link" href="#cpc-compare">Not ready to answer twenty questions? The free
+        comparison below ranks all 28 countries in one click.</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--sm" id="cpc-compare">
+    <div class="container container--narrow">
+      <form class="cpc-controls" id="cpc-form" novalidate>
+        <div class="field field--full">
+          <span class="field__label">How you travel</span>
+          <div class="style-picker" role="group" aria-label="Travel style presets">
+            {styles.map(s => (
+              <button type="button" class="style-btn" data-style={s.id} data-typical={s.typical}>
+                <span class="style-btn__label">{s.label}</span>
+                <span class="style-btn__range">{s.low}–{s.high === 380 ? '380+' : s.high}/day</span>
+              </button>
+            ))}
+          </div>
+          <p class="cpc-provenance">
+            Daily figures are our own estimate for a Western European trip, then scaled to each
+            country using Eurostat's price level index for restaurants and hotels, reference year
+            {' '}{source.referenceYear}, where the EU27 average is 100.
+          </p>
+        </div>
+
+        <label class="field">
+          <span class="field__label">for how many nights</span>
+          <input type="number" id="cpc-nights" min="1" max="365" step="1" value="7" inputmode="numeric" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Your daily budget, per person</span>
+          <div class="field-inline">
+            <select id="cpc-currency" aria-label="Currency">
+              <option value="€" selected>€</option>
+              <option value="$">$</option>
+              <option value="£">£</option>
+              <option value="₱">₱</option>
+              <option value="R$">R$</option>
+            </select>
+            <input type="number" id="cpc-budget" min="0" step="5" placeholder="optional" inputmode="decimal" />
+          </div>
+          <span class="field__hint">Optional. It draws a line across the comparison rather than
+          changing any figure: countries at or below it are marked.</span>
+        </label>
+      </form>
+
+      <div class="cpc-head">
+        <h2 class="cpc-head__title">Cheapest first</h2>
+        <p class="cpc-head__meta" id="cpc-summary">—</p>
+      </div>
+
+      <ol class="cpc-list" id="cpc-list" role="list">
+        {countries.map(c => (
+          <li class="cpc-row" data-pli={c.pli} data-name={c.name}>
+            <div class="cpc-row__main">
+              <span class="cpc-row__name">{c.name}</span>
+              <span class="cpc-row__index">index {c.pli}</span>
+            </div>
+            <div class="cpc-row__bar"><span class="cpc-row__fill"></span></div>
+            <div class="cpc-row__figures">
+              <span class="cpc-row__day"></span>
+              <span class="cpc-row__trip"></span>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <p class="cpc-legend" id="cpc-legend" hidden></p>
     </div>
   </section>
 
@@ -378,10 +365,15 @@ const schema = {
 </BaseLayout>
 
 <style>
+  /* This page carries three stacked sections and the shared --space-12 block
+     padding on each was most of its height. Scoped here, not in global.css. */
+  .section--sm { padding-block: var(--space-8); }
+  .section--sm + .section--sm { padding-top: 0; }
+
   .tool-title {
     font-family: var(--font-serif);
     font-weight: 700;
-    margin: var(--space-3) 0 var(--space-4);
+    margin: var(--space-2) 0 var(--space-3);
   }
   .tool-intro {
     font-size: var(--text-lg);
@@ -394,8 +386,8 @@ const schema = {
   .cpc-controls {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-4);
-    padding: var(--space-5);
+    gap: var(--space-3) var(--space-4);
+    padding: var(--space-4);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     background: var(--color-bg-alt);
@@ -479,7 +471,7 @@ const schema = {
     grid-template-columns: minmax(9rem, 1.1fr) minmax(0, 1.6fr) minmax(7rem, auto);
     align-items: center;
     gap: var(--space-4);
-    padding: var(--space-3) var(--space-3);
+    padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-md);
     border-left: 3px solid transparent;
     transition: background var(--transition-fast);
@@ -513,6 +505,40 @@ const schema = {
   .cpc-row__day { font-weight: var(--font-semibold); color: var(--color-text); }
   .cpc-row__trip { font-size: var(--text-xs); color: var(--color-text-light); }
 
+  /* Two columns on a wide screen, so 28 rows take 14 rows of height. CSS
+     columns fill the first column top to bottom before starting the second,
+     which is the order the rows are sorted in. This is why the sort moves the
+     DOM nodes: CSS order has no effect inside a multi column layout. */
+  @media (min-width: 900px) {
+    .cpc-list {
+      display: block;
+      column-count: 2;
+      column-gap: var(--space-5);
+    }
+    .cpc-row {
+      break-inside: avoid;
+      margin-bottom: 2px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "main day"
+        "bar  trip";
+      align-items: center;
+      gap: 2px var(--space-3);
+    }
+    /* Name beside index, and the two figures beside the bar, rather than each
+       pair stacking. Halves the height of every row. */
+    .cpc-row__main {
+      grid-area: main;
+      flex-direction: row;
+      align-items: baseline;
+      gap: var(--space-2);
+    }
+    .cpc-row__bar { grid-area: bar; }
+    .cpc-row__figures { display: contents; }
+    .cpc-row__day  { grid-area: day;  text-align: right; }
+    .cpc-row__trip { grid-area: trip; text-align: right; }
+  }
+
   .cpc-legend {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
@@ -541,13 +567,13 @@ const schema = {
     margin-bottom: var(--space-3);
   }
 
-  /* The questions are collapsed so the offer sits close to the comparison
-     rather than below 28 rows of it. A native <details> keeps this working
+  /* The questions are collapsed so the offer leads the page without the 28
+     rows of free comparison behind it. A native <details> keeps this working
      with JavaScript off and keyboard accessible without any code. */
   .cpc-report__summary {
     display: block;
     position: relative;
-    padding: var(--space-5) var(--space-8) var(--space-5) var(--space-5);
+    padding: var(--space-4) var(--space-8) var(--space-4) var(--space-4);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     background: var(--color-bg-alt);
@@ -561,15 +587,15 @@ const schema = {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
-  .cpc-report__summary .cpc-report__title { margin-top: var(--space-2); }
+  .cpc-report__summary .cpc-report__title { margin-top: var(--space-1); }
   .cpc-report__summary .cpc-report__intro { margin-bottom: 0; }
 
   /* A chevron rather than the default triangle, so the card reads as a button. */
   .cpc-report__summary::after {
     content: '';
     position: absolute;
-    top: var(--space-6);
-    right: var(--space-5);
+    top: var(--space-5);
+    right: var(--space-4);
     width: 10px;
     height: 10px;
     border-right: 2px solid var(--color-primary);
@@ -582,29 +608,34 @@ const schema = {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
-  .cpc-report__disclosure[open] > .cpc-report__intro { margin-top: var(--space-5); }
+  .cpc-report__disclosure[open] > .cpc-report__intro { margin-top: var(--space-4); }
 
-  /* The same offer, one line, above the 28 rows. */
-  .cpc-offer {
-    margin-top: var(--space-5);
+  /* One quiet line sending anybody who does not want the questions down to the
+     free comparison. No card, no button. */
+  .cpc-cue {
+    margin-top: var(--space-4);
     font-size: var(--text-sm);
     line-height: var(--leading-relaxed);
     max-width: 62ch;
-  }
-  .cpc-offer__link {
     color: var(--color-text-muted);
-    text-decoration: none;
-    border-bottom: 1px solid var(--color-accent);
-    padding-bottom: 1px;
   }
-  .cpc-offer__link:hover { color: var(--color-accent); }
+  .cpc-cue__link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 3px;
+  }
+  .cpc-cue__link:hover {
+    color: var(--color-accent);
+    text-decoration-color: var(--color-accent);
+  }
 
-  .report-form { margin-top: var(--space-6); }
+  .report-form { margin-top: var(--space-4); }
   .tool-block {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: var(--space-5);
-    margin-bottom: var(--space-4);
+    padding: var(--space-4);
+    margin-bottom: var(--space-3);
     background: var(--color-bg-alt);
   }
   .tool-block__title {
@@ -616,13 +647,13 @@ const schema = {
   .tool-block__hint {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
-    margin: var(--space-2) 0 var(--space-4);
+    margin: var(--space-1) 0 var(--space-3);
   }
 
   .field-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: var(--space-4);
+    gap: var(--space-3) var(--space-4);
   }
 
   .country-grid {
@@ -643,7 +674,7 @@ const schema = {
   .country-check input { width: auto; flex: 0 0 auto; margin: 0; accent-color: var(--color-primary); }
   .country-check:has(input:checked) { border-color: var(--color-primary); background: var(--color-primary-bg); }
 
-  .report-submit { margin-top: var(--space-5); width: 100%; }
+  .report-submit { margin-top: var(--space-4); width: 100%; }
   .report-status {
     font-size: var(--text-sm);
     line-height: var(--leading-relaxed);
@@ -655,8 +686,8 @@ const schema = {
 
   .cpc-notes {
     border-top: 1px solid var(--color-border);
-    padding-top: var(--space-6);
-    margin-top: var(--space-8);
+    padding-top: var(--space-5);
+    margin-top: 0;
   }
   .cpc-notes__title {
     font-family: var(--font-serif);
@@ -719,8 +750,12 @@ const schema = {
   const listEl = document.getElementById('cpc-list');
   const summaryEl = document.getElementById('cpc-summary');
   const legendEl = document.getElementById('cpc-legend') as HTMLElement | null;
-  const styleBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.style-btn'));
-  const rows = Array.from(document.querySelectorAll<HTMLLIElement>('.cpc-row'));
+  // Scoped to this page's own controls and list, not the document. The same
+  // defect ran the other way too: a bare '.style-btn' here attached this
+  // page's click handlers to the budget planner's buttons.
+  const controlsEl = document.getElementById('cpc-form');
+  const styleBtns = Array.from(controlsEl?.querySelectorAll<HTMLButtonElement>('.style-btn') ?? []);
+  const rows = Array.from(listEl?.querySelectorAll<HTMLLIElement>('.cpc-row') ?? []);
 
   function activeStyle(): HTMLButtonElement | undefined {
     return styleBtns.find(b => b.classList.contains('is-active'));
@@ -751,10 +786,17 @@ const schema = {
 
     const maxDay = Math.max(...computed.map(c => c.perDay), 0);
 
-    computed
-      .slice()
-      .sort((a, b) => a.perDay - b.perDay)
-      .forEach(({ row }, i) => { row.style.order = String(i); });
+    // The rows are reordered as DOM nodes rather than by CSS order, because the
+    // two column layout uses CSS columns, where order does nothing at all.
+    // Moving them through a fragment keeps it to one reflow.
+    if (listEl) {
+      const inOrder = document.createDocumentFragment();
+      computed
+        .slice()
+        .sort((a, b) => a.perDay - b.perDay)
+        .forEach(({ row }) => inOrder.appendChild(row));
+      listEl.appendChild(inOrder);
+    }
 
     let under = 0;
     computed.forEach(({ row, perDay, trip }) => {
@@ -794,7 +836,6 @@ const schema = {
       }
     }
 
-    if (listEl) (listEl as HTMLElement).style.display = 'flex';
     save();
   }
 
@@ -930,13 +971,12 @@ const schema = {
   reportForm?.addEventListener('change', saveReport);
 
   // Closed by default. It opens for anybody who already has answers in here,
-  // for the offer line above the comparison, and for a link straight to it.
+  // and for a link straight to it.
   const reportDetails = document.getElementById('report-details') as HTMLDetailsElement | null;
   function openReport() { if (reportDetails) reportDetails.open = true; }
 
   if (restoreReport()) openReport();
   if (location.hash === '#report-details') openReport();
-  document.querySelector('.cpc-offer__link')?.addEventListener('click', openReport);
 
   reportForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
