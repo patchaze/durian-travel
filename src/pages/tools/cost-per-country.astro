@@ -20,6 +20,15 @@ const canonical = 'https://www.duriantravel.com/tools/cost-per-country/';
 const source = costData._source;
 const countries = costData.countries;
 
+// The price of the full report. Empty until Patricia decides it.
+// Set it to a string like '€9' and the button label picks it up.
+const REPORT_PRICE = '';
+
+// The only place a price appears on this page. Nowhere else.
+const reportCta = REPORT_PRICE
+  ? `Get the full report for ${REPORT_PRICE}`
+  : 'Get the full report';
+
 // The same three bands as /tools/budget/, and the same typical figures.
 // Durian's own editorial estimate for Western Europe, not a statistic.
 const styles = [
@@ -162,6 +171,7 @@ const schema = {
               somebody who cooks saves almost nothing there while somebody who eats out saves a
               quarter.
             </span>
+            <span class="btn btn--primary cpc-report__cta">{reportCta}</span>
           </summary>
 
         <p class="cpc-report__intro">
@@ -300,8 +310,13 @@ const schema = {
       </form>
 
       <div class="cpc-head">
-        <h2 class="cpc-head__title">Cheapest first</h2>
-        <p class="cpc-head__meta" id="cpc-summary">—</p>
+        <h2 class="cpc-head__title">Can you afford Europe?</h2>
+        <div class="cpc-head__row">
+          <p class="cpc-head__lede">
+            Pick how you travel and see what a week costs in all 28 countries, cheapest first.
+          </p>
+          <p class="cpc-head__meta" id="cpc-summary">—</p>
+        </div>
       </div>
 
       <ol class="cpc-list" id="cpc-list" role="list">
@@ -458,11 +473,13 @@ const schema = {
     max-width: 62ch;
   }
 
-  .cpc-head {
-    display: flex; align-items: baseline; justify-content: space-between;
-    gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-4);
-  }
+  .cpc-head { margin-bottom: var(--space-4); }
   .cpc-head__title { font-family: var(--font-serif); font-size: var(--text-2xl); color: var(--color-navy); }
+  .cpc-head__row {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: var(--space-2) var(--space-4); flex-wrap: wrap; margin-top: var(--space-2);
+  }
+  .cpc-head__lede { font-size: var(--text-sm); color: var(--color-text-muted); max-width: 52ch; }
   .cpc-head__meta { font-size: var(--text-sm); color: var(--color-text-muted); }
 
   .cpc-list { display: flex; flex-direction: column; gap: 2px; }
@@ -589,6 +606,19 @@ const schema = {
   }
   .cpc-report__summary .cpc-report__title { margin-top: var(--space-1); }
   .cpc-report__summary .cpc-report__intro { margin-bottom: 0; }
+
+  /* A span, not a button or a link. An interactive element nested inside a
+     <summary> breaks the disclosure and its keyboard behaviour. The summary
+     itself is already the click target, so this only has to look like the
+     thing you press. Styling comes from .btn in global.css. */
+  .cpc-report__cta {
+    margin-top: var(--space-4);
+    white-space: normal;
+  }
+  .cpc-report__summary:hover .cpc-report__cta {
+    background: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+  }
 
   /* A chevron rather than the default triangle, so the card reads as a button. */
   .cpc-report__summary::after {
@@ -742,6 +772,8 @@ const schema = {
 
   const STORAGE_KEY = 'durian-cpc-v1';
   const REPORT_KEY = 'durian-cpc-report-v1';
+  // Session only, so it survives the back button but not a new tab.
+  const GENERATED_KEY = 'durian-cpc-report-generated';
   const DEFAULT_STYLE = 'mid';
 
   const nightsEl = document.getElementById('cpc-nights') as HTMLInputElement | null;
@@ -929,36 +961,29 @@ const schema = {
     } catch (e) { /* private mode */ }
   }
 
-  function restoreReport(): boolean {
-    let answered = false;
+  // Restores the answers into the fields. It does not open the disclosure:
+  // somebody landing on the page gets the offer, not a wall of questions.
+  // Their answers are waiting for them once they open it.
+  function restoreReport() {
     try {
       const raw = localStorage.getItem(REPORT_KEY);
-      if (!raw) return false;
+      if (!raw) return;
       const d = JSON.parse(raw);
-      if (!d || typeof d !== 'object') return false;
+      if (!d || typeof d !== 'object') return;
       answerEls.forEach(el => {
         const key = el.dataset.answer;
         const saved = key ? d[key] : undefined;
         if (typeof saved !== 'string') return;
         if (el instanceof HTMLSelectElement) {
-          if (!Array.from(el.options).some(o => o.value === saved)) return;
-          // No option here carries a selected attribute, so the untouched value
-          // is the first one rather than the empty string.
-          const opts = Array.from(el.options);
-          const fallback = (opts.find(o => o.defaultSelected) ?? opts[0])?.value ?? '';
-          if (saved !== fallback) answered = true;
-          el.value = saved;
+          if (Array.from(el.options).some(o => o.value === saved)) el.value = saved;
         } else {
-          if (saved !== el.defaultValue) answered = true;
           el.value = saved;
         }
       });
       if (Array.isArray(d.countries)) {
         countryBoxes.forEach(b => { b.checked = d.countries.indexOf(b.value) !== -1; });
-        if (d.countries.length > 0) answered = true;
       }
     } catch (e) { /* ignore */ }
-    return answered;
   }
 
   function say(message: string, isError: boolean) {
@@ -970,13 +995,17 @@ const schema = {
   reportForm?.addEventListener('input', saveReport);
   reportForm?.addEventListener('change', saveReport);
 
-  // Closed by default. It opens for anybody who already has answers in here,
-  // and for a link straight to it.
+  // Closed on every page load, for everybody. The one exception is coming back
+  // from a report generated in this tab: the flag lives in sessionStorage, so
+  // it is gone the moment the tab is.
   const reportDetails = document.getElementById('report-details') as HTMLDetailsElement | null;
   function openReport() { if (reportDetails) reportDetails.open = true; }
 
-  if (restoreReport()) openReport();
-  if (location.hash === '#report-details') openReport();
+  restoreReport();
+
+  try {
+    if (sessionStorage.getItem(GENERATED_KEY) === '1') openReport();
+  } catch (e) { /* private mode */ }
 
   reportForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -1015,6 +1044,10 @@ const schema = {
         if (submitEl) submitEl.disabled = false;
         return;
       }
+
+      // Set only once a report has actually come back, not on a refused code,
+      // so the back button lands on the questions rather than the offer.
+      try { sessionStorage.setItem(GENERATED_KEY, '1'); } catch (e) { /* private mode */ }
 
       // frame-src is 'none', so the report cannot go in an iframe. It replaces
       // this document instead. The answers are already in localStorage, so the
