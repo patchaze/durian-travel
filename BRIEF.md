@@ -2,125 +2,150 @@
 
 **Status: DONE**
 **Written: 10 September 2026, by Cowork**
-**Brief 007**
+**Brief 008**
 
-Claude Code: read all of it, run "The automatic path to live" from `CLAUDE.md`, then fill in the Done section and set the status to DONE. There are no questions for Patricia in this brief.
+Promoted to the live work order by Cowork on 12 September 2026, after brief 007 was marked DONE.
 
-Brief 006 shipped. Three changes to how the paid offer reads on `/tools/cost-per-country/`. **Still no Stripe.** The price is not decided, and item 2 is built so that setting it later is a one line change.
+Claude Code: once promoted, read all of it, run "The automatic path to live" from `CLAUDE.md`, then fill in the Done section and set the status to DONE. There are no questions for Patricia in this brief.
 
-Everything here is `src/pages/tools/cost-per-country.astro`.
+**Patricia does not take calls. At all.** Not paid, not free, not fifteen minutes, not video. The site currently offers calls in at least ten files, and the chatbot tells people "Everything runs online via video call". Every one of those is a promise she will not keep. This brief removes the offer and routes everybody to email instead.
+
+The replacement already exists and already works: `src/pages/contact.astro` posts to `https://formsubmit.co/contact@duriantravel.com` and `public/_headers` already allows `form-action ... https://formsubmit.co`. **No header change is needed and none is permitted.**
 
 ---
 
 ## What to do
 
-### 1. The report toggle is always closed on landing
+### 1. Retire the booking page
 
-Brief 005 said to reopen the `<details>` when the visitor has answers saved in `durian-cpc-report-v1`. That was Cowork's idea, not Patricia's, and it is wrong: she lands on her own page with saved answers and gets a wall of questions.
+- Delete `src/pages/book-a-call.astro`. This is the one file this brief authorises you to delete.
+- Add a 301 in `public/_redirects` sending `/book-a-call/` to `/contact/`, matching the style of the redirects already in that file.
+- Check whether `/free-visa-audit/` still resolves. It has no page in `src/pages/`, but it is still referenced in content. If it is a live redirect, point it at `/contact/` too. If it is a dead link, fix the references.
 
-- **Remove the auto open entirely.** The `<details>` is closed on every page load, for everybody, saved answers or not.
-- Keep restoring the saved answers into the fields. They are just not visible until the visitor opens the disclosure.
-- Keep it open after a report has been generated in that session.
+### 2. The chatbot
 
-### 2. Make the offer look like a button, and give it a price slot
+`src/components/ChatBot.astro`.
 
-The summary currently reads as a heading with a paragraph. It needs to read as something you click.
+- The `human` answer at line 278 currently reads: "Of course. Everything runs online via video call. You can [book a call](/book-a-call/) or reach us through the [contact page](/contact/)." **Replace it.** No call, no video, no phone. It should say that the way to reach a person is the contact form, that messages go to Patricia's inbox, and that she replies by email. Keep it to two sentences in the site voice.
+- The quick reply label at line 17, "Talk to a person", stays. It is the right label. Only the answer changes.
+- Remove `'book a call'`, `'consultation'` and `'phone'` from that entry's `keywords` array, and check every other entry in the file for the same words.
+- The `language` answer at line 283 ends "Mention your preferred language when you book." Nobody books anything. Rewrite that clause.
+- The chatbot stays a keyword matcher with no model behind it. Do not add an API call.
 
-- Add a real call to action inside the `<summary>`, styled as a primary button using the existing `.btn` and `.btn--primary` classes from `src/styles/global.css`. Do not invent a new button style and do not edit `global.css`.
-- Because it sits inside a `<summary>`, it must not be a `<button>` or an `<a>`. Nested interactive elements break the disclosure and the keyboard behaviour. Use a `<span>` carrying the button classes. The whole summary is already the click target.
-- The label comes from a single constant at the top of the file:
+### 3. The CTA banner, which is the widest reach
 
-```
-// The price of the full report. Empty until Patricia decides it.
-// Set it to a string like '€9' and the button label picks it up.
-const REPORT_PRICE = '';
-```
+`src/components/CTABanner.astro`. Its defaults are a call:
 
-- When `REPORT_PRICE` is empty the label reads **"Get the full report"**. When it is set the label reads **"Get the full report for €9"**, using whatever string is in the constant.
-- **Do not put a price anywhere else on the page.** One constant, one place.
-- Give the summary a visible open and closed state, so it is obvious it expands. A rotating chevron or a plus turning into a minus is enough. Keep the native `<details>` behaviour underneath.
+- `subtitle` defaults to "Book a free 15-minute call about your route, your budget and your timing. No documents are reviewed."
+- `ctaHref` defaults to `/book-a-call/`.
 
-### 3. A question heading above the free comparison
+Change the defaults to point at `/contact/` and to offer a written reply rather than a call. Then check every page that uses the component and passes its own `cta`, `subtitle` or `ctaHref`, because a prop overrides the default and those are the ones a default change will miss.
 
-The heading above the 28 rows is currently "Cheapest first", which tells a search engine and an AI assistant nothing about what the section answers.
+### 4. Sweep the rest
 
-- Change that `<h2>` to a question a person would actually type. Use: **"Can you afford Europe?"**
-- Under it, one short line of context, something close to: "Pick how you travel and see what a week costs in all 28 countries, cheapest first."
-- Keep "Cheapest first" as the small label on the list itself if it still helps, but it is no longer the heading.
-- This stays an `<h2>`. Do not add a second `<h1>` and do not move the existing one.
+Every remaining call reference. Known from a scan on 10 September 2026, line counts may have moved:
 
-**A boundary that matters here.** The heading asks about the cost of a trip and nothing else. Nothing in this section may connect that answer to a visa application, to whether a bank balance is sufficient, or to how an embassy would read it. Master strategy 5.4 is the line and this heading sits closer to it than the old one did.
+`src/pages/404.astro`, `src/pages/about-us.astro`, `src/pages/contact.astro`, `src/pages/faq.astro`, `src/pages/terms-of-service.astro`, `src/pages/schengen-visa-guide.astro`, `src/pages/services/[slug].astro`, `src/pages/blog/[...slug].astro`, `src/pages/destinations.astro`, `src/pages/destinations/[slug].astro`, and in content: `src/content/blog/europe-trip-planning-timeline.md`, `src/content/destinations/liechtenstein.md`, `src/content/destinations/slovenia.md`, `src/content/destinations/croatia.md`, `src/content/destinations/spain.md`.
+
+Search for and remove: `book a call`, `book a free`, `15-minute`, `30-minute`, `video call`, `schedule a call`, `planning call`, `consultation`, `calendly`, `free visa audit`, and `/book-a-call/`.
+
+**Do not simply delete the sentences.** Where a call was the offer, replace it with the written one: send a message through the contact page and get a reply by email. Where a call is only mentioned in passing, cut the clause and leave the paragraph reading naturally.
+
+Also check `src/data/service-packages.json` and `src/data/service-pages.ts`, and the JSON-LD on any page that describes a service, since structured data is what Google and AI assistants quote.
+
+### 5. Make the contact page carry the weight
+
+`src/pages/contact.astro` is now the only way to reach a person, so it has to say so.
+
+- It should state plainly that Durian answers by email, usually within a stated number of working days. **Do not invent that number.** Use "within a few working days" unless Patricia has given you one.
+- It must not promise a call, a meeting, or a time slot.
+- Leave the form action, the field names and `formsubmit.co` exactly as they are. It works.
 
 ## Why
 
-The report is the thing this page sells and it currently reads as an optional footnote rather than an offer. A button that names the product, and later the price, is the difference.
+Every call reference on the site is an offer Patricia will not honour, and the chatbot states it as fact on 76 of 77 pages. That is worse than a stale link: somebody fills in a booking expecting a video call that will never happen.
 
-The heading change is Patricia's call as an SEO strategist. Worth recording honestly: Cowork could not verify the search volume for that phrasing, because the Ahrefs plan refused both the overview and the matching terms queries on 10 September 2026. The reasoning for it is that a question heading matches how people and AI assistants phrase the problem, which is a judgement rather than a measurement.
+Email also suits the business better. It is asynchronous, it survives her being nine hours ahead of most of her audience, and it leaves a written record of what was asked.
 
 ## Do not
 
-- Do not add Stripe, a payment link, or any fulfilment code.
-- Do not set `REPORT_PRICE` to a value. Patricia sets it when she decides.
-- Do not write a price, a currency amount or a "from" figure anywhere else on the page.
-- Do not put a `<button>` or an `<a>` inside the `<summary>`.
-- Do not replace the `<details>` with a JavaScript accordion.
-- Do not change `isPaidRequest`, `functions/api/report.ts`, or `src/lib/report.ts`.
-- Do not change any question, answer option, or weighting in the report form.
-- Do not change what the free comparison computes, or touch `src/data/country-costs.json`.
-- Do not edit `src/styles/tokens.css` or `src/styles/global.css`.
-- Do not undo the selector scoping from brief 006. Any new script here stays scoped to this page's own root.
-- Do not touch `public/_headers`, the CSP, or DNS.
-- Do not touch `/tools/budget/` or `/tools/visa-checklist/`.
-- Nothing on this page may score, rate, predict or imply a visa outcome, or comment on whether somebody's money is enough for an application.
+- Do not touch `public/_headers` or the CSP. `formsubmit.co` is already allowed under `form-action` and nothing else needs to change.
+- Do not change the contact form's action, method, field names or destination address.
+- Do not add a scheduling tool, a calendar embed, Calendly, or any booking widget, in any form.
+- Do not invent a response time, a number of working days, or an availability window.
+- Do not delete any file other than `src/pages/book-a-call.astro`.
+- Do not add Stripe or a price. Separate work.
+- Do not touch `/tools/cost-per-country/`, `/tools/budget/` or `/tools/visa-checklist/` in this brief. The checklist is under review separately and gets its own brief.
+- Do not change `functions/api/report.ts` or `src/lib/report.ts`.
+- Do not add an API call or a model to the chatbot.
+- Nothing you write may promise or imply a visa outcome, offer document review, or comment on whether somebody's money is enough.
 - Do not `git add -A` or `git add .`. Stage files by name.
 - Do not commit `BUILD-BRIEF-001.md`, `CC-PROMPT-STEP-1.md`, `.claude/launch.json`, the untracked `api/` folder, or any `.xlsx` file in the repo root.
-- The page keeps: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
+- Every page keeps: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
+
+## Check before you merge
+
+- `grep -ri "book a call\|video call\|15-minute\|calendly\|schedule a call" dist/` returns nothing.
+- `/book-a-call/` returns a 301 to `/contact/`, not a 404.
+- The chatbot's "Talk to a person" reply mentions no call.
+- The build passes and `grep -ri "azevedo" dist/` returns nothing.
 
 ---
 
 ## Done
 
-**Completed on:** 11 September 2026
-**Branch:** `brief/007-offer-button-and-question-heading`
+**Completed on:** 12 September 2026
+**Branch:** `brief/008-retire-calls-route-to-email`
 
 **What changed:**
 
-1. **The disclosure is closed on every page load.** The auto open is gone. `restoreReport()` is
-   back to only restoring: it no longer tracks whether anything was answered, because that
-   bookkeeping existed solely to decide whether to open. Verified with saved answers present:
-   the panel stays closed and the countries, party, stay type and ceiling are all still in the
-   fields when it is opened by hand.
+19 files, one deleted. The site builds 75 pages instead of 76.
 
-   The one exception is a report generated in the same tab. That is a `sessionStorage` flag,
-   `durian-cpc-report-generated`, set only after a report has actually come back, not on a
-   refused code and not on a failed request. Verified: a refused request leaves the flag unset,
-   the flag reopens the panel on reload, and clearing it closes the panel again.
+1. **The booking page is gone.** `src/pages/book-a-call.astro` deleted. `public/_redirects` now
+   301s both `/book-a-call` and `/book-a-call/` to `/contact/`. `/free-visa-audit/` was a live 301
+   to the booking page, confirmed against the live site before the change, and now points at
+   `/contact/` too.
 
-2. **The summary has a primary call to action.** A `<span class="btn btn--primary">`, not a
-   `<button>` or an `<a>`, so nothing interactive is nested inside the `<summary>`. Styling is
-   the existing `.btn` and `.btn--primary` from `global.css`, which was not edited. The card
-   already had the rotating chevron from brief 005 for the open and closed state, so that is
-   unchanged.
+2. **The chatbot.** The `human` answer no longer mentions a call, video or a phone: it says to
+   send a message through the contact page, that it lands in the inbox, and that we reply by
+   email. `'book a call'`, `'consultation'` and `'phone'` are out of its keywords. The `location`
+   answer said "All sessions are conducted online via video call" and now says the work happens in
+   writing, by email; `'video call'` is out of its keywords too. The `language` answer no longer
+   ends "when you book". The "Talk to a person" label is unchanged, and so is the keyword matcher:
+   no API, no model.
 
-   The label comes from `REPORT_PRICE` at the top of the file, shipped empty, so it reads "Get
-   the full report". I set it to a euro amount, rebuilt, and confirmed the label became "Get the
-   full report for €9" and that the amount appeared exactly once in the built page, then set it
-   back to empty. It is a one line change.
+3. **The CTA banner.** Defaults now point at `/contact/` with "Send Us a Message" and a subtitle
+   offering a written reply. Nine pages use the component; two passed their own props
+   (`destinations.astro` and `destinations/[slug].astro`) and both were changed.
 
-3. **The comparison heading is a question.** "Cheapest first" becomes "Can you afford Europe?",
-   still an `<h2>`, with one line under it: "Pick how you travel and see what a week costs in all
-   28 countries, cheapest first." The dynamic line that names the cheapest and dearest country
-   still sits beside it. The page still has exactly one `<h1>` and it has not moved.
+4. **The sweep.** Every remaining reference: `404.astro`, `about-us.astro`, `faq.astro`,
+   `terms-of-service.astro`, `privacy-policy.astro`, `schengen-visa-guide.astro` (three places),
+   `services/index.astro`, `services/[slug].astro` (two places), `blog/[...slug].astro`,
+   `destinations.astro`, `destinations/[slug].astro`, `europe-trip-planning-timeline.md` and
+   `public/llms.txt`. Where a call was the offer it became the written one; where it was a passing
+   clause it was cut and the sentence rewritten.
 
-   On the boundary: I checked the whole comparison section for anything tying cost to a visa
-   outcome. No occurrence of visa, embassy, consulate, approval, application, eligibility,
-   sufficient funds, proof of funds or bank balance. The section is about what a trip costs and
-   nothing else.
+   The FAQ needed care: the visible list and the JSON-LD both render from one `faqSchema` array, so
+   fixing the array fixed both. "What is the free planning call?" became "How do I get in touch?"
+   and "Do sessions happen online?" became "How does the work happen?", answered with writing and
+   email.
 
-Brief 006 is intact: two columns of fourteen, cheapest first, scoped selectors, style buttons
-reading `140–240/day`. No console errors, no sideways scroll, one column and no overflow at
-375px. Page height at 1440 by 900 is 3087px against 2944px before, the difference being the
-button and the new line of context.
+5. **The contact page.** Says plainly that everything happens in writing and that we answer by
+   email, usually within a few working days. The "Skip the Queue" booking card is now "Write a
+   Better Message". The meta description and keywords no longer sell a consultation or a planning
+   call. **The form action, method, field names and formsubmit.co destination are untouched**,
+   verified in a browser: `https://formsubmit.co/contact@duriantravel.com`, POST, fields `_next`,
+   `_captcha`, `_subject`, `_template`, `name`, `email`, `subject`, `nationality`, `visa-type`,
+   `message`. `public/_headers` was not touched.
+
+**Checks:**
+
+- No `/book-a-call/` link anywhere in `dist/` except the redirect rules themselves.
+- A link check across all 75 built pages and 77 distinct internal targets: no broken links.
+- `grep -ri "azevedo" dist/` returns nothing. All 75 pages still carry the educational notice.
+- The chatbot was driven in a browser: "Talk to a person" returns the new answer and the panel
+  contains no call, video or phone wording.
+- The sitemap has no reference to the deleted page.
 
 **Could not do, and why:**
 
@@ -128,18 +153,33 @@ Nothing in the brief was skipped.
 
 **For Cowork:**
 
-- **The card now says "Get the full report" twice**, once as the `<h2>` from brief 005 and once
-  on the new button. The brief specified the button label and said nothing about the heading, so
-  I left the heading alone rather than rewrite copy that was not mine to touch. It looks like a
-  mistake on the rendered page. It needs a different `<h2>`, something naming the product rather
-  than repeating the action. Once `REPORT_PRICE` is set the two lines will at least differ.
-- **I also removed the `#report-details` hash auto open.** The brief said closed on every page
-  load for everybody, and brief 006 had already deleted the only link that pointed there, so it
-  was dead code. Say the word if you want deep links to open it again.
-- The old "Cheapest first" is not repeated as a separate label on the list, because the new line
-  of context already ends with those words. Adding it again read as a stutter.
-- On the search volume note in the brief: I did not attempt to verify it either. The heading
-  ships as written.
-- Untouched as instructed: `src/lib/report.ts`, `functions/`, `src/styles/`, `src/data/`,
-  `public/`, `/tools/budget/`, `/tools/visa-checklist/`. No Stripe, no payment link, no price
-  set, no new dependency.
+- **The paid packages promised live sessions and the term list would have missed all of them.**
+  `service-packages.json` contained "Schengen planning session (60 min)", "Second planning
+  session", "Group planning session (2+ travellers)", "Currency exchange strategy session",
+  "Post-trip debrief for next-trip planning" and "Pre-trip briefing call with the full Durian
+  team". None match the brief's search terms, but a 60 minute planning session is a call, and the
+  brief says "not paid, not free". All six are now written deliverables. **This changes what the
+  paid packages promise**, so it needs Patricia's eye more than anything else in this brief.
+- **Four items say "briefing" and I left them alone**: two pharmacist briefings, a Europe health
+  risk briefing, and a post-travel monitoring brief. A briefing can be a written document, so
+  changing them would have been me deciding what the service is. If any of them is spoken, they
+  need the same treatment.
+- **The brief's own merge check has two false positives.** `grep -ri "15-minute" dist/` matches a
+  15 minute bus ride in Croatia and a 15 minute walk in Liechtenstein. Both are accurate travel
+  copy, not calls, and I left them. A tighter term for future sweeps is `[0-9]+[- ]minute call`.
+  Everything else in that check returns nothing.
+- **Three "consultation" mentions remain and all three are protective.** The travel health blog
+  post says the package is "explicitly not a medical consultation", and the Wellness Journey FAQ
+  asks "Is this a medical consultation or a travel-planning service?" and answers that it is not.
+  Removing them would weaken a disclaimer. Two SEO keywords on that page did contradict it, and
+  those are changed: "medical travel consultation service" and "travel health pharmacist
+  consultation" are now planning wording. Two keywords still read "consultant", on the Nomad and
+  Grand Circuit packages. Those are positioning, not a call promise, so they are Patricia's call.
+- **`vercel.json` still redirects `/free-visa-audit` to `/book-a-call/`.** It is the rollback
+  reference and the brief did not authorise touching it. A rollback that reverts the repo is
+  consistent, because the page exists in any earlier commit. It only bites if somebody switches
+  the live host back to Vercel at current HEAD. One line if you want it mirrored.
+- **`CLAUDE.md` still lists "Paid 1 to 1 calls with Patricia" as where the business is going.**
+  That now contradicts this brief and it is the kind of line that makes a future session write
+  call copy again. I did not edit it, because the brief was about the site. It should be corrected.
+
