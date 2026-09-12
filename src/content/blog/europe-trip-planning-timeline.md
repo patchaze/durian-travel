@@ -160,4 +160,4 @@ After the route is stable and before you submit visa documents or buy non-refund
 
 *Some links in this post may be affiliate links. If you buy through them, we may earn a small commission at no extra cost to you. We only recommend tools we'd use ourselves.*
 
-**Need help building your route?** [Explore our First Journey package](/services/first-international-trip/) or [book a free planning call](/book-a-call/).
+**Need help building your route?** [Explore our First Journey package](/services/first-international-trip/) or [send us a message](/contact/) and we will reply by email.

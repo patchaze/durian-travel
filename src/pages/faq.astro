@@ -39,8 +39,8 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      "name": "What is the free planning call?",
-      "acceptedAnswer": { "@type": "Answer", "text": "A free call, usually 15 to 20 minutes, about the trip itself: your route, your budget, your timing, and how the current border rules apply to where you are travelling from. No documents are reviewed and no opinion is given on the outcome of any application." }
+      "name": "How do I get in touch?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Through the contact page. Send a message about the trip itself: your route, your budget, your timing, and where you are travelling from. It goes to our inbox and we answer by email, usually within a few working days. No documents are reviewed and no opinion is given on the outcome of any application." }
     },
     {
       "@type": "Question",
@@ -74,8 +74,8 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      "name": "Where are you located? Do sessions happen online?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes, all sessions are conducted online via video call. We work with clients globally." }
+      "name": "Where are you located? How does the work happen?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Durian Travel is online only and works with people all over the world. Everything happens in writing, by email. We do not run calls or meetings." }
     }
   ]
 };
@@ -83,7 +83,7 @@ const faqSchema = {
 
 <BaseLayout
   title="Frequently Asked Questions | DURIAN Travel"
-  description="Common questions about Durian Travel: how the planning work runs, what a session covers, what we do not do, and how we can help plan your Europe trip."
+  description="Common questions about Durian Travel: how the planning work runs, what is covered, what we do not do, and how we can help plan your Europe trip."
   breadcrumb={[{ name: 'FAQ', url: 'https://www.duriantravel.com/faq/' }]}
   schema={faqSchema}
   keywords="DURIAN travel FAQ, Europe trip planning questions, Schengen visa FAQ, Europe travel planning FAQ, how DURIAN travel works"
@@ -126,7 +126,6 @@ const faqSchema = {
         <p>Didn't find your answer?</p>
         <div style="display:flex;gap:var(--space-4);flex-wrap:wrap;justify-content:center;margin-top:var(--space-4)">
           <a href="/contact/" class="btn btn--primary">Contact Us</a>
-          <a href="/book-a-call/" class="btn btn--secondary">Book a Free Call →</a>
         </div>
       </div>
     </div>
