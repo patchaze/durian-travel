@@ -1,26 +1,31 @@
-// The Trip Budget Report generator.
+// The cost per country report generator.
 //
 // Pure functions only. No network, no file system, no environment, no clock
 // beyond the one date passed in. `functions/api/report.ts` is the thin HTTP
-// wrapper around this module, which keeps the entire calculation testable
-// without a server and makes the timing measurable in isolation.
+// wrapper around this module, and it only ever calls `buildReport`.
 //
 // This module lives outside functions/ on purpose. Cloudflare Pages turns
 // every file under functions/ into a route, so the calculation is kept here
-// where it can only ever be imported, never requested. Astro does not build
-// it either: nothing in src/pages imports it, so it never reaches a browser.
+// where it can only ever be imported, never requested. Nothing in src/pages
+// imports it, so it never reaches a browser, and neither do the editorial
+// tables below.
 //
-// What the report is. The free comparison on /tools/cost-per-country/ applies
-// one Eurostat index, restaurants and hotels, to every euro a visitor spends.
-// That is wrong for most people. Portugal sits well below the EU average for
-// restaurants and hotels and slightly above it for food from shops, so
-// somebody who cooks saves almost nothing there while somebody who eats out
-// saves a quarter. This report answers the questionnaire by weighting seven
-// Eurostat categories instead of one.
+// What the report does. It lays the options out against the reader's own
+// budget and lets them choose: each country they are comparing on its own for
+// the whole trip, then the realistic ways to combine those countries. Every
+// option carries a total, a daily figure per person, and what it leaves spare
+// or how far over it goes. The report never names a best option and never
+// recommends one.
 //
-// Every figure the report prints is derived from three things only: the
-// answers given on /tools/cost-per-country/, src/data/country-costs.json, and
-// the editorial weighting table below. Nothing is fetched or inferred.
+// What the reader sees and what stays here. Every Eurostat source and date is
+// printed. The editorial weights are not, because they are the method. The
+// report describes what each part of a trip covers in words and never prints
+// how much of a day each part is given.
+//
+// Every figure comes from three places only: the reader's answers,
+// src/data/country-costs.json, and the editorial tables below. Nothing is
+// fetched. No fare is ever invented: the only flight figure in a report is the
+// one the reader typed.
 
 /* ────────────────────────────── the dataset ────────────────────────────── */
 
@@ -74,7 +79,7 @@ export interface CostData {
   countries: CostCountry[];
 }
 
-/* ───────────────────── the editorial weighting table ───────────────────── */
+/* ───────────────────────────── parts of a trip ─────────────────────────── */
 
 export type Component =
   | 'accommodation'
@@ -105,15 +110,36 @@ export const COMPONENT_LABELS: Record<Component, string> = {
   groceryFood: 'Food from shops',
   drinks: 'Drinks',
   cityTransport: 'Getting around a city',
-  intercityTransport: 'Travelling between cities',
+  intercityTransport: 'Traveling between cities',
   recreation: 'Museums, tours and going out',
   shopping: 'Shopping',
   communication: 'Data and calls',
 };
 
-// Which Eurostat category prices each component. Two components share the
-// restaurants and hotels index, because that Eurostat category covers both a
-// hotel room and a restaurant meal.
+// What each part of a trip covers, in plain words. The report prints these in
+// place of the weights, so the reader learns what goes into a figure without
+// learning how it is put together. The Eurostat category that prices each part
+// is added from the dataset when it is printed, so the two cannot drift apart.
+const PART_COVERS: Record<Component, string> = {
+  accommodation: 'your room or bed each night',
+  restaurantFood: 'the meals, coffee and snacks you buy in cafés and restaurants',
+  groceryFood: 'the groceries you buy to prepare and eat yourself',
+  drinks: 'alcohol',
+  cityTransport: 'local public transport, taxis and ride hailing, and hiring a car if you do',
+  intercityTransport: 'the trains, buses or flights you take between cities inside one country',
+  recreation: 'entry tickets, guided tours and nights out',
+  shopping: 'clothes, shoes and the things you buy to take home',
+  communication: 'your eSIM or data plan',
+};
+
+// A part that needs one more honest word about what its price level measures.
+const PART_NOTES: Partial<Record<Component, string>> = {
+  drinks: ', which tracks what alcohol costs in shops rather than in bars',
+};
+
+// Which Eurostat category prices each part. Two parts share the restaurants
+// and hotels index, because that Eurostat category covers both a hotel room
+// and a restaurant meal.
 export const COMPONENT_CATEGORY: Record<Component, CategoryKey> = {
   accommodation: 'stay',
   restaurantFood: 'stay',
@@ -129,27 +155,27 @@ export const COMPONENT_CATEGORY: Record<Component, CategoryKey> = {
 type Points = Partial<Record<Component, number>>;
 
 // ─────────────────────────────────────────────────────────────────────────
-// DURIAN'S EDITORIAL WEIGHTING. NOT A PUBLISHED STATISTIC.
+// DURIAN'S EDITORIAL WEIGHTING. NOT A PUBLISHED STATISTIC. NEVER PRINTED.
 //
 // These numbers are assumptions about how people spend, not measurements of
 // how they do. Nobody surveyed anyone. There is no dataset behind them and no
-// source to cite, and the report says so in its own words wherever a figure
-// derived from them appears.
+// source to cite, and the report says in its own words that the split of a
+// day between parts of a trip is Durian's estimate.
 //
 // What is sourced and what is not, kept apart on purpose:
-//   sourced      the price level index for each country and category, which
-//                is Eurostat and carries its dataset, reference year and
+//   sourced      the price level for each country and category, which is
+//                Eurostat and carries its dataset, reference year and
 //                retrieval date everywhere it is printed
-//   ours         this table, which decides how much of a trip each of those
+//   ours         this table, which decides how much of a day each of those
 //                categories accounts for
 //
 // Read the numbers as points, not percentages. Every answer adds or removes
-// points from one or more components, negatives are floored at zero, and the
-// nine totals are divided by their sum at the end so the weights add to 1.
-// Only the ratios between these numbers matter.
+// points from one or more parts, negatives are floored at zero, and the nine
+// totals are divided by their sum at the end so the weights add to 1. Only
+// the ratios between these numbers matter.
 //
-// Change them here and nowhere else. Nothing in this module hard codes a
-// weight outside this table.
+// The weights are the method, so they are never printed. Change them here and
+// nowhere else. Nothing in this module hard codes a weight outside this table.
 // ─────────────────────────────────────────────────────────────────────────
 export const EDITORIAL_WEIGHTS = {
   // Where every trip starts, before a single answer is read.
@@ -208,10 +234,12 @@ export const EDITORIAL_WEIGHTS = {
     no: {},
   } as Record<string, Points>,
 
-  // Intercity travel is the one component whose weight depends on how often
-  // it happens, so it is scaled by moves divided by nights rather than set by
-  // a single answer. A fortnight with four train legs weighs far more than a
-  // fortnight in one city.
+  // Travel between cities is the one part whose weight depends on how often it
+  // happens, so it is scaled by moves divided by nights rather than set by a
+  // single answer. Two weeks with four train journeys weighs far more than two
+  // weeks in one city. The same figures also shape the estimate for a journey
+  // between countries, below. The key `coach` is kept for saved answers; the
+  // reader only ever sees the word Bus.
   intercityPerMove: {
     train: 32,
     coach: 14,
@@ -264,6 +292,28 @@ export const EDITORIAL_WEIGHTS = {
   } as Points,
 };
 
+// ─────────────────────────────────────────────────────────────────────────
+// DURIAN'S EDITORIAL RULES FOR COMBINING COUNTRIES. NOT PUBLISHED FIGURES.
+//
+// Wherever one of these shapes a number, the report says in that sentence
+// that it is Durian's estimate.
+// ─────────────────────────────────────────────────────────────────────────
+export const COMBINING = {
+  // Fewer nights than this in a country is passing through, not staying, so a
+  // combination is only built when every country in it gets at least this.
+  minNightsPerCountry: 3,
+  // The largest combination the report builds.
+  maxCountriesInCombination: 4,
+  // Combinations are only built when the reader is comparing this many
+  // countries or fewer. Beyond that there are too many options to read.
+  maxCountriesForCombining: 6,
+  // At most this many combinations are shown, lowest total first. Countries on
+  // their own are never capped.
+  maxCombinationsShown: 10,
+  // Time spent traveling each time the reader moves into another country.
+  daysPerJourney: 0.5,
+};
+
 /* ─────────────────────────────── the inputs ────────────────────────────── */
 
 export interface ReportInput {
@@ -274,8 +324,11 @@ export interface ReportInput {
   children: number;
   ceiling: number;
   currency: string;
-  base: number; // daily figure per person, from the style band above the form
+  base: number; // daily figure per person, from the style band on the comparison
   style: string;
+  combine: string; // one, combining or unsure
+  flyingFrom: string; // the reader's own words, trimmed and capped, printed escaped
+  fare: number; // return fare per person, the reader's own figure, 0 when not known
   stayType: string;
   breakfast: string;
   mealsOut: string;
@@ -293,12 +346,12 @@ export interface ReportInput {
 }
 
 // The currency labels the page offers, plus the empty string. An allowlist
-// rather than a passthrough, because this is the only visitor supplied string
-// that reaches the HTML unmapped.
+// rather than a passthrough, so no posted currency reaches the HTML unmapped.
 const CURRENCIES = ['€', '$', '£', '₱', 'R$', ''];
 
 // Every answer label the report prints, keyed by the value posted. Nothing a
-// visitor sends is ever printed directly: it is looked up here or dropped.
+// visitor sends is printed directly, except where they typed where they are
+// flying from, which is trimmed, capped and escaped.
 export const ANSWER_LABELS: Record<string, Record<string, string>> = {
   party: {
     solo: 'Solo',
@@ -336,7 +389,7 @@ export const ANSWER_LABELS: Record<string, Record<string, string>> = {
     taxi: 'Mostly taxis and ride hailing',
   },
   carHire: { yes: 'Hiring a car somewhere', no: 'No car hire' },
-  intercityMode: { train: 'Train', coach: 'Coach', flight: 'Budget flights' },
+  intercityMode: { train: 'Train', coach: 'Bus', flight: 'Budget flights' },
   museums: {
     rarely: 'Museums rarely',
     few: 'A few museums',
@@ -355,6 +408,11 @@ export const ANSWER_LABELS: Record<string, Record<string, string>> = {
   shopping: { no: 'No shopping', little: 'A little shopping', lot: 'A lot of shopping' },
   esim: { yes: 'An eSIM or data plan', no: 'No eSIM needed' },
   style: { budget: 'Budget', mid: 'Mid range', comfortable: 'Comfortable' },
+  combine: {
+    one: 'Set on one country',
+    combining: 'Open to combining',
+    unsure: 'Not sure yet',
+  },
 };
 
 // The three daily bands the free comparison offers, matching /tools/budget/.
@@ -381,13 +439,48 @@ function obj(raw: unknown): Record<string, unknown> {
   return raw && typeof raw === 'object' ? (raw as Record<string, unknown>) : {};
 }
 
-// A posted answer is kept only if the weighting table has an entry for it.
-// Anything else falls back, so a hand crafted body cannot introduce a value
-// the arithmetic has never seen.
+// A posted answer is kept only if the table has an entry for it. Anything else
+// falls back, so a hand crafted body cannot introduce a value the arithmetic
+// has never seen.
 function pick(raw: unknown, allowed: Record<string, unknown>, fallback: string): string {
   const v = String(raw ?? '');
   return Object.prototype.hasOwnProperty.call(allowed, v) ? v : fallback;
 }
+
+// Free text the reader typed. Control characters become spaces, runs of space
+// collapse, and it is capped. It is still escaped wherever it is printed.
+function cleanText(raw: unknown, max: number): string {
+  // Control characters are found by code point, never with an escaped pattern,
+  // so none can hide in this source file.
+  let out = '';
+  for (const ch of String(raw ?? '')) {
+    const code = ch.codePointAt(0) ?? 0;
+    out += code < 32 || code === 127 ? ' ' : ch;
+  }
+  return out.replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+// A couple is always two adults. The party answer decides the head count
+// instead of trusting whatever the number fields were left at, because the
+// adults field starts at 1 and somebody choosing "A couple" rarely changes it.
+function headcount(party: string, adultsRaw: unknown, childrenRaw: unknown): { adults: number; children: number } {
+  const adults = count(adultsRaw, 0, 20, 1);
+  const children = count(childrenRaw, 0, 20, 0);
+  switch (party) {
+    case 'solo':
+      return { adults: 1, children: 0 };
+    case 'couple':
+      return { adults: 2, children: 0 };
+    case 'family':
+      return { adults: Math.max(1, adults), children: Math.max(1, children) };
+    case 'friends':
+      return { adults: Math.max(2, adults), children };
+    default:
+      return { adults: Math.max(1, adults), children };
+  }
+}
+
+const COMBINE_OPTIONS = { one: true, combining: true, unsure: true };
 
 // Takes anything at all and returns a valid ReportInput. The endpoint hands
 // straight over to this, so the rest of the module never sees a bad value.
@@ -402,22 +495,25 @@ export function normalise(raw: unknown, data: CostData): ReportInput {
 
   const currencyRaw = typeof src.currency === 'string' ? src.currency : '€';
   const style = pick(src.style, STYLE_BASE, 'mid');
-
-  const adults = count(src.adults, 0, 20, 1);
-  const children = count(src.children, 0, 20, 0);
+  const party = pick(src.party, EDITORIAL_WEIGHTS.party, 'solo');
+  const { adults, children } = headcount(party, src.adults, src.children);
 
   return {
     // An empty selection is a defaulted selection rather than an error: the
     // endpoint never fails on a bad body, it reports on a sane one.
     countries: countries.length ? countries : data.countries.map((c) => c.iso),
     nights: count(src.nights, 1, 365, 10),
-    party: pick(src.party, EDITORIAL_WEIGHTS.party, 'solo'),
-    adults: adults + children === 0 ? 1 : adults,
+    party,
+    adults,
     children,
     ceiling: money(src.ceiling),
     currency: CURRENCIES.includes(currencyRaw) ? currencyRaw : '',
     base: money(src.base) || STYLE_BASE[style],
     style,
+    combine: pick(src.combine, COMBINE_OPTIONS, 'unsure'),
+    flyingFrom: cleanText(src.flyingFrom, 80),
+    // "I do not know yet" wins over any number left in the fare field.
+    fare: src.fareUnknown === 'yes' ? 0 : money(src.fare),
     stayType: pick(src.stayType, EDITORIAL_WEIGHTS.stayType, 'hotel'),
     breakfast: pick(src.breakfast, EDITORIAL_WEIGHTS.breakfast, 'no'),
     mealsOut: pick(src.mealsOut, EDITORIAL_WEIGHTS.mealsOut, '1'),
@@ -446,8 +542,8 @@ function addPoints(into: Record<Component, number>, points: Points | undefined):
   }
 }
 
-// Every answer moves at least one component. The nine totals are floored at
-// zero and divided by their sum, so the result always adds to 1.
+// Every answer moves at least one part. The nine totals are floored at zero
+// and divided by their sum, so the result always adds to 1.
 export function computeWeights(input: ReportInput): Weights {
   const w = { ...EDITORIAL_WEIGHTS.base };
   const E = EDITORIAL_WEIGHTS;
@@ -492,85 +588,164 @@ export function computeWeights(input: ReportInput): Weights {
   return out;
 }
 
-export interface BasketRow {
+/* ─────────────────────────────── the prices ────────────────────────────── */
+
+export interface PartPrice {
   component: Component;
   label: string;
-  weight: number;
-  category: CategoryKey;
-  categoryName: string;
+  perDay: number; // per person, per day
 }
 
-export function buildBasket(weights: Weights, source: CostSource): BasketRow[] {
-  return COMPONENTS.map((component) => {
-    const category = COMPONENT_CATEGORY[component];
-    return {
-      component,
-      label: COMPONENT_LABELS[component],
-      weight: weights[component],
-      category,
-      categoryName: source.categories[category] ?? source.category,
-    };
-  }).sort((a, b) => b.weight - a.weight);
-}
-
-export interface CountryRow {
+export interface CountryPrice {
   name: string;
   iso: string;
-  plainIndex: number; // the restaurants and hotels index on its own
-  personalIndex: number; // the same country, weighted by their answers
-  perDay: number; // per person, per day
-  perTrip: number; // everyone, whole trip
-  plainPerTrip: number;
-  gap: number; // ceiling minus perTrip. Negative means over.
-  plainRank: number;
-  personalRank: number;
+  transport: number; // the Eurostat transport services price level
+  perDay: number; // per person, per day, everything except flights and border journeys
+  parts: PartPrice[]; // in COMPONENTS order
 }
 
-// The personal index is the sum of each weight multiplied by that country's
-// index for the matching Eurostat category. Everything else on this page is
-// that one number applied to their daily figure.
-export function personalIndexFor(country: CostCountry, weights: Weights): number {
-  let total = 0;
-  for (const component of COMPONENTS) {
-    total += weights[component] * country[COMPONENT_CATEGORY[component]];
+function headsOf(input: ReportInput): number {
+  return Math.max(1, input.adults + input.children);
+}
+
+// Each part of a day is the reader's daily figure, times the share of a day
+// that part is given, times the country's Eurostat price level for the
+// category that prices it, over 100. A full day is the sum of the parts.
+// Countries come back in alphabetical order, which is neutral.
+export function priceCountries(input: ReportInput, data: CostData, weights: Weights): CountryPrice[] {
+  return data.countries
+    .filter((c) => input.countries.includes(c.iso))
+    .map((c) => {
+      const parts = COMPONENTS.map((component) => ({
+        component,
+        label: COMPONENT_LABELS[component],
+        perDay: (input.base * weights[component] * c[COMPONENT_CATEGORY[component]]) / 100,
+      }));
+      const perDay = parts.reduce((sum, p) => sum + p.perDay, 0);
+      return { name: c.name, iso: c.iso, transport: c.transport, perDay, parts };
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/* ─────────────────────────────── the options ───────────────────────────── */
+
+export interface Scenario {
+  kind: 'single' | 'combination';
+  countries: CountryPrice[];
+  nightsEach: number; // nights split evenly across the countries in it
+  journeys: number; // journeys between countries
+  daysTraveling: number;
+  journeyPerPerson: number; // one journey between countries, per person
+  groundPerPerson: number; // everything except flights and border journeys, whole trip, per person
+  travelPerPerson: number; // every journey between countries, per person
+  flightsPerPerson: number; // the reader's own fare, or 0
+  perPersonPerDay: number; // ground plus border journeys, per day, before flights
+  total: number; // everyone, whole trip, flights included only when the reader gave a fare
+  gap: number; // ceiling minus total; only read when there is a ceiling
+}
+
+export interface ScenarioSet {
+  singles: Scenario[];
+  combinations: Scenario[]; // the ones shown
+  combinationsPossible: number; // realistic combinations before the display cap
+  combinationsNote: 'one' | 'too-many-countries' | 'too-few-nights' | 'built';
+}
+
+function combinationsOf<T>(items: T[], size: number): T[][] {
+  const out: T[][] = [];
+  const walk = (start: number, acc: T[]) => {
+    if (acc.length === size) {
+      out.push(acc.slice());
+      return;
+    }
+    for (let i = start; i < items.length; i++) {
+      acc.push(items[i]);
+      walk(i + 1, acc);
+      acc.pop();
+    }
+  };
+  walk(0, []);
+  return out;
+}
+
+// One journey between countries, per person. Durian has no fare data, so this
+// is Durian's estimate: the reader's daily figure, scaled by how much a
+// journey between cities weighs for the way they said they travel, priced at
+// the average Eurostat transport services level of the countries involved.
+function journeyCost(input: ReportInput, countries: CountryPrice[]): number {
+  const avgTransport = countries.reduce((s, c) => s + c.transport, 0) / countries.length;
+  const share = (EDITORIAL_WEIGHTS.intercityPerMove[input.intercityMode] ?? 0) / 100;
+  return (input.base * share * avgTransport) / 100;
+}
+
+function makeScenario(input: ReportInput, countries: CountryPrice[]): Scenario {
+  const k = countries.length;
+  const heads = headsOf(input);
+  const nightsEach = input.nights / k;
+  const journeys = k - 1;
+  const groundPerPerson = countries.reduce((s, c) => s + c.perDay * nightsEach, 0);
+  const journeyPerPerson = journeys > 0 ? journeyCost(input, countries) : 0;
+  const travelPerPerson = journeyPerPerson * journeys;
+  const flightsPerPerson = input.fare;
+  const total = (groundPerPerson + travelPerPerson + flightsPerPerson) * heads;
+  return {
+    kind: k === 1 ? 'single' : 'combination',
+    countries,
+    nightsEach,
+    journeys,
+    daysTraveling: journeys * COMBINING.daysPerJourney,
+    journeyPerPerson,
+    groundPerPerson,
+    travelPerPerson,
+    flightsPerPerson,
+    perPersonPerDay: (groundPerPerson + travelPerPerson) / input.nights,
+    total,
+    gap: input.ceiling - total,
+  };
+}
+
+function labelOf(s: Scenario): string {
+  const names = s.countries.map((c) => c.name);
+  return s.kind === 'single' ? `${names[0]} on its own` : `${list(names)} together`;
+}
+
+// Options are listed from the lowest total to the highest. That is an order,
+// stated as one, and never a recommendation.
+function byTotal(a: Scenario, b: Scenario): number {
+  return a.total - b.total || labelOf(a).localeCompare(labelOf(b));
+}
+
+export function buildScenarios(input: ReportInput, prices: CountryPrice[]): ScenarioSet {
+  const singles = prices.map((p) => makeScenario(input, [p])).sort(byTotal);
+
+  if (prices.length < 2) {
+    return { singles, combinations: [], combinationsPossible: 0, combinationsNote: 'one' };
   }
-  return total;
-}
+  if (prices.length > COMBINING.maxCountriesForCombining) {
+    return { singles, combinations: [], combinationsPossible: 0, combinationsNote: 'too-many-countries' };
+  }
 
-export function computeCountries(
-  input: ReportInput,
-  data: CostData,
-  weights: Weights
-): CountryRow[] {
-  const chosen = data.countries.filter((c) => input.countries.includes(c.iso));
-  const heads = Math.max(1, input.adults + input.children);
+  const largest = Math.min(
+    prices.length,
+    COMBINING.maxCountriesInCombination,
+    Math.floor(input.nights / COMBINING.minNightsPerCountry)
+  );
+  if (largest < 2) {
+    return { singles, combinations: [], combinationsPossible: 0, combinationsNote: 'too-few-nights' };
+  }
 
-  const plainOrder = [...chosen].sort((a, b) => a.stay - b.stay).map((c) => c.iso);
+  const all: Scenario[] = [];
+  for (let size = 2; size <= largest; size++) {
+    for (const group of combinationsOf(prices, size)) all.push(makeScenario(input, group));
+  }
+  all.sort(byTotal);
 
-  const rows = chosen.map((c) => {
-    const personalIndex = personalIndexFor(c, weights);
-    const perDay = (input.base * personalIndex) / 100;
-    const perTrip = perDay * input.nights * heads;
-    const plainPerTrip = ((input.base * c.stay) / 100) * input.nights * heads;
-    return {
-      name: c.name,
-      iso: c.iso,
-      plainIndex: c.stay,
-      personalIndex,
-      perDay,
-      perTrip,
-      plainPerTrip,
-      gap: input.ceiling > 0 ? input.ceiling - perTrip : 0,
-      plainRank: plainOrder.indexOf(c.iso) + 1,
-      personalRank: 0,
-    };
-  });
-
-  rows.sort((a, b) => a.personalIndex - b.personalIndex);
-  rows.forEach((r, i) => {
-    r.personalRank = i + 1;
-  });
-  return rows;
+  return {
+    singles,
+    combinations: all.slice(0, COMBINING.maxCombinationsShown),
+    combinationsPossible: all.length,
+    combinationsNote: 'built',
+  };
 }
 
 /* ─────────────────────────────── rendering ─────────────────────────────── */
@@ -588,16 +763,63 @@ function esc(value: string): string {
 }
 
 function fmt(value: number, currency: string): string {
-  const text = Math.round(value).toLocaleString('en-GB');
+  const text = Math.round(value).toLocaleString('en-US');
   return currency ? currency + text : text;
 }
 
-function idx(value: number): string {
-  return value.toFixed(1);
+// Rounded the way a person says a sum out loud. Only ever printed after
+// "about" or "roughly", so a rounded figure is never presented as exact.
+function nice(value: number, currency: string): string {
+  const v = Math.abs(value);
+  const step = v >= 1000 ? 50 : 10;
+  return fmt(Math.round(v / step) * step, currency);
 }
 
-function pct(value: number): string {
-  return (value * 100).toFixed(1) + '%';
+const NUMBER_WORDS = [
+  'zero', 'one', 'two', 'three', 'four', 'five', 'six',
+  'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
+];
+
+function numberWord(n: number): string {
+  return NUMBER_WORDS[n] ?? String(n);
+}
+
+function plural(n: number, one: string, many: string): string {
+  return n === 1 ? one : many;
+}
+
+function groupPhrase(heads: number): string {
+  if (heads <= 1) return 'for you';
+  if (heads === 2) return 'for the two of you';
+  return `for all ${numberWord(heads)} of you`;
+}
+
+function daysPhrase(days: number): string {
+  if (days === 0.5) return 'half a day';
+  if (days === 1) return 'a day';
+  if (days === 1.5) return 'a day and a half';
+  if (Number.isInteger(days)) return `${numberWord(days)} days`;
+  return `about ${Math.round(days)} days`;
+}
+
+function modePhrase(mode: string): string {
+  if (mode === 'coach') return 'by bus';
+  if (mode === 'flight') return 'on budget flights';
+  return 'by train';
+}
+
+// "A0111, restaurants and hotels" becomes "price level for restaurants and
+// hotels (A0111)", which reads as part of a sentence while keeping the code.
+function categoryWords(raw: string): string {
+  const m = /^([A-Z0-9]+),\s*(.+)$/.exec(String(raw).trim());
+  return m ? `price level for ${m[2]} (${m[1]})` : String(raw);
+}
+
+// "A0111, restaurants and hotels" becomes "restaurants and hotels (A0111)", for
+// a list of several categories inside one sentence.
+function categoryName(raw: string): string {
+  const m = /^([A-Z0-9]+),\s*(.+)$/.exec(String(raw).trim());
+  return m ? `${m[2]} (${m[1]})` : String(raw);
 }
 
 const MONTHS = [
@@ -619,10 +841,6 @@ function list(items: string[]): string {
   if (items.length === 0) return '';
   if (items.length === 1) return items[0];
   return items.slice(0, -1).join(', ') + ' and ' + items[items.length - 1];
-}
-
-function answer(group: string, value: string): string {
-  return ANSWER_LABELS[group]?.[value] ?? '';
 }
 
 const STYLES = `
@@ -793,368 +1011,352 @@ const STYLES = `
 
 /* ─────────────────────────────── sections ─────────────────────────────── */
 
-function renderCover(input: ReportInput, rows: CountryRow[], generatedOn: string): string {
-  const heads = input.adults + input.children;
-  const who = answer('party', input.party);
-  const names = list(rows.map((r) => r.name));
+function renderCover(input: ReportInput, prices: CountryPrice[], set: ScenarioSet, generatedOn: string): string {
+  const c = input.currency;
+  const names = esc(list(prices.map((p) => p.name)));
+  const nights = `${input.nights} ${plural(input.nights, 'night', 'nights')}`;
 
-  const facts = [
-    `${rows.length} ${rows.length === 1 ? 'country' : 'countries'}`,
-    `${input.nights} ${input.nights === 1 ? 'night' : 'nights'}`,
-    `${heads} ${heads === 1 ? 'person' : 'people'}`,
-    esc(answer('style', input.style)) + ' daily figure',
-  ];
+  // Comparing, not visiting. The reader picked countries to weigh against each
+  // other, and nothing here may claim they are going to all of them.
+  const comparing =
+    prices.length === 1
+      ? `This report prices a trip of ${nights} in ${names}.`
+      : `You are comparing ${names} for a trip of ${nights}.`;
 
-  const partyDetail =
-    input.children > 0
-      ? `${input.adults} ${input.adults === 1 ? 'adult' : 'adults'} and ${input.children} ${
-          input.children === 1 ? 'child' : 'children'
-        }`
-      : `${input.adults} ${input.adults === 1 ? 'adult' : 'adults'}`;
+  const a = input.adults;
+  const ch = input.children;
+  const adultsText = `${numberWord(a)} ${plural(a, 'adult', 'adults')}`;
+  const childrenText = `${numberWord(ch)} ${plural(ch, 'child', 'children')}`;
+  let party: string;
+  switch (input.party) {
+    case 'solo':
+      party = 'You are traveling on your own.';
+      break;
+    case 'couple':
+      party = 'You are traveling as a couple, so every total is for two adults.';
+      break;
+    case 'family':
+      party = `You are traveling as a family of ${adultsText} and ${childrenText}.`;
+      break;
+    default:
+      party =
+        ch > 0
+          ? `You are traveling with friends, ${adultsText} and ${childrenText} in all.`
+          : `You are traveling with friends, ${adultsText} in all.`;
+  }
+
+  const origin = input.flyingFrom ? ` You are flying from ${esc(input.flyingFrom)}.` : '';
+
+  const fare =
+    input.fare > 0
+      ? `You told us you are seeing return fares of about ${fmt(input.fare, c)} per person, and that fare is included in every total below. It is your figure, not ours, because Durian has no fare data of its own.`
+      : 'You have not given us a fare yet, so no total in this report includes flights.';
+
+  let lead = '';
+  if (prices.length > 1) {
+    const hasCombos = set.combinations.length > 0;
+    if (input.combine === 'combining') {
+      lead = hasCombos
+        ? 'You said you are open to combining countries, so the combinations come first and each country on its own follows.'
+        : 'You said you are open to combining countries, but this trip does not allow a realistic combination, so each country is shown on its own. The section on combining explains why.';
+    } else if (input.combine === 'one') {
+      lead = hasCombos
+        ? 'You said you are set on one country, so each country on its own comes first and the combinations follow as alternatives.'
+        : 'You said you are set on one country, so each country is shown on its own.';
+    } else {
+      lead = hasCombos
+        ? 'You are not sure yet whether to stay in one country or combine several, so this report starts with each country on its own and then shows the combinations.'
+        : 'You are not sure yet whether to stay in one country or combine several, so this report shows each country on its own. The section on combining explains why there are no combinations for this trip.';
+    }
+  }
 
   return `
   <p class="eyebrow">Durian Travel</p>
   <h1>Your cost per country report</h1>
-  <p class="lede">${esc(who)}, ${esc(partyDetail)}, ${input.nights} ${
-    input.nights === 1 ? 'night' : 'nights'
-  } across ${esc(names)}. Generated ${esc(prettyDate(generatedOn))}.</p>
-  <ul class="facts">${facts.map((f) => `<li>${f}</li>`).join('')}</ul>
-  <p class="muted">The free comparison prices your whole trip with one Eurostat index, the one for
-  restaurants and hotels. This report prices it with seven, weighted by how you answered. Every
-  index below is Eurostat. The weighting is ours, and it is labelled as ours everywhere it
-  appears.</p>`;
+  <p class="lede">${comparing} ${party}${origin} This report was generated on ${esc(prettyDate(generatedOn))}.</p>
+  <p>${fare}</p>
+  ${lead ? `<p>${lead}</p>` : ''}
+  <p class="muted">Every figure is built from Eurostat's price levels for seven kinds of spending, so a room, a meal out and a week of groceries are each priced at what they actually cost in each country, rather than with one average for everything.</p>`;
 }
 
-function renderVerdict(input: ReportInput, rows: CountryRow[]): string {
-  const c = input.currency;
-  const cheapest = rows[0];
-  const dearest = rows[rows.length - 1];
-
-  // The country whose ranking moves most between the two methods is the whole
-  // argument for the report, so it is named rather than left to be spotted.
-  const movers = rows
-    .map((r) => ({ r, move: r.plainRank - r.personalRank }))
-    .sort((a, b) => Math.abs(b.move) - Math.abs(a.move));
-  const mover = movers[0];
-
-  let moved: string;
-  if (rows.length === 1) {
-    const only = rows[0];
-    const diff = only.personalIndex - only.plainIndex;
-    moved = `You picked one country, so there is no ranking to move. What does move is the price
-      level itself. On restaurants and hotels alone ${esc(only.name)} sits at
-      ${idx(only.plainIndex)}. Weighted the way you travel it sits at ${idx(only.personalIndex)},
-      which is ${idx(Math.abs(diff))} points ${diff >= 0 ? 'higher' : 'lower'}.`;
-  } else if (!mover || mover.move === 0) {
-    moved = `Your answers do not reorder the list. Every country holds the position it had on the
-      restaurants and hotels index alone. The gaps between them change, but the order does not,
-      so on this trip the free comparison was already telling you the right story.`;
-  } else {
-    const dir = mover.move > 0 ? 'cheaper' : 'dearer';
-    moved = `The biggest change is ${esc(mover.r.name)}. On restaurants and hotels alone it ranks
-      ${mover.r.plainRank} of ${rows.length}. Weighted the way you travel it ranks
-      ${mover.r.personalRank}, which is ${Math.abs(mover.move)}
-      ${Math.abs(mover.move) === 1 ? 'place' : 'places'} ${dir} for you than the free comparison
-      suggested.`;
+function leadGroups(input: ReportInput, set: ScenarioSet): { lead: Scenario[]; other: Scenario[] } {
+  if (input.combine === 'combining' && set.combinations.length > 0) {
+    return { lead: set.combinations, other: set.singles };
   }
+  return { lead: set.singles, other: set.combinations };
+}
 
-  const ceiling =
+function optionSentence(s: Scenario, input: ReportInput): string {
+  const c = input.currency;
+  const flights = input.fare > 0 ? ', flights included' : ' before flights';
+  const label = esc(labelOf(s));
+  if (input.ceiling > 0) {
+    const tolerance = Math.max(25, input.ceiling * 0.02);
+    if (s.gap >= tolerance) return `${label} leaves you about ${nice(s.gap, c)} spare${flights}.`;
+    if (s.gap <= -tolerance) return `${label} puts you roughly ${nice(s.gap, c)} over${flights}.`;
+    return `${label} comes out close to your ceiling${flights}.`;
+  }
+  return `${label} comes to about ${nice(s.total, c)} ${groupPhrase(headsOf(input))}${flights}, or about ${fmt(
+    s.perPersonPerDay,
+    c
+  )} a day each for everything except flights.`;
+}
+
+// The headline shows the range in each group, never only the cheapest: the
+// lowest total and the highest, with one between when there is room. Showing
+// only the cheapest would let every sentence read as money left over while an
+// option that goes over the ceiling sat unseen in the table.
+function spread(options: Scenario[], n: number): Scenario[] {
+  if (options.length <= n) return options;
+  if (n <= 1) return options.slice(0, 1);
+  const out: Scenario[] = [];
+  for (let i = 0; i < n; i++) {
+    const at = Math.round((i * (options.length - 1)) / (n - 1));
+    if (!out.includes(options[at])) out.push(options[at]);
+  }
+  return out;
+}
+
+function renderHeadline(input: ReportInput, set: ScenarioSet): string {
+  const c = input.currency;
+  const { lead, other } = leadGroups(input, set);
+  const picked = [...spread(lead, 3), ...spread(other, 2)];
+  const sentences = picked.map((s) => `<p>${optionSentence(s, input)}</p>`).join('');
+  const shownAll = picked.length === set.singles.length + set.combinations.length;
+
+  const opener =
     input.ceiling > 0
-      ? `<p>You said you will not go over <b>${fmt(input.ceiling, c)}</b>. ${
-          cheapest.perTrip <= input.ceiling
-            ? `${esc(cheapest.name)} comes in ${fmt(
-                input.ceiling - cheapest.perTrip,
-                c
-              )} under that.`
-            : `Every country you picked comes in above it, ${esc(cheapest.name)} by the least at
-               ${fmt(cheapest.perTrip - input.ceiling, c)} over.`
-        }</p>`
-      : '<p class="muted">You did not set a ceiling, so no country is measured against one.</p>';
+      ? `<p>You told us you will not spend more than ${fmt(input.ceiling, c)} on the whole trip. Here is how the options sit against that.</p>`
+      : '<p>You did not set a ceiling, so nothing here is measured against one. Add one to your answers and each option will show how much it leaves you spare or how far over it goes.</p>';
 
   return `
-  <h2>The verdict</h2>
-  <div class="verdict">
-    <p class="verdict__label">Cheapest for the way you travel</p>
-    <p class="verdict__value">${esc(cheapest.name)}</p>
-    <div class="split">
-      <div><span>Per person, per day</span><b>${fmt(cheapest.perDay, c)}</b></div>
-      <div><span>Whole trip, everyone</span><b>${fmt(cheapest.perTrip, c)}</b></div>
-      <div><span>Personal index</span><b>${idx(cheapest.personalIndex)}</b></div>
-    </div>
-  </div>
-  ${
-    rows.length > 1
-      ? `<p>The dearest of the countries you picked is <b>${esc(dearest.name)}</b>, at
-         ${fmt(dearest.perDay, c)} per person per day, or ${fmt(dearest.perTrip, c)} for the trip.
-         The gap between the two is ${fmt(dearest.perTrip - cheapest.perTrip, c)}.</p>`
-      : ''
-  }
-  <p>${moved}</p>
-  ${ceiling}`;
+  <h2>${input.ceiling > 0 ? 'How the options fit your budget' : 'What each option costs'}</h2>
+  ${opener}
+  <div class="verdict">${sentences}</div>
+  ${shownAll ? '' : '<p class="muted">Every option, with its daily figure, is listed in full below.</p>'}`;
 }
 
-function renderBasket(
-  input: ReportInput,
-  basket: BasketRow[],
-  lean: CountryRow,
-  country: CostCountry,
-  source: CostSource
-): string {
-  const body = basket
-    .map(
-      (r) => `
-      <tr>
-        <th scope="row">${esc(r.label)}</th>
-        <td>${pct(r.weight)}</td>
-        <td>${esc(r.categoryName)}</td>
-        <td>${idx(country[r.category])}</td>
-      </tr>`
-    )
-    .join('');
-
-  return `
-  <h2>Your basket</h2>
-  <p>Nine parts of a trip, each priced by the Eurostat category that fits it. The weight is how
-  much of your daily spending that part accounts for, worked out from your answers. The index is
-  what ${esc(country.name)} costs for that category, where the EU27 average is 100.</p>
-
-  <div class="table-wrap table-wrap--wide">
-  <table>
-    <caption>Price level indices are ${esc(source.publisher)}, dataset
-    ${esc(source.dataset)}, indicator ${esc(source.indicator)}, reference year
-    ${esc(source.referenceYear)}, published ${esc(prettyDate(source.eurostatLastUpdated))} and
-    retrieved by us on ${esc(prettyDate(source.categoriesRetrieved))}. The weights are not
-    ${esc(source.publisher)} and are not a published statistic.</caption>
-    <thead>
-      <tr>
-        <th scope="col">Part of the trip</th>
-        <th scope="col">Weight</th>
-        <th scope="col">Eurostat category</th>
-        <th scope="col">Index, ${esc(country.name)}</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${body}
-      <tr class="sum">
-        <th scope="row">Your personal index</th>
-        <td>100%</td>
-        <td class="muted">weighted sum of the column to the right</td>
-        <td>${idx(lean.personalIndex)}</td>
-      </tr>
-    </tbody>
-  </table>
-  </div>
-
-  <div class="ours">
-    <p><b>The weights are ours, not Eurostat's.</b> They are Durian's editorial weighting: our
-    assumptions about how somebody who answered the way you did spends their money. Nobody
-    surveyed anyone, there is no dataset behind them, and a different set of assumptions would
-    give a different personal index.</p>
-    <p>The indices they multiply are a different matter. Those are published, sourced and dated,
-    and they are what makes the comparison between countries worth reading.</p>
-  </div>
-
-  <div class="method">
-    <p><b>How the personal index is worked out.</b>
-    <code>personal index = &Sigma; (weight &times; that country's index for the category)</code>.</p>
-    <p>Then <code>per person per day = your daily figure &times; personal index &divide; 100</code>,
-    and <code>whole trip = per day &times; ${input.nights} nights &times;
-    ${input.adults + input.children} ${input.adults + input.children === 1 ? 'person' : 'people'}</code>.</p>
-  </div>`;
-}
-
-function renderCountries(input: ReportInput, rows: CountryRow[]): string {
+function optionTable(title: string, rows: Scenario[], input: ReportInput): string {
+  if (rows.length === 0) return '';
   const c = input.currency;
+  const heads = headsOf(input);
   const hasCeiling = input.ceiling > 0;
+  const totalHead =
+    input.fare > 0
+      ? `Whole trip ${groupPhrase(heads)}, flights included`
+      : `Whole trip ${groupPhrase(heads)}, flights not included`;
 
   const body = rows
-    .map(
-      (r) => `
-      <tr>
-        <th scope="row">${esc(r.name)}</th>
-        <td>${idx(r.personalIndex)}</td>
-        <td>${fmt(r.perDay, c)}</td>
-        <td>${fmt(r.perTrip, c)}</td>
-        ${
-          hasCeiling
-            ? `<td class="${r.gap < 0 ? 'over' : ''}">${
-                r.gap < 0 ? fmt(-r.gap, c) + ' over' : fmt(r.gap, c) + ' under'
-              }</td>`
-            : ''
-        }
-      </tr>`
-    )
-    .join('');
-
-  return `
-  <h2>Country by country</h2>
-  <p>Sorted cheapest first for the way you travel, which is not always the same order as the free
-  comparison. Per day is one person. Per trip is everyone, for
-  ${input.nights} ${input.nights === 1 ? 'night' : 'nights'}.</p>
-
-  <div class="table-wrap table-wrap--wide">
-  <table>
-    <caption>Your daily figure is ${fmt(input.base, c)} per person, the
-    ${esc(answer('style', input.style)).toLowerCase()} band. That figure is Durian's own estimate
-    for a Western European trip, not a published statistic. Each country's index then scales
-    it.</caption>
-    <thead>
-      <tr>
-        <th scope="col">Country</th>
-        <th scope="col">Personal index</th>
-        <th scope="col">Per person, per day</th>
-        <th scope="col">Whole trip</th>
-        ${hasCeiling ? `<th scope="col">Against ${fmt(input.ceiling, c)}</th>` : ''}
-      </tr>
-    </thead>
-    <tbody>${body}</tbody>
-  </table>
-  </div>
-  ${
-    hasCeiling
-      ? `<p class="muted">The last column is your ceiling minus the trip total. It counts the
-         nights and the people, and it does not count flights, because no free source prices
-         those.</p>`
-      : ''
-  }`;
-}
-
-function renderChart(rows: CountryRow[]): string {
-  const max = Math.max(...rows.map((r) => Math.max(r.personalIndex, r.plainIndex)), 1);
-
-  const bars = rows
-    .map((r) => {
-      const diff = r.personalIndex - r.plainIndex;
-      const note =
-        Math.abs(diff) < 0.05
-          ? 'the same either way'
-          : `${idx(Math.abs(diff))} ${diff > 0 ? 'higher' : 'lower'} for you`;
-      return `
-      <div class="chart__row">
-        <div class="chart__head"><b>${esc(r.name)}</b><span>${idx(r.personalIndex)} against ${idx(
-          r.plainIndex
-        )}, ${note}</span></div>
-        <div class="chart__bar"><span class="chart__fill" style="width:${(
-          (r.personalIndex / max) *
-          100
-        ).toFixed(1)}%"></span></div>
-        <div class="chart__bar"><span class="chart__fill chart__fill--plain" style="width:${(
-          (r.plainIndex / max) *
-          100
-        ).toFixed(1)}%"></span></div>
-      </div>`;
-    })
-    .join('');
-
-  return `
-  <h2>The difference, drawn</h2>
-  <p>Two bars per country. The first is your personal index, the second is the restaurants and
-  hotels index the free comparison uses on its own. Where the two differ, the free comparison was
-  pricing your trip with the wrong basket.</p>
-  <div class="key">
-    <span><i class="personal"></i>Your personal index</span>
-    <span><i class="plain"></i>Restaurants and hotels only</span>
-  </div>
-  <div class="chart">${bars}</div>`;
-}
-
-function renderSplit(input: ReportInput, basket: BasketRow[], lean: CountryRow, country: CostCountry): string {
-  const c = input.currency;
-  const heads = Math.max(1, input.adults + input.children);
-
-  const body = basket
-    .map((r) => {
-      const perDay = (input.base * r.weight * country[r.category]) / 100;
+    .map((s) => {
+      const nights =
+        s.kind === 'single'
+          ? String(input.nights)
+          : Number.isInteger(s.nightsEach)
+            ? `${s.nightsEach} in each`
+            : `about ${Math.round(s.nightsEach)} in each`;
+      const against = hasCeiling
+        ? `<td class="${s.gap < 0 ? 'over' : ''}">${
+            s.gap < 0 ? `${fmt(-s.gap, c)} over` : `${fmt(s.gap, c)} spare`
+          }</td>`
+        : '';
       return `
       <tr>
-        <th scope="row">${esc(r.label)}</th>
-        <td>${pct(r.weight)}</td>
-        <td>${fmt(perDay, c)}</td>
-        <td>${fmt(perDay * input.nights * heads, c)}</td>
+        <th scope="row">${esc(labelOf(s))}</th>
+        <td>${nights}</td>
+        <td>${fmt(s.perPersonPerDay, c)}</td>
+        <td>${fmt(s.total, c)}</td>
+        ${against}
       </tr>`;
     })
     .join('');
 
   return `
-  <h2>Where your money goes in ${esc(country.name)}</h2>
-  <p>${esc(country.name)} is the cheapest of the countries you picked for the way you travel, so
-  this is the one worth breaking open. Each line is your daily figure, split by weight, then
-  priced at that country's index for the category.</p>
-
+  <h3>${title}</h3>
   <div class="table-wrap table-wrap--wide">
   <table>
-    <caption>Per person per day, and then the same figure across
-    ${input.nights} ${input.nights === 1 ? 'night' : 'nights'} for
-    ${heads} ${heads === 1 ? 'person' : 'people'}.</caption>
     <thead>
       <tr>
-        <th scope="col">Part of the trip</th>
-        <th scope="col">Weight</th>
-        <th scope="col">Per person, per day</th>
-        <th scope="col">Whole trip</th>
+        <th scope="col">Option</th>
+        <th scope="col">Nights</th>
+        <th scope="col">Each person, per day, before flights</th>
+        <th scope="col">${totalHead}</th>
+        ${hasCeiling ? `<th scope="col">Against your ${fmt(input.ceiling, c)}</th>` : ''}
       </tr>
     </thead>
-    <tbody>
-      ${body}
-      <tr class="sum">
-        <th scope="row">Total</th>
-        <td>100%</td>
-        <td>${fmt(lean.perDay, c)}</td>
-        <td>${fmt(lean.perTrip, c)}</td>
-      </tr>
-    </tbody>
+    <tbody>${body}</tbody>
   </table>
   </div>`;
 }
 
-function renderLimits(): string {
+function renderOptions(input: ReportInput, set: ScenarioSet): string {
+  const singles = optionTable('Each country on its own', set.singles, input);
+  const combos = optionTable('Combining countries', set.combinations, input);
+  const combosFirst = input.combine === 'combining' && set.combinations.length > 0;
   return `
-  <h2>What this does not cover</h2>
-  <ul class="plain">
-    <li><b>Flights.</b> There is no free, official source for fares, so no figure in this report
-    is a flight. Whatever you are quoted sits on top of every total here.</li>
-    <li><b>Season.</b> The indices are annual averages. August and February can differ by more
-    than two countries do, and no part of this report knows which month you are travelling.</li>
-    <li><b>The capital city premium.</b> Prices in a capital, and in the streets around the
-    sights, run above the national figure. Sometimes well above.</li>
-    <li><b>The difference between a country and a tourist district.</b> Every index here is a
-    national average across everything a resident buys. You will be buying in the parts of the
-    country that charge visitors the most.</li>
-    <li><b>The weighting itself.</b> The nine weights are our assumptions about behaviour, not a
-    measurement of yours. They are the part of this report you should argue with.</li>
-  </ul>
-  <p>Treat the ranking as the reliable part and the exact figures as a starting point.</p>`;
+  <h2>Every option in detail</h2>
+  <p>Each group below is listed from the lowest total to the highest. The daily figure is what one person spends in a day on everything except flights, including any journeys between countries.</p>
+  ${combosFirst ? combos + singles : singles + combos}`;
 }
 
-function renderSources(source: CostSource, rows: CountryRow[]): string {
-  const used = Array.from(new Set(COMPONENTS.map((k) => COMPONENT_CATEGORY[k])));
+function renderCombining(input: ReportInput, set: ScenarioSet, source: CostSource): string {
+  const c = input.currency;
+  const heads = headsOf(input);
+  const min = numberWord(COMBINING.minNightsPerCountry);
+  const nights = `${input.nights} ${plural(input.nights, 'night', 'nights')}`;
+
+  if (set.combinationsNote === 'one') return '';
+
+  if (set.combinationsNote === 'too-many-countries') {
+    return `
+  <h2>What combining countries costs</h2>
+  <p>You are comparing ${numberWord(set.singles.length)} countries. Combining that many would produce more options than anyone can read, so this report prices each country on its own. Compare ${numberWord(
+    COMBINING.maxCountriesForCombining
+  )} countries or fewer to see combinations.</p>`;
+  }
+
+  if (set.combinationsNote === 'too-few-nights') {
+    return `
+  <h2>What combining countries costs</h2>
+  <p>In ${nights} you cannot give each country at least ${min} nights, which is the least that counts as staying somewhere rather than passing through. So this report does not build combinations for this trip.</p>`;
+  }
+
+  const transport = esc(categoryWords(source.categories.transport ?? ''));
+  const intro = `<p>Combining countries costs you in two ways that are easy to miss. Every move from one country to the next is a journey you pay for, on top of the moves between cities you already told us about, and it takes time you do not spend anywhere.</p>
+  <p>We price each journey ${modePhrase(input.intercityMode)} from your daily figure of ${fmt(
+    input.base,
+    c
+  )}, adjusted by Eurostat's ${transport} in the countries involved. We also allow ${daysPhrase(
+    COMBINING.daysPerJourney
+  )} of traveling for each journey. Both are Durian's estimates, not published fares or timetables, and neither takes distance into account, so a long journey costs the same here as a short one.</p>`;
+
+  const cap =
+    set.combinationsPossible > set.combinations.length
+      ? `<p>In ${nights} there are ${set.combinationsPossible} ways to combine these countries while giving each at least ${min} nights. This report shows the ${set.combinations.length} with the lowest totals.</p>`
+      : `<p>These are all the ways to combine your countries in ${nights} while giving each at least ${min} nights.</p>`;
+
+  const items = set.combinations
+    .map((s) => {
+      const journeys = `${numberWord(s.journeys)} ${plural(s.journeys, 'journey', 'journeys')}`;
+      const forAll = heads > 1 ? `, or about ${nice(s.travelPerPerson * heads, c)} ${groupPhrase(heads)}` : '';
+      return `<li>${esc(labelOf(s))} means ${journeys} between countries. That adds about ${nice(
+        s.travelPerPerson,
+        c
+      )} per person${forAll}, and about ${daysPhrase(s.daysTraveling)} spent traveling rather than staying anywhere.</li>`;
+    })
+    .join('');
 
   return `
-  <h2>Sources</h2>
-  <table class="provenance">
-    <tbody>
-      <tr><th scope="row">Publisher</th><td>${esc(source.publisher)}</td></tr>
-      <tr><th scope="row">Dataset</th><td>${esc(source.datasetName)} (${esc(source.dataset)})</td></tr>
-      <tr><th scope="row">Indicator</th><td>${esc(source.indicator)}</td></tr>
-      <tr><th scope="row">Categories used</th><td>${used
-        .map((k) => esc(source.categories[k] ?? k))
-        .join('<br>')}</td></tr>
-      <tr><th scope="row">Reference year</th><td>${esc(source.referenceYear)}</td></tr>
-      <tr><th scope="row">Last updated by ${esc(source.publisher)}</th><td>${esc(
-        prettyDate(source.eurostatLastUpdated)
-      )}</td></tr>
-      <tr><th scope="row">Retrieved by us</th><td>${esc(
-        prettyDate(source.categoriesRetrieved)
-      )}</td></tr>
-      <tr><th scope="row">Source</th><td><a href="${esc(source.url)}">${esc(source.url)}</a></td></tr>
-      <tr><th scope="row">Countries in this report</th><td>${rows.length}</td></tr>
-      <tr><th scope="row">The weighting</th><td>Durian Travel editorial weighting. Not published,
-      not a statistic, and not ${esc(source.publisher)}.</td></tr>
-      <tr><th scope="row">The daily figure</th><td>Durian Travel editorial estimate for a Western
-      European trip. Also not a statistic.</td></tr>
-    </tbody>
+  <h2>What combining countries costs</h2>
+  ${intro}
+  ${cap}
+  <ul class="plain">${items}</ul>`;
+}
+
+// Every country the reader is comparing, never only the cheapest one.
+function renderDays(input: ReportInput, prices: CountryPrice[]): string {
+  const c = input.currency;
+
+  const sentences = prices
+    .map((p) => {
+      const top = [...p.parts].sort((a, b) => b.perDay - a.perDay);
+      return `<li>In ${esc(p.name)}, a full day comes to about ${fmt(p.perDay, c)} per person. ${esc(
+        top[0].label
+      )} is the largest part at ${fmt(top[0].perDay, c)}, and ${esc(top[1].label.toLowerCase())} comes next at ${fmt(
+        top[1].perDay,
+        c
+      )}.</li>`;
+    })
+    .join('');
+
+  const head = COMPONENTS.map((k) => `<th scope="col">${esc(COMPONENT_LABELS[k])}</th>`).join('');
+  const rows = prices
+    .map(
+      (p) => `
+      <tr>
+        <th scope="row">${esc(p.name)}</th>
+        ${p.parts.map((part) => `<td>${fmt(part.perDay, c)}</td>`).join('')}
+        <td><b>${fmt(p.perDay, c)}</b></td>
+      </tr>`
+    )
+    .join('');
+
+  return `
+  <h2>What a day costs in each country</h2>
+  <p>This is what one day costs each person in every country you are comparing, before flights and before any journeys between countries, split into the parts of a trip. Each figure comes from your daily figure of ${fmt(
+    input.base,
+    c
+  )} and Eurostat's price levels for each country. What each part includes is explained after the table.</p>
+  <ul class="plain">${sentences}</ul>
+  <div class="table-wrap table-wrap--wide">
+  <table>
+    <caption>Per person, per day, before flights.</caption>
+    <thead><tr><th scope="col">Country</th>${head}<th scope="col">A full day</th></tr></thead>
+    <tbody>${rows}</tbody>
   </table>
-  <p class="muted">${esc(source.note)}</p>`;
+  </div>`;
+}
+
+function renderParts(source: CostSource): string {
+  const items = COMPONENTS.map((k) => {
+    const category = esc(categoryWords(source.categories[COMPONENT_CATEGORY[k]] ?? ''));
+    return `<li><b>${esc(COMPONENT_LABELS[k])}</b> covers ${esc(PART_COVERS[k])}. It is priced with Eurostat's ${category}${esc(PART_NOTES[k] ?? '')}.</li>`;
+  }).join('');
+
+  return `
+  <h2>What each part of the cost covers</h2>
+  <ul class="plain">${items}</ul>
+  <p>Eating out and cooking for yourself are priced separately, because the gap between restaurant prices and shop prices is very different from one country to the next. How much of your day goes to each part depends on your answers, such as where you sleep and how often you eat out. That split is Durian's own estimate of how people who answer the way you did tend to spend. It is not a measurement of you and it is not a published figure.</p>`;
+}
+
+function renderLimits(input: ReportInput): string {
+  const c = input.currency;
+  const flights =
+    input.fare > 0
+      ? `The flights in every total are the return fare you gave us, ${fmt(input.fare, c)} per person. Durian has no fare data of its own, so that number is yours and not ours, and it will change as you search.`
+      : 'No total in this report includes flights. Durian has no fare data of its own and you did not give us a fare, so whatever you pay to reach Europe comes on top of every figure here.';
+
+  return `
+  <h2>What this report does not cover</h2>
+  <ul class="plain">
+    <li>${flights}</li>
+    <li>Every price level is a yearly average, and this report does not know when you are going. A week in August and a week in February can differ by more than two countries do.</li>
+    <li>Capital cities, and the streets around the famous sights, cost more than the national figure. Sometimes they cost a lot more.</li>
+    <li>Each price level is an average of what residents pay across the whole country. As a visitor, you will mostly buy in the places that charge the most.</li>
+    <li>How a day splits between the parts of a trip is an estimate of how people like you tend to spend, not a record of how you will.</li>
+  </ul>
+  <p>The differences between the options are more reliable than any single figure, so treat each total as a starting point for your own planning.</p>`;
+}
+
+function renderSources(input: ReportInput, source: CostSource, prices: CountryPrice[], set: ScenarioSet): string {
+  const c = input.currency;
+  const used = Array.from(new Set(COMPONENTS.map((k) => COMPONENT_CATEGORY[k])));
+  const categories = list(used.map((k) => esc(categoryName(source.categories[k] ?? k))));
+  const style = esc((ANSWER_LABELS.style[input.style] ?? '').toLowerCase());
+  const combining =
+    set.combinationsNote === 'built'
+      ? ', and so are the cost of each journey between countries and the half day it takes'
+      : '';
+
+  return `
+  <h2>Where these figures come from</h2>
+  <p>Every price level in this report comes from ${esc(source.publisher)}, the statistical office of the European Union. The dataset is called "${esc(
+    source.datasetName
+  )}", code ${esc(source.dataset)}, indicator ${esc(source.indicator)}, for the reference year ${esc(
+    source.referenceYear
+  )}. ${esc(source.publisher)} last updated it on ${esc(
+    prettyDate(source.eurostatLastUpdated)
+  )}, and Durian retrieved the figures used here on ${esc(
+    prettyDate(source.categoriesRetrieved)
+  )}. Each price level compares a country with the average of the 27 EU countries, which is set at 100.</p>
+  <p>The categories used are ${categories}. You can check any of them yourself on the <a href="${esc(
+    source.url
+  )}">${esc(source.publisher)} data browser</a>.</p>
+  <p>Your daily figure of ${fmt(input.base, c)} per person is Durian's own estimate for a ${style} trip in Western Europe. It is not a published statistic. How that day splits between the parts of a trip is Durian's estimate too${combining}.</p>
+  <p class="muted">This report covers ${numberWord(prices.length)} ${plural(
+    prices.length,
+    'country',
+    'countries'
+  )}. ${esc(source.note)}</p>`;
 }
 
 /* ────────────────────────────── the report ─────────────────────────────── */
@@ -1163,13 +1365,15 @@ export interface RenderOptions {
   generatedOn?: string; // ISO date, YYYY-MM-DD. Defaults to today in UTC.
 }
 
+// The page this report is generated from. The report replaces that page in the
+// browser, so a shared link is this address, and the canonical says so.
+const REPORT_PAGE = 'https://www.duriantravel.com/tools/cost-per-country/full-report/';
+
 export function buildReport(raw: unknown, data: CostData, options: RenderOptions = {}): string {
   const input = normalise(raw, data);
   const weights = computeWeights(input);
-  const basket = buildBasket(weights, data._source);
-  const rows = computeCountries(input, data, weights);
-  const lean = rows[0];
-  const leanCountry = data.countries.find((c) => c.iso === lean.iso) as CostCountry;
+  const prices = priceCountries(input, data, weights);
+  const set = buildScenarios(input, prices);
   const generatedOn = options.generatedOn ?? new Date().toISOString().slice(0, 10);
 
   return `<!doctype html>
@@ -1179,6 +1383,8 @@ export function buildReport(raw: unknown, data: CostData, options: RenderOptions
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Your cost per country report | DURIAN Travel</title>
+<meta name="description" content="Your cost per country report from DURIAN Travel: each country you are comparing, and the realistic ways to combine them, priced against your own budget with every source dated.">
+<link rel="canonical" href="${REPORT_PAGE}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
@@ -1201,26 +1407,24 @@ export function buildReport(raw: unknown, data: CostData, options: RenderOptions
 </header>
 <div class="wrap">
 <div class="bar no-print">
-  <a href="/tools/cost-per-country/">Back to the comparison</a>
+  <a href="/tools/cost-per-country/full-report/">Change your answers</a>
   <button type="button" onclick="window.print()">Print or save as PDF</button>
 </div>
-${renderCover(input, rows, generatedOn)}
-${renderVerdict(input, rows)}
-${renderBasket(input, basket, lean, leanCountry, data._source)}
-${renderCountries(input, rows)}
-${renderChart(rows)}
-${renderSplit(input, basket, lean, leanCountry)}
-${renderLimits()}
-${renderSources(data._source, rows)}
+${renderCover(input, prices, set, generatedOn)}
+${renderHeadline(input, set)}
+${renderOptions(input, set)}
+${renderCombining(input, set, data._source)}
+${renderDays(input, prices)}
+${renderParts(data._source)}
+${renderLimits(input)}
+${renderSources(input, data._source, prices, set)}
 
 <div class="disclaimer">
   <p>${DISCLAIMER}</p>
 </div>
 
 <footer>
-  <p>Cost per country report, generated ${esc(prettyDate(generatedOn))} by DURIAN Travel.
-  Prepared by the Durian Travel Editorial Team. Estimates only, built from the answers you gave.
-  Prices change constantly and vary by season, city and how far ahead you book.</p>
+  <p>This cost per country report was generated on ${esc(prettyDate(generatedOn))} by DURIAN Travel and prepared by the Durian Travel Editorial Team. Every figure is an estimate built from the answers you gave. Prices change all the time and vary by season, by city and by how far ahead you book.</p>
 </footer>
 </div>
 </body>

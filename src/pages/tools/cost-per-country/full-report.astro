@@ -63,8 +63,8 @@ const schema = {
       <span class="section-label">Full report</span>
       <h1 class="tool-title">The full cost per country report</h1>
       <p class="tool-intro">
-        Priced for the way you actually travel. Answer these and the report weights seven Eurostat
-        categories instead of one, then ranks the countries you are weighing up.
+        Priced for the way you actually travel. Answer these and the report prices each country you
+        are comparing against your own budget, then shows the realistic ways to combine them.
       </p>
       <p class="report-back">
         <a href={comparisonUrl}>Back to the free comparison</a>
@@ -91,7 +91,7 @@ const schema = {
         data-default-style={DEFAULT_STYLE}
       >
         <fieldset class="tool-block">
-          <legend class="tool-block__title">Which countries are you weighing up?</legend>
+          <legend class="tool-block__title">Which countries are you comparing?</legend>
           <p class="tool-block__hint">Pick at least one.</p>
           <div class="country-grid">
             {countries.map((c) => (
@@ -107,29 +107,60 @@ const schema = {
           <fieldset class="tool-block">
             <legend class="tool-block__title">{block.group}</legend>
             <div class="field-grid">
-              {block.fields.map((f) => (
-                <label class="field">
-                  <span class="field__label">{f.label}</span>
-                  {f.type === 'number' ? (
+              {block.fields.map((f) =>
+                f.type === 'fare' ? (
+                  // Two controls, so a wrapping <label> would be invalid: each gets its own.
+                  <div class="field">
+                    <label class="field__label" for={`r-${f.id}`}>{f.label}</label>
                     <input
                       type="number"
                       id={`r-${f.id}`}
                       data-answer={f.id}
-                      min={f.min}
-                      max={f.max}
-                      step="1"
-                      value={f.value}
-                      inputmode="numeric"
+                      min="0"
+                      step="10"
+                      placeholder="0"
+                      inputmode="decimal"
                     />
-                  ) : (
-                    <select id={`r-${f.id}`} data-answer={f.id}>
-                      {(f.options ?? []).map(([value, label]) => (
-                        <option value={value}>{label}</option>
-                      ))}
-                    </select>
-                  )}
-                </label>
-              ))}
+                    <label class="fare-unknown">
+                      <input type="checkbox" id={`r-${f.id}Unknown`} data-answer={`${f.id}Unknown`} value="yes" />
+                      <span>I do not know yet</span>
+                    </label>
+                    {f.hint && <span class="field__hint">{f.hint}</span>}
+                  </div>
+                ) : (
+                  <label class="field">
+                    <span class="field__label">{f.label}</span>
+                    {f.type === 'number' ? (
+                      <input
+                        type="number"
+                        id={`r-${f.id}`}
+                        data-answer={f.id}
+                        min={f.min}
+                        max={f.max}
+                        step="1"
+                        value={f.value}
+                        inputmode="numeric"
+                      />
+                    ) : f.type === 'text' ? (
+                      <input
+                        type="text"
+                        id={`r-${f.id}`}
+                        data-answer={f.id}
+                        placeholder={f.placeholder}
+                        maxlength={f.maxlength}
+                        autocomplete="off"
+                      />
+                    ) : (
+                      <select id={`r-${f.id}`} data-answer={f.id}>
+                        {(f.options ?? []).map(([value, label]) => (
+                          <option value={value} selected={value === f.value}>{label}</option>
+                        ))}
+                      </select>
+                    )}
+                    {f.hint && <span class="field__hint">{f.hint}</span>}
+                  </label>
+                )
+              )}
             </div>
           </fieldset>
         ))}
@@ -334,6 +365,25 @@ const schema = {
   .country-check input { width: auto; flex: 0 0 auto; margin: 0; accent-color: var(--color-primary); }
   .country-check:has(input:checked) { border-color: var(--color-primary); background: var(--color-primary-bg); }
 
+  .field__hint {
+    display: block;
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-light);
+  }
+  .fare-unknown {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+  .report-form .fare-unknown input { width: auto; flex: 0 0 auto; margin: 0; padding: 0; accent-color: var(--color-primary); }
+  .report-form input:disabled { background: var(--color-bg-alt); color: var(--color-text-light); }
+
   .pay { margin-top: var(--space-5); }
   .report-submit { width: 100%; white-space: normal; }
   .pay__terms {
@@ -453,7 +503,12 @@ const schema = {
       const out: Record<string, unknown> = {};
       answerEls.forEach((el) => {
         const key = el.dataset.answer;
-        if (key) out[key] = el.value;
+        if (!key) return;
+        // A checkbox's value is "yes" whether or not it is ticked, so its state
+        // is sent instead.
+        out[key] = el instanceof HTMLInputElement && el.type === 'checkbox'
+          ? (el.checked ? 'yes' : '')
+          : el.value;
       });
       out.countries = countryBoxes.filter((b) => b.checked).map((b) => b.value);
       out.currency = currencyEl?.value ?? '€';
@@ -478,7 +533,9 @@ const schema = {
         const key = el.dataset.answer;
         const saved = key ? d[key] : undefined;
         if (typeof saved !== 'string') return;
-        if (el instanceof HTMLSelectElement) {
+        if (el instanceof HTMLInputElement && el.type === 'checkbox') {
+          el.checked = saved === 'yes';
+        } else if (el instanceof HTMLSelectElement) {
           if (Array.from(el.options).some((o) => o.value === saved)) el.value = saved;
         } else {
           el.value = saved;
@@ -505,6 +562,42 @@ const schema = {
 
     restoreCurrency();
     restoreReport();
+
+    // A couple is always two adults, so the party answer sets the head count
+    // rather than whatever the number fields were left at. The report applies
+    // the same rule on the server, so the form and the report always agree.
+    const partyEl = reportForm.querySelector('#r-party') as HTMLSelectElement | null;
+    const adultsEl = reportForm.querySelector('#r-adults') as HTMLInputElement | null;
+    const childrenEl = reportForm.querySelector('#r-children') as HTMLInputElement | null;
+    function syncParty() {
+      if (!partyEl || !adultsEl || !childrenEl) return;
+      const adults = parseInt(adultsEl.value, 10) || 0;
+      const children = parseInt(childrenEl.value, 10) || 0;
+      if (partyEl.value === 'solo') {
+        adultsEl.value = '1';
+        childrenEl.value = '0';
+      } else if (partyEl.value === 'couple') {
+        adultsEl.value = '2';
+        childrenEl.value = '0';
+      } else if (partyEl.value === 'family') {
+        adultsEl.value = String(Math.max(1, adults));
+        childrenEl.value = String(Math.max(1, children));
+      } else if (partyEl.value === 'friends') {
+        adultsEl.value = String(Math.max(2, adults));
+      }
+    }
+    partyEl?.addEventListener('change', syncParty);
+    syncParty();
+
+    // "I do not know yet" switches the fare off without throwing the number
+    // away, so ticking it and unticking it again loses nothing.
+    const fareEl = reportForm.querySelector('#r-fare') as HTMLInputElement | null;
+    const fareUnknownEl = reportForm.querySelector('#r-fareUnknown') as HTMLInputElement | null;
+    function syncFare() {
+      if (fareEl && fareUnknownEl) fareEl.disabled = fareUnknownEl.checked;
+    }
+    fareUnknownEl?.addEventListener('change', syncFare);
+    syncFare();
 
     // One generator for both ways in. The code goes in one header and the Stripe
     // session id in another. The Function decides whether either is good enough;

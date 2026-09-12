@@ -33,10 +33,10 @@ export const payCta = REPORT_PRICE
 
 // What somebody is actually buying, said before they are asked to pay.
 export const reportIncludes = [
-  'Seven Eurostat categories weighted to how you actually travel, not one index for everybody.',
-  'Every country you are weighing up, priced per person per day and for the whole trip.',
-  'The ranking that changes once your own habits are counted, with the biggest mover named.',
-  'A page you can save or print, with every figure sourced and dated.',
+  'Each country you are comparing, priced against your own budget, showing what you would have left over or how far you would go over.',
+  'The realistic ways to combine those countries, with the extra travel each combination costs and the days it takes.',
+  'What a day costs in every country, split into where you sleep, eating out, groceries and the rest.',
+  'Seven Eurostat price categories behind every figure, each one sourced and dated, on a page you can save or print.',
 ];
 
 // The same three bands as /tools/budget/, and the same typical figures.
@@ -52,11 +52,15 @@ export const DEFAULT_STYLE = 'mid';
 export interface Field {
   id: string;
   label: string;
-  type: 'number' | 'select';
+  type: 'number' | 'select' | 'text' | 'fare';
   min?: number;
   max?: number;
-  value?: number;
+  // For a number, the starting value. For a select, the option chosen by default.
+  value?: number | string;
   options?: [string, string][];
+  placeholder?: string;
+  maxlength?: number;
+  hint?: string;
 }
 
 export interface QuestionGroup {
@@ -69,6 +73,15 @@ export interface QuestionGroup {
 // source for seasonality exists yet, so the answer would change nothing.
 export const questions: QuestionGroup[] = [
   {
+    // Decides which options lead in the report. It never hides one.
+    group: 'One country or several',
+    fields: [
+      { id: 'combine', label: 'Are you set on one country, or open to combining?', type: 'select', value: 'unsure', options: [
+        ['one', 'Set on one country'], ['combining', 'Open to combining'], ['unsure', 'Not sure yet'],
+      ] },
+    ],
+  },
+  {
     group: 'Your trip',
     fields: [
       { id: 'nights', label: 'How many nights in total?', type: 'number', min: 1, max: 365, value: 10 },
@@ -78,6 +91,16 @@ export const questions: QuestionGroup[] = [
       ] },
       { id: 'adults', label: 'How many adults?', type: 'number', min: 0, max: 20, value: 1 },
       { id: 'children', label: 'How many children?', type: 'number', min: 0, max: 20, value: 0 },
+    ],
+  },
+  {
+    // Neither answer is looked up anywhere. Where they fly from is shown back to
+    // them in the report. The fare is their own number, added to every total
+    // only when they give one, because Durian has no fare data.
+    group: 'Getting there',
+    fields: [
+      { id: 'flyingFrom', label: 'Where are you flying from?', type: 'text', placeholder: 'Your city or country', maxlength: 80, hint: 'This is only used to describe your trip back to you in the report.' },
+      { id: 'fare', label: 'What return fare are you seeing?', type: 'fare', hint: 'Per person and return, in the same currency as your budget below. Durian has no fare data, so this number stays yours.' },
     ],
   },
   {
@@ -123,7 +146,7 @@ export const questions: QuestionGroup[] = [
     fields: [
       { id: 'cityMoves', label: 'How many times will you move city?', type: 'number', min: 0, max: 100, value: 2 },
       { id: 'intercityMode', label: 'How do you travel between them?', type: 'select', options: [
-        ['train', 'Train'], ['coach', 'Coach'], ['flight', 'Budget flight'],
+        ['train', 'Train'], ['coach', 'Bus'], ['flight', 'Budget flight'],
       ] },
     ],
   },
