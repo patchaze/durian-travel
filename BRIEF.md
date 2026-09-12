@@ -2,100 +2,118 @@
 
 **Status: DONE**
 **Written: 12 September 2026, by Cowork**
-**Brief 011**
+**Brief 012**
 
 Claude Code: read all of it, run "The automatic path to live" from `CLAUDE.md`, then fill in the Done section and set the status to DONE. There are no questions for Patricia in this brief.
 
-Brief 010 shipped and Stripe works. Patricia looked at the live page and the disclosure is the problem: nineteen questions unfolding inside the page is not intuitive. The paid flow moves to its own page.
+Patricia bought the report with her own code and read it as a customer would. Her verdict: it gave her no value and raised questions she could not answer. She is right. This brief rebuilds what the report does and what it says. **Brief 013 will follow for the visual design.** Do not spend time on styling here beyond what item 7 asks for.
+
+Files: `src/lib/report.ts`, `src/data/full-report.ts`, `src/pages/tools/cost-per-country/full-report.astro`.
 
 ---
 
+## The problem in one line
+
+The report shows its calculation. It should lay out options and let the reader decide. Everything below follows from that.
+
 ## What to do
 
-### 1. Move the paid flow to its own page
+### 1. Fix the plain bugs first
 
-New page at `src/pages/tools/cost-per-country/full-report.astro`, URL `/tools/cost-per-country/full-report/`.
+These are wrong, not merely unhelpful.
 
-Astro routes `src/pages/tools/cost-per-country.astro` and a `src/pages/tools/cost-per-country/` folder to different URLs, so both can exist. If the build disagrees, convert the existing page to `src/pages/tools/cost-per-country/index.astro` and keep its URL exactly as it is today. **The existing URL must not change.** It is the page that ranks.
+- **"Couple" produces one adult.** A couple is always two adults. Check every party option against the headcount it produces, and make the party size drive every per person figure.
+- **The header claims a trip that is not happening.** It reads like "seven nights across Portugal, Italy, Germany and France", which says they visit all four. They are *comparing* four. Reword so it says what is true: seven nights, comparing these four.
+- **Country by country shows only one country.** Patricia picked four and got Portugal. Every chosen country must appear, in every section that says "country by country". This is the product failing, not a detail.
+- **"Where your money goes" has the same fault.** It must cover every chosen country, or say clearly which one it is showing and why.
 
-Move onto the new page, unchanged in substance:
+### 2. The report becomes scenarios, not a table
 
-- The nineteen questions, in their current groups and order.
-- The pay button, the price, the what you get bullets, and the Stripe reassurance line.
-- The access code fine print, per item 3.
-- Everything Brief 010 built for the states after payment, including the return from Stripe and the refused session message.
-- The `localStorage` keys stay as they are, `durian-cpc-report-v1`.
+The reader's ceiling is the spine. Build these, in this order:
 
-The new page needs its own `title` and `description` for `BaseLayout`, a breadcrumb back to the comparison, and the standard disclaimer.
+1. **Each chosen country on its own**, for the full trip length.
+2. **The combinations of the chosen countries** that are realistic for the nights they have. Do not generate every permutation of four countries for a five night trip. Cap the combinations sensibly and say in Done what cap you used.
 
-### 2. Delete the disclosure from the comparison page
+For every scenario, produce: the total for the whole party, the per person per day figure, and **how much of their ceiling it uses**, stated as money left over or money short.
 
-`src/pages/tools/cost-per-country.astro`.
+The headline is that comparison, written as sentences a person reads once and understands. The shape to aim for:
 
-- Remove the `<details id="report-details">` and everything inside it.
-- In its place, keep the offer as a plain block: the "Full report" eyebrow, the `<h2>` "Priced for the way you actually travel", the intro paragraph, the what you get bullets, the price, and one primary button that is a normal link to `/tools/cost-per-country/full-report/`.
-- No dropdown, no toggle, no JavaScript for this. It is a link.
-- The free comparison below it stays exactly as it is.
+> Portugal on its own leaves you about €1,200 spare. Portugal and Spain together leaves about €400. Adding Switzerland puts you roughly €900 over.
 
-### 3. The access code line
+### 3. Say what combining actually costs
 
-On the new page only. It currently reads "Testing this? Enter a code."
+Nobody tells them this and it is the most useful thing in the report.
 
-- Change the text to exactly: **Got a code.**
-- Nothing else. No question mark, no "enter", no explanation, no hint that it gives free access.
-- It stays small, muted, collapsed by default, and the input only appears when clicked. Behaviour behind it is unchanged.
+- Extra travel between countries, using the `A010703` transport services index already in `country-costs.json`.
+- Time. Moving between countries spends days that are not spent anywhere. Say how many days each combination costs them, based on the number of moves.
+- Both stated in words, not left for the reader to work out from a table.
 
-### 4. The scroll cue becomes a real heading
+### 4. Three new questions
 
-`src/pages/tools/cost-per-country.astro` line 306, currently a `<p class="cpc-cue">` wrapping a link that reads "Not ready to answer twenty questions? The free comparison below ranks all 28 countries in one click."
+`src/data/full-report.ts`. Add to the existing set, each one changing something in the output.
 
-That is a link pretending to be a signpost, and it carries no search value.
+- **"Where are you flying from?"** A text input for their city or country. It does not feed a calculation. It appears in the report so the reader sees their own trip described back to them, and it tells Patricia where her audience is, which she has never been able to measure.
+- **"What return fare are you seeing?"** A number, optional, with an explicit "I do not know yet" state. When given, it goes into every scenario total. When not, every total is shown without flights and each one says so.
+- **"Are you set on one country, or open to combining?"** Set on one, open to combining, or not sure. It decides which scenarios lead and which are shown as alternatives. It does not hide any scenario.
 
-- Replace it with an `<h2>` phrased the way a person types it into a search box. Use: **How much does a trip to Europe cost?**
-- Under it, one short line with the link into the comparison, something close to: "Pick how you travel and see what a week costs in all 28 countries, cheapest first."
-- Keep the existing `<h2>` "Can you afford Europe?" where it is, on the comparison itself. Two question headings on one page is fine because they answer different questions, one about the cost and one about affording it.
-- Do not add a second `<h1>`, and do not move the existing one.
+**On flights, the rule does not move.** Durian has no fare data and none is invented. The number is the reader's own and the report says so in the sentence where it appears.
 
-**Recorded honestly:** Cowork could not verify search volume for either phrase. The Ahrefs plan refused both the overview and the matching terms queries on 10 September 2026 and again today. The reasoning is that question headings match how people and AI assistants phrase the problem, which is a judgement rather than a measurement. Patricia has Ahrefs access elsewhere if she wants the real figure.
+### 5. Rewrite every sentence in the report
 
-### 5. Repoint the Stripe redirect
+The current copy is fragments. Patricia's words: it is not natively English, it is not organic, it is hard to understand. Examples she quoted: "the dearest of the countries you picked is France", and "the biggest change in Germany".
 
-The Payment Link's success URL currently returns people to `/tools/cost-per-country/`. Their saved answers and the report now live on the new page.
+The rules for the rewrite:
 
-- Cowork updates the URL in Stripe to `https://duriantravel.com/tools/cost-per-country/full-report/?session_id={CHECKOUT_SESSION_ID}`. **Do not attempt this yourself, you have no Stripe access.**
-- Build the new page to read `session_id` from its own URL.
-- As a safety net, if `/tools/cost-per-country/` is loaded with a `session_id` in the query, forward to the new page keeping that parameter, so anybody returning against the old URL still gets their report rather than a dead end.
+- Full sentences that connect to each other. No labels pretending to be prose.
+- Second person, present tense, plain words. Read each sentence aloud. If it does not survive that, rewrite it.
+- **No British words.** "Dearest" becomes "the most expensive". `Coach` becomes `Bus` everywhere, in `src/data/full-report.ts` line 126, in the label map at `src/lib/report.ts` line 339, and anywhere else it appears in tool copy. Leave the Switzerland destination page alone, PostBus is a proper noun there.
+- **The reader never sees the phrase "personal index"** or any internal term. If a concept needs a name, name it in plain words, and explain it the first time it appears.
+- Every figure sits in a sentence that says what it is and where it came from.
+
+### 6. Hide the method, keep the sources
+
+Patricia does not want the recipe published, because it can be lifted.
+
+- **Remove the section that shows the component weights.** That table is the method.
+- **Keep every Eurostat source, dated, in the sentence.** Showing sources is the site's whole positioning and it stays.
+- In place of the weights, describe in words what each part of the cost covers, for example that eating out is priced differently from cooking for yourself. Describe the inputs, not the arithmetic.
+
+### 7. The two page level fixes
+
+- **`noindex` the report.** It is a paid deliverable and must never rank. Add `noindex` through `BaseLayout`.
+- **Give it a title and a description anyway**, for the browser tab and for anyone who shares the link. Add a canonical. These are for humans, not for search.
 
 ## Why
 
-Nineteen questions unfolding inside a page that is also a free tool asks the visitor to hold two things at once. A separate page makes the paid product feel like a product, gives it a URL that can be linked and measured on its own, and leaves the free comparison clean.
+A person who pays €5 and gets a table of numbers with no explanation feels cheated, and correctly. The report has the right data underneath and answers the wrong question with it. Scenarios against a budget ceiling turn the same data into a decision the reader can actually make, which is what they paid for.
 
 ## Do not
 
-- Do not change the URL of `/tools/cost-per-country/`.
-- Do not change any question, answer option, or the weighting.
-- Do not change `functions/api/report.ts`, the Stripe verification, or the access code checking.
-- Do not change the report's content or appearance.
-- Do not change what the free comparison computes, or touch `src/data/country-costs.json`.
-- Do not reintroduce a `<details>` for the question form anywhere.
-- Do not write a price anywhere except the existing constant.
-- Do not put the Stripe secret key, the Payment Link, or a session id anywhere new in the repo beyond the constants that already hold them.
-- Do not touch `public/_headers`, the CSP, or DNS. Only `public/_redirects` if a redirect is needed.
-- Do not touch `/tools/budget/` or `/tools/do-you-need-a-visa/`.
-- Do not edit `src/styles/tokens.css` or `src/styles/global.css`.
+- Do not decide for the reader. Lay out the options with the numbers and let them choose. No recommendation, no "best" country, no ranking presented as advice.
+- Do not invent a flight fare, a seasonal adjustment, or any figure that is not either the reader's own or from `country-costs.json`.
+- Do not change the Eurostat data, the seven categories, or `src/data/country-costs.json`.
+- Do not publish the component weights anywhere a reader can see them.
+- Do not remove or weaken any source line or date.
+- Do not change `functions/api/report.ts`, the Stripe verification, or the access code.
+- Do not change the price or the Payment Link.
+- Do not change the free comparison on `/tools/cost-per-country/`.
+- Do not restyle beyond item 7. Brief 013 covers colour, animation and typography.
+- Do not touch `public/_headers`, the CSP, or DNS.
+- Do not add a library or any new runtime dependency.
+- Nothing may score, rate, predict or imply a visa outcome, or comment on whether somebody's money is sufficient for an application. This report talks about the cost of a trip and nothing else.
 - Any page script scopes its queries to its own page root. See brief 006.
-- Build to the `durian-deliverable-design` skill. Light only.
 - Do not `git add -A` or `git add .`. Stage files by name.
 - Do not commit `BUILD-BRIEF-001.md`, `CC-PROMPT-STEP-1.md`, `.claude/launch.json`, the untracked `api/` folder, or any `.xlsx` file in the repo root.
-- Both pages carry: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
+- The report carries: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
 
 ## Check before you merge
 
-- `/tools/cost-per-country/` still resolves and still shows all 28 countries.
-- `/tools/cost-per-country/full-report/` resolves and holds every question.
-- The access code line reads exactly "Got a code."
-- No `<details>` remains around the question form.
-- The sitemap includes the new page.
+- A couple produces two adults, and a family with children produces the right headcount.
+- Generate a report with four countries and confirm all four appear in every country by country section.
+- The header does not claim the reader is visiting every country they picked.
+- `grep -rn "Coach\|dearest\|personal index" src/lib/report.ts src/data/full-report.ts src/pages/tools/` returns nothing.
+- With no fare entered, every total says flights are not included.
+- The report page is `noindex` and has a title, description and canonical.
 - Build passes and `grep -ri "azevedo" dist/` returns nothing.
 
 ---
@@ -103,112 +121,121 @@ Nineteen questions unfolding inside a page that is also a free tool asks the vis
 ## Done
 
 **Completed on:** 13 September 2026
-**Branch:** `brief/011-full-report-page`
-
-**Cowork has one action:** repoint the Payment Link's success URL in Stripe to
-`https://duriantravel.com/tools/cost-per-country/full-report/?session_id={CHECKOUT_SESSION_ID}`.
-Until then the safety net in item 5 forwards anybody Stripe returns to the old URL, so nothing
-breaks in the meantime.
+**Branch:** `brief/012-report-scenarios`
 
 **What changed:**
 
-1. **New page** at `src/pages/tools/cost-per-country/full-report.astro`. On Astro 4.16.19 the
-   file route `cost-per-country.astro` and the folder route built side by side, so no conversion
-   to `index.astro` was needed and `/tools/cost-per-country/` is unchanged. The page holds every
-   question in its original groups and order, the what you get bullets, the price, the pay
-   button, the Stripe line, the code line, and every return state from brief 010. The
-   `localStorage` key is still `durian-cpc-report-v1`. It has its own title, description,
-   canonical, a breadcrumb back to the comparison, the disclaimer, and it is in the sitemap.
+1. **The bugs, confirmed by rendering the old report before changing anything.** Test case: a
+   couple comparing Portugal, Italy, Germany and France for 7 nights.
+   - **Couple produced one adult.** The party answer never set the head count, and the adults
+     field starts at 1. The old report read "A couple, 1 adult" and priced Portugal at €1,101 for
+     the whole trip. The party now decides: solo is 1 adult, a couple 2 adults and no children, a
+     family at least 1 adult and 1 child, friends at least 2 adults. This is enforced in
+     `normalise()` on the server and mirrored in the form. Portugal for that couple is now €2,202.
+   - **The header claimed a trip across every country.** It read "7 nights across Portugal, Italy,
+     Germany and France". It now reads "You are comparing France, Germany, Italy and Portugal for
+     a trip of 7 nights."
+   - **The one-country sections were not the one named "Country by country".** That table did list
+     all four. The faults were "Your basket", which showed price levels for Portugal only, and
+     "Where your money goes in Portugal". Both are gone. "What a day costs in each country" now
+     covers every chosen country, in a table and in one sentence each.
 
-2. **Comparison page.** The `<details id="report-details">` and everything inside it are gone.
-   The offer is now a plain block: the eyebrow, the `<h2>`, the intro, the bullets, the price, and
-   one primary button that is an ordinary `<a href>` to the new page. No toggle and no script for
-   it. The free comparison is unchanged, checked token by token against HEAD.
+2. **Scenarios, not a table.** Each chosen country on its own for the full trip, then the
+   combinations. Nights are split evenly. Every option gives the total for the whole party, the
+   per person per day figure before flights, and the money spare or over against the ceiling. The
+   headline is sentences, and it always includes the lowest and the highest total in each group, so
+   an option that goes over the ceiling is never left out of it. Each group is listed from the
+   lowest total to the highest, said as an order, with no best option and no recommendation.
+   **The cap:** combinations are built only when 2 to 6 countries are picked, every country in a
+   combination gets at least 3 nights, a combination holds at most 4 countries, and at most 10
+   combinations are shown, lowest total first. Countries on their own are never capped. Past 6
+   countries, or with too few nights, the report says why there are no combinations.
 
-3. **The code line** reads exactly "Got a code." It is collapsed on load, the input appears only
-   when it is opened, it is keyboard operable because it is a native disclosure, and the code is
-   still checked server side.
+3. **What combining costs.** One journey between countries, per person, is the reader's daily
+   figure, scaled by the existing editorial between-cities figure for the way they travel, and
+   priced at the average `A010703` transport services level of the countries involved. Each journey
+   also costs half a day. Both are stated in words as Durian's estimates.
 
-4. **The heading.** The `<p class="cpc-cue">` became `<h2>` "How much does a trip to Europe
-   cost?" with one line under it linking into the comparison. "Can you afford Europe?" stays on
-   the comparison itself. Still exactly one `<h1>`, not moved.
+4. **Three new questions** in `src/data/full-report.ts`. "Are you set on one country, or open to
+   combining?" defaults to Not sure yet and decides which group leads, without hiding either.
+   "Where are you flying from?" is text, capped at 80 characters, escaped, and shown back in the
+   report. "What return fare are you seeing?" takes a per person number plus an "I do not know yet"
+   box. A given fare, times the party, goes into every total. With no fare, every total says flights
+   are not included, in the headline sentences and in the table heading.
 
-5. **Safety net.** If `/tools/cost-per-country/` loads with a `session_id`, a small inline script
-   forwards to the new page with the query string intact. It is a script rather than a
-   `_redirects` rule because Cloudflare Pages redirect rules cannot match on a query string, so
-   `public/_redirects` was not touched.
+5. **Every sentence rewritten** in full sentences, second person, American spelling. The reader
+   never sees "personal index", "dearest", "weight", or "index". Coach is Bus in both places. The
+   stored value stays `coach`, so answers already saved in a visitor's browser still restore.
+   "Travelling", "fortnight" and "weighing up" are gone from the report and the form. I printed
+   the whole report as prose and read it aloud twice, and seven sentences were rewritten after the
+   second read.
 
-6. **The two identical buttons, fixed at Patricia's request.** The comparison's button reads
-   "Get the full report for €5" and takes you to the report page. The report page's button reads
-   "Pay €5 and get your report" and takes payment. Both labels come from `REPORT_PRICE`.
+6. **The method is hidden, the sources are kept.** The basket table, the formula box and the
+   comparison chart are removed. Each of the nine parts of a trip is described in words, with the
+   Eurostat category and code that prices it. Every source stays in a sentence with its dates:
+   dataset `prc_ppp_ind`, indicator `PLI_EU27_2020`, reference year 2024, updated by Eurostat on
+   10 July 2025, retrieved 8 September 2026.
 
-7. **Shared module.** `REPORT_PRICE`, `STRIPE_PAYMENT_LINK`, both button labels, the offer
-   bullets, the styles and the questions moved from the comparison page into
-   `src/data/full-report.ts`, because both pages need them and copying would have defined the
-   price and the link twice. They were moved, not changed: the questions, styles, bullets, price
-   and link are identical to HEAD. The Payment Link is in exactly one source file, and in the
-   built site it appears once, on the report page only.
+7. **Page level.** The generated report keeps `noindex, nofollow` and gains a meta description
+   and a canonical pointing at `/tools/cost-per-country/full-report/`. See the note below on how I
+   read this item.
 
-**A bug this move exposed, found and fixed:**
-
-- The report payload used to take the travel style, its daily base and the currency from the
-  comparison's controls on the same page. The new page has none of those controls. Without them
-  `normalise` in `src/lib/report.ts` silently defaults to Mid-range and a blank currency, which
-  would have changed the report people receive. The new page reads the style and currency the
-  visitor last used from `durian-cpc-v1`, the key the comparison already saves, and falls back to
-  Mid-range and €, the comparison's own defaults.
-- Testing that hand-off exposed a worse bug underneath. **All four tool pages load one shared
-  bundle, `page-tools.*.js`, that carries every tool's script.** The free comparison's `update()`
-  therefore ran on every tool page and saved `{"style":"mid"}` over the visitor's saved choice,
-  wiping their nights, budget and currency. Reproduced before the fix on the report page, the
-  budget planner and the visa tool. On the budget and visa pages this predates this brief. On the
-  new report page it priced every report at Mid-range: a visitor who picked Budget sent a payload
-  of Mid-range, base 190.
-- Fix: the comparison script's listeners and its `restore()` and `update()` calls now run only
-  when its own list and controls are present. This touches the free comparison's script but not
-  what it computes. After rebuilding, the saved choice survives on all three pages, the comparison
-  still restores and saves on its own page, and the hand-off sends Budget, base 100, $.
-- The budget planner was checked for the same fault: its own saved state survives loads of every
-  other tool page, so there is no second bug.
+**Also changed:**
+- The offer bullets in `src/data/full-report.ts` described the old report ("the ranking that
+  changes... with the biggest mover named"). They now describe what it does. The bullets show on
+  both pages, so the offer on `/tools/cost-per-country/` changed too. The free comparison did not.
+- The form's intro and its country legend no longer say the report "ranks" or "weighs up".
+- `cleanText` in `report.ts` contained three raw control characters (0x00, 0x1F, 0x7F) that I
+  introduced while writing it. It now tests code points directly, and the file contains none.
 
 **Checks:**
-
-- Build passes, 76 pages. `grep -ri "azevedo" dist/` returns nothing. No secret key or price id in
-  `src/`, `functions/` or `dist/`.
-- Built comparison page: 28 rows, no question form, no `<details>`, the offer button a real link
-  to the new page, no Payment Link, the forward script present, both question headings, one
-  `<h1>`, the disclaimer.
-- Built report page: all 19 answer fields in the original order, 28 country checkboxes, "Got a
-  code.", one `<details>` and it is the code line, not the form, the Payment Link once, the new
-  canonical, the disclaimer.
-- Sitemap lists `/tools/cost-per-country/` and `/tools/cost-per-country/full-report/`.
-- In a browser: cold arrival sends Mid-range, 190, €; the hand-off sends Budget, 100, $; a refused
-  code shows the refusal; the old URL with a `session_id` lands on the new page with the id kept
-  and stripped from the address bar; returning with answers posts to `/api/report`; returning
-  without them says so and keeps the session; the pay button saves the answers before leaving and
-  lands on Stripe showing €5.00 for "Full cost per country report" in sandbox. No sideways scroll
-  at 375px on either page. No JavaScript errors. The only console errors are the local preview's
-  404 on `/api/report`, because the preview server does not run Cloudflare Functions. The live
-  endpoint is checked after deploy.
-- All new copy checked for dashes and banned words.
+- Build passes, 76 pages. `grep -ri "azevedo" dist/` returns nothing. The brief's search for
+  Coach, dearest and personal index returns nothing. `functions/api/report.ts`,
+  `src/data/country-costs.json` and `public/_headers` are unchanged. Type check clean on the report,
+  the questions and the Function.
+- 43 checks across twelve rendered scenarios, all passing. The couple gets two adults and
+  €2,202. A family left at 0 children gets one child. A family of 2 and 3 is priced for five.
+  Friends left at 1 adult become two. All four countries appear in the options, the day table and
+  the day sentences. With no fare, every headline sentence and the table heading say flights are
+  not included. A fare of €650 for a couple adds €1,300. "I do not know yet" overrides a typed
+  fare. With no ceiling, the wording changes. One country builds no combinations. 5 nights and
+  2 countries explain why there are none. So do 8 countries. 14 nights and 4 countries give 11
+  combinations and show 10. "Open to combining" puts combinations first. A script tag typed as
+  the origin comes out escaped. The head has noindex, a description, a canonical and a title. The
+  disclaimer is present, there are no dashes, and the dates sit in sentences.
+- In a browser: all 23 form fields render, "Not sure yet" is preselected, and no label is nested
+  inside another. Party sync sets 2/0 for a couple, 2/1 for a family left at 2/0, 2/0 for friends
+  left at 1/0 and 1/0 for solo from 3/2. "I do not know yet" disables the fare and keeps the number.
+  The payload carries every new field. Everything, the checkbox included, restores after a reload.
+  No console errors, and nothing overflows at 375px.
 
 **Could not do, and why:**
 
-Nothing in the brief was skipped. Repointing the Stripe success URL is Cowork's, as the brief said.
+Nothing in the brief was skipped. The generated report itself cannot be requested on the live site
+without Patricia's code or a paid session, so it was verified by rendering the same module locally
+across the twelve scenarios above. On the live site I can check the form and that the endpoint
+still refuses.
 
 **For Cowork:**
 
-- **The cue line does not use the suggested wording.** The suggested sentence, "Pick how you
-  travel and see what a week costs in all 28 countries, cheapest first", is already the lede
-  under "Can you afford Europe?" a short scroll below. Using it again put the same sentence twice
-  in a row. The line reads "Rather skip the questions? The free comparison below ranks all 28
-  countries straight away."
-- **The shared bundle is the root cause of both this bug and brief 006's, and it is worth a brief
-  of its own.** Every tool page also loads the FAQ and services chunks. Any page script that
-  writes storage or attaches listeners without checking its own page root will misbehave on pages
-  it was never meant for. The visa tool, the report page and now the comparison all check. The FAQ
-  and services scripts were not tested here.
-- **The report's own "Back to the comparison" link** still points at `/tools/cost-per-country/`,
-  not the report page, because the report's content was off limits. Nothing is lost: the answers
-  are saved, and the report page restores them.
-- Search volume for both question headings is still unverified, as the brief recorded.
+- **How I read item 7.** "Noindex the report... through `BaseLayout`" cannot apply literally to the
+  generated report, because it is an HTML string built in `report.ts` and never passes through
+  `BaseLayout`. It was already `noindex`, so I added the description and canonical there.
+  `/tools/cost-per-country/full-report/` stays indexable and in the sitemap, as brief 011 set it
+  up. If the intent was to take that form page out of search, it is `noindex` on its `BaseLayout`
+  plus an exclusion in the sitemap filter.
+- **"Where are you flying from?" does not reach Patricia yet.** It is shown back to the visitor in
+  the report and saved in their browser, but nothing records it anywhere. Brief 010 forbade logging
+  answers and this brief did not authorise analytics. Measuring where the audience is needs a
+  decision, for example a GA4 event that carries only the country, never the text.
+- **Journey costs ignore distance.** The dataset has no distances and inventing them would break
+  the rule. In the test case every journey came out at about €20 to €30 per person by bus, and
+  Lisbon to Rome costs the same as Paris to Brussels. The report says this in the sentence. A real
+  fix needs distance or route data.
+- **The method can still be worked backwards with effort.** The report prints the daily figure and
+  the money for each part of a day in each country, and the Eurostat levels are public, so the
+  weights can be recovered by division. Closing that fully means dropping the per part table or
+  the daily figure. The percentages and the formula are no longer shown.
+- Headline sentences keep the brief's own shape, "Italy and Portugal together leaves you about
+  €520 spare", singular verb included.
+
