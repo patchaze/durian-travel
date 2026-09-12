@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import costData from '../data/country-costs.json';
+import visaData from '../data/visa-requirements.json';
 
 const canonical = 'https://www.duriantravel.com/sources/';
 
@@ -10,6 +11,11 @@ const canonical = 'https://www.duriantravel.com/sources/';
 // page updates with it.
 const cost = costData._source;
 const countryCount = costData.countries.length;
+
+// Same discipline for the visa tool: the provenance is read from the file that
+// feeds it, so this page cannot drift from the data it describes.
+const visa = visaData._source;
+const visaEntryCount = visaData.entries.length;
 
 const borderSources = [
   {
@@ -156,6 +162,52 @@ const schema = {
     </div>
   </section>
 
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <div class="prose">
+        <h2>Whether a passport needs a Schengen visa</h2>
+        <p>
+          The <a href="/tools/do-you-need-a-visa/">visa requirement check</a> reads one legal
+          instrument and nothing else. {visa.instrument} lists the countries whose nationals need a
+          visa for a short stay in Annex I, and the countries whose nationals do not in Annex II.
+          Conditions on individual entries, such as a biometric passport requirement, are footnotes
+          to those annexes and are quoted as they are written.
+        </p>
+        <p>
+          We use the consolidated version rather than the original text, because the regulation has
+          been amended several times and the consolidated version is the one that reflects every
+          amendment in force.
+        </p>
+      </div>
+
+      <dl class="prov">
+        <div><dt>Publisher</dt><dd>{visa.publisher}</dd></div>
+        <div><dt>Instrument</dt><dd>{visa.instrument}</dd></div>
+        <div><dt>Annexes used</dt><dd>Annex I and Annex II</dd></div>
+        <div><dt>Consolidated version</dt><dd>{visa.consolidatedVersionLabel}</dd></div>
+        <div><dt>CELEX</dt><dd><code>{visa.celex}</code></dd></div>
+        <div><dt>We last retrieved it</dt><dd>{visa.retrieved}</dd></div>
+        <div><dt>Entries covered</dt><dd>{visaEntryCount}</dd></div>
+        <div><dt>Source</dt><dd><a href={visa.consolidatedUrl} rel="nofollow noopener" target="_blank">Read the consolidated regulation on EUR-Lex</a></dd></div>
+      </dl>
+
+      <div class="prose">
+        <h3>What it does not cover</h3>
+        <p>
+          Short stays only: tourism and similar purposes, up to 90 days in any 180 day period, in
+          the Schengen area. It says nothing about work, study, residence or any longer stay, which
+          run on different rules entirely. It does not tell you what a consulate will ask you for,
+          what an application costs or how long it takes. Only the consulate handling your
+          application can tell you that.
+        </p>
+        <p>
+          Nationals of the EU, the EEA and Switzerland appear in neither annex. The tool lists them
+          under free movement rules, which is a different legal basis, and says so.
+        </p>
+      </div>
+    </div>
+  </section>
+
   <section class="section section--sm section--alt">
     <div class="container container--narrow">
       <div class="prose">
@@ -198,10 +250,19 @@ const schema = {
           is more recent and decide what to plan around.
         </p>
         <p>
+          <strong>Resolved, as far as we can resolve it.</strong> On 12 September 2026 we checked
+          the official ETIAS site itself, and it states the fee as EUR 20. That is the same figure
+          the Commission announced, now on the site travellers are sent to, so we plan around EUR
+          20. Both figures stay above with their dates, because the EEAS page still said EUR 7 when
+          we last looked on 2 September 2026 and we would rather show you the disagreement than
+          tidy it away.
+        </p>
+        <p>
           Two things worth knowing either way. ETIAS is not operational yet, so no fee is being
-          charged to anyone today. And the Commission has said some travellers, including those
-          under 18 and over 70, are exempt. Check the official ETIAS site before you budget for
-          it.
+          charged to anyone today and there is nothing to apply for. The official site said
+          "ETIAS is currently not in operation and no applications for travel authorisations are
+          collected at this point" when we checked it on 12 September 2026. And the Commission has
+          said some travellers, including those under 18 and over 70, are exempt.
         </p>
       </div>
     </div>

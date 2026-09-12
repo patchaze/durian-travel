@@ -1,0 +1,1278 @@
+{
+  "_source": {
+    "publisher": "European Union",
+    "instrument": "Regulation (EU) 2018/1806",
+    "instrumentTitle": "Regulation (EU) 2018/1806 of the European Parliament and of the Council of 14 November 2018 listing the third countries whose nationals must be in possession of visas when crossing the external borders and those whose nationals are exempt from that requirement",
+    "consolidatedVersion": "2025-12-30",
+    "consolidatedVersionLabel": "Consolidated text 32018R1806 EN, 30 December 2025",
+    "celex": "02018R1806-20251230",
+    "url": "https://eur-lex.europa.eu/eli/reg/2018/1806/",
+    "consolidatedUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02018R1806-20251230",
+    "retrieved": "2026-09-12",
+    "annexes": {
+      "Annex I": "Third countries whose nationals are required to hold a visa when crossing the external borders of the Member States.",
+      "Annex II": "Third countries whose nationals are exempt from that requirement for stays of no more than 90 days in any 180 day period."
+    },
+    "freeMovementNote": "Nationals of the EU, the EEA and Switzerland appear in neither annex. Their category here comes from free movement rules, not from Regulation (EU) 2018/1806.",
+    "scope": "Short stays for tourism and similar purposes, up to 90 days in any 180 day period, in the Schengen area. It does not cover work, study, residence or any long stay.",
+    "note": "Conditions are quoted from the footnotes to the annexes of the consolidated regulation. Where an entry is conditional, the condition is the headline, not a footnote."
+  },
+  "categories": {
+    "free_movement": "No visa and no ETIAS. Free movement rights apply with no time limit under the Schengen short stay rules.",
+    "exempt": "No short stay visa needed for up to 90 days in any 180 day period.",
+    "exempt_conditional": "No short stay visa needed for up to 90 days in any 180 day period, but only if a condition is met.",
+    "visa_required": "A Schengen short stay visa is required."
+  },
+  "entries": [
+    {
+      "name": "Afghanistan",
+      "category": "visa_required",
+      "iso": "AF",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Albania",
+      "category": "exempt_conditional",
+      "iso": "AL",
+      "annex": "Annex II, part 1",
+      "condition": "Only if your passport is biometric."
+    },
+    {
+      "name": "Algeria",
+      "category": "visa_required",
+      "iso": "DZ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Andorra",
+      "category": "exempt",
+      "iso": "AD",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Angola",
+      "category": "visa_required",
+      "iso": "AO",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Antigua and Barbuda",
+      "category": "exempt",
+      "iso": "AG",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Argentina",
+      "category": "exempt",
+      "iso": "AR",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Armenia",
+      "category": "visa_required",
+      "iso": "AM",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Australia",
+      "category": "exempt",
+      "iso": "AU",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Austria",
+      "category": "free_movement",
+      "iso": "AT",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Azerbaijan",
+      "category": "visa_required",
+      "iso": "AZ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Bahamas",
+      "category": "exempt",
+      "iso": "BS",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Bahrain",
+      "category": "visa_required",
+      "iso": "BH",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Bangladesh",
+      "category": "visa_required",
+      "iso": "BD",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Barbados",
+      "category": "exempt",
+      "iso": "BB",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Belarus",
+      "category": "visa_required",
+      "iso": "BY",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Belgium",
+      "category": "free_movement",
+      "iso": "BE",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Belize",
+      "category": "visa_required",
+      "iso": "BZ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Benin",
+      "category": "visa_required",
+      "iso": "BJ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Bhutan",
+      "category": "visa_required",
+      "iso": "BT",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Bolivia",
+      "category": "visa_required",
+      "iso": "BO",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Bosnia and Herzegovina",
+      "category": "exempt_conditional",
+      "iso": "BA",
+      "annex": "Annex II, part 1",
+      "condition": "Only if your passport is biometric."
+    },
+    {
+      "name": "Botswana",
+      "category": "visa_required",
+      "iso": "BW",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Brazil",
+      "category": "exempt",
+      "iso": "BR",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "British national (Overseas)",
+      "category": "exempt",
+      "annex": "Annex II, part 3"
+    },
+    {
+      "name": "British overseas citizen (BOC)",
+      "category": "exempt",
+      "annex": "Annex II, part 3"
+    },
+    {
+      "name": "British overseas territories citizen (BOTC)",
+      "category": "exempt",
+      "annex": "Annex II, part 3"
+    },
+    {
+      "name": "British protected person (BPP)",
+      "category": "exempt",
+      "annex": "Annex II, part 3"
+    },
+    {
+      "name": "British subject (BS)",
+      "category": "exempt",
+      "annex": "Annex II, part 3"
+    },
+    {
+      "name": "Brunei",
+      "category": "exempt",
+      "iso": "BN",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Bulgaria",
+      "category": "free_movement",
+      "iso": "BG",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Burkina Faso",
+      "category": "visa_required",
+      "iso": "BF",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Burundi",
+      "category": "visa_required",
+      "iso": "BI",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Cambodia",
+      "category": "visa_required",
+      "iso": "KH",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Cameroon",
+      "category": "visa_required",
+      "iso": "CM",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Canada",
+      "category": "exempt",
+      "iso": "CA",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Cape Verde",
+      "category": "visa_required",
+      "iso": "CV",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Central African Republic",
+      "category": "visa_required",
+      "iso": "CF",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Chad",
+      "category": "visa_required",
+      "iso": "TD",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Chile",
+      "category": "exempt",
+      "iso": "CL",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "China",
+      "category": "visa_required",
+      "iso": "CN",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Colombia",
+      "category": "exempt",
+      "iso": "CO",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Comoros",
+      "category": "visa_required",
+      "iso": "KM",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Congo",
+      "category": "visa_required",
+      "iso": "CG",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Costa Rica",
+      "category": "exempt",
+      "iso": "CR",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Croatia",
+      "category": "free_movement",
+      "iso": "HR",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Cuba",
+      "category": "visa_required",
+      "iso": "CU",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Cyprus",
+      "category": "free_movement",
+      "iso": "CY",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Czechia",
+      "category": "free_movement",
+      "iso": "CZ",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Côte d'Ivoire",
+      "category": "visa_required",
+      "iso": "CI",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Democratic Republic of the Congo",
+      "category": "visa_required",
+      "iso": "CD",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Denmark",
+      "category": "free_movement",
+      "iso": "DK",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Djibouti",
+      "category": "visa_required",
+      "iso": "DJ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Dominica",
+      "category": "exempt_conditional",
+      "iso": "DM",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Dominican Republic",
+      "category": "visa_required",
+      "iso": "DO",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Ecuador",
+      "category": "visa_required",
+      "iso": "EC",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Egypt",
+      "category": "visa_required",
+      "iso": "EG",
+      "annex": "Annex I"
+    },
+    {
+      "name": "El Salvador",
+      "category": "exempt",
+      "iso": "SV",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Equatorial Guinea",
+      "category": "visa_required",
+      "iso": "GQ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Eritrea",
+      "category": "visa_required",
+      "iso": "ER",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Estonia",
+      "category": "free_movement",
+      "iso": "EE",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Eswatini",
+      "category": "visa_required",
+      "iso": "SZ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Ethiopia",
+      "category": "visa_required",
+      "iso": "ET",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Fiji",
+      "category": "visa_required",
+      "iso": "FJ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Finland",
+      "category": "free_movement",
+      "iso": "FI",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "France",
+      "category": "free_movement",
+      "iso": "FR",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Gabon",
+      "category": "visa_required",
+      "iso": "GA",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Georgia",
+      "category": "exempt_conditional",
+      "iso": "GE",
+      "annex": "Annex II, part 1",
+      "condition": "Only if your passport is a biometric passport issued by Georgia to ICAO standards."
+    },
+    {
+      "name": "Germany",
+      "category": "free_movement",
+      "iso": "DE",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Ghana",
+      "category": "visa_required",
+      "iso": "GH",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Greece",
+      "category": "free_movement",
+      "iso": "GR",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Grenada",
+      "category": "exempt_conditional",
+      "iso": "GD",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Guatemala",
+      "category": "exempt",
+      "iso": "GT",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Guinea",
+      "category": "visa_required",
+      "iso": "GN",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Guinea-Bissau",
+      "category": "visa_required",
+      "iso": "GW",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Guyana",
+      "category": "visa_required",
+      "iso": "GY",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Haiti",
+      "category": "visa_required",
+      "iso": "HT",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Holy See",
+      "category": "exempt",
+      "iso": "VA",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Honduras",
+      "category": "exempt",
+      "iso": "HN",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Hong Kong SAR",
+      "category": "exempt_conditional",
+      "iso": "HK",
+      "annex": "Annex II, part 2",
+      "condition": "Only holders of a Hong Kong Special Administrative Region passport."
+    },
+    {
+      "name": "Hungary",
+      "category": "free_movement",
+      "iso": "HU",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Iceland",
+      "category": "free_movement",
+      "iso": "IS",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "India",
+      "category": "visa_required",
+      "iso": "IN",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Indonesia",
+      "category": "visa_required",
+      "iso": "ID",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Iran",
+      "category": "visa_required",
+      "iso": "IR",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Iraq",
+      "category": "visa_required",
+      "iso": "IQ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Ireland",
+      "category": "free_movement",
+      "iso": "IE",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Israel",
+      "category": "exempt",
+      "iso": "IL",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Italy",
+      "category": "free_movement",
+      "iso": "IT",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Jamaica",
+      "category": "visa_required",
+      "iso": "JM",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Japan",
+      "category": "exempt",
+      "iso": "JP",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Jordan",
+      "category": "visa_required",
+      "iso": "JO",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Kazakhstan",
+      "category": "visa_required",
+      "iso": "KZ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Kenya",
+      "category": "visa_required",
+      "iso": "KE",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Kiribati",
+      "category": "exempt_conditional",
+      "iso": "KI",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Kosovo",
+      "category": "exempt_conditional",
+      "iso": "XK",
+      "annex": "Annex II, part 4",
+      "condition": "Only if your passport is a biometric passport issued by Kosovo to ICAO standards.",
+      "note": "A second condition in the regulation set the start date as the day ETIAS starts operations or 1 January 2024, whichever came first. That date has passed."
+    },
+    {
+      "name": "Kuwait",
+      "category": "visa_required",
+      "iso": "KW",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Kyrgyzstan",
+      "category": "visa_required",
+      "iso": "KG",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Laos",
+      "category": "visa_required",
+      "iso": "LA",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Latvia",
+      "category": "free_movement",
+      "iso": "LV",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Lebanon",
+      "category": "visa_required",
+      "iso": "LB",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Lesotho",
+      "category": "visa_required",
+      "iso": "LS",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Liberia",
+      "category": "visa_required",
+      "iso": "LR",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Libya",
+      "category": "visa_required",
+      "iso": "LY",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Liechtenstein",
+      "category": "free_movement",
+      "iso": "LI",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Lithuania",
+      "category": "free_movement",
+      "iso": "LT",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Luxembourg",
+      "category": "free_movement",
+      "iso": "LU",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Macao SAR",
+      "category": "exempt_conditional",
+      "iso": "MO",
+      "annex": "Annex II, part 2",
+      "condition": "Only holders of a Região Administrativa Especial de Macau passport."
+    },
+    {
+      "name": "Madagascar",
+      "category": "visa_required",
+      "iso": "MG",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Malawi",
+      "category": "visa_required",
+      "iso": "MW",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Malaysia",
+      "category": "exempt",
+      "iso": "MY",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Maldives",
+      "category": "visa_required",
+      "iso": "MV",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Mali",
+      "category": "visa_required",
+      "iso": "ML",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Malta",
+      "category": "free_movement",
+      "iso": "MT",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Marshall Islands",
+      "category": "exempt_conditional",
+      "iso": "MH",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Mauritania",
+      "category": "visa_required",
+      "iso": "MR",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Mauritius",
+      "category": "exempt",
+      "iso": "MU",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Mexico",
+      "category": "exempt",
+      "iso": "MX",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Micronesia",
+      "category": "exempt_conditional",
+      "iso": "FM",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Moldova",
+      "category": "exempt_conditional",
+      "iso": "MD",
+      "annex": "Annex II, part 1",
+      "condition": "Only if your passport is a biometric passport issued by Moldova to ICAO standards."
+    },
+    {
+      "name": "Monaco",
+      "category": "exempt",
+      "iso": "MC",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Mongolia",
+      "category": "visa_required",
+      "iso": "MN",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Montenegro",
+      "category": "exempt_conditional",
+      "iso": "ME",
+      "annex": "Annex II, part 1",
+      "condition": "Only if your passport is biometric."
+    },
+    {
+      "name": "Morocco",
+      "category": "visa_required",
+      "iso": "MA",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Mozambique",
+      "category": "visa_required",
+      "iso": "MZ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Myanmar/Burma",
+      "category": "visa_required",
+      "iso": "MM",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Namibia",
+      "category": "visa_required",
+      "iso": "NA",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Nauru",
+      "category": "exempt_conditional",
+      "iso": "NR",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Nepal",
+      "category": "visa_required",
+      "iso": "NP",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Netherlands",
+      "category": "free_movement",
+      "iso": "NL",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "New Zealand",
+      "category": "exempt",
+      "iso": "NZ",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Nicaragua",
+      "category": "exempt",
+      "iso": "NI",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Niger",
+      "category": "visa_required",
+      "iso": "NE",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Nigeria",
+      "category": "visa_required",
+      "iso": "NG",
+      "annex": "Annex I"
+    },
+    {
+      "name": "North Korea",
+      "category": "visa_required",
+      "iso": "KP",
+      "annex": "Annex I"
+    },
+    {
+      "name": "North Macedonia",
+      "category": "exempt_conditional",
+      "iso": "MK",
+      "regulationName": "former Yugoslav Republic of Macedonia",
+      "annex": "Annex II, part 1",
+      "condition": "Only if your passport is biometric."
+    },
+    {
+      "name": "Norway",
+      "category": "free_movement",
+      "iso": "NO",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Oman",
+      "category": "visa_required",
+      "iso": "OM",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Pakistan",
+      "category": "visa_required",
+      "iso": "PK",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Palau",
+      "category": "exempt_conditional",
+      "iso": "PW",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Panama",
+      "category": "exempt",
+      "iso": "PA",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Papua New Guinea",
+      "category": "visa_required",
+      "iso": "PG",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Paraguay",
+      "category": "exempt",
+      "iso": "PY",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Peru",
+      "category": "exempt_conditional",
+      "iso": "PE",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Philippines",
+      "category": "visa_required",
+      "iso": "PH",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Poland",
+      "category": "free_movement",
+      "iso": "PL",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Portugal",
+      "category": "free_movement",
+      "iso": "PT",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Qatar",
+      "category": "visa_required",
+      "iso": "QA",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Romania",
+      "category": "free_movement",
+      "iso": "RO",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Russia",
+      "category": "visa_required",
+      "iso": "RU",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Rwanda",
+      "category": "visa_required",
+      "iso": "RW",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Saint Kitts and Nevis",
+      "category": "exempt",
+      "iso": "KN",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Saint Lucia",
+      "category": "exempt_conditional",
+      "iso": "LC",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Saint Vincent and the Grenadines",
+      "category": "exempt_conditional",
+      "iso": "VC",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Samoa",
+      "category": "exempt",
+      "iso": "WS",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "San Marino",
+      "category": "exempt",
+      "iso": "SM",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Saudi Arabia",
+      "category": "visa_required",
+      "iso": "SA",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Senegal",
+      "category": "visa_required",
+      "iso": "SN",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Serbia",
+      "category": "exempt_conditional",
+      "iso": "RS",
+      "regulationName": "Serbia (including holders of Serbian passports issued by the Serbian Coordination Directorate, in Serbian: Koordinaciona uprava)",
+      "annex": "Annex II, part 1",
+      "condition": "Only if your passport is a biometric passport issued to ICAO standards. Serbian passports issued by the Coordination Directorate are included."
+    },
+    {
+      "name": "Seychelles",
+      "category": "exempt",
+      "iso": "SC",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Sierra Leone",
+      "category": "visa_required",
+      "iso": "SL",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Singapore",
+      "category": "exempt",
+      "iso": "SG",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Slovakia",
+      "category": "free_movement",
+      "iso": "SK",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Slovenia",
+      "category": "free_movement",
+      "iso": "SI",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Solomon Islands",
+      "category": "exempt",
+      "iso": "SB",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Somalia",
+      "category": "visa_required",
+      "iso": "SO",
+      "annex": "Annex I"
+    },
+    {
+      "name": "South Africa",
+      "category": "visa_required",
+      "iso": "ZA",
+      "annex": "Annex I"
+    },
+    {
+      "name": "South Korea",
+      "category": "exempt",
+      "iso": "KR",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "South Sudan",
+      "category": "visa_required",
+      "iso": "SS",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Spain",
+      "category": "free_movement",
+      "iso": "ES",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Sri Lanka",
+      "category": "visa_required",
+      "iso": "LK",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Sudan",
+      "category": "visa_required",
+      "iso": "SD",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Suriname",
+      "category": "visa_required",
+      "iso": "SR",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Sweden",
+      "category": "free_movement",
+      "iso": "SE",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Switzerland",
+      "category": "free_movement",
+      "iso": "CH",
+      "annex": "not in Regulation (EU) 2018/1806"
+    },
+    {
+      "name": "Syria",
+      "category": "visa_required",
+      "iso": "SY",
+      "annex": "Annex I"
+    },
+    {
+      "name": "São Tomé and Príncipe",
+      "category": "visa_required",
+      "iso": "ST",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Taiwan",
+      "category": "exempt_conditional",
+      "iso": "TW",
+      "annex": "Annex II, part 4",
+      "condition": "Only holders of a Taiwan passport that includes an identity card number."
+    },
+    {
+      "name": "Tajikistan",
+      "category": "visa_required",
+      "iso": "TJ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Tanzania",
+      "category": "visa_required",
+      "iso": "TZ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Thailand",
+      "category": "visa_required",
+      "iso": "TH",
+      "annex": "Annex I"
+    },
+    {
+      "name": "The Gambia",
+      "category": "visa_required",
+      "iso": "GM",
+      "annex": "Annex I"
+    },
+    {
+      "name": "The Palestinian Authority",
+      "category": "visa_required",
+      "iso": "PS",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Timor-Leste",
+      "category": "exempt_conditional",
+      "iso": "TL",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Togo",
+      "category": "visa_required",
+      "iso": "TG",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Tonga",
+      "category": "exempt_conditional",
+      "iso": "TO",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Trinidad and Tobago",
+      "category": "exempt",
+      "iso": "TT",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Tunisia",
+      "category": "visa_required",
+      "iso": "TN",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Turkey",
+      "category": "visa_required",
+      "iso": "TR",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Turkmenistan",
+      "category": "visa_required",
+      "iso": "TM",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Tuvalu",
+      "category": "exempt_conditional",
+      "iso": "TV",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "Uganda",
+      "category": "visa_required",
+      "iso": "UG",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Ukraine",
+      "category": "exempt_conditional",
+      "iso": "UA",
+      "annex": "Annex II, part 1",
+      "condition": "Only if your passport is a biometric passport issued by Ukraine to ICAO standards."
+    },
+    {
+      "name": "United Arab Emirates",
+      "category": "exempt_conditional",
+      "iso": "AE",
+      "annex": "Annex II, part 1",
+      "condition": "Visa free only from the date the visa exemption agreement with the European Union entered into force. Check the current position with the consulate of your main destination."
+    },
+    {
+      "name": "United Kingdom",
+      "category": "exempt",
+      "iso": "GB",
+      "regulationName": "United Kingdom (excluding British nationals as referred to in Part 3)",
+      "annex": "Annex II, part 1",
+      "note": "British nationals who are not British citizens are listed separately in Annex II, part 3."
+    },
+    {
+      "name": "United States",
+      "category": "exempt",
+      "iso": "US",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Uruguay",
+      "category": "exempt",
+      "iso": "UY",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Uzbekistan",
+      "category": "visa_required",
+      "iso": "UZ",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Vanuatu",
+      "category": "visa_required",
+      "iso": "VU",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Venezuela",
+      "category": "exempt",
+      "iso": "VE",
+      "annex": "Annex II, part 1"
+    },
+    {
+      "name": "Vietnam",
+      "category": "visa_required",
+      "iso": "VN",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Yemen",
+      "category": "visa_required",
+      "iso": "YE",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Zambia",
+      "category": "visa_required",
+      "iso": "ZM",
+      "annex": "Annex I"
+    },
+    {
+      "name": "Zimbabwe",
+      "category": "visa_required",
+      "iso": "ZW",
+      "annex": "Annex I"
+    }
+  ]
+}

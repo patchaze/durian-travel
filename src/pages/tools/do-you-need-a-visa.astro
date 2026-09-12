@@ -1,0 +1,418 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import visaData from '../../data/visa-requirements.json';
+
+const canonical = 'https://www.duriantravel.com/tools/do-you-need-a-visa/';
+
+// One question, four possible answers, every one of them traceable to a
+// consolidated legal instrument. The tool reports whether a rule applies. It
+// never comments on an application, and it lists no documents.
+const source = visaData._source;
+const categories = visaData.categories;
+const entries = visaData.entries;
+
+// ETIAS status, in one place. Verified against the official ETIAS site on the
+// date below. Nobody can apply: applications are not being collected, so
+// nothing on this page may tell somebody to apply.
+const ETIAS = {
+  operational: false,
+  statement:
+    'ETIAS is currently not in operation and no applications for travel authorisations are collected at this point.',
+  fee: 'EUR 20',
+  countries: 30,
+  url: 'https://travel-europe.europa.eu/etias_en',
+  checked: '2026-09-12',
+  checkedLabel: '12 September 2026',
+};
+
+const sourceLine = `${source.instrument}, ${source.consolidatedVersionLabel}. Durian last checked it on 12 September 2026.`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Do you need a visa for Europe?',
+  url: canonical,
+  applicationCategory: 'TravelApplication',
+  operatingSystem: 'Any',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  description:
+    'Pick the passport you will travel on and see whether a Schengen short stay visa is required, read straight from Regulation (EU) 2018/1806.',
+  isBasedOn: {
+    '@type': 'Legislation',
+    name: source.instrumentTitle,
+    url: source.consolidatedUrl,
+  },
+};
+---
+
+<BaseLayout
+  title="Do You Need a Visa for Europe? | DURIAN Travel"
+  description="Pick the passport you will travel on and see whether you need a Schengen short stay visa. Read from Regulation (EU) 2018/1806, with the consolidated version and the date we checked it."
+  canonical={canonical}
+  schema={schema}
+  keywords="do i need a visa for europe, schengen visa required countries, visa free europe passport, annex ii visa exempt"
+  breadcrumb={[{ name: 'Do you need a visa', url: canonical }]}
+>
+  <div class="container">
+    <Breadcrumb items={[{ name: 'Planners', href: '/tools/' }, { name: 'Do you need a visa' }]} />
+  </div>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <span class="section-label">Free planner</span>
+      <h1 class="tool-title">Do you need a visa for Europe?</h1>
+      <p class="tool-intro">
+        One question. Pick the passport you will travel on and the answer comes straight from the
+        regulation that decides it.
+      </p>
+
+      <div class="scope" role="note">
+        <h2 class="scope__title">What this covers</h2>
+        <p>
+          Short stays in the Schengen area for tourism and similar purposes, up to 90 days in any
+          180 day period. It does not cover work, study, residence or any stay longer than that.
+          Those run on different rules and this tool says nothing about them.
+        </p>
+      </div>
+
+      <form class="picker" id="visa-form" novalidate>
+        <label class="field" for="passport">
+          <span class="field__label">The passport you will travel on</span>
+          <select id="passport" class="field__select">
+            <option value="" selected>Select a passport</option>
+            {entries.map((e) => (
+              <option
+                value={e.name}
+                data-category={e.category}
+                data-condition={e.condition ?? ''}
+                data-annex={e.annex}
+                data-note={e.note ?? ''}
+              >{e.name}</option>
+            ))}
+          </select>
+          <span class="field__hint">
+            {entries.length} entries, listed as the regulation lists them.
+          </span>
+        </label>
+      </form>
+
+      <div class="answer" id="answer" hidden aria-live="polite"></div>
+
+      <p class="visa-disclaimer">
+        Educational information only. Not legal advice. Always check the official embassy or
+        consulate source.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <div class="notes">
+        <h2 class="notes__title">Where this comes from, and what it cannot tell you</h2>
+        <p>
+          Every answer above is read from <strong>{source.instrument}</strong>, the regulation
+          listing the countries whose nationals need a visa for a short stay and the countries whose
+          nationals do not. The version used is the
+          {' '}<strong>{source.consolidatedVersionLabel}</strong>, and Durian last checked it
+          against EUR-Lex on <strong>{ETIAS.checkedLabel}</strong>.
+          {' '}<a href={source.consolidatedUrl} rel="nofollow noopener" target="_blank">Read the consolidated regulation on EUR-Lex →</a>
+        </p>
+        <p>
+          Nationals of the EU, the EEA and Switzerland are in neither annex. They appear here under
+          free movement rules rather than under {source.instrument}.
+        </p>
+        <p class="notes__limits">
+          <strong>What it cannot tell you.</strong> Whether a visa is required is only the first
+          question. It does not tell you what a consulate will ask you for, how long anything takes,
+          or what any application will cost. It says nothing about work, study, residence or long
+          stays. Border rules change, so check the official source for your destination before you
+          rely on any of it. If the regulation and this page ever disagree, the regulation is right
+          and we want to know.
+        </p>
+        <p class="notes__src">
+          <a href="/sources/">See all sources and how often they are checked →</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tool-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    margin: var(--space-2) 0 var(--space-3);
+  }
+  .tool-intro {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .scope {
+    margin-top: var(--space-5);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-alt);
+  }
+  .scope__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-base);
+    font-weight: 400;
+    color: var(--color-navy);
+    margin-bottom: var(--space-2);
+  }
+  .scope p {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    margin: 0;
+    max-width: 65ch;
+  }
+
+  .picker {
+    margin-top: var(--space-5);
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-alt);
+  }
+  .field { display: block; margin: 0; }
+  .field__label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    margin-bottom: var(--space-2);
+    color: var(--color-text);
+  }
+  .field__select {
+    width: 100%;
+    padding: var(--space-3);
+    font: inherit;
+    font-size: var(--text-base);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .field__select:focus { outline: none; border-color: var(--color-primary); }
+  .field__hint {
+    display: block;
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+  }
+
+  /* The answer. Navy carries the structure; terracotta is spent once, on the
+     conditional headline, because that is the case somebody must not miss. */
+  .answer { margin-top: var(--space-5); }
+  #answer :global(.answer__card) {
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    background: var(--color-surface);
+  }
+  #answer :global(.answer__card--conditional) { border-color: var(--color-accent); }
+  #answer :global(.answer__label) {
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wider, .1em);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-2);
+  }
+  #answer :global(.answer__verdict) {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: var(--text-3xl);
+    line-height: var(--leading-tight);
+    color: var(--color-primary);
+    margin: 0 0 var(--space-3);
+  }
+  #answer :global(.answer__card--conditional) :global(.answer__verdict) { color: var(--color-accent); }
+  #answer :global(.answer__body) {
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text);
+    margin: 0 0 var(--space-3);
+    max-width: 62ch;
+  }
+  #answer :global(.answer__body:last-child) { margin-bottom: 0; }
+  #answer :global(.answer__condition) {
+    margin: 0 0 var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--color-accent-bg);
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text);
+  }
+  #answer :global(.answer__meta) {
+    margin: var(--space-4) 0 0;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+  }
+  #answer :global(.answer__meta) :global(a) { color: var(--color-primary); }
+
+  .notes {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-5);
+  }
+  .notes__title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: var(--text-xl);
+    color: var(--color-navy);
+    margin-bottom: var(--space-3);
+  }
+  .notes p {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+    max-width: 68ch;
+  }
+  .notes__limits {
+    padding-left: var(--space-3);
+    border-left: 3px solid var(--color-border);
+  }
+
+  .visa-disclaimer {
+    margin-top: var(--space-5);
+    font-size: var(--text-xs);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-light);
+  }
+
+  @media print {
+    .picker, .visa-disclaimer + * { display: none; }
+    #answer :global(.answer__card) { break-inside: avoid; }
+  }
+
+  @media (max-width: 720px) {
+    .picker { padding: var(--space-4); }
+    #answer :global(.answer__card) { padding: var(--space-4); }
+  }
+</style>
+
+<script
+  define:vars={{
+    ETIAS,
+    sourceLine,
+    categories,
+    consolidatedUrl: visaData._source.consolidatedUrl,
+  }}
+>
+  // Scoped to this page's own form and answer node, never the document. Astro
+  // bundles page scripts together, so a document wide selector here would reach
+  // into whichever other tool page happened to use the same class name.
+  const formEl = document.getElementById('visa-form');
+  const selectEl = formEl ? formEl.querySelector('#passport') : null;
+  const answerEl = document.getElementById('answer');
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
+  }
+
+  // ETIAS is not in operation. This sentence never tells anybody to apply,
+  // because nobody can: applications are not being collected.
+  function etiasLine() {
+    return (
+      'ETIAS will also apply to you once it starts. It is not running yet: the official ETIAS site said "' +
+      esc(ETIAS.statement) + '" when Durian checked it on ' + esc(ETIAS.checkedLabel) +
+      '. There is nothing to apply for today. The fee is stated as ' + esc(ETIAS.fee) +
+      ' and it will cover ' + ETIAS.countries + ' European countries. ' +
+      '<a href="' + esc(ETIAS.url) + '" rel="nofollow noopener" target="_blank">Check the official ETIAS site →</a>'
+    );
+  }
+
+  const VERDICT = {
+    free_movement: 'No visa, and no ETIAS',
+    exempt: 'No short stay visa needed',
+    exempt_conditional: 'No short stay visa needed, with one condition',
+    visa_required: 'A Schengen short stay visa is required',
+  };
+
+  function render(opt) {
+    if (!answerEl) return;
+
+    if (!opt || !opt.value) {
+      answerEl.hidden = true;
+      answerEl.innerHTML = '';
+      return;
+    }
+
+    const cat = opt.dataset.category;
+    const name = opt.value;
+    const condition = opt.dataset.condition || '';
+    const annex = opt.dataset.annex || '';
+    const note = opt.dataset.note || '';
+
+    let body = '';
+
+    if (cat === 'free_movement') {
+      body =
+        '<p class="answer__body">You travel on free movement rights, so no Schengen short stay ' +
+        'visa applies to you and neither does ETIAS. The 90 days in any 180 day period limit is ' +
+        'for people who are not covered by free movement, so it does not apply to you either.</p>';
+    } else if (cat === 'exempt') {
+      body =
+        '<p class="answer__body">For tourism and similar short stays you can enter without a ' +
+        'Schengen visa, for up to 90 days in any 180 day period. Your passport is listed in ' +
+        esc(annex) + ' of the regulation, which is the exempt list.</p>' +
+        '<p class="answer__body">' + etiasLine() + '</p>';
+    } else if (cat === 'exempt_conditional') {
+      body =
+        '<p class="answer__condition"><strong>' + esc(condition) + '</strong></p>' +
+        '<p class="answer__body">If that condition is met, you can enter without a Schengen visa ' +
+        'for tourism and similar short stays, up to 90 days in any 180 day period. If it is not ' +
+        'met, the exemption does not apply to you and you should ask the consulate of your main ' +
+        'destination what to do. Your passport is listed in ' + esc(annex) + '.</p>' +
+        (note ? '<p class="answer__body">' + esc(note) + '</p>' : '') +
+        '<p class="answer__body">' + etiasLine() + '</p>';
+    } else {
+      body =
+        '<p class="answer__body">For a short stay you need to apply for a Schengen visa before ' +
+        'you travel. Apply to the consulate of your main destination, which is the country where ' +
+        'you will spend the most time. If no single country stands out, it is the country you ' +
+        'enter first. Your passport is listed in ' + esc(annex) + ', the list of countries whose ' +
+        'nationals need a visa.</p>' +
+        '<p class="answer__body">That consulate is the only place that can tell you what it wants ' +
+        'from you, what it charges and how long it takes. ETIAS does not apply to you: it is for ' +
+        'travellers who do not need a visa.</p>';
+    }
+
+    const heading =
+      cat === 'exempt_conditional'
+        ? esc(VERDICT[cat])
+        : esc(VERDICT[cat] || '');
+
+    answerEl.innerHTML =
+      '<div class="answer__card' + (cat === 'exempt_conditional' ? ' answer__card--conditional' : '') + '">' +
+      '<p class="answer__label">Travelling on a ' + esc(name) + ' passport</p>' +
+      '<h2 class="answer__verdict">' + heading + '</h2>' +
+      body +
+      '<p class="answer__meta">Read from ' + esc(sourceLine) +
+      ' <a href="' + esc(consolidatedUrl) + '" rel="nofollow noopener" target="_blank">See the regulation →</a>' +
+      '</p>' +
+      '</div>';
+
+    answerEl.hidden = false;
+  }
+
+  if (selectEl) {
+    selectEl.addEventListener('change', () => {
+      render(selectEl.options[selectEl.selectedIndex]);
+    });
+    // A browser may restore a previous selection on a back navigation.
+    render(selectEl.options[selectEl.selectedIndex]);
+  }
+</script>
