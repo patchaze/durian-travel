@@ -77,6 +77,20 @@ const schema = {
       </div>
 
       <form class="picker" id="visa-form" novalidate>
+        <div class="field filter" id="filter-field" hidden>
+          <label class="field__label" for="passport-filter">Search the list</label>
+          <input
+            type="search"
+            id="passport-filter"
+            class="field__input"
+            placeholder="Start typing a country"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+            aria-controls="passport"
+            aria-describedby="passport-hint"
+          />
+        </div>
         <label class="field" for="passport">
           <span class="field__label">The passport you will travel on</span>
           <select id="passport" class="field__select">
@@ -91,7 +105,7 @@ const schema = {
               >{e.name}</option>
             ))}
           </select>
-          <span class="field__hint">
+          <span class="field__hint" id="passport-hint" aria-live="polite" data-total={entries.length}>
             {entries.length} entries, listed as the regulation lists them.
           </span>
         </label>
@@ -200,6 +214,25 @@ const schema = {
     border-radius: var(--radius-md);
   }
   .field__select:focus { outline: none; border-color: var(--color-primary); }
+
+  /* The filter is shown by script. With JavaScript off it stays hidden and the
+     select carries every entry, which is the behaviour without it anyway. */
+  .filter { margin-bottom: var(--space-4); }
+  .field__input {
+    width: 100%;
+    padding: var(--space-3);
+    font: inherit;
+    font-size: var(--text-base);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .field__input:focus { outline: none; border-color: var(--color-primary); }
+  .field__input::placeholder { color: var(--color-text-light); }
+  .field__hint--empty { color: var(--color-accent-dark); }
   .field__hint {
     display: block;
     margin-top: var(--space-2);
@@ -414,5 +447,116 @@ const schema = {
     });
     // A browser may restore a previous selection on a back navigation.
     render(selectEl.options[selectEl.selectedIndex]);
+  }
+
+  /* ───────────────────────────── the filter ───────────────────────────── */
+  //
+  // 204 entries is a lot to scroll on a phone, so the list can be narrowed by
+  // typing. The native <select> is kept rather than replaced by a custom
+  // listbox: it stays keyboard accessible, screen readers already know it, and
+  // a phone still gets its own picker. With JavaScript off the filter never
+  // appears and the select carries every entry.
+
+  const filterFieldEl = document.getElementById('filter-field');
+  const filterEl = document.getElementById('passport-filter');
+  const hintEl = document.getElementById('passport-hint');
+
+  // Accents come off before matching, so "sao tome" finds São Tomé and
+  // Príncipe and "cote" finds Côte d'Ivoire.
+  function fold(value) {
+    return String(value)
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // Search helpers only. These change what the box finds, never what any
+  // answer says. Every one is a widely used alternative name for an entry the
+  // regulation lists under a different one.
+  const ALIASES = {
+    'United Kingdom': ['uk', 'great britain', 'britain', 'england', 'scotland', 'wales'],
+    'United States': ['usa', 'us', 'america'],
+    'United Arab Emirates': ['uae', 'emirates', 'dubai', 'abu dhabi'],
+    'Democratic Republic of the Congo': ['drc', 'congo kinshasa', 'zaire'],
+    'Netherlands': ['holland', 'dutch'],
+    'Holy See': ['vatican'],
+    "Côte d'Ivoire": ['ivory coast'],
+    'Czechia': ['czech republic'],
+    'Timor-Leste': ['east timor'],
+    'Eswatini': ['swaziland'],
+    'Myanmar/Burma': ['burma'],
+    'North Macedonia': ['macedonia', 'fyrom'],
+    'Cape Verde': ['cabo verde'],
+    'The Gambia': ['gambia'],
+    'South Korea': ['korea republic of', 'rok'],
+    'North Korea': ['dprk'],
+    'Taiwan': ['republic of china'],
+    'Hong Kong SAR': ['hongkong'],
+    'Macao SAR': ['macau'],
+  };
+
+  if (selectEl && filterEl && filterFieldEl) {
+    const placeholderEl = selectEl.options[0];
+    const allOptions = Array.from(selectEl.options).slice(1);
+    const haystack = new Map();
+    allOptions.forEach((opt) => {
+      const extra = (ALIASES[opt.value] || []).join(' ');
+      haystack.set(opt, fold(opt.value + ' ' + extra));
+    });
+
+    const defaultHint = hintEl ? hintEl.textContent.trim() : '';
+    const total = allOptions.length;
+
+    function applyFilter() {
+      const q = fold(filterEl.value);
+      const chosen = selectEl.value;
+
+      // The chosen passport always stays in the list, so the select can never
+      // contradict the answer already on screen.
+      const matches = q
+        ? allOptions.filter((o) => haystack.get(o).indexOf(q) !== -1 || o.value === chosen)
+        : allOptions;
+
+      selectEl.replaceChildren(placeholderEl, ...matches);
+      selectEl.value = chosen;
+      if (selectEl.value !== chosen) selectEl.value = '';
+
+      if (!hintEl) return;
+      const shown = q ? matches.filter((o) => haystack.get(o).indexOf(q) !== -1).length : total;
+      if (!q) {
+        hintEl.textContent = defaultHint;
+        hintEl.classList.remove('field__hint--empty');
+      } else if (shown === 0) {
+        hintEl.textContent = 'No entry matches that. Clear the box to see all ' + total + '.';
+        hintEl.classList.add('field__hint--empty');
+      } else {
+        hintEl.textContent =
+          shown === 1 ? '1 of ' + total + ' entries matches.' : shown + ' of ' + total + ' entries match.';
+        hintEl.classList.remove('field__hint--empty');
+      }
+    }
+
+    filterEl.addEventListener('input', applyFilter);
+
+    filterEl.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        selectEl.focus();
+        return;
+      }
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      // One match left, so Enter takes it rather than making them go and find it.
+      const q = fold(filterEl.value);
+      if (!q) return;
+      const hits = allOptions.filter((o) => haystack.get(o).indexOf(q) !== -1);
+      if (hits.length !== 1) return;
+      selectEl.value = hits[0].value;
+      render(selectEl.options[selectEl.selectedIndex]);
+    });
+
+    filterFieldEl.hidden = false;
   }
 </script>
