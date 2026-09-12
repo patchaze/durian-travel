@@ -111,7 +111,7 @@ Until that decision is made, do not build anything else on top of it.
 
 `src/components/ChatBot.astro` is a keyword matcher with hand written answers. It makes no network calls, uses no API key, and has no model behind it. It cannot invent a fee or promise an approval, which is the right design for a visa site. Keep it that way.
 
-Its answers still describe the retired document review business. That is a copy problem, not a code problem.
+Its answers were rewritten when the document review business was retired, and again in brief 008 when the call offer went. Keep them in step with what the site actually offers: they are plain strings in that file, so a stale answer is a copy problem, not a code problem.
 
 ## Where the business is going
 
@@ -120,7 +120,13 @@ Moving away from hands on Schengen visa document review. Patricia does not want 
 Moving towards three things:
 1. Small self serve tools people pay a low price for.
 2. Free educational content about visas, money and routes.
-3. Paid 1 to 1 calls with Patricia.
+3. Paid planning delivered in writing, by email.
+
+**Patricia does not take calls. At all.** Not paid, not free, not fifteen minutes, not video.
+Brief 008 removed every call offer from the site on 12 September 2026 and routed everybody to
+`/contact/`, which posts to formsubmit.co and lands in her inbox. Never write copy that offers a
+call, a session, a meeting or a time slot, and never add a scheduling tool or a calendar embed.
+If a deliverable sounds like something spoken, write it as a document instead.
 
 ## Hard rules, never break these
 
@@ -132,6 +138,7 @@ Moving towards three things:
 - Don't write anything that reads as immigration advice rather than education.
 - No readiness score, probability, risk analysis or approval rate in any product, paid or free.
 - No document review under any product name.
+- No calls, video meetings or scheduled sessions under any product name, paid or free.
 
 ## Voice
 
