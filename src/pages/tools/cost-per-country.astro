@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import costData from '../../data/country-costs.json';
+import { REPORT_PRICE, offerCta, reportIncludes, styles, FULL_REPORT_URL } from '../../data/full-report';
 
 const canonical = 'https://www.duriantravel.com/tools/cost-per-country/';
 
@@ -15,134 +16,15 @@ const canonical = 'https://www.duriantravel.com/tools/cost-per-country/';
 // dropdown is gone.
 //
 // The full report asks how somebody actually travels and weights seven
-// Eurostat categories instead of one. It is generated server side by
-// /api/report and never built into this page.
+// Eurostat categories instead of one. It lives on its own page at
+// /tools/cost-per-country/full-report/, is generated server side by
+// /api/report, and is never built into this page. This page only shows the
+// offer and links to it.
 const source = costData._source;
 const countries = costData.countries;
 
-// The price of the full report. Patricia set it on 12 September 2026.
-// The only place a price appears on this page. Nowhere else.
-const REPORT_PRICE = '€5';
-
-// The hosted Stripe Payment Link. A test link today: it charges nothing and
-// takes only Stripe test cards, because the account is still under identity
-// review. Swapping it for the live link is this one edit.
-//
-// It is a public navigation target, not a secret. It has to reach the browser
-// for the button to work, so it is in the page rather than in the environment.
-// The secret key, the price in cents and the currency are Cloudflare values and
-// are never in this repository.
-const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_8x23cu35Va9xgGV9937wA00';
-
-const reportCta = REPORT_PRICE
-  ? `Get the full report for ${REPORT_PRICE}`
-  : 'Get the full report';
-
-// What somebody is actually buying, said before they are asked to pay.
-const reportIncludes = [
-  'Seven Eurostat categories weighted to how you actually travel, not one index for everybody.',
-  'Every country you are weighing up, priced per person per day and for the whole trip.',
-  'The ranking that changes once your own habits are counted, with the biggest mover named.',
-  'A page you can save or print, with every figure sourced and dated.',
-];
-
-// The same three bands as /tools/budget/, and the same typical figures.
-// Durian's own editorial estimate for Western Europe, not a statistic.
-const styles = [
-  { id: 'budget', label: 'Budget', low: 70, high: 130, typical: 100 },
-  { id: 'mid', label: 'Mid-range', low: 140, high: 240, typical: 190 },
-  { id: 'comfortable', label: 'Comfortable', low: 260, high: 380, typical: 320 },
-];
-
-// Every question the report asks. Each one changes a weight, so none is
-// decorative. There is deliberately no travel month or season: no verified
-// source for seasonality exists yet, so the answer would change nothing.
-const questions = [
-  {
-    group: 'Your trip',
-    fields: [
-      { id: 'nights', label: 'How many nights in total?', type: 'number', min: 1, max: 365, value: 10 },
-      { id: 'party', label: 'Who is going?', type: 'select', options: [
-        ['solo', 'Solo'], ['couple', 'A couple'],
-        ['family', 'A family with children'], ['friends', 'A group of friends'],
-      ] },
-      { id: 'adults', label: 'How many adults?', type: 'number', min: 0, max: 20, value: 1 },
-      { id: 'children', label: 'How many children?', type: 'number', min: 0, max: 20, value: 0 },
-    ],
-  },
-  {
-    group: 'Where you sleep',
-    fields: [
-      { id: 'stayType', label: 'Where do you usually stay?', type: 'select', options: [
-        ['hotel', 'Hotel'], ['apartment', 'Apartment or rental'],
-        ['hostel', 'Hostel dorm'], ['friends', 'With friends or family'],
-      ] },
-      { id: 'breakfast', label: 'Is breakfast usually included?', type: 'select', options: [
-        ['no', 'No'], ['yes', 'Yes'],
-      ] },
-    ],
-  },
-  {
-    group: 'What you eat',
-    fields: [
-      { id: 'mealsOut', label: 'How many meals a day do you eat out?', type: 'select', options: [
-        ['0', 'None'], ['1', 'One'], ['2', 'Two'], ['3', 'Three'],
-      ] },
-      { id: 'snacks', label: 'Coffee, pastries, snacks out?', type: 'select', options: [
-        ['rarely', 'Rarely'], ['daily', 'Once a day'], ['several', 'Several a day'],
-      ] },
-      { id: 'dinnerDrinks', label: 'Drinks with dinner?', type: 'select', options: [
-        ['no', 'No'], ['sometimes', 'Sometimes'], ['most', 'Most nights'],
-      ] },
-    ],
-  },
-  {
-    group: 'Getting around a city',
-    fields: [
-      { id: 'cityTransport', label: 'How do you move around a city?', type: 'select', options: [
-        ['walking', 'Mostly walking'], ['public', 'Public transport'],
-        ['mix', 'A mix, with some taxis'], ['taxi', 'Mostly taxis and ride hailing'],
-      ] },
-      { id: 'carHire', label: 'Hiring a car anywhere?', type: 'select', options: [
-        ['no', 'No'], ['yes', 'Yes'],
-      ] },
-    ],
-  },
-  {
-    group: 'Between cities',
-    fields: [
-      { id: 'cityMoves', label: 'How many times will you move city?', type: 'number', min: 0, max: 100, value: 2 },
-      { id: 'intercityMode', label: 'How do you travel between them?', type: 'select', options: [
-        ['train', 'Train'], ['coach', 'Coach'], ['flight', 'Budget flight'],
-      ] },
-    ],
-  },
-  {
-    group: 'What you actually do',
-    fields: [
-      { id: 'museums', label: 'Museums, galleries, monuments?', type: 'select', options: [
-        ['rarely', 'Rarely'], ['few', 'A few'], ['most', 'Most days'],
-      ] },
-      { id: 'tours', label: 'Guided tours or day trips?', type: 'select', options: [
-        ['none', 'None'], ['couple', 'One or two'], ['several', 'Several'],
-      ] },
-      { id: 'nightlife', label: 'Going out at night?', type: 'select', options: [
-        ['no', 'No'], ['occasionally', 'Occasionally'], ['often', 'Often'],
-      ] },
-      { id: 'shopping', label: 'Planning to shop?', type: 'select', options: [
-        ['no', 'No'], ['little', 'A little'], ['lot', 'A lot'],
-      ] },
-    ],
-  },
-  {
-    group: 'Staying connected',
-    fields: [
-      { id: 'esim', label: 'Do you need an eSIM or data plan?', type: 'select', options: [
-        ['no', 'No'], ['yes', 'Yes'],
-      ] },
-    ],
-  },
-];
+// The price, the offer copy and the styles come from src/data/full-report.ts,
+// shared with the full report page, so each is defined exactly once.
 
 const schema = {
   '@context': 'https://schema.org',
@@ -164,6 +46,14 @@ const schema = {
   keywords="cheapest countries in europe to visit, cost of travel by country europe, europe daily budget by country"
   breadcrumb={[{ name: 'Cost per country', url: canonical }]}
 >
+  <script define:vars={{ FULL_REPORT_URL }}>
+    // Stripe used to return people to this page. The report now lives on its
+    // own page, so anybody arriving here with a session id is forwarded there
+    // with it, rather than landing on a page that no longer takes payment.
+    if (/[?&]session_id=/.test(location.search)) {
+      location.replace(FULL_REPORT_URL + location.search + location.hash);
+    }
+  </script>
   <div class="container">
     <Breadcrumb items={[{ name: 'Planners', href: '/tools/' }, { name: 'Cost per country' }]} />
   </div>
@@ -177,135 +67,35 @@ const schema = {
         route is flexible, that gap is the single biggest lever you have on the budget.
       </p>
       <div class="cpc-report">
-        <details class="cpc-report__disclosure" id="report-details">
-          <summary class="cpc-report__summary">
-            <span class="section-label">Full report</span>
-            <h2 class="cpc-report__title">Priced for the way you actually travel</h2>
-            <span class="cpc-report__intro">
-              The free comparison below prices your whole trip with one index, the one for
-              restaurants and hotels. That is the wrong basket for most people. Portugal sits well
-              below the EU average for restaurants and hotels and slightly above it for food from shops, so
-              somebody who cooks saves almost nothing there while somebody who eats out saves a
-              quarter.
-            </span>
-
-            <span class="offer">
-              <span class="offer__heading">What you get</span>
-              <span class="offer__list">
-                {reportIncludes.map((item) => (
-                  <span class="offer__item">{item}</span>
-                ))}
-              </span>
-              <span class="offer__price">{REPORT_PRICE}</span>
-              <span class="btn btn--primary cpc-report__cta">{reportCta}</span>
-              <span class="offer__terms">
-                Payment is handled by Stripe on their own page. The report opens here as soon as it
-                goes through. No account needed.
-              </span>
-            </span>
-          </summary>
-
+        <span class="section-label">Full report</span>
+        <h2 class="cpc-report__title">Priced for the way you actually travel</h2>
         <p class="cpc-report__intro">
-          Answer these and the report weights seven Eurostat categories instead of one, then ranks
-          the countries you are weighing up for the way you actually travel.
+          The free comparison below prices your whole trip with one index, the one for restaurants
+          and hotels. That is the wrong basket for most people. Portugal sits well below the EU
+          average for restaurants and hotels and slightly above it for food from shops, so somebody
+          who cooks saves almost nothing there while somebody who eats out saves a quarter.
         </p>
 
-        <form
-          class="report-form"
-          id="report-form"
-          novalidate
-          data-payment-link={STRIPE_PAYMENT_LINK}
-        >
-          <fieldset class="tool-block">
-            <legend class="tool-block__title">Which countries are you weighing up?</legend>
-            <p class="tool-block__hint">Pick at least one.</p>
-            <div class="country-grid">
-              {countries.map(c => (
-                <label class="country-check">
-                  <input type="checkbox" name="countries" value={c.iso} />
-                  <span>{c.name}</span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
-          {questions.map(block => (
-            <fieldset class="tool-block">
-              <legend class="tool-block__title">{block.group}</legend>
-              <div class="field-grid">
-                {block.fields.map(f => (
-                  <label class="field">
-                    <span class="field__label">{f.label}</span>
-                    {f.type === 'number' ? (
-                      <input
-                        type="number"
-                        id={`r-${f.id}`}
-                        data-answer={f.id}
-                        min={f.min}
-                        max={f.max}
-                        step="1"
-                        value={f.value}
-                        inputmode="numeric"
-                      />
-                    ) : (
-                      <select id={`r-${f.id}`} data-answer={f.id}>
-                        {f.options.map(([value, label]) => (
-                          <option value={value}>{label}</option>
-                        ))}
-                      </select>
-                    )}
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-          ))}
-
-          <fieldset class="tool-block">
-            <legend class="tool-block__title">The number you will not go over</legend>
-            <p class="tool-block__hint">For the whole trip, everyone included.</p>
-            <label class="field">
-              <span class="field__label">Your ceiling</span>
-              <div class="field-inline">
-                <select id="r-currency" aria-label="Currency">
-                  <option value="€" selected>€</option>
-                  <option value="$">$</option>
-                  <option value="£">£</option>
-                  <option value="₱">₱</option>
-                  <option value="R$">R$</option>
-                </select>
-                <input type="number" id="r-ceiling" data-answer="ceiling" min="0" step="50" placeholder="0" inputmode="decimal" />
-              </div>
-            </label>
-          </fieldset>
-
-          <div class="pay">
-            <button type="submit" class="btn btn--primary btn--lg report-submit" id="report-submit">
-              {reportCta}
-            </button>
-            <p class="pay__terms">
-              Payment is handled by Stripe on their own page. The report opens here as soon as it
-              goes through. No account needed.
-            </p>
-            <p class="report-status" id="report-status" role="status" aria-live="polite"></p>
-
-            <details class="tester">
-              <summary class="tester__toggle">Testing this? Enter a code.</summary>
-              <label class="field tester__field">
-                <span class="field__label">Code</span>
-                <input type="text" id="r-access" autocomplete="off" spellcheck="false" />
-              </label>
-              <button type="button" class="btn btn--secondary btn--sm" id="report-code-submit">
-                Generate with this code
-              </button>
-            </details>
-          </div>
-        </form>
-        </details>
+        <div class="offer">
+          <p class="offer__heading">What you get</p>
+          <ul class="offer__list" role="list">
+            {reportIncludes.map((item) => (
+              <li class="offer__item">{item}</li>
+            ))}
+          </ul>
+          <p class="offer__price">{REPORT_PRICE}</p>
+          <a class="btn btn--primary cpc-report__cta" href={FULL_REPORT_URL}>{offerCta}</a>
+          <p class="offer__terms">
+            Payment is handled by Stripe on their own page. The report opens as soon as it goes
+            through. No account needed.
+          </p>
+        </div>
       </div>
 
+      <h2 class="cpc-cost-q">How much does a trip to Europe cost?</h2>
       <p class="cpc-cue">
-        <a class="cpc-cue__link" href="#cpc-compare">Not ready to answer twenty questions? The free
-        comparison below ranks all 28 countries in one click.</a>
+        <a class="cpc-cue__link" href="#cpc-compare">Rather skip the questions? The free comparison
+        below ranks all 28 countries straight away.</a>
       </p>
     </div>
   </section>
@@ -467,9 +257,7 @@ const schema = {
     margin-top: var(--space-2);
   }
   .cpc-controls input,
-  .cpc-controls select,
-  .report-form input,
-  .report-form select {
+  .cpc-controls select {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid var(--color-border);
@@ -479,18 +267,14 @@ const schema = {
     color: var(--color-text);
   }
   .cpc-controls input:focus,
-  .cpc-controls select:focus,
-  .report-form input:focus,
-  .report-form select:focus { outline: none; border-color: var(--color-primary); }
+  .cpc-controls select:focus { outline: none; border-color: var(--color-primary); }
 
   /* Must come after the shared rule above: same specificity, so source order
      decides. Without this the currency select takes the full width and
      collapses the amount field next to it. */
   .field-inline { display: flex; gap: var(--space-2); align-items: stretch; }
-  .cpc-controls .field-inline select,
-  .report-form .field-inline select { width: 4.75rem; flex: 0 0 auto; padding-inline: 8px; }
-  .cpc-controls .field-inline input,
-  .report-form .field-inline input { flex: 1 1 auto; width: auto; min-width: 0; }
+  .cpc-controls .field-inline select { width: 4.75rem; flex: 0 0 auto; padding-inline: 8px; }
+  .cpc-controls .field-inline input { flex: 1 1 auto; width: auto; min-width: 0; }
 
   .style-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
   .style-btn {
@@ -607,16 +391,20 @@ const schema = {
     border-left: 3px solid var(--color-primary);
   }
 
+  /* The offer, as a plain block. The questions and the payment live on the
+     full report page, so there is no disclosure and no script here. */
   .cpc-report {
-    border-top: 1px solid var(--color-border);
-    padding-top: var(--space-6);
-    margin-top: var(--space-4);
+    margin-top: var(--space-5);
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-alt);
   }
   .cpc-report__title {
     font-family: var(--font-serif);
     font-size: var(--text-2xl);
     color: var(--color-navy);
-    margin: var(--space-3) 0 var(--space-4);
+    margin: var(--space-1) 0 var(--space-3);
   }
   .cpc-report__intro {
     display: block;
@@ -624,40 +412,11 @@ const schema = {
     line-height: var(--leading-relaxed);
     color: var(--color-text-muted);
     max-width: 62ch;
-    margin-bottom: var(--space-3);
+    margin-bottom: 0;
   }
 
-  /* The questions are collapsed so the offer leads the page without the 28
-     rows of free comparison behind it. A native <details> keeps this working
-     with JavaScript off and keyboard accessible without any code. */
-  .cpc-report__summary {
-    display: block;
-    position: relative;
-    padding: var(--space-4) var(--space-8) var(--space-4) var(--space-4);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-bg-alt);
-    cursor: pointer;
-    transition: border-color var(--transition-fast), background var(--transition-fast);
-  }
-  .cpc-report__summary::-webkit-details-marker { display: none; }
-  .cpc-report__summary::marker { content: ''; }
-  .cpc-report__summary:hover { border-color: var(--color-primary); }
-  .cpc-report__summary:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-  }
-  .cpc-report__summary .cpc-report__title { margin-top: var(--space-1); }
-  .cpc-report__summary .cpc-report__intro { margin-bottom: 0; }
 
-  /* A span, not a button or a link. An interactive element nested inside a
-     <summary> breaks the disclosure and its keyboard behaviour. The summary
-     itself is already the click target, so this only has to look like the
-     thing you press. Styling comes from .btn in global.css. */
-  .cpc-report__cta {
-    margin-top: 0;
-    white-space: normal;
-  }
+  .cpc-report__cta { white-space: normal; }
 
   /* The offer, said plainly before anybody is asked to pay. */
   .offer {
@@ -675,7 +434,7 @@ const schema = {
     color: var(--color-text-muted);
     margin-bottom: var(--space-3);
   }
-  .offer__list { display: block; margin-bottom: var(--space-4); }
+  .offer__list { list-style: none; padding: 0; margin: 0 0 var(--space-4); }
   .offer__item {
     display: block;
     position: relative;
@@ -705,8 +464,7 @@ const schema = {
     color: var(--color-navy);
     margin-bottom: var(--space-3);
   }
-  .offer__terms,
-  .pay__terms {
+  .offer__terms {
     display: block;
     margin-top: var(--space-3);
     font-size: var(--text-xs);
@@ -715,59 +473,15 @@ const schema = {
     max-width: 52ch;
   }
 
-  .pay { margin-top: var(--space-5); }
-
-  /* The code route is still here and still works. It is fine print, because a
-     visible "access code" block reads as a way in without paying. */
-  .tester { margin-top: var(--space-5); }
-  .tester__toggle {
-    display: inline-block;
-    font-size: var(--text-xs);
-    color: var(--color-text-light);
-    cursor: pointer;
-    text-decoration: underline;
-    text-decoration-color: var(--color-border);
-    text-underline-offset: 3px;
-    list-style: none;
+  /* A heading phrased the way people search, and one line into the comparison. */
+  .cpc-cost-q {
+    font-family: var(--font-serif);
+    font-size: var(--text-2xl);
+    color: var(--color-navy);
+    margin: var(--space-6) 0 var(--space-2);
   }
-  .tester__toggle::-webkit-details-marker { display: none; }
-  .tester__toggle::marker { content: ''; }
-  .tester__toggle:hover { color: var(--color-text-muted); }
-  .tester__toggle:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-  }
-  .tester__field { margin-top: var(--space-3); max-width: 18rem; }
-  .tester .btn { margin-top: var(--space-3); }
-  .cpc-report__summary:hover .cpc-report__cta {
-    background: var(--color-primary-dark);
-    border-color: var(--color-primary-dark);
-  }
-
-  /* A chevron rather than the default triangle, so the card reads as a button. */
-  .cpc-report__summary::after {
-    content: '';
-    position: absolute;
-    top: var(--space-5);
-    right: var(--space-4);
-    width: 10px;
-    height: 10px;
-    border-right: 2px solid var(--color-primary);
-    border-bottom: 2px solid var(--color-primary);
-    transform: rotate(45deg);
-    transition: transform var(--transition-fast);
-  }
-  .cpc-report__disclosure[open] > .cpc-report__summary::after { transform: rotate(-135deg); }
-  .cpc-report__disclosure[open] > .cpc-report__summary {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-  .cpc-report__disclosure[open] > .cpc-report__intro { margin-top: var(--space-4); }
-
-  /* One quiet line sending anybody who does not want the questions down to the
-     free comparison. No card, no button. */
   .cpc-cue {
-    margin-top: var(--space-4);
+    margin-top: 0;
     font-size: var(--text-sm);
     line-height: var(--leading-relaxed);
     max-width: 62ch;
@@ -784,59 +498,6 @@ const schema = {
     text-decoration-color: var(--color-accent);
   }
 
-  .report-form { margin-top: var(--space-4); }
-  .tool-block {
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-4);
-    margin-bottom: var(--space-3);
-    background: var(--color-bg-alt);
-  }
-  .tool-block__title {
-    font-family: var(--font-serif);
-    font-size: var(--text-lg);
-    color: var(--color-navy);
-    padding: 0 var(--space-2);
-  }
-  .tool-block__hint {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    margin: var(--space-1) 0 var(--space-3);
-  }
-
-  .field-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: var(--space-3) var(--space-4);
-  }
-
-  .country-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
-    gap: var(--space-2);
-  }
-  .country-check {
-    display: flex; align-items: center; gap: var(--space-2);
-    padding: 8px 10px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-surface);
-    font-size: var(--text-sm);
-    cursor: pointer;
-  }
-  .country-check:hover { border-color: var(--color-primary); }
-  .country-check input { width: auto; flex: 0 0 auto; margin: 0; accent-color: var(--color-primary); }
-  .country-check:has(input:checked) { border-color: var(--color-primary); background: var(--color-primary-bg); }
-
-  .report-submit { margin-top: var(--space-4); width: 100%; }
-  .report-status {
-    font-size: var(--text-sm);
-    line-height: var(--leading-relaxed);
-    color: var(--color-text-muted);
-    margin-top: var(--space-3);
-    min-height: 1.5em;
-  }
-  .report-status.is-error { color: var(--color-accent-dark); }
 
   .cpc-notes {
     border-top: 1px solid var(--color-border);
@@ -855,7 +516,7 @@ const schema = {
     color: var(--color-text-muted);
     margin-bottom: var(--space-3);
   }
-  .cpc-notes a, .cpc-report a { color: var(--color-accent-dark); }
+  .cpc-notes a { color: var(--color-accent-dark); }
   .cpc-notes__limits {
     background: var(--color-bg-alt);
     border-left: 3px solid var(--color-accent);
@@ -879,7 +540,6 @@ const schema = {
     .cpc-controls { grid-template-columns: 1fr; }
     .cpc-row { grid-template-columns: 1fr auto; gap: var(--space-2) var(--space-3); }
     .cpc-row__bar { grid-column: 1 / -1; order: 3; }
-    .field-grid { grid-template-columns: 1fr; }
   }
 </style>
 
@@ -895,9 +555,6 @@ const schema = {
   // line: countries at or below it are marked, countries above it are not.
 
   const STORAGE_KEY = 'durian-cpc-v1';
-  const REPORT_KEY = 'durian-cpc-report-v1';
-  // Session only, so it survives the back button but not a new tab.
-  const GENERATED_KEY = 'durian-cpc-report-generated';
   const DEFAULT_STYLE = 'mid';
 
   const nightsEl = document.getElementById('cpc-nights') as HTMLInputElement | null;
@@ -1027,257 +684,24 @@ const schema = {
     } catch (e) { /* ignore */ }
   }
 
-  styleBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      styleBtns.forEach(b => b.classList.toggle('is-active', b === btn));
-      update();
-    });
-  });
-
-  document.getElementById('cpc-form')?.addEventListener('input', update);
-  document.getElementById('cpc-form')?.addEventListener('change', update);
-
-  restore();
-  update();
-
-  /* ─────────────────────────── the full report ─────────────────────────── */
-
-  const reportForm = document.getElementById('report-form') as HTMLFormElement | null;
-  const statusEl = document.getElementById('report-status');
-  const submitEl = document.getElementById('report-submit') as HTMLButtonElement | null;
-  const accessEl = document.getElementById('r-access') as HTMLInputElement | null;
-  const reportCurrencyEl = document.getElementById('r-currency') as HTMLSelectElement | null;
-  const answerEls = Array.from(
-    document.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-answer]')
-  );
-  const countryBoxes = Array.from(
-    document.querySelectorAll<HTMLInputElement>('input[name="countries"]')
-  );
-
-  // One currency for the page. Changing either control changes both, so the
-  // comparison and the ceiling can never be in different money.
-  function syncCurrency(from: HTMLSelectElement | null, to: HTMLSelectElement | null) {
-    if (!from || !to || to.value === from.value) return;
-    to.value = from.value;
-  }
-  currencyEl?.addEventListener('change', () => { syncCurrency(currencyEl, reportCurrencyEl); saveReport(); });
-  reportCurrencyEl?.addEventListener('change', () => { syncCurrency(reportCurrencyEl, currencyEl); update(); });
-  syncCurrency(currencyEl, reportCurrencyEl);
-
-  function answers() {
-    const out: Record<string, unknown> = {};
-    answerEls.forEach(el => {
-      const key = el.dataset.answer;
-      if (key) out[key] = el.value;
-    });
-    out.countries = countryBoxes.filter(b => b.checked).map(b => b.value);
-    out.currency = currencyEl?.value ?? '€';
-    out.style = activeStyle()?.dataset.style ?? DEFAULT_STYLE;
-    out.base = parseFloat(activeStyle()?.dataset.typical ?? '0') || 0;
-    return out;
-  }
-
-  // The access code is deliberately not saved. Everything else is, so a
-  // refresh does not cost somebody the whole questionnaire.
-  function saveReport() {
-    try {
-      localStorage.setItem(REPORT_KEY, JSON.stringify(answers()));
-    } catch (e) { /* private mode */ }
-  }
-
-  // Restores the answers into the fields. It does not open the disclosure:
-  // somebody landing on the page gets the offer, not a wall of questions.
-  // Their answers are waiting for them once they open it.
-  function restoreReport() {
-    try {
-      const raw = localStorage.getItem(REPORT_KEY);
-      if (!raw) return;
-      const d = JSON.parse(raw);
-      if (!d || typeof d !== 'object') return;
-      answerEls.forEach(el => {
-        const key = el.dataset.answer;
-        const saved = key ? d[key] : undefined;
-        if (typeof saved !== 'string') return;
-        if (el instanceof HTMLSelectElement) {
-          if (Array.from(el.options).some(o => o.value === saved)) el.value = saved;
-        } else {
-          el.value = saved;
-        }
+  // This script is bundled alongside the other tool pages and runs on them as
+  // well. Without this check, update() saved {style: 'mid'} over the visitor's
+  // saved choice on every tool page they opened, dropping their nights, budget
+  // and currency, and the full report page then priced them at the wrong
+  // style. It now does nothing unless its own list and controls are present.
+  if (listEl && controlsEl) {
+    styleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        styleBtns.forEach(b => b.classList.toggle('is-active', b === btn));
+        update();
       });
-      if (Array.isArray(d.countries)) {
-        countryBoxes.forEach(b => { b.checked = d.countries.indexOf(b.value) !== -1; });
-      }
-    } catch (e) { /* ignore */ }
+    });
+
+    controlsEl.addEventListener('input', update);
+    controlsEl.addEventListener('change', update);
+
+    restore();
+    update();
   }
 
-  function say(message: string, isError: boolean) {
-    if (!statusEl) return;
-    statusEl.textContent = message;
-    statusEl.classList.toggle('is-error', isError);
-  }
-
-  reportForm?.addEventListener('input', saveReport);
-  reportForm?.addEventListener('change', saveReport);
-
-  // Closed on every page load, for everybody. The one exception is coming back
-  // from a report generated in this tab: the flag lives in sessionStorage, so
-  // it is gone the moment the tab is.
-  const reportDetails = document.getElementById('report-details') as HTMLDetailsElement | null;
-  function openReport() { if (reportDetails) reportDetails.open = true; }
-
-  restoreReport();
-
-  try {
-    if (sessionStorage.getItem(GENERATED_KEY) === '1') openReport();
-  } catch (e) { /* private mode */ }
-
-  // One generator for both ways in. The code goes in one header and the Stripe
-  // session id in another. The Function decides whether either is good enough;
-  // nothing here is trusted.
-  async function generate(auth) {
-    const payload = answers();
-    if (!Array.isArray(payload.countries) || payload.countries.length === 0) {
-      say(
-        auth.session
-          ? 'Pick at least one country, then generate again. Your payment still counts and you will not be charged twice.'
-          : 'Pick at least one country first.',
-        true
-      );
-      if (submitEl) submitEl.disabled = false;
-      return;
-    }
-
-    if (submitEl) submitEl.disabled = true;
-    openReport();
-    say('Building your report. This takes a moment.', false);
-
-    const headers = { 'content-type': 'application/json' };
-    if (auth.code) headers['x-durian-access'] = auth.code;
-    if (auth.session) headers['x-durian-session'] = auth.session;
-
-    try {
-      const response = await fetch('/api/report', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(payload),
-      });
-
-      if (response.status === 402) {
-        // Never say the payment failed. We do not know that, only that we could
-        // not confirm it, and blaming the visitor for our check is wrong.
-        say(
-          auth.session
-            ? 'We could not confirm that payment, so nothing has been generated. If you were charged, send us a message through the contact page and we will sort it out.'
-            : 'That code was not accepted. Check it and try again.',
-          true
-        );
-        if (submitEl) submitEl.disabled = false;
-        return;
-      }
-
-      if (!response.ok) {
-        say('Something went wrong and the report was not generated.', true);
-        if (submitEl) submitEl.disabled = false;
-        return;
-      }
-
-      // Set only once a report has actually come back, not on a refused code,
-      // so the back button lands on the questions rather than the offer.
-      try { sessionStorage.setItem(GENERATED_KEY, '1'); } catch (e) { /* private mode */ }
-
-      // frame-src is 'none', so the report cannot go in an iframe. It replaces
-      // this document instead. The answers are already in localStorage, so the
-      // back button returns to a filled in form.
-      const html = await response.text();
-      document.open();
-      document.write(html);
-      document.close();
-    } catch (e) {
-      say('Something went wrong and the report was not generated.', true);
-      if (submitEl) submitEl.disabled = false;
-    }
-  }
-
-  /* ───────────────────────── coming back from Stripe ───────────────────── */
-  //
-  // Stripe sends the visitor back to this page with ?session_id=... The id is
-  // taken out of the address bar so a refresh cannot fire a second request, and
-  // held for this tab only so somebody whose answers did not survive can fill
-  // them in and generate without paying again.
-
-  // The hosted payment page. Read from the button rather than inlined here, so
-  // the URL stays in the one constant at the top of this file.
-  const PAYMENT_LINK = reportForm?.dataset.paymentLink ?? '';
-
-  const SESSION_KEY = 'durian-cpc-paid-session';
-  let paidSession = '';
-
-  try {
-    const fromUrl = new URLSearchParams(location.search).get('session_id');
-    if (fromUrl) {
-      paidSession = fromUrl;
-      try { sessionStorage.setItem(SESSION_KEY, fromUrl); } catch (e) { /* private mode */ }
-      const clean = location.pathname + location.hash;
-      history.replaceState(null, '', clean);
-    } else {
-      paidSession = sessionStorage.getItem(SESSION_KEY) || '';
-    }
-  } catch (e) { /* private mode, or no history API */ }
-
-  // With a paid session in hand the button stops being a payment button.
-  if (paidSession && submitEl) {
-    submitEl.textContent = 'Generate my report';
-  }
-
-  reportForm?.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    if (paidSession) {
-      generate({ session: paidSession });
-      return;
-    }
-
-    // Save before leaving the page, because the answers have to survive the
-    // round trip to Stripe and back.
-    saveReport();
-
-    const payload = answers();
-    if (!Array.isArray(payload.countries) || payload.countries.length === 0) {
-      say('Pick at least one country first, then continue to payment.', true);
-      return;
-    }
-
-    if (!PAYMENT_LINK) {
-      say('Payment is not set up yet. Send us a message through the contact page.', true);
-      return;
-    }
-
-    say('Taking you to Stripe to pay. Your answers are saved.', false);
-    // Plain navigation. The CSP blocks embedding Stripe, and a hosted payment
-    // page is the design rather than a workaround.
-    window.location.assign(PAYMENT_LINK);
-  });
-
-  document.getElementById('report-code-submit')?.addEventListener('click', () => {
-    const code = accessEl?.value.trim() ?? '';
-    if (!code) {
-      say('Enter a code first.', true);
-      return;
-    }
-    generate({ code });
-  });
-
-  if (paidSession) {
-    openReport();
-    const saved = answers();
-    if (Array.isArray(saved.countries) && saved.countries.length > 0) {
-      say('Payment received. Building your report now.', false);
-      generate({ session: paidSession });
-    } else {
-      say(
-        'Payment received. We do not have your answers on this device, so fill the questions in again and press Generate my report. You will not be charged twice.',
-        false
-      );
-    }
-  }
 </script>

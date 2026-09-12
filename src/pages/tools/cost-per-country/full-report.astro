@@ -1,0 +1,646 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../../components/Breadcrumb.astro';
+import costData from '../../../data/country-costs.json';
+import {
+  REPORT_PRICE,
+  STRIPE_PAYMENT_LINK,
+  payCta,
+  reportIncludes,
+  styles,
+  questions,
+  DEFAULT_STYLE,
+} from '../../../data/full-report';
+
+const canonical = 'https://www.duriantravel.com/tools/cost-per-country/full-report/';
+const comparisonUrl = '/tools/cost-per-country/';
+const countries = costData.countries;
+
+// The daily figure behind each style, keyed by style id. The report is priced
+// on the style the visitor last used on the free comparison, which is exactly
+// what it did when this form lived on that page. Somebody who arrives here
+// cold gets Mid-range, which was that page's default too.
+const styleBases = Object.fromEntries(styles.map((s) => [s.id, s.typical]));
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'The full cost per country report',
+  url: canonical,
+  description:
+    'A cost per country report for a trip to Europe, weighted across seven Eurostat price categories to the way you travel.',
+  isPartOf: {
+    '@type': 'WebApplication',
+    name: 'Europe Cost-per-Country Estimator',
+    url: 'https://www.duriantravel.com/tools/cost-per-country/',
+  },
+};
+---
+
+<BaseLayout
+  title="Full Cost per Country Report | DURIAN Travel"
+  description="Answer a few questions about how you travel and get a cost per country report for Europe, weighted across seven Eurostat price categories and priced per day and per trip."
+  canonical={canonical}
+  schema={schema}
+  keywords="europe trip cost report, cost of travel by country europe, eurostat travel cost comparison"
+  breadcrumb={[
+    { name: 'Cost per country', url: 'https://www.duriantravel.com/tools/cost-per-country/' },
+    { name: 'Full report', url: canonical },
+  ]}
+>
+  <div class="container">
+    <Breadcrumb
+      items={[
+        { name: 'Planners', href: '/tools/' },
+        { name: 'Cost per country', href: comparisonUrl },
+        { name: 'Full report' },
+      ]}
+    />
+  </div>
+
+  <section class="section section--sm" id="full-report">
+    <div class="container container--narrow">
+      <span class="section-label">Full report</span>
+      <h1 class="tool-title">The full cost per country report</h1>
+      <p class="tool-intro">
+        Priced for the way you actually travel. Answer these and the report weights seven Eurostat
+        categories instead of one, then ranks the countries you are weighing up.
+      </p>
+      <p class="report-back">
+        <a href={comparisonUrl}>Back to the free comparison</a>
+      </p>
+
+      <div class="offer">
+        <p class="offer__heading">What you get</p>
+        <ul class="offer__list" role="list">
+          {reportIncludes.map((item) => (
+            <li class="offer__item">{item}</li>
+          ))}
+        </ul>
+        <p class="offer__price">{REPORT_PRICE}</p>
+      </div>
+
+      <p class="report-status" id="report-status" role="status" aria-live="polite"></p>
+
+      <form
+        class="report-form"
+        id="report-form"
+        novalidate
+        data-payment-link={STRIPE_PAYMENT_LINK}
+        data-style-bases={JSON.stringify(styleBases)}
+        data-default-style={DEFAULT_STYLE}
+      >
+        <fieldset class="tool-block">
+          <legend class="tool-block__title">Which countries are you weighing up?</legend>
+          <p class="tool-block__hint">Pick at least one.</p>
+          <div class="country-grid">
+            {countries.map((c) => (
+              <label class="country-check">
+                <input type="checkbox" name="countries" value={c.iso} />
+                <span>{c.name}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        {questions.map((block) => (
+          <fieldset class="tool-block">
+            <legend class="tool-block__title">{block.group}</legend>
+            <div class="field-grid">
+              {block.fields.map((f) => (
+                <label class="field">
+                  <span class="field__label">{f.label}</span>
+                  {f.type === 'number' ? (
+                    <input
+                      type="number"
+                      id={`r-${f.id}`}
+                      data-answer={f.id}
+                      min={f.min}
+                      max={f.max}
+                      step="1"
+                      value={f.value}
+                      inputmode="numeric"
+                    />
+                  ) : (
+                    <select id={`r-${f.id}`} data-answer={f.id}>
+                      {(f.options ?? []).map(([value, label]) => (
+                        <option value={value}>{label}</option>
+                      ))}
+                    </select>
+                  )}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ))}
+
+        <fieldset class="tool-block">
+          <legend class="tool-block__title">The number you will not go over</legend>
+          <p class="tool-block__hint">For the whole trip, everyone included.</p>
+          <label class="field">
+            <span class="field__label">Your ceiling</span>
+            <div class="field-inline">
+              <select id="r-currency" aria-label="Currency">
+                <option value="€" selected>€</option>
+                <option value="$">$</option>
+                <option value="£">£</option>
+                <option value="₱">₱</option>
+                <option value="R$">R$</option>
+              </select>
+              <input type="number" id="r-ceiling" data-answer="ceiling" min="0" step="50" placeholder="0" inputmode="decimal" />
+            </div>
+          </label>
+        </fieldset>
+
+        <div class="pay">
+          <button type="submit" class="btn btn--primary btn--lg report-submit" id="report-submit">
+            {payCta}
+          </button>
+          <p class="pay__terms">
+            Payment is handled by Stripe on their own page. The report opens here as soon as it goes
+            through. No account needed.
+          </p>
+
+          <details class="tester">
+            <summary class="tester__toggle">Got a code.</summary>
+            <label class="field tester__field">
+              <span class="field__label">Code</span>
+              <input type="text" id="r-access" autocomplete="off" spellcheck="false" />
+            </label>
+            <button type="button" class="btn btn--secondary btn--sm" id="report-code-submit">
+              Generate with this code
+            </button>
+          </details>
+        </div>
+      </form>
+
+      <p class="visa-disclaimer">
+        Educational information only. Not legal advice. Always check the official embassy or
+        consulate source.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section--sm { padding-block: var(--space-8); }
+
+  .tool-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    margin: var(--space-2) 0 var(--space-3);
+  }
+  .tool-intro {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+  .report-back {
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+  }
+  .report-back a {
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 3px;
+  }
+  .report-back a:hover { color: var(--color-accent); text-decoration-color: var(--color-accent); }
+
+  /* The offer, said plainly before anybody is asked to pay. */
+  .offer {
+    margin-top: var(--space-5);
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-alt);
+  }
+  .offer__heading {
+    font-size: var(--text-xs);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-weight: var(--font-semibold);
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-3);
+  }
+  .offer__list { list-style: none; padding: 0; margin: 0 0 var(--space-4); }
+  .offer__item {
+    position: relative;
+    padding-left: var(--space-5);
+    margin-bottom: var(--space-2);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text);
+    max-width: 58ch;
+  }
+  .offer__item::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: .55em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-accent);
+  }
+  .offer__price {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: var(--text-4xl, 2.25rem);
+    line-height: 1.1;
+    color: var(--color-navy);
+    margin: 0;
+  }
+
+  .report-status {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    margin-top: var(--space-4);
+    min-height: 1.5em;
+  }
+  .report-status.is-error { color: var(--color-accent-dark); }
+
+  .report-form { margin-top: var(--space-2); }
+  .report-form input,
+  .report-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    font-size: var(--text-base);
+    color: var(--color-text);
+  }
+  .report-form input:focus,
+  .report-form select:focus { outline: none; border-color: var(--color-primary); }
+
+  /* After the shared rule above on purpose: same specificity, so source order
+     decides. Without this the currency select takes the full width. */
+  .field-inline { display: flex; gap: var(--space-2); align-items: stretch; }
+  .report-form .field-inline select { width: 4.75rem; flex: 0 0 auto; padding-inline: 8px; }
+  .report-form .field-inline input { flex: 1 1 auto; width: auto; min-width: 0; }
+
+  .field { display: block; margin: 0; }
+  .field__label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    margin-bottom: var(--space-2);
+    color: var(--color-text);
+  }
+
+  .tool-block {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    margin-bottom: var(--space-3);
+    background: var(--color-bg-alt);
+  }
+  .tool-block__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    color: var(--color-navy);
+    padding: 0 var(--space-2);
+  }
+  .tool-block__hint {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: var(--space-1) 0 var(--space-3);
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--space-3) var(--space-4);
+  }
+
+  .country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: var(--space-2);
+  }
+  .country-check {
+    display: flex; align-items: center; gap: var(--space-2);
+    padding: 8px 10px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    font-size: var(--text-sm);
+    cursor: pointer;
+  }
+  .country-check:hover { border-color: var(--color-primary); }
+  .country-check input { width: auto; flex: 0 0 auto; margin: 0; accent-color: var(--color-primary); }
+  .country-check:has(input:checked) { border-color: var(--color-primary); background: var(--color-primary-bg); }
+
+  .pay { margin-top: var(--space-5); }
+  .report-submit { width: 100%; white-space: normal; }
+  .pay__terms {
+    margin-top: var(--space-3);
+    font-size: var(--text-xs);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-light);
+    max-width: 52ch;
+  }
+
+  /* The code route still works. It is fine print, because a visible code block
+     reads as a way in without paying. */
+  .tester { margin-top: var(--space-5); }
+  .tester__toggle {
+    display: inline-block;
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 3px;
+    list-style: none;
+  }
+  .tester__toggle::-webkit-details-marker { display: none; }
+  .tester__toggle::marker { content: ''; }
+  .tester__toggle:hover { color: var(--color-text-muted); }
+  .tester__toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  .tester__field { margin-top: var(--space-3); max-width: 18rem; }
+  .tester .btn { margin-top: var(--space-3); }
+
+  .visa-disclaimer {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-top: var(--space-6);
+  }
+
+  @media (max-width: 720px) {
+    .field-grid { grid-template-columns: 1fr; }
+    .offer { padding: var(--space-4); }
+  }
+
+  @media print {
+    .pay, .report-back { display: none; }
+  }
+</style>
+
+<script>
+  // Scoped to this page's own root, never the document. Astro bundles page
+  // scripts together, so a document wide selector here could reach into
+  // another tool page that happens to share a class or id. See brief 006.
+  const root = document.getElementById('full-report');
+  const reportForm = root ? (root.querySelector('#report-form') as HTMLFormElement | null) : null;
+
+  if (root && reportForm) {
+    const REPORT_KEY = 'durian-cpc-report-v1';
+    const COMPARISON_KEY = 'durian-cpc-v1';
+    const SESSION_KEY = 'durian-cpc-paid-session';
+
+    const statusEl = root.querySelector('#report-status') as HTMLElement | null;
+    const submitEl = root.querySelector('#report-submit') as HTMLButtonElement | null;
+    const accessEl = root.querySelector('#r-access') as HTMLInputElement | null;
+    const currencyEl = root.querySelector('#r-currency') as HTMLSelectElement | null;
+    const codeBtn = root.querySelector('#report-code-submit') as HTMLButtonElement | null;
+    const answerEls = Array.from(
+      reportForm.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-answer]')
+    );
+    const countryBoxes = Array.from(
+      reportForm.querySelectorAll<HTMLInputElement>('input[name="countries"]')
+    );
+
+    const PAYMENT_LINK = reportForm.dataset.paymentLink ?? '';
+    const DEFAULT_STYLE = reportForm.dataset.defaultStyle ?? 'mid';
+    let styleBases: Record<string, number> = {};
+    try { styleBases = JSON.parse(reportForm.dataset.styleBases ?? '{}'); } catch (e) { styleBases = {}; }
+
+    function readJson(key: string): Record<string, unknown> | null {
+      try {
+        const raw = localStorage.getItem(key);
+        const d = raw ? JSON.parse(raw) : null;
+        return d && typeof d === 'object' ? d : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // The style this report is priced on: whichever the visitor last used on
+    // the free comparison, or Mid-range for somebody who arrives here first.
+    function chosenStyle(): string {
+      const saved = readJson(COMPARISON_KEY);
+      const s = saved && typeof saved.style === 'string' ? saved.style : '';
+      return Object.prototype.hasOwnProperty.call(styleBases, s) ? s : DEFAULT_STYLE;
+    }
+
+    function validCurrency(value: unknown): value is string {
+      return !!currencyEl && typeof value === 'string' &&
+        Array.from(currencyEl.options).some((o) => o.value === value);
+    }
+
+    // The currency this form opens in: the one used for these answers last
+    // time, otherwise the one used on the free comparison.
+    function restoreCurrency() {
+      if (!currencyEl) return;
+      const fromReport = readJson(REPORT_KEY)?.currency;
+      const fromComparison = readJson(COMPARISON_KEY)?.currency;
+      if (validCurrency(fromReport)) currencyEl.value = fromReport;
+      else if (validCurrency(fromComparison)) currencyEl.value = fromComparison;
+    }
+
+    function answers() {
+      const out: Record<string, unknown> = {};
+      answerEls.forEach((el) => {
+        const key = el.dataset.answer;
+        if (key) out[key] = el.value;
+      });
+      out.countries = countryBoxes.filter((b) => b.checked).map((b) => b.value);
+      out.currency = currencyEl?.value ?? '€';
+      const style = chosenStyle();
+      out.style = style;
+      out.base = Number(styleBases[style]) || 0;
+      return out;
+    }
+
+    // The access code is deliberately not saved. Everything else is, so a
+    // refresh does not cost somebody the whole questionnaire.
+    function saveReport() {
+      try {
+        localStorage.setItem(REPORT_KEY, JSON.stringify(answers()));
+      } catch (e) { /* private mode */ }
+    }
+
+    function restoreReport() {
+      const d = readJson(REPORT_KEY);
+      if (!d) return;
+      answerEls.forEach((el) => {
+        const key = el.dataset.answer;
+        const saved = key ? d[key] : undefined;
+        if (typeof saved !== 'string') return;
+        if (el instanceof HTMLSelectElement) {
+          if (Array.from(el.options).some((o) => o.value === saved)) el.value = saved;
+        } else {
+          el.value = saved;
+        }
+      });
+      if (Array.isArray(d.countries)) {
+        const picked = d.countries as unknown[];
+        countryBoxes.forEach((b) => { b.checked = picked.indexOf(b.value) !== -1; });
+      }
+    }
+
+    // The status sits above the form, and every message is brought into view.
+    // Somebody coming back from Stripe lands at the top, and somebody who
+    // pressed the button at the bottom needs to see what went wrong.
+    function say(message: string, isError: boolean) {
+      if (!statusEl) return;
+      statusEl.textContent = message;
+      statusEl.classList.toggle('is-error', isError);
+      try { statusEl.scrollIntoView({ block: 'nearest' }); } catch (e) { /* old browser */ }
+    }
+
+    reportForm.addEventListener('input', saveReport);
+    reportForm.addEventListener('change', saveReport);
+
+    restoreCurrency();
+    restoreReport();
+
+    // One generator for both ways in. The code goes in one header and the Stripe
+    // session id in another. The Function decides whether either is good enough;
+    // nothing here is trusted.
+    async function generate(auth: { code?: string; session?: string }) {
+      const payload = answers();
+      if (!Array.isArray(payload.countries) || payload.countries.length === 0) {
+        say(
+          auth.session
+            ? 'Pick at least one country, then generate again. Your payment still counts and you will not be charged twice.'
+            : 'Pick at least one country first.',
+          true
+        );
+        if (submitEl) submitEl.disabled = false;
+        return;
+      }
+
+      if (submitEl) submitEl.disabled = true;
+      say('Building your report. This takes a moment.', false);
+
+      const headers: Record<string, string> = { 'content-type': 'application/json' };
+      if (auth.code) headers['x-durian-access'] = auth.code;
+      if (auth.session) headers['x-durian-session'] = auth.session;
+
+      try {
+        const response = await fetch('/api/report', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload),
+        });
+
+        if (response.status === 402) {
+          // Never say the payment failed. We do not know that, only that we could
+          // not confirm it, and blaming the visitor for our check is wrong.
+          say(
+            auth.session
+              ? 'We could not confirm that payment, so nothing has been generated. If you were charged, send us a message through the contact page and we will sort it out.'
+              : 'That code was not accepted. Check it and try again.',
+            true
+          );
+          if (submitEl) submitEl.disabled = false;
+          return;
+        }
+
+        if (!response.ok) {
+          say('Something went wrong and the report was not generated.', true);
+          if (submitEl) submitEl.disabled = false;
+          return;
+        }
+
+        // frame-src is 'none', so the report cannot go in an iframe. It replaces
+        // this document instead. The answers are already in localStorage, so the
+        // back button returns to a filled in form.
+        const html = await response.text();
+        document.open();
+        document.write(html);
+        document.close();
+      } catch (e) {
+        say('Something went wrong and the report was not generated.', true);
+        if (submitEl) submitEl.disabled = false;
+      }
+    }
+
+    /* ─────────────────────── coming back from Stripe ─────────────────────── */
+    //
+    // Stripe sends the visitor back here with ?session_id=... The id is taken
+    // out of the address bar so a refresh cannot fire a second request, and held
+    // for this tab only so somebody whose answers did not survive can fill them
+    // in and generate without paying again.
+
+    let paidSession = '';
+    try {
+      const fromUrl = new URLSearchParams(location.search).get('session_id');
+      if (fromUrl) {
+        paidSession = fromUrl;
+        try { sessionStorage.setItem(SESSION_KEY, fromUrl); } catch (e) { /* private mode */ }
+        history.replaceState(null, '', location.pathname + location.hash);
+      } else {
+        paidSession = sessionStorage.getItem(SESSION_KEY) || '';
+      }
+    } catch (e) { /* private mode, or no history API */ }
+
+    // With a paid session in hand the button stops being a payment button.
+    if (paidSession && submitEl) {
+      submitEl.textContent = 'Generate my report';
+    }
+
+    reportForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      if (paidSession) {
+        generate({ session: paidSession });
+        return;
+      }
+
+      // Save before leaving the page, because the answers have to survive the
+      // round trip to Stripe and back.
+      saveReport();
+
+      const payload = answers();
+      if (!Array.isArray(payload.countries) || payload.countries.length === 0) {
+        say('Pick at least one country first, then continue to payment.', true);
+        return;
+      }
+
+      if (!PAYMENT_LINK) {
+        say('Payment is not set up yet. Send us a message through the contact page.', true);
+        return;
+      }
+
+      say('Taking you to Stripe to pay. Your answers are saved.', false);
+      // Plain navigation. The CSP blocks embedding Stripe, and a hosted payment
+      // page is the design rather than a workaround.
+      window.location.assign(PAYMENT_LINK);
+    });
+
+    codeBtn?.addEventListener('click', () => {
+      const code = accessEl?.value.trim() ?? '';
+      if (!code) {
+        say('Enter a code first.', true);
+        return;
+      }
+      generate({ code });
+    });
+
+    if (paidSession) {
+      const saved = answers();
+      if (Array.isArray(saved.countries) && saved.countries.length > 0) {
+        say('Payment received. Building your report now.', false);
+        generate({ session: paidSession });
+      } else {
+        say(
+          'Payment received. We do not have your answers on this device, so fill the questions in again and press Generate my report. You will not be charged twice.',
+          false
+        );
+      }
+    }
+  }
+</script>
