@@ -183,9 +183,9 @@ Everything that becomes the website lives in `src/`. Everything outside `src/` i
   - `countries.json`: the master list of destination countries. This list is what actually creates the destination pages.
   - `country-costs.json`: the Eurostat price level data behind `/tools/cost-per-country/`, with full provenance. Refresh it when Eurostat publishes, usually mid year.
   - `destination-overrides.ts`: per country tweaks layered on top of `countries.json`.
-  - `service-packages.json` + `service-pages.ts`: the seven service packages. The `.json` is the raw data; the `.ts` file cleans it up and attaches icons and SEO copy.
+  - `full-report.ts`: the paid report's price, Payment Link, button labels and questions. The price is defined here once.
 - **`src/layouts/BaseLayout.astro`**: the shell every page sits inside: `<head>`, Google Analytics, header, footer, chatbot.
-- **`src/components/`**: reusable pieces: `Header`, `Footer`, `SEO`, `Breadcrumb`, `CTABanner`, `BlogCard`, `ServiceCard`, `ChatBot`.
+- **`src/components/`**: reusable pieces: `Header`, `Footer`, `SEO`, `Breadcrumb`, `CTABanner`, `BlogCard`, `ChatBot`. `ServiceCard` is still there but nothing uses it since the services section was retired in brief 014.
 - **`src/styles/`**: `tokens.css` (all colours, fonts, spacing as CSS variables) and `global.css` (reset plus shared classes like `.btn`, `.card`, `.section`, `.prose`).
 - **`src/assets/images/`**: images used inside pages. Optimised and resized at build time.
 - **`public/`**: files copied to the site untouched: `favicon.svg`, `robots.txt`, `_headers`, `_redirects`. Nothing here is optimised.
@@ -219,7 +219,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 Pages with `[slug]` in the name are generated, not written one at a time:
 - `src/pages/destinations/[slug].astro` builds one page per entry in `countries.json`
-- `src/pages/services/[slug].astro` builds one page per service package
 - `src/pages/blog/[...slug].astro` builds one page per blog post
 
 ## How to add a new blog post
