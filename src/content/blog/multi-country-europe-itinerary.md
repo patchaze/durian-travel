@@ -136,4 +136,4 @@ The best multi-country route is not the one with the most transport options. It 
 
 *Some links may be affiliate links. We may earn a commission at no extra cost to you.*
 
-**Want a route that aligns with your bookings and pace?** [Explore the Grand Circuit package](/services/multi-region-trip-planning/) for multi-stop planning designed around your real trip.
+**Deciding which countries to include?** The [cost per country comparison](/tools/cost-per-country/) shows what the same trip costs in each of 28 countries.

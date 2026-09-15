@@ -159,7 +159,7 @@ const faqItems = [
     <Breadcrumb items={[{ name: 'Schengen Tourist Visa Guide 2026' }]} />
   </div>
 
-  <section class="guide-hero section section--tinted">
+  <section class="hero-sm hero-gradient guide-hero">
     <div class="container">
       <div class="guide-hero__layout">
         <div>
@@ -167,7 +167,8 @@ const faqItems = [
             <span class="badge badge--success">Updated {lastReviewed}</span>
             <span class="badge">For non-European travelers</span>
           </div>
-          <h1 class="guide-hero__title">Schengen Tourist Visa Guide 2026</h1>
+          <span class="section-label" style="color:var(--color-accent-light)">Schengen Visa Guide</span>
+          <h1 class="hero-sm__title" style="color:white">Schengen Tourist Visa Guide 2026</h1>
           <p class="guide-hero__subtitle">
             The complete guide to documents, costs, timelines, financial proof, and the mistakes that get Schengen applications refused.
           </p>
@@ -175,7 +176,7 @@ const faqItems = [
             <div class="author-panel__avatar" aria-hidden="true">DT</div>
             <div>
               <strong>Durian Travel Editorial Team</strong>
-              <p>European travel specialists behind DURIAN Travel.</p>
+              <p>Written and checked by DURIAN Travel.</p>
             </div>
           </div>
           <div class="notice notice--warning" style="max-width:64ch">
@@ -398,7 +399,7 @@ const faqItems = [
 
           <h2>Ready to take the next step?</h2>
           <p>
-            If you want the route, the budget and the timing looked over, <a href="/contact/" class="link">send us a message</a> and we will reply by email. For more hands-on planning, browse the <a href="/services/" class="link">service packages</a>.
+            If you want the route, the budget and the timing looked over, <a href="/contact/" class="link">send us a message</a> and we will reply by email. To check the numbers behind your trip, try the <a href="/tools/" class="link">planners</a>.
           </p>
           <p>
             Related guides: <a href="/blog/schengen-document-checklist/" class="link">Schengen Document Checklist</a>, <a href="/blog/how-to-write-visa-cover-letter/" class="link">How to Write a Cover Letter</a>, <a href="/blog/how-much-does-schengen-visa-cost/" class="link">Schengen Visa Costs</a>, and <a href="/blog/europe-trip-planning-timeline/" class="link">Europe Trip Planning Timeline</a>.
@@ -429,7 +430,10 @@ const faqItems = [
 </BaseLayout>
 
 <style>
-.guide-hero { padding-block: var(--space-14); }
+/* The page opens with the site's hero pattern: navy gradient, orange eyebrow,
+   white title. The badges and the warning notice were built for a light
+   background, so they get their own treatment on the dark one. */
+.guide-hero { padding-block: var(--space-16); }
 .guide-hero__layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
@@ -442,14 +446,23 @@ const faqItems = [
   gap: var(--space-3);
   margin-bottom: var(--space-4);
 }
-.guide-hero__title {
-  font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
+.hero-sm__title {
+  font-family: var(--font-serif);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
   line-height: 1.1;
   margin-bottom: var(--space-4);
 }
+.guide-hero .badge,
+.guide-hero .badge--success {
+  background: hsla(0, 0%, 100%, 0.14);
+  color: white;
+}
+.guide-hero .notice--warning {
+  background: var(--color-surface);
+}
 .guide-hero__subtitle {
   font-size: var(--text-lg);
-  color: var(--color-text-muted);
+  color: hsla(0, 0%, 100%, 0.85);
   max-width: 60ch;
   margin-bottom: var(--space-6);
 }

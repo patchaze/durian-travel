@@ -27,6 +27,7 @@ const testimonials = [
 // is worse than no number. Each one links, so this row also carries internal
 // links from the highest-authority page on the site.
 import costData from '../data/country-costs.json';
+import { REPORT_PRICE, FULL_REPORT_URL } from '../data/full-report';
 // Eight countries spanning the published Eurostat range, cheapest to dearest.
 // Figures come from country-costs.json (source and dates recorded there).
 const costPick = ['bulgaria', 'portugal', 'greece', 'croatia', 'italy', 'france', 'netherlands', 'switzerland'];
@@ -42,30 +43,32 @@ const trustStats = [
   { value: '0', label: 'Applications we submit for you', href: '/faq/' }
 ];
 
+// What Durian Travel offers: three free planners and one paid report. Each
+// card links to the tool itself, and the report's price comes from its constant.
 const serviceCards = [
   {
-    title: 'Schengen Trip Planning',
-    body: 'We explain how the Schengen process works, point you at the requirements your own consulate publishes, and build the route and budget around them. Your paperwork stays with you.',
-    href: '/services/#schengen-blueprint',
-    linkText: 'Find out how →'
+    title: 'Do you need a visa?',
+    body: 'Pick the passport you will travel on and see whether a Schengen short stay visa applies, read straight from EU law.',
+    href: '/tools/do-you-need-a-visa/',
+    linkText: 'Check your passport →'
   },
   {
-    title: 'Custom Europe Itineraries',
-    body: 'Each itinerary is built around your passport, pace, and interests, never a template. We design daily routes with logical sequencing across multiple countries.',
-    href: '/services/#first-journey',
-    linkText: 'Learn more →'
+    title: 'Cost per country',
+    body: 'See what the same trip costs in each of 28 European countries, built on Eurostat price levels.',
+    href: '/tools/cost-per-country/',
+    linkText: 'Compare countries →'
   },
   {
-    title: 'Handpicked European Stays',
-    body: 'Boutique hotels, private villas, and character-rich properties selected by hand. No generic chain recommendations.',
-    href: '/services/#grand-circuit',
-    linkText: 'Discover stays →'
+    title: 'Budget calculator',
+    body: 'Add up your own figures and see the total, the cost per person and the cost per day.',
+    href: '/tools/budget/',
+    linkText: 'Work out your budget →'
   },
   {
-    title: 'On-Trip Support',
-    body: 'Real English-speaking agents available when plans change mid-trip. Not a chatbot. Not an FAQ page.',
-    href: '/services/#grand-circuit',
-    linkText: 'See experiences →'
+    title: 'The full cost per country report',
+    body: `Each country you are comparing, priced against your own budget, for ${REPORT_PRICE}. It opens on screen as soon as payment goes through.`,
+    href: FULL_REPORT_URL,
+    linkText: 'See what you get →'
   }
 ];
 
@@ -73,7 +76,7 @@ const processSteps = [
   {
     number: '01',
     title: 'Tell Us About Your Trip',
-    body: 'Share your travel window, origin country, passport, and rough interests. No lengthy forms, just a conversation.'
+    body: 'Share your travel window, origin country, passport, and rough interests. Write to us and we reply by email.'
   },
   {
     number: '02',
@@ -83,7 +86,7 @@ const processSteps = [
   {
     number: '03',
     title: 'Travel With Confidence',
-    body: 'Go to Europe with a route that holds together, a budget you trust, and a support line if anything changes on the ground.'
+    body: 'Go to Europe with a route that holds together and a budget you trust.'
   }
 ];
 
@@ -299,8 +302,8 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
   <section class="section section--alt" aria-labelledby="services-help-heading">
     <div class="container">
       <header data-reveal class="section-header">
-        <span class="section-label">How We Help</span>
-        <h2 id="services-help-heading" class="section-title">What We Do For You</h2>
+        <span class="section-label">Planners</span>
+        <h2 id="services-help-heading" class="section-title">Check the numbers yourself</h2>
       </header>
       <div data-reveal-stagger class="services-grid-home">
         {serviceCards.map((card) => (
@@ -502,18 +505,16 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
         <h2 id="trust-heading" class="section-title">Built on Expertise</h2>
       </header>
       <ul class="trust-list">
-        <li class="trust-item"><strong>Founded by specialists:</strong> European travel experts focused on non-European travelers and real-world route logic.</li>
+        <li class="trust-item"><strong>Run by one specialist:</strong> A European traveler focused on travelers from outside Europe and real-world route logic.</li>
         <li class="trust-item"><strong>Straight about outcomes:</strong> Consulates decide approvals, not us. We never look at your documents and we never predict a result.</li>
-        <li class="trust-item"><strong>Written by people:</strong> Every itinerary and guide is written and checked by a person, never auto-generated.</li>
-        <li class="trust-item"><strong>Vetted partner network:</strong> Hotels, guides, and operators across Europe selected for fit, not generic inventory.</li>
-        <li class="trust-item"><strong>24/7 on-trip support:</strong> Real English-speaking agents when plans change mid-journey.</li>
+        <li class="trust-item"><strong>Written by a person:</strong> Every guide is written and checked by hand, never auto-generated.</li>
       </ul>
     </div>
   </section>
 
   <div class="container">
     <p class="entity-paragraph">
-      Durian Travel is a Europe trip planning consultancy for travellers planning from outside Europe. Founded by European travel specialists, it covers country guides, multi-country routes, realistic budgets, and the documentation a Schengen application asks for. Durian Travel does not submit applications on anyone's behalf, and consular officers alone decide the outcome.
+      Durian Travel publishes free guides and planning tools for travelers planning a trip to Europe from outside it. It is run by one European traveler, and it covers country guides, multi-country routes, realistic budgets, and the documentation a Schengen application asks for. Durian Travel does not submit applications on anyone's behalf, and consular officers alone decide the outcome.
     </p>
   </div>
 

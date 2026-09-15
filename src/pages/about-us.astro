@@ -3,19 +3,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import CTABanner from '../components/CTABanner.astro';
 
+// Authorship is the organisation, never a person. This page says plainly that
+// Durian Travel is one person writing as an organisation, and names nobody.
 const aboutSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "DURIAN Travel",
   "url": "https://www.duriantravel.com",
-  "description": "DURIAN Travel helps non-European travelers plan smarter trips to Europe — from Schengen visa strategy to full itinerary design. Serving clients from Latin America, North America, Asia, Africa, Australia, and beyond.",
+  "description": "DURIAN Travel publishes free guides and planning tools, and one paid cost report, for people planning a trip to Europe from outside it.",
   "areaServed": "Worldwide",
   "knowsAbout": [
-    "Schengen visa applications",
-    "European travel planning",
-    "Itinerary design",
-    "Multi-country Europe routes",
-    "Non-European traveler logistics"
+    "Schengen short stay visa rules",
+    "Travel costs across European countries",
+    "Planning a trip to Europe from outside the continent"
   ],
   "contactPoint": {
     "@type": "ContactPoint",
@@ -25,49 +25,26 @@ const aboutSchema = {
 };
 
 const whoWeAre = [
-  'A consultancy that helps you understand and navigate the Europe trip planning process end-to-end',
-  'Experienced advisors who give direct, specific guidance instead of hedged generalities',
-  'A team that works with a manageable number of clients so each trip gets genuine attention'
+  'A one person project based in Europe, writing as Durian Travel',
+  'A publisher of free guides and planning tools for trips to Europe',
+  'A source that says where its figures come from',
 ];
 
 const whoWeAreNot = [
-  'A travel agency that books flights or hotels on your behalf',
-  'A visa agency that submits applications as your representative or guarantees outcomes',
-  'A law firm — nothing here is legal advice',
-  'A template business selling the same itinerary to every client'
-];
-
-const workWithUs = [
-  {
-    title: 'Start by Writing to Us',
-    text: 'Send a message if you are not sure where to start. Tell us the route, the budget and the timing you have in mind and we will write back. No documents are reviewed.',
-    href: '/contact/'
-  },
-  {
-    title: 'Browse the Packages',
-    text: 'If you already know what you need, the service packages cover everything from a single Schengen plan to a full multi-region trip.',
-    href: '/services/'
-  },
-  {
-    title: 'Contact Us Directly',
-    text: 'If you have a specific question first, send a message. Every enquiry is read personally.',
-    href: '/contact/'
-  },
-  {
-    title: 'Research Before You Book',
-    text: 'The blog and destination pages cover visa strategy, route design, and practical Europe planning for travelers coming from outside the continent.',
-    href: '/blog/'
-  }
+  'A travel agency. We do not book flights or hotels',
+  'A visa agency. We do not submit applications or promise any result',
+  'A law firm. Nothing here is legal advice',
+  'A service that reviews documents or runs calls',
 ];
 ---
 
 <BaseLayout
-  title="About DURIAN Travel | Europe Trip Planning for Non-European Travelers"
-  description="DURIAN Travel helps non-European travelers plan smarter trips to Europe - Schengen visa strategy, itinerary design, and honest guidance built for people coming from outside the continent."
+  title="About DURIAN Travel | Free Guides and Planners for a Trip to Europe"
+  description="Durian Travel is a one person project based in Europe. We publish free guides and planning tools for people planning a trip to Europe from outside it."
   canonical="https://www.duriantravel.com/about-us/"
   breadcrumb={[{ name: 'About', url: 'https://www.duriantravel.com/about-us/' }]}
   schema={aboutSchema}
-  keywords="about DURIAN Travel, Europe trip planning for non-European travelers, Schengen visa strategy, itinerary design"
+  keywords="about DURIAN Travel, planning a trip to Europe from outside Europe, free Europe travel planners"
 >
   <div class="container">
     <Breadcrumb items={[{ name: 'About DURIAN Travel' }]} />
@@ -78,49 +55,43 @@ const workWithUs = [
       <span class="section-label" style="color:var(--color-accent-light)">About</span>
       <h1 class="hero-sm__title" style="color:white">About DURIAN Travel</h1>
       <p class="hero-sm__subtitle">
-        Europe trip planning for non-European travelers, built around the reality of visas, long-haul logistics, and route decisions that generic travel content rarely covers.
+        Durian Travel is a one person project based in Europe. We publish free guides and planning
+        tools for people who live outside Europe and want to plan a trip there. Everything is free to
+        use, except one paid report on what your trip would cost in each country you are considering.
+        We do not book travel, submit visa applications, review documents or run calls.
       </p>
     </div>
   </section>
 
   <section class="section">
     <div class="container container--narrow prose">
-      <h2>Europe looks different depending on where you're coming from</h2>
+      <h2>What Durian Travel does</h2>
       <p>
-        Most travel content about Europe is written by people who live there, or who travel from countries where entry is straightforward and a visa is never part of the calculation.
+        Most travel writing about Europe assumes you can cross a border without a second thought. If
+        you live outside Europe, the trip looks different. A visa may come before anything else, the
+        long flight shapes the budget, and prices change more from one country to the next than most
+        guides admit.
       </p>
       <p>
-        For everyone else, the planning process looks different. The Schengen visa timeline can stretch across weeks or months. Minor itinerary decisions can change which embassy you apply to. Long-haul routing from Sao Paulo, Lagos, Seoul, Sydney, or Mexico City changes the cost, pacing, and shape of the trip before you even get to Europe.
+        So we write for that reader. The <a href="/blog/">blog</a> and the
+        {' '}<a href="/destinations/">destination guides</a> explain how things actually work, and the
+        {' '}<a href="/tools/">planners</a> let you check the numbers yourself: whether your passport
+        needs a visa, what the same trip costs in each country, and what your own budget adds up to.
       </p>
       <p>
-        Good guidance for non-European travelers has to reflect that. DURIAN exists because most generic Europe advice does not.
-      </p>
-
-      <h2>What DURIAN Travel does</h2>
-      <p>
-        DURIAN is a European travel consultancy. We work with individuals, couples, families, and small groups who are planning trips to Europe from outside the continent, helping them navigate the process from first question to boarding pass.
-      </p>
-      <p>
-        In practice, that means two connected areas of work: <strong>Schengen visa strategy</strong> and <strong>Europe itinerary planning</strong>. We help clients understand what embassies actually look for, identify weak spots in a document package before submission, and design routes that make sense for budget, timing, and the realities of getting to Europe from their home country.
-      </p>
-      <p>
-        Most clients need both. The visa and the itinerary are not separate problems. They are the same problem seen from two different angles.
+        Behind the site is one person who has traveled widely inside Europe and writes as Durian
+        Travel. There is no team of advisors and no agency.
       </p>
 
       <h2>Who we work with</h2>
       <p>
-        Our clients come from every region outside Europe. Some are planning their first trip to the continent and need a clean path through the visa and planning process. Others are building longer, more complex itineraries that involve multiple countries, tight Schengen windows, or more demanding logistics.
+        Our readers come from every region outside Europe. Some are planning a first trip and want to
+        understand the rules before they book anything. Others are comparing several countries and
+        want to see what each one really costs before they choose.
       </p>
       <p>
-        What they share is that they are approaching Europe from the outside and want guidance built for that reality rather than advice written for someone who can cross a border by train without thinking about immigration, embassy representation, or long-haul routing.
-      </p>
-
-      <h2>The team</h2>
-      <p>
-        DURIAN was founded by a European travel specialist who spent years navigating European travel personally and professionally before building a consultancy around it. The founder leads all client work and is the person you will speak with directly.
-      </p>
-      <p>
-        The founder is supported by a small team contributing to research, destination content, and operational support. The destination guides on this site are grounded in real travel experience across Western, Northern, Central, and Eastern Europe.
+        What they share is that they are coming to Europe from the outside, and they want information
+        written for that.
       </p>
     </div>
   </section>
@@ -128,8 +99,8 @@ const workWithUs = [
   <section class="section section--alt">
     <div class="container">
       <header class="section-header text-center">
-        <span class="section-label">How We Work</span>
-        <h2 class="section-title">What We Are and What We Are Not</h2>
+        <span class="section-label">Plainly</span>
+        <h2 class="section-title">What we are and what we are not</h2>
       </header>
       <div class="truth-grid">
         <div class="truth-card">
@@ -147,34 +118,9 @@ const workWithUs = [
       </div>
       <div class="container--narrow prose" style="margin-top:var(--space-8)">
         <p>
-          If your situation is unusually complex, such as prior immigration violations or legal issues that genuinely require formal representation, we will tell you directly. We would rather refer you to the right expert than pretend every problem can be solved with travel consulting.
+          If your situation involves an earlier refusal, an overstay, or anything else that needs legal
+          representation, speak to a qualified immigration lawyer. Nothing on this site replaces one.
         </p>
-
-        <h2>Why DURIAN</h2>
-        <p>
-          Durian is one of the most misunderstood things in the world. Difficult from the outside. Completely different once you know what you are dealing with. Planning a trip to Europe from outside the continent can feel exactly like that: opaque, overcomplicated, and full of warnings from people who have never actually done it.
-        </p>
-        <p>
-          Once you understand the real process, the real requirements, and the real logistics, it becomes far more manageable than it first appears. That is the work we do.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <header class="section-header text-center">
-        <span class="section-label">Next Step</span>
-        <h2 class="section-title">How to Work With Us</h2>
-      </header>
-      <div class="work-grid">
-        {workWithUs.map(item => (
-          <a href={item.href} class="work-card">
-            <h3>{item.title}</h3>
-            <p>{item.text}</p>
-            <span class="work-card__cta">Explore →</span>
-          </a>
-        ))}
       </div>
     </div>
   </section>
@@ -185,6 +131,7 @@ const workWithUs = [
 <style>
 .hero-sm { padding-block: var(--space-16); }
 .hero-sm__title {
+  font-family: var(--font-serif);
   font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
   margin-bottom: var(--space-4);
 }
@@ -194,19 +141,12 @@ const workWithUs = [
   max-width: 60ch;
   line-height: var(--leading-relaxed);
 }
-.truth-grid,
-.work-grid {
+.truth-grid {
   display: grid;
   gap: var(--space-6);
-}
-.truth-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-.work-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.truth-card,
-.work-card {
+.truth-card {
   background: white;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
@@ -247,31 +187,11 @@ const workWithUs = [
   color: var(--color-accent-dark);
   background: var(--color-accent-bg);
 }
-.truth-card h3,
-.work-card h3 {
+.truth-card h3 {
   margin-bottom: var(--space-4);
-}
-.work-card {
-  text-decoration: none;
-  color: inherit;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
-}
-.work-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-primary);
-}
-.work-card p {
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-4);
-}
-.work-card__cta {
-  color: var(--color-primary);
-  font-weight: var(--font-semibold);
 }
 @media (max-width: 900px) {
-  .truth-grid,
-  .work-grid {
+  .truth-grid {
     grid-template-columns: 1fr;
   }
 }

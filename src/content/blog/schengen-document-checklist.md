@@ -74,8 +74,6 @@ A written explanation of your trip, covering:
 - Financial means to support yourself
 - Reasons you will return home (ties to your country)
 
-Want help structuring this? [→ See the Schengen Blueprint package](/services/schengen-visa-help/)
-
 ### 8. Travel Itinerary
 
 A day-by-day plan including:
@@ -90,8 +88,6 @@ Documents proving you can support yourself financially. Common requirements:
 - **Minimum balance** (varies by country, typically €50–€100/day of stay)
 - **Proof of employment / income** (salary slips, employment letter)
 - **If sponsored**: sponsor's bank statements + signed sponsor declaration
-
-Not sure if your documents are strong enough? [→ See the Schengen Blueprint package](/services/schengen-visa-help/)
 
 ### 10. Proof of Ties to Home Country
 
@@ -137,7 +133,7 @@ Before submitting, review your complete package for:
 - ✅ Completeness — is every required document present?
 - ✅ Chronology — do your bank statements cover the correct period?
 
-[→ Explore the Schengen Blueprint package](/services/schengen-visa-help/) to have a professional review your package before submission.
+[→ Check whether your passport needs a visa at all](/tools/do-you-need-a-visa/)
 
 ---
 

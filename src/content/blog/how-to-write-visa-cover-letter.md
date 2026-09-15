@@ -237,7 +237,7 @@ What the cover letter does is reduce doubt. A clear, factual letter that matches
 
 If you have had a previous refusal, read the refusal letter first. It names the ground the consulate relied on, and [our guide to the refusal reasons](/blog/visa-refusal-reasons/) explains what each one refers to. The letter also sets out the appeal route and the deadline.
 
-For a full breakdown of what goes in your application, see the [Schengen document checklist](/blog/schengen-document-checklist/) and our [Schengen Blueprint package](/services/schengen-visa-help/). If you are applying from outside Europe, the [Schengen visa guide for non-European travelers](/blog/schengen-visa-requirements-non-european-travelers/) is the best companion piece.
+For a full breakdown of what goes in your application, see the [Schengen document checklist](/blog/schengen-document-checklist/). If you are applying from outside Europe, the [Schengen visa guide for non-European travelers](/blog/schengen-visa-requirements-non-european-travelers/) is the best companion piece.
 
 ## Frequently asked questions
 

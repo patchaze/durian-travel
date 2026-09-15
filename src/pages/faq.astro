@@ -92,11 +92,11 @@ const faqSchema = {
     <Breadcrumb items={[{ name: 'FAQ' }]} />
   </div>
 
-  <section class="section--tinted section--sm">
-    <div class="container text-center">
-      <span class="section-label">Questions Answered</span>
-      <h1 class="faq-hero__title">Frequently Asked Questions</h1>
-      <p class="faq-hero__subtitle">Everything you need to know before working with us.</p>
+  <section class="hero-sm hero-gradient">
+    <div class="container">
+      <span class="section-label" style="color:var(--color-accent-light)">Questions Answered</span>
+      <h1 class="hero-sm__title" style="color:white">Frequently Asked Questions</h1>
+      <p class="hero-sm__subtitle">Plain answers about what Durian Travel does, and what it does not do.</p>
     </div>
   </section>
 
@@ -162,8 +162,9 @@ const faqSchema = {
 </script>
 
 <style>
-.faq-hero__title    { font-size: clamp(var(--text-3xl), 4vw, var(--text-4xl)); margin-block: var(--space-3); }
-.faq-hero__subtitle { font-size: var(--text-lg); color: var(--color-text-muted); }
+.hero-sm { padding-block: var(--space-16); }
+.hero-sm__title { font-family: var(--font-serif); font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl)); margin-bottom: var(--space-4); }
+.hero-sm__subtitle { font-size: var(--text-lg); color: hsla(0, 0%, 100%, 0.85); max-width: 60ch; line-height: var(--leading-relaxed); }
 .faq-list { display: flex; flex-direction: column; gap: 0; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--color-border); }
 .faq-item { border-bottom: 1px solid var(--color-border); }
 .faq-item:last-child { border-bottom: none; }

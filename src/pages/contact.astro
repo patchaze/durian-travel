@@ -63,12 +63,8 @@ import CTABanner from '../components/CTABanner.astro';
               <label for="contact-subject" class="form-label">Subject <span class="required" aria-hidden="true">*</span></label>
               <select id="contact-subject" name="subject" class="form-select" required>
                 <option value="" disabled selected>Select a subject</option>
-                <option value="schengen-blueprint">The Schengen Blueprint</option>
-                <option value="first-journey">The First Journey Package</option>
-                <option value="nomad-infrastructure">The Nomad Infrastructure Plan</option>
-                <option value="family-expedition">The Family Expedition Bundle</option>
-                <option value="wellness-journey">The Wellness Journey</option>
-                <option value="grand-circuit">The Grand Circuit</option>
+                <option value="full-report">The full cost per country report</option>
+                <option value="planners">The free planners</option>
                 <option value="general">General Question</option>
                 <option value="urgent">Urgent, travelling in under 2 weeks</option>
               </select>
@@ -146,7 +142,7 @@ import CTABanner from '../components/CTABanner.astro';
 
 <style>
 .hero-sm { padding-block: var(--space-16); }
-.hero-sm__title { font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl)); margin-bottom: var(--space-4); }
+.hero-sm__title { font-family: var(--font-serif); font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl)); margin-bottom: var(--space-4); }
 .contact-grid { display: grid; grid-template-columns: 1fr 340px; gap: var(--space-12); align-items: start; }
 @media (max-width: 960px) { .contact-grid { grid-template-columns: 1fr; } }
 .contact-form-wrap__title { font-size: var(--text-2xl); margin-bottom: var(--space-5); }

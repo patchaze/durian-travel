@@ -4,32 +4,36 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout
   title="Thank You | DURIAN Travel"
-  description="Thank you for contacting DURIAN Travel. We will get back to you shortly."
+  description="Thank you for contacting DURIAN Travel. We reply by email, usually within a few working days."
   noindex={true}
   keywords="thank you, DURIAN travel contact received"
 >
-  <section class="section" style="min-height:60vh;display:flex;align-items:center">
-    <div class="container container--narrow text-center">
-      <div class="thankyou-icon" aria-hidden="true">✅</div>
-      <h1 class="thankyou__title">Message Received. Thank You!</h1>
-      <p class="thankyou__subtitle">
-        We've received your message and will respond within <strong>1–2 business days</strong>.
+  <section class="hero-sm hero-gradient">
+    <div class="container">
+      <span class="section-label" style="color:var(--color-accent-light)">Message sent</span>
+      <h1 class="hero-sm__title" style="color:white">Thank you, your message is on its way</h1>
+      <p class="hero-sm__subtitle">
+        We read every message and reply by email, usually within a few working days.
       </p>
-      <p style="color:var(--color-text-muted);font-size:var(--text-base);margin-bottom:var(--space-8)">
-        While you wait, explore our free resources:
-      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--narrow">
+      <p class="thankyou__lead">While you wait, these are free to use:</p>
       <div class="thankyou__links">
-        <a href="/schengen-visa-guide/" class="btn btn--primary">Schengen Complete Guide →</a>
-        <a href="/blog/" class="btn btn--secondary">Visa Strategy Blog →</a>
-        <a href="/faq/" class="btn btn--ghost" style="color:var(--color-primary);border-color:var(--color-border)">FAQ →</a>
+        <a href="/tools/" class="btn btn--primary">Planners</a>
+        <a href="/schengen-visa-guide/" class="btn btn--secondary">Schengen Complete Guide</a>
+        <a href="/blog/" class="btn btn--ghost" style="color:var(--color-primary);border-color:var(--color-border)">Blog</a>
       </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-.thankyou-icon { font-size: 4rem; margin-bottom: var(--space-5); }
-.thankyou__title { font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl)); margin-bottom: var(--space-4); }
-.thankyou__subtitle { font-size: var(--text-xl); color: var(--color-text-muted); margin-bottom: var(--space-4); }
-.thankyou__links { display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap; }
+.hero-sm { padding-block: var(--space-16); }
+.hero-sm__title { font-family: var(--font-serif); font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl)); margin-bottom: var(--space-4); }
+.hero-sm__subtitle { font-size: var(--text-lg); color: hsla(0, 0%, 100%, 0.85); max-width: 60ch; line-height: var(--leading-relaxed); }
+.thankyou__lead { color: var(--color-text-muted); font-size: var(--text-base); margin-bottom: var(--space-5); }
+.thankyou__links { display: flex; gap: var(--space-4); flex-wrap: wrap; }
 </style>

@@ -8,17 +8,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   noindex={true}
   keywords="404 error, page not found, DURIAN travel"
 >
-  <section class="section not-found" style="min-height:70vh;display:flex;align-items:center">
-    <div class="container container--narrow text-center">
-      <div class="not-found__icon" aria-hidden="true">🗺️</div>
-      <h1 class="not-found__title">404 — Page Not Found</h1>
-      <p class="not-found__subtitle">
-        Looks like this page got lost in transit. Let's get you back on track.
+  <section class="hero-sm hero-gradient">
+    <div class="container">
+      <span class="section-label" style="color:var(--color-accent-light)">Error 404</span>
+      <h1 class="hero-sm__title" style="color:white">This page does not exist</h1>
+      <p class="hero-sm__subtitle">
+        It may have moved, or the link that brought you here may be out of date. These will get you
+        back on track.
       </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--narrow">
       <div class="not-found__links">
-        <a href="/" class="btn btn--primary">Back to Homepage →</a>
-        <a href="/services/" class="btn btn--secondary">Our Services</a>
-        <a href="/blog/" class="btn btn--ghost" style="color:var(--color-primary);border-color:var(--color-border)">Blog →</a>
+        <a href="/" class="btn btn--primary">Back to the homepage</a>
+        <a href="/tools/" class="btn btn--secondary">Planners</a>
+        <a href="/blog/" class="btn btn--ghost" style="color:var(--color-primary);border-color:var(--color-border)">Blog</a>
       </div>
       <div class="not-found__popular">
         <p>Popular pages:</p>
@@ -33,12 +39,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <style>
-.not-found__icon     { font-size: 4rem; margin-bottom: var(--space-5); }
-.not-found__title    { font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl)); margin-bottom: var(--space-4); }
-.not-found__subtitle { font-size: var(--text-xl); color: var(--color-text-muted); margin-bottom: var(--space-8); max-width: 44ch; margin-inline: auto; line-height: var(--leading-relaxed); }
-.not-found__links    { display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap; margin-bottom: var(--space-10); }
+.hero-sm { padding-block: var(--space-16); }
+.hero-sm__title { font-family: var(--font-serif); font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl)); margin-bottom: var(--space-4); }
+.hero-sm__subtitle { font-size: var(--text-lg); color: hsla(0, 0%, 100%, 0.85); max-width: 60ch; line-height: var(--leading-relaxed); }
+.not-found__links    { display: flex; gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-8); }
 .not-found__popular  { color: var(--color-text-muted); }
 .not-found__popular p { font-size: var(--text-sm); margin-bottom: var(--space-3); }
-.not-found__popular ul { display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap; }
+.not-found__popular ul { display: flex; gap: var(--space-4); flex-wrap: wrap; }
 .not-found__popular li { font-size: var(--text-sm); }
 </style>

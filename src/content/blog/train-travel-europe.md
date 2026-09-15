@@ -139,4 +139,4 @@ If the answer feels fuzzy, the route probably needs to be simpler.
 
 *This post may contain affiliate links.*
 
-**If you want a day-by-day plan that aligns accommodations, finances, and transport logic**, our [Grand Circuit package](/services/multi-region-trip-planning/) covers exactly this kind of route-building. Or check our [Europe Budget Blueprint](/blog/europe-trip-budget/) for the financial planning side.
+**Planning the money side of a rail trip?** Check our [Europe Budget Blueprint](/blog/europe-trip-budget/), or use the [budget calculator](/tools/budget/) to add up your own figures.

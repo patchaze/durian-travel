@@ -164,4 +164,4 @@ April to June and September to October. July and August are hot and crowded (but
 
 *This post may contain affiliate links.*
 
-**If you want a day-by-day itinerary that aligns with your bookings and pace**, our [First Journey package](/services/first-international-trip/) is built for exactly that structure. Or check our [Europe Packing List](/blog/europe-packing-list/) before you go.
+**Comparing Italy with other countries before you book?** The [cost per country comparison](/tools/cost-per-country/) shows what the same trip costs in each one. Or check our [Europe Packing List](/blog/europe-packing-list/) before you go.
