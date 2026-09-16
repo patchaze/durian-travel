@@ -6,7 +6,7 @@ description: "A realistic week-by-week Europe planning timeline for first-time t
 pubDate: "2026-03-10"
 author: "Durian Travel Editorial Team"
 tags: ["Planning", "Europe", "Itinerary"]
-modDate: "2026-04-09"
+modDate: "2026-09-17"
 readTime: 13
 ---
 
@@ -24,7 +24,7 @@ Before you open 37 tabs of "best hidden gems," write down the constraints that w
 - **Pace preference** (slow traveler vs city-hopper)
 - **Health considerations** (meds, mobility, allergies)
 
-If you're applying for a Schengen visa, your plan also has to be coherent: you apply to the consulate based on where you'll stay longest, and you'll need supporting documents such as accommodation and evidence of financial means.
+If you're applying for a Schengen visa, your plan also has to be coherent: you apply to the consulate of your main destination, judged by the number of days you spend there or by the main purpose of the trip, and you'll need supporting documents such as accommodation and evidence of financial means.
 
 The same principle applies even if you're visa-exempt: coherence protects your wallet and time.
 
@@ -153,6 +153,8 @@ Overstuffing the itinerary. You do not lose time by slowing down. You save it.
 
 **When should I buy insurance?**
 After the route is stable and before you submit visa documents or buy non-refundable bookings.
+
+*Sources: [European Commission, Applying for a Schengen visa](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy/applying-schengen-visa_en); [the Visa Code, Regulation (EC) No 810/2009, consolidated text of 11 June 2024](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02009R0810-20240611), Articles 5, 9 and 15. The visa rules on this page were last checked against these official sources on 17 September 2026.*
 
 ---
 

@@ -6,7 +6,7 @@ description: "Build a Europe trip budget with fixed costs, daily spending, pre-t
 pubDate: "2026-03-02"
 author: "Durian Travel Editorial Team"
 tags: ["Budget", "Europe", "Planning"]
-modDate: "2026-04-08"
+modDate: "2026-09-17"
 readTime: 12
 ---
 
@@ -89,7 +89,7 @@ Even if you're not applying for a visa, budgeting like you're building a coheren
 - Do your plans match your means?
 - Can you explain your route in one sentence?
 
-And if you are applying for Schengen, the EU overview explicitly lists evidence of financial means as part of the supporting documents category.
+And if you are applying for Schengen, the [European Commission's visa page](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy/applying-schengen-visa_en) lists evidence of financial means among the supporting documents.
 
 ## Western Europe vs Lower-Cost Europe
 
@@ -123,6 +123,8 @@ Columns you need:
 - **Cash vs card:** use a no-fee travel card to avoid conversion markups
 - **Stay one extra night in a base city** instead of paying for a second transfer
 - **Price transport before you book hotels** so the route does not quietly become expensive
+
+*Sources: [European Commission, Applying for a Schengen visa](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy/applying-schengen-visa_en); [the Visa Code, Regulation (EC) No 810/2009, Article 16, consolidated text of 11 June 2024](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02009R0810-20240611). The visa fee and the supporting documents rule were last checked against these official sources on 17 September 2026.*
 
 ---
 

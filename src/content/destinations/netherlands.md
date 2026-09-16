@@ -6,7 +6,7 @@ keywords: "Netherlands travel guide"
 ---
 ## Introduction
 
-The Netherlands is one of Europe's most immediately enjoyable countries — a place where infrastructure works flawlessly, cities are extraordinarily walkable (and cyclable), the cultural density is remarkable for the country's small size, and the flat, green, canal-laced landscape has an almost dreamlike quality that painters have been struggling to capture for four centuries.
+The Netherlands is one of Europe's most immediately enjoyable countries: a place where infrastructure works reliably, cities are extraordinarily walkable (and cyclable), the cultural density is remarkable for the country's small size, and the flat, green, canal-laced landscape has an almost dreamlike quality that painters have been struggling to capture for four centuries.
 
 Amsterdam needs no introduction: its Golden Age canal ring, world-class museums (the Rijksmuseum, Van Gogh Museum, Anne Frank House), and the most bicycle-friendly urban culture in the world make it one of Europe's most visited and most rewarding capitals. But the Netherlands beyond Amsterdam rewards exploration: Rotterdam's bold contemporary architecture, Delft's Vermeer-blue pottery and intact medieval centre, The Hague's international institutions and Mauritshuis art collection, Leiden's university town charm, and the tulip fields and windmill landscapes of the countryside in spring.
 

@@ -6,7 +6,7 @@ description: "A first-timers 10-day Italy itinerary with pacing, Schengen entry 
 pubDate: "2026-03-05"
 author: "Durian Travel Editorial Team"
 tags: ["Italy", "Itinerary", "Rome"]
-modDate: "2026-04-08"
+modDate: "2026-09-17"
 readTime: 14
 ---
 
@@ -14,7 +14,7 @@ If you're going to do Italy for the first time, this route is popular for a reas
 
 The official Italian tourism portal publishes itinerary and travel ideas across regions, which supports building a coherent route rather than random city-hopping.
 
-Last updated: April 2026.
+Visa rule last checked: 17 September 2026.
 
 ## Why This Route Works
 
@@ -24,13 +24,13 @@ Last updated: April 2026.
 
 Each city has a different pace, and moving south to north (or north to south) follows a natural rail corridor.
 
-It also keeps the Schengen file easy to explain. If Italy is your main destination, this route makes the visa logic obvious. If you're mixing Italy with another country, make sure the nights still match the embassy rule.
+It also keeps the Schengen file easy to explain. If Italy is your main destination, this route makes the visa logic obvious. If you're mixing Italy with another country, make sure your days still point to one main destination.
 
 ## How to Use This Route for Schengen Planning
 
-If Italy is the country where you will spend the most nights, Italy is usually the application country.
+If Italy is your main destination, judged by the number of days you spend there or by the main purpose of the trip, you apply to Italy.
 
-If your nights are split evenly with another Schengen country, the first entry rule takes over.
+If no main destination can be worked out, you apply to the country whose external border you cross first.
 
 That means this itinerary works best when the bookings and the cover letter tell the same story from day one.
 
@@ -159,6 +159,8 @@ For 3 intercity legs, point-to-point tickets are usually cheaper. Price out both
 
 **What's the best time to visit Italy?**
 April to June and September to October. July and August are hot and crowded (but still beautiful).
+
+*Sources: [European Commission, Applying for a Schengen visa](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy/applying-schengen-visa_en); [the Visa Code, Regulation (EC) No 810/2009, Article 5, consolidated text of 11 June 2024](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02009R0810-20240611). The rule on which country you apply to was last checked against these official sources on 17 September 2026.*
 
 ---
 

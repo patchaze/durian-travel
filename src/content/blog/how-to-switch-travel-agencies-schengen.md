@@ -4,6 +4,7 @@ title: "How to Migrate Your Schengen Visa Application to a New Agency"
 seoTitle: "Change Schengen Agencies Mid-Application"
 description: "Hidden fees or poor communication from a visa agency? What to check in your contract, what you are entitled to get back, and how the handover works."
 pubDate: "2026-03-24"
+modDate: "2026-09-17"
 author: "Durian Travel Editorial Team"
 tags: ["Schengen", "Travel Agency", "Implementation"]
 readTime: 6
@@ -36,8 +37,8 @@ Ask any prospective replacement how they handle a dossier someone else started. 
 
 ## Step 4: The 48-Hour Strategy Reset
 
-Once you officially sign with your new agency, demand a "Strategy Reset" call. During this 48-hour onboarding window, your new consultant should:
-* Recalculate your primary destination based on the Schengen 90/180-day rule.
+Once you sign with a new agency, ask them to confirm in writing, within 48 hours, that they will:
+* Re-check which country is your main destination, because that decides which consulate you apply to.
 * Re-issue valid dummy flight and hotel reservations (if your previous agency's bookings expired).
 * Draft a new, highly specific Cover Letter explaining the strength of your application, bypassing any errors the previous agency might have made.
 
@@ -46,3 +47,5 @@ Once you officially sign with your new agency, demand a "Strategy Reset" call. D
 Most generic travel agencies have strict "no-refund" policies once the setup fee is paid. However, if they failed to provide actionable service (e.g., they missed a deadline or provided verifiably incorrect legal advice regarding the Schengen Acquis), you can often initiate a chargeback through your credit card provider. 
 
 **Summary:** Do not let the sunk cost fallacy keep you with an agency that is not doing the work. Read your contract, get your documents and receipts back, and confirm nothing has been lodged in your name before you move.
+
+*Sources: [European Commission, Applying for a Schengen visa](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy/applying-schengen-visa_en); [the Visa Code, Regulation (EC) No 810/2009, Article 5, consolidated text of 11 June 2024](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02009R0810-20240611). The rule on which country you apply to was last checked against these official sources on 17 September 2026.*

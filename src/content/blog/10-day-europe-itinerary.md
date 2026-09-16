@@ -4,7 +4,7 @@ title: "10-Day Europe Itinerary for First-Time Travelers"
 seoTitle: "10-Day Europe Itinerary for First-Time Travelers"
 description: "A realistic 10-day Europe itinerary for first-time travelers, with two strong bases, humane pacing, and route logic that works before you book."
 pubDate: "2026-04-09"
-modDate: "2026-04-10"
+modDate: "2026-09-17"
 author: "Durian Travel Editorial Team"
 tags: ["Itinerary", "Europe", "First-Time Travelers", "Non-European Travelers"]
 readTime: 10
@@ -114,7 +114,7 @@ Your itinerary should help the visa file, not fight it.
 
 That means:
 
-- the country with the most nights should usually be the application country
+- you apply to your main destination, judged by the number of days you spend there or by the main purpose of the trip
 - every night should be accounted for
 - your bookings and your cover letter should describe the same trip
 - the route should make sense for your declared budget
@@ -148,6 +148,8 @@ If you want one simple rule to remember, use this:
 That is usually what separates a memorable first Europe trip from a ten-day luggage operation.
 
 For the next step, pair this guide with our [multi-country Europe itinerary guide](/blog/multi-country-europe-itinerary/), [Europe trip budget guide](/blog/europe-trip-budget/), and [Schengen visa requirements guide](/blog/schengen-visa-requirements-non-european-travelers/).
+
+*Sources: [European Commission, Applying for a Schengen visa](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy/applying-schengen-visa_en); [the Visa Code, Regulation (EC) No 810/2009, Article 5, consolidated text of 11 June 2024](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02009R0810-20240611). The rule on which country you apply to was last checked against these official sources on 17 September 2026.*
 
 ---
 

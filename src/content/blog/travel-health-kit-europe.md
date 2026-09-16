@@ -1,11 +1,11 @@
 ---
-keywords: "Health, Europe, Pharmacist"
+keywords: "Health, Europe"
 title: "Travel Health Kit for Europe: Meds, Packing & Medication Rules"
 seoTitle: "Travel Health Kit for Europe: Medication Checklist"
 description: "A practical Europe travel health kit checklist: meds, prescriptions, packing rules, pharmacy differences, and the habits that prevent common travel health problems."
 pubDate: "2026-03-08"
 author: "Durian Travel Editorial Team"
-tags: ["Health", "Europe", "Pharmacist"]
+tags: ["Health", "Europe"]
 modDate: "2026-04-08"
 readTime: 10
 ---

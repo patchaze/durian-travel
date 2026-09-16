@@ -6,7 +6,7 @@ description: "A practical method for building a Europe itinerary: pacing rules, 
 pubDate: "2026-02-28"
 author: "Durian Travel Editorial Team"
 tags: ["Itinerary", "Europe", "Planning"]
-modDate: "2026-04-08"
+modDate: "2026-09-17"
 readTime: 11
 ---
 
@@ -58,18 +58,18 @@ If you want the route to feel coherent, keep the cities on the same rail or flig
 
 If Paris is one of your bases, choose your hotel with the same care you choose the route. Our [Where to Stay in Paris guide](/blog/where-to-stay-paris/) breaks down which neighborhoods actually work for first-time visitors.
 
-## How to Count Schengen Nights
+## Which Country You Apply To
 
 This part matters if you need a visa.
 
-- apply to the country where you spend the most nights
-- if the nights are equal, apply through the first entry country
+- apply to your main destination, judged by the number of days you spend there or by the main purpose of the trip
+- if no main destination can be worked out, apply to the country whose external border you cross first
 - keep the hotel proof aligned with the route you describe
 
 Example:
 
-- 4 nights in France, 3 in Belgium, 3 in the Netherlands - apply through France
-- 3 nights in Portugal, 3 in Spain, 3 in France, 1 buffer night - first entry becomes important if the nights are equal
+- 4 nights in France, 3 in Belgium and 3 in the Netherlands: France is the main destination by length of stay, so you apply to France
+- 3 nights each in Portugal, Spain and France: if the purpose of the trip does not make one of them the main destination, you apply to the country whose external border you cross first
 
 The cleaner the route, the easier the application.
 
@@ -131,6 +131,8 @@ Use flights when:
 - the ticket logic is becoming more expensive than the time saved
 
 The best multi-country route is not the one with the most transport options. It is the one that leaves you enough energy to enjoy the trip.
+
+*Sources: [European Commission, Applying for a Schengen visa](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy/applying-schengen-visa_en); [the Visa Code, Regulation (EC) No 810/2009, Article 5, consolidated text of 11 June 2024](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02009R0810-20240611). The rule on which country you apply to was last checked against these official sources on 17 September 2026.*
 
 ---
 

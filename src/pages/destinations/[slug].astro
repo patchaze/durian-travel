@@ -36,7 +36,7 @@ const country = {
 const defaultMetaTitle = `${country.name} Travel Guide 2026: Visa, Budget & Tips`;
 const pageTitle = destinationEntry?.data.metaTitle || override.metaTitle || country.metaTitle || defaultMetaTitle;
 const heroTitle = destinationEntry?.data.title || override.heroTitle || country.heroTitle || pageTitle;
-const pageDescription = destinationEntry?.data.metaDescription || override.metaDescription || country.metaDescription || `Plan your trip to ${country.name} with expert itinerary design, accommodation guidance, and practical travel notes. Capital: ${country.facts.capital}. Best months: ${country.facts.bestMonths}.`;
+const pageDescription = destinationEntry?.data.metaDescription || override.metaDescription || country.metaDescription || `A free guide to planning a trip to ${country.name}. Capital: ${country.facts.capital}. Best months: ${country.facts.bestMonths}.`;
 const pageKeywords = destinationEntry?.data.keywords || country.seoKeywords || `${country.name} travel planning, ${country.name} itinerary, ${country.name} visa requirements, visit ${country.name}, ${country.region.toLowerCase()} destinations`;
 const hasReplacementContent = Boolean(DestinationContent);
 
@@ -106,7 +106,7 @@ const breadcrumb = [
         <>
       {country.longDescription && (
         <div class="prose mt-12 mb-8">
-          <h2 style="font-size:var(--text-2xl); color:var(--color-navy);">Bespoke Travel in {country.name}</h2>
+          <h2 style="font-size:var(--text-2xl); color:var(--color-navy);">About {country.name}</h2>
           <p style="font-size:var(--text-lg); line-height:1.7;">{country.longDescription}</p>
         </div>
       )}

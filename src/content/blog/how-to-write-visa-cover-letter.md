@@ -4,7 +4,7 @@ title: "How to Write a Schengen Visa Cover Letter (3 Templates for 2026)"
 seoTitle: "How to Write a Schengen Visa Cover Letter (3 Templates, 2026)"
 description: "Write a cover letter that embassy officers actually read. Three annotated templates for tourists, employed applicants, and self-sponsored travelers."
 pubDate: "2026-02-18"
-modDate: "2026-04-07"
+modDate: "2026-09-17"
 author: "Durian Travel Editorial Team"
 tags: ["Cover Letter", "Strategy", "Schengen"]
 readTime: 11
@@ -14,7 +14,7 @@ faq:
   - question: "Do I need a cover letter if the embassy does not list it?"
     answer: "Yes, in most cases. A cover letter helps the officer understand your file faster and reduces the chance that they have to guess how the documents fit together."
   - question: "Should I write the letter in English or the destination language?"
-    answer: "English is accepted at most embassies in the Philippines, and it is usually the safest choice unless you are very comfortable writing in the destination language."
+    answer: "Use a language the consulate says it accepts. Its own instructions, or those of the visa centre acting for it, list them. If English is on that list, it is usually the simplest choice."
   - question: "Can my travel agency write it for me?"
     answer: "Yes, but you should review it carefully. Generic agency letters often miss the specific details that make the application credible."
 ---
@@ -235,7 +235,7 @@ No. The cover letter is one part of a complete application. Your bank statements
 
 What the cover letter does is reduce doubt. A clear, factual letter that matches your documents leaves fewer questions unanswered.
 
-If you have had a previous refusal, read the refusal letter first. It names the ground the consulate relied on, and [our guide to the refusal reasons](/blog/visa-refusal-reasons/) explains what each one refers to. The letter also sets out the appeal route and the deadline.
+If you have had a previous refusal, read the refusal letter first. It names the ground the consulate relied on, and [our guide to the refusal reasons](/blog/visa-refusal-reasons/) explains what each one refers to. The letter also tells you how to appeal.
 
 For a full breakdown of what goes in your application, see the [Schengen document checklist](/blog/schengen-document-checklist/). If you are applying from outside Europe, the [Schengen visa guide for non-European travelers](/blog/schengen-visa-requirements-non-european-travelers/) is the best companion piece.
 
@@ -248,11 +248,9 @@ One to two A4 pages. One page is fine if all five sections are covered clearly.
 Some embassies do not explicitly require it, but including one is usually better because it helps the officer understand your application quickly.
 
 **Should I write it in English or the language of the destination country?**
-English is accepted at most embassies in the Philippines. French, German, or Spanish are also accepted, but only use another language if your written fluency is high.
+Use a language the consulate says it accepts. Its own instructions, or those of the visa centre acting for it, list them. Only write in a language other than English if your written fluency is high.
 
 **Can my travel agency write it for me?**
 Yes, but read it carefully before submitting. Generic agency letters often lack the personal details that make a letter credible.
 
-*Sources: Schengen visa application guidelines from embassies in Manila, VFS Global Philippines guidance, and DURIAN Travel client application experience.*
-
-*Last reviewed: April 2026.*
+*Sources: [European Commission, Applying for a Schengen visa](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy/applying-schengen-visa_en) for what a refusal letter tells you, and [the Visa Code, Regulation (EC) No 810/2009, Article 32, consolidated text of 11 June 2024](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02009R0810-20240611) for the right to appeal. Last checked against these official sources on 17 September 2026. The templates are examples, not an official format.*

@@ -6,7 +6,7 @@ description: "How to choose Europe travel insurance: coverage types, exclusions,
 pubDate: "2026-03-13"
 author: "Durian Travel Editorial Team"
 tags: ["Insurance", "Europe", "Schengen"]
-modDate: "2026-04-08"
+modDate: "2026-09-17"
 readTime: 12
 ---
 
@@ -128,6 +128,8 @@ If your route or connection passes through a disrupted region, read the exclusio
 3. Confirm the full trip dates and territory.
 4. Read the exclusions for conflict, strikes, and pre-existing conditions.
 5. Make sure you can print a certificate that looks clean for the visa file.
+
+*Sources: [the Visa Code, Regulation (EC) No 810/2009, Article 15, consolidated text of 11 June 2024](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02009R0810-20240611); [European Commission, Applying for a Schengen visa](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy/applying-schengen-visa_en). The Schengen insurance rules on this page were last checked against these official sources on 17 September 2026.*
 
 ---
 

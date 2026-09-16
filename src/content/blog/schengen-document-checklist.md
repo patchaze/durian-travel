@@ -2,9 +2,9 @@
 keywords: "Schengen, Documents, Checklist"
 title: "Schengen Visa Document Checklist 2026 — Complete & Updated"
 seoTitle: "Schengen Visa Document Checklist 2026"
-description: "Everything you need in your Schengen visa document package, explained step by step with official embassy references. Updated February 2026."
+description: "Everything you need in your Schengen visa document package, explained step by step. Rules checked September 2026."
 pubDate: "2026-02-15"
-modDate: "2026-04-06"
+modDate: "2026-09-17"
 author: "Durian Travel Editorial Team"
 tags: ["Schengen", "Documents", "Checklist"]
 readTime: 8
@@ -21,9 +21,9 @@ faq:
 
 ## What Is the Schengen Area?
 
-The Schengen Area is a zone of 27 European countries that have abolished passport controls at their mutual borders. A **Schengen tourist visa (Type C)** allows you to visit these countries for up to 90 days within any 180-day period.
+The Schengen Area is a zone of 29 European countries that have abolished passport controls at their mutual borders. A **Schengen tourist visa (Type C)** allows you to visit these countries for up to 90 days within any 180-day period.
 
-Getting the document package right is the single most controllable factor in a successful application. If you need a complete overview of the process, [→ Read our Ultimate Schengen Visa Guide](/schengen-visa-guide/).
+Getting the document package right is the single most controllable factor in a successful application. If you need a complete overview of the process, [→ Read our complete Schengen Visa Guide](/schengen-visa-guide/).
 
 If you are applying from outside Europe, read this together with our [Schengen visa guide for non-European travelers](/blog/schengen-visa-requirements-non-european-travelers/). The checklist stays broadly the same, but the strongest files also explain local income patterns, sponsorship logic, and trip intent clearly.
 
@@ -44,15 +44,14 @@ Download the **official Schengen Visa Application Form** from the VFS Global or 
 
 ### 3. Recent Passport Photos
 
-- **2 identical photos**, taken within the last 6 months
-- White or off-white background
-- Specific size requirements vary by embassy (typically 35mm x 45mm)
+- A photo that meets the ICAO photo standard
+- Check the published photo rules of the consulate or visa centre you apply through before you have it taken
 
 ### 4. Travel Health Insurance
 
 This is **mandatory** for all Schengen applications. Your insurance must:
 - Cover the **entire Schengen Area** (not just your primary destination)
-- Provide minimum **€30,000 coverage** for emergency medical care and repatriation
+- Provide minimum **€30,000 coverage** for emergency medical care, hospital treatment and repatriation
 - Be valid for the **entire duration** of your stay
 
 ### 5. Flight Reservation (Not Booked Tickets)
@@ -85,7 +84,7 @@ A day-by-day plan including:
 
 Documents proving you can support yourself financially. Common requirements:
 - **Bank statements** from the last 3–6 months
-- **Minimum balance** (varies by country, typically €50–€100/day of stay)
+- **Enough money for the length of your stay**, checked against the consulate's own guidance on the amount it expects
 - **Proof of employment / income** (salary slips, employment letter)
 - **If sponsored**: sponsor's bank statements + signed sponsor declaration
 
@@ -137,6 +136,6 @@ Before submitting, review your complete package for:
 
 ---
 
-*This guide is updated regularly based on publicly available embassy requirements. Last reviewed: February 2026. This is educational guidance only — not legal advice.*
+*Sources: [the Visa Code, Regulation (EC) No 810/2009, consolidated text of 11 June 2024](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02009R0810-20240611), Articles 12 and 15, for the passport and insurance rules; [European Commission, Applying for a Schengen visa](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy/applying-schengen-visa_en) for the photo standard; [European Commission, Schengen area](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/schengen-area_en) for the 29 countries; [EU Entry/Exit System, What is the EES](https://travel-europe.europa.eu/ees/what-is-the-ees) for the 90 days in any 180-day period. Last checked against these official sources on 17 September 2026. A consulate can ask for documents that are not on this list, so its own checklist comes first. Educational guidance only. Not legal advice.*
 
 *By the Durian Travel editorial team | [About Durian Travel](/about-us/)*

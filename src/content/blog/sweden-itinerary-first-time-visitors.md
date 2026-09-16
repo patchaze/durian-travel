@@ -4,13 +4,13 @@ title: "Sweden Itinerary: 10 Days for First-Time Visitors"
 seoTitle: "Sweden Itinerary: 10 Days for First-Time Visitors (2026 Route Guide)"
 description: "A practical 10-day Sweden itinerary with route logic for Stockholm, Gothenburg, and Lapland — including Schengen application notes for non-European travelers. Updated 2026."
 pubDate: "2026-04-06"
-modDate: "2026-04-10"
+modDate: "2026-09-17"
 author: "Durian Travel Editorial Team"
 tags: ["Sweden", "Itinerary", "First-Time Travelers", "Schengen"]
 readTime: 9
 faq:
   - question: "Do non-European travelers need a visa for Sweden?"
-    answer: "If your nationality requires a Schengen visa, yes. If Sweden is the main destination by number of nights, Sweden is usually the country you apply through."
+    answer: "If your nationality requires a Schengen visa, yes. If Sweden is your main destination, judged by the number of days you spend there or by the main purpose of the trip, you apply to Sweden."
   - question: "Should I include Lapland in a first Sweden trip?"
     answer: "Only if the trip is built around winter experiences and you have enough time and budget. For many first-timers, Stockholm plus one second base is a cleaner route."
   - question: "Is 10 days enough for Sweden?"
@@ -150,12 +150,14 @@ The point is not to force the longest route. The point is to choose the Sweden t
 
 ## Internal Planning Checklist
 
-- Decide if Sweden is your main Schengen destination by number of nights
+- Decide if Sweden is your main Schengen destination, by the days you spend there or the purpose of the trip
 - Keep the route to one or two bases
 - Budget in euro first, then convert closer to booking week
 - Make sure your cover letter and itinerary tell the same story
 
 For the wider route logic, pair this post with our [10-day Europe itinerary](/blog/10-day-europe-itinerary/), [Sweden cost breakdown](/blog/is-sweden-worth-it/), and the main [Sweden travel guide](/destinations/sweden/).
+
+*Sources: [European Commission, Applying for a Schengen visa](https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy/applying-schengen-visa_en); [the Visa Code, Regulation (EC) No 810/2009, Article 5, consolidated text of 11 June 2024](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02009R0810-20240611). The rule on which country you apply to was last checked against these official sources on 17 September 2026.*
 
 ---
 

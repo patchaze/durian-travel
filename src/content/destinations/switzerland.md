@@ -29,7 +29,7 @@ Switzerland's mountains are not just spectacularly beautiful — they're enginee
 ### Scenic Train Journeys of Global Renown
 The Glacier Express (Zermatt to St Moritz, 7.5 hours), the Bernina Express (Chur to Tirano, 4 hours), the Golden Pass (Montreux to Lucerne, 3 hours), and the Gotthard Panorama Express (Lucerne to Lugano, 5 hours) are ranked among the world's great rail journeys. The Swiss Travel Pass, which covers most of this network, offers outstanding value for visitors planning multiple scenic train segments.
 
-### A Country That Functions Flawlessly
+### A Country That Runs on Time
 Swiss trains run on time — not as a cliché but as a national obsession. Signage is in four languages. Hiking paths are immaculately waymarked. Museums open and close when they say they will. This level of infrastructure reliability removes a lot of the friction of travel and allows a visitor to focus entirely on the experience.
 
 ---
