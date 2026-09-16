@@ -1,112 +1,93 @@
 # BRIEF
 
 **Status: DONE**
-**Written: 12 September 2026, by Cowork**
-**Brief 014**
+**Written: 16 September 2026, by Cowork**
+**Brief 015**
 
-Promoted to the live work order by Claude Code on 15 September 2026, at Patricia's direct request, ahead of brief 013. Brief 013, the report's visual design, has not been written yet. Retiring `/services/` does not depend on it.
+Claude Code: read all of it, run "The automatic path to live" from `CLAUDE.md`, then fill in the Done section and set the status to DONE. There are no questions for Patricia in this brief.
 
-`/services/` is retired. Everything Durian sells is a tool, so `/tools/` becomes the commercial page.
+**Read this first.** This brief publishes blog posts, and blog posts state facts. Under the handoff convention they reach live with nobody reading them. **Patricia has been told to read the three new posts before you merge.** If she has not, write that in Done and stop before item 3 rather than publishing them unread. Items 1 and 2 are safe to ship either way.
 
 ---
 
-## The decision, and why
-
-Patricia asked Cowork to decide this. The decision is recorded here so it is not relitigated.
-
-**The six packages go.** The Schengen Blueprint, The First Journey Package, The Family Expedition Bundle, The Nomad Infrastructure Plan, The Wellness Journey and The Grand Circuit carry **no price, no list of what the buyer receives, no turnaround and no format**. The only action available to a visitor is an enquiry, which costs Patricia an email exchange to discover the person wanted something she does not sell. They also compete with the €5 report, which is cheaper, instant and already built, and several are shaped as ongoing engagements when Patricia has said plainly that she does not take calls and wants to hand something over once.
-
-**Nothing new is built here.** The site has never sold anything to a stranger. Building a second or third product before the first has a customer is the mistake `claude/decision-log.md` records being made three times already, each time by an outside plan that designed a platform for a business with no buyers. The report sells first. What it teaches decides what comes next.
-
 ## What to do
 
-### 1. Retire the services section
+### 1. Finish the retirement
 
-- Delete `src/pages/services/index.astro`, `src/pages/services/[slug].astro`, `src/data/service-packages.json` and `src/data/service-pages.ts`. **These four are the only files this brief authorises you to delete.**
-- 301 every services URL to `/tools/` in `public/_redirects`, both with and without the trailing slash: `/services/`, and the six package URLs `schengen-visa-help`, `first-international-trip`, `family-travel-planning`, `digital-nomad-visa-strategy`, `travel-health-planning`, `multi-region-trip-planning`.
-- The existing redirects at lines 10 to 19 currently point at `/services/` and at `/services/schengen-visa-help/`. Repoint them all at `/tools/` so nothing chains through a page that no longer exists.
-- Remove `Services` from `navLinks` in `src/components/Header.astro`, and from the footer.
-- Remove every internal link to a services URL across the site, and every mention of a package by name.
-- Check `astro.config.mjs` for sitemap exclusions referring to services and clean them up.
+Claude Code flagged these in brief 014 and they are still live. Every one of them sells work Durian no longer does.
 
-**The `Rx exclusive` badge on The Wellness Journey and the `health_layer` field on all six are the pharmacist positioning retired on 27 August 2026.** They go with the files. If that framing survives anywhere else on the site, list it in Done rather than fixing it here.
+- `src/pages/privacy-policy.astro` line 36: "DURIAN ("we", "us", "our") is a visa application strategy consultancy". Durian is not a consultancy. Reword.
+- `src/pages/terms-of-service.astro` line 10: the meta description says "educational services and consultancy".
+- `src/pages/destinations.astro` line 29: the description offers "links to travel consultancy support".
+- `src/pages/destinations.astro` line 80: a paragraph selling a "trusted Europe travel planner", "custom Europe itineraries", "personalized travel consultancy", and claiming every detail is "arranged flawlessly". **Rewrite the whole paragraph.** It is keyword stuffing, it sells three retired services, and "flawlessly" is a promise about an outcome Durian does not control.
+- `src/data/countries.json`: the `metaDescription` for France, Spain and Croatia each promise "expert travel consultancy" and "custom itineraries". Check all 30 countries, not just those three, and list in Done how many you changed.
 
-### 2. `/tools/` becomes the page that sells
+`src/content/blog/travel-health-kit-europe.md` was flagged for pharmacist framing. **Read it before changing anything.** Lines 61, 88 and 90 talk about using a pharmacy abroad and carrying generic drug names, which is ordinary travel advice and stays. Only remove wording that presents Durian, or the person behind it, as a pharmacist or as medically qualified. If there is none, say so in Done and change nothing.
 
-`src/pages/tools/index.astro`. It already uses the right header, so keep it.
+### 2. Date the border content
 
-- The eyebrow currently reads "Free Planners". Everything there is no longer free, so change it to something that covers both. "Planners" on its own is fine.
-- Restructure the body into two clearly separated groups:
-  - **Free**, with the three free tools, each with one line saying what question it answers.
-  - **Paid**, with the full cost per country report, its price from the existing constant, one line on what the buyer receives, and the fact that it arrives on screen immediately.
-- Keep it short. The current services index runs to 1,669 words and that is the disease, not the symptom. This page should be scannable in under thirty seconds.
-- The nav label stays `Planners` unless Patricia says otherwise.
+Only one blog post carries a "last checked" line, and only one mentions ETIAS. Border rules move, and an undated rule on this site is the single most damaging error it can make.
 
-### 3. Fix the header inconsistency Patricia found
+- Find every post that states a border rule, a visa rule, a fee or an entry requirement.
+- Add a dated line in the same style the site already uses, naming the official source and the date it was checked. **Check each rule against its official source before you date it.** If you cannot confirm a statement, do not date it: remove the claim or replace it with a link to the official page, and list what you removed in Done.
+- Do not change `pubDate` on any existing post. Use `modDate`.
 
-Every page except services opens with `<section class="hero-sm hero-gradient">`, a `section-label` set to `color:var(--color-accent-light)`, and a white `hero-sm__title`. Confirmed on `about-us`, `sources`, `contact` and `tools/index`.
+### 3. Three new posts
 
-- Apply that exact pattern to any page that does not follow it. Services is going, so check the rest of the site for the same drift and list what you changed in Done.
-- The orange eyebrow is the pattern. A page missing it is the bug.
+All three are built only from data already in this repo or from the sources named below. **No figure may come from anywhere else.**
 
-### 4. Make `/tools/` the page people want to explore
+Each post ends by sending the reader to the tool that answers the question, not to the contact page.
 
-Patricia's ambition for this page, in her words: something that pops out, that people can move and engage with, that makes them think "let me see how this works" and stay longer, without the page looking huge.
+**Post A, money.** Working title: what a week in Europe actually costs, country by country.
+- Source: `src/data/country-costs.json` only. Eurostat `prc_ppp_ind`, `PLI_EU27_2020`, reference year 2024, the dates already in that file's `_source` block.
+- The story is the one that makes the paid report worth buying: the cheap country for hotels is not the cheap country for groceries. Portugal sits well below the EU average for restaurants and hotels and slightly above it for food from shops. Bulgaria looks far cheaper on hotels than it is on food.
+- Any daily figure that is Durian's own estimate says so in the same sentence.
+- Ends at `/tools/cost-per-country/`.
 
-- Each tool card reveals what it does on hover and on focus. On a touch screen, on tap. Never a hover only effect, because most of the audience is on a phone.
-- The paid report card opens a short **"what you get"** reveal: the sections of the report, as three or four short items that appear in sequence rather than all at once.
-- Movement is quiet. Fades and small slides, nothing bouncing, nothing that moves while being read.
-- **Honour `prefers-reduced-motion: reduce`.** Everything must be fully usable and fully visible with animation switched off.
-- No animation library. CSS transitions and, where genuinely needed, a small `IntersectionObserver`.
+**Post B, border rules.** Working title: what ETIAS is, what it costs, and why you cannot apply yet.
+- Sources: the official ETIAS site `https://travel-europe.europa.eu/etias_en`, verified by Cowork on 12 September 2026. It states: "ETIAS is currently not in operation and no applications for travel authorisations are collected at this point." The fee shown is EUR 20. It covers 30 European countries and stays of up to 90 days.
+- **Re-check that page yourself before publishing and use your own date.** If it now says something different, write what it says, not what is above.
+- The point of the post is that nobody can apply yet and that anyone charging for an ETIAS application today is not selling what they claim. Say it plainly, without naming anybody.
+- Ends at `/tools/do-you-need-a-visa/`.
 
-The page still reads in under thirty seconds with every card closed. The reveals add depth for people who want it, not length for people who do not.
+**Post C, nationality.** Working title: which passports need a Schengen visa and which do not.
+- Source: `src/data/visa-requirements.json` only, which brief 009 built from Regulation (EU) 2018/1806 and verified against EUR-Lex.
+- Explain the three situations plainly: free movement, visa exempt, and visa required. Cover the conditional cases, because they catch people out: several exemptions apply only to biometric passports, and some British national categories are listed separately.
+- **This post must not tell anybody what documents to gather.** It says whether a rule applies. Nothing else.
+- Ends at `/tools/do-you-need-a-visa/`.
 
-### 5. About Us needs a short answer at the top
-
-`src/pages/about-us.astro` is 1,295 words across seven headings, and Patricia's point is that it never plainly answers who this is.
-
-- Add a short summary directly under the `<h1>`, before anything else. Three or four sentences at most. It answers: who runs Durian Travel, what it does, who it is for, and what it does not do.
-- **Authorship stays the organisation.** No name, no byline, no `Person` schema. The anonymity decision of 27 August 2026 holds. Write it as "we", and describe experience without naming anybody.
-- "The team" heading currently implies a team. Durian Travel is one person writing as an organisation. Reword that section so it is not misleading, without naming her.
-- Trim the rest hard. Seven headings for a page nobody scrolls is too many. Keep "What Durian Travel does", "Who we work with", and "What we are and what we are not". Fold or cut the rest.
-- Remove any remaining mention of consultations, calls, or document review.
-
-### 6. One line where the packages were
-
-Anyone arriving on an old services URL lands on `/tools/`. They came looking for a service, so the page should acknowledge that in one sentence near the top, something close to: "Durian does not do consultations or document review. Everything here is a tool you use yourself, and one report you can buy."
-
-No apology, no explanation of the history, one sentence.
+**For all three:** target keyword, title under 60 characters, meta description under 155, real `pubDate` of the day you publish. Authorship is the organisation. Follow the blog frontmatter shape in `CLAUDE.md`.
 
 ## Why
 
-A page selling six unpriced packages that nobody can order, for a business that no longer does the work, is worse than no page. It absorbs the attention of anyone genuinely interested and hands them nothing to act on. Moving the commercial weight onto `/tools/`, where the free tools earn trust and one report takes money, matches what Durian actually does and what Patricia is willing to deliver.
+The blog has published nothing since 9 April, and it is the traffic channel the strategy names first. Restarting it on the two datasets Durian already maintains costs no new research and produces content nobody else can copy, because copying it means maintaining the data.
+
+ETIAS is the largest traffic opportunity available: the searches are building now and the thing does not exist yet, so the page that explains the wait is the page people find.
 
 ## Do not
 
-- Do not build a new product, tool, or paid deliverable. Not one.
-- Do not name Patricia anywhere on About Us or imply a team of people.
-- Do not add an animation library, a carousel, a parallax effect, or anything that moves while somebody is reading it.
-- Do not write a price for anything except the existing report constant.
-- Do not delete any file other than the four named in item 1.
-- Do not remove any redirect. Repoint the ones that need it and add the new ones.
-- Do not reintroduce document review, readiness scoring, approval language, or any offer of a call, in any copy you write here.
-- Do not change `/tools/cost-per-country/`, `/tools/cost-per-country/full-report/`, `/tools/budget/` or `/tools/do-you-need-a-visa/` beyond linking to them correctly.
-- Do not change `functions/api/report.ts`, the Stripe verification, or the access code.
-- Do not touch `public/_headers`, the CSP, or DNS. Only `public/_redirects`.
+- **Do not backdate any post.** `pubDate` is the real date of publication. Google records when it first saw a URL, and a false date in article schema is the exact trust signal this site cannot afford to lose.
+- Do not invent a statistic, a price, a law or a date. Every number comes from `country-costs.json`, `visa-requirements.json`, or the official ETIAS page, cited with a date.
+- Do not state a border rule you have not checked against its official source today.
+- Do not list documents to gather, in any post. That is the retired business.
+- Do not score, rate, predict or imply a visa outcome anywhere.
+- Do not name Patricia, add a byline, or add `Person` schema. Authorship is the organisation.
+- Do not use: unlock, seamless, effortless, game changer, dream trip, guaranteed, chances, odds, hack, secret, ultimate, definitive, flawlessly.
+- Do not use dashes as punctuation in published copy. Rewrite the sentence.
+- Do not change `functions/api/report.ts`, the Stripe verification, the access code, or any tool's arithmetic.
+- Do not touch `public/_headers`, the CSP, or DNS.
 - Do not add a library or any new runtime dependency.
-- Build to the `durian-deliverable-design` skill. Light only.
 - Do not `git add -A` or `git add .`. Stage files by name.
 - Do not commit `BUILD-BRIEF-001.md`, `CC-PROMPT-STEP-1.md`, `.claude/launch.json`, the untracked `api/` folder, or any `.xlsx` file in the repo root.
-- Every page carries: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
+- Every page and post touching visas or borders carries: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
 
 ## Check before you merge
 
-- `grep -rn "Schengen Blueprint\|First Journey\|Family Expedition\|Nomad Infrastructure\|Wellness Journey\|Grand Circuit\|Rx exclusive\|health_layer" src/ dist/` returns nothing.
-- Every old services URL 301s to `/tools/`, with and without the trailing slash, and none of them chains through a deleted page.
-- No internal link anywhere points at a `/services/` URL.
-- `/tools/` shows the free group and the paid group, and reads in under thirty seconds with every card closed.
-- Every reveal works on a touch screen, and the page is fully usable with `prefers-reduced-motion: reduce` set.
-- About Us answers who this is in its first four sentences, and `grep -ri "azevedo" dist/` still returns nothing.
+- `grep -rni "consultancy\|consultant\|flawlessly\|custom itinerar" src/ dist/` returns nothing.
+- Every post stating a border rule carries a dated source line.
+- No new post lists documents to gather.
+- Every figure in the three new posts traces to a named file or the official ETIAS page.
+- No `pubDate` is earlier than the day you publish.
 - Build passes and `grep -ri "azevedo" dist/` returns nothing.
 
 ---
@@ -115,33 +96,33 @@ A page selling six unpriced packages that nobody can order, for a business that 
 
 *Claude Code fills this in. Keep it to facts.*
 
-**Completed on:** 15 September 2026
-**Branch:** `brief/014-retire-services`
+**Completed on:** 17 September 2026, items 1 and 2. Item 3 is drafted, not published.
+**Branch:** `brief/015-retirement-and-dates`, merged. Item 3 drafts: `brief/015-new-posts`, not merged.
 
 **What changed:**
 
-1. **Services retired.** Deleted only the four named files. `public/_redirects`: the 20 old services rules now point straight at `/tools/`, and `/services` plus the six package URLs, with and without slash, 301 to `/tools/`. 69 rules, none removed, no chains. Services gone from the header; the footer link became Planners. `astro.config.mjs` had no services exclusion. Internal services links and package names removed from the homepage, contact form options, blog post footer cards, destination page schema, the visa guide and ten blog posts. Brief grep clean on `src/` and `dist/`. No `/services/` link in any built page. Link check: 0 broken.
-2. **`/tools/`.** Eyebrow "Planners". Free group: visa check, cost per country, budget, one line each. Paid group: the report, `REPORT_PRICE` from `src/data/full-report.ts`, one line on what the buyer gets, "It opens on screen as soon as you pay." 153 words with cards closed, about 40 seconds read word for word (the required disclaimer is 14 of those).
-3. **Hero pattern** applied to FAQ (was tinted), 404, thank you and the Schengen visa guide (none had the eyebrow). Hero titles on about-us, blog index, contact, destinations, FAQ, 404, thank you and the guide were rendering in Inter; all now use the serif like sources and `/tools/`.
-4. **Reveals.** Cards open on mouse hover (fine pointers only), keyboard focus anywhere in the card, and tap on a "What it does" / "What you get" button. Paid card shows four report sections in sequence. CSS transitions only, no library, no observer. All motion sits inside `prefers-reduced-motion: no-preference`; without script every card is open. Checked in the browser: tap, keyboard Tab, closed heights.
-5. **About Us.** Four sentence summary under the h1. Three sections kept. "The team", "Why DURIAN" and "How to Work With Us" cut. 1,295 words to 424. Written as "we", one person project stated without a name, no Person schema.
-6. `/tools/` hero: "We do not run consultations or review documents. Everything here is a tool you use yourself."
-7. Also changed, because the deletions made them untrue: homepage cards now show the planners and report; homepage trust list lost the partner network and 24/7 on-trip support claims; thank you page no longer promises "1–2 business days"; CLAUDE.md project map no longer lists the deleted files.
+1. **Retirement.**
+   - Privacy policy "Who we are" reworded, last updated 17 September 2026. Terms meta description. `destinations.astro` description, hero line ("bespoke adventure") and the whole "Planning Your European Journey" paragraph, which now links to cost per country and the visa check.
+   - `countries.json`: **29 of 29** meta descriptions rewritten (the file has 29 countries, not 30), plus Austria's "Our custom itineraries" and "bespoke" dropped from 7 keyword lists. **None of this was live.** Every country has its own `src/content/destinations/*.md`, whose description wins, and those were already clean. Same for the "Bespoke Travel in" heading and the fallback description in `destinations/[slug].astro`, both fixed.
+   - The check grep also caught, and these were live: homepage hero button "Get a Custom Itinerary" (now "Try the free planners", to `/tools/`), "consultant" twice in the homepage FAQ and three times in the disclaimer (last updated 17 September 2026), the Switzerland and Netherlands write ups, and the agency switching post's "Strategy Reset" call.
+   - Travel health kit: "Pharmacist" removed from tags and keywords. The body makes no pharmacist or medical claim; lines 61, 88, 90 and 102 unchanged.
+   - `grep -rni "consultancy\|consultant\|flawlessly\|custom itinerar" src/ dist/`: nothing.
+2. **Dates.** Checked on 17 September 2026 against the Commission's "Applying for a Schengen visa" page, the Visa Code consolidated 11 June 2024 on EUR-Lex (Articles 5, 9, 12, 15, 16, 32), the Commission's Schengen area and EES pages, the official ETIAS site, and EUR-Lex for Regulation (EU) 2018/1806 (latest consolidation still 30 December 2025).
+   - **13 posts** now end with a linked source line dated 17 September 2026 and carry `modDate: "2026-09-17"`: schengen-visa-requirements, how-much-does-schengen-visa-cost, visa-refusal-reasons, schengen-document-checklist, how-to-write-visa-cover-letter, europe-travel-insurance, europe-trip-planning-timeline, europe-trip-budget, 10-day-europe-itinerary, 10-day-italy-itinerary, multi-country-europe-itinerary, sweden-itinerary, how-to-switch-travel-agencies. No `pubDate` changed.
+   - **Wrong, corrected:** requirements post said passports from outside Europe generally need a visa, naming North America and Australia. Document checklist said 27 Schengen countries, now 29. Eight posts said "most nights, and first entry if equal"; Article 5 says days or purpose, then first external border. Visa guide said EES replaces stamps "in the long term"; it has since 10 April 2026.
+   - **Unconfirmed, removed:** "ETIAS starts in the last quarter of 2026" (requirements post, visa guide page, chatbot); the official site gives no date. Sources page EES and ETIAS date moved to 17 September 2026. Refusal post: the 14.8% refusal rate section (approval rate shaped), "many travelers get approved", and "a prior refusal never explained" as a ground. Appeal "deadline" claims in the refusal and cover letter posts. Cost post: every unsourced price range (visa centre, courier, insurance, documents, reservations, the EUR 170 to 270 total). Checklist: "EUR 50 to 100 a day" and the photo size; now the ICAO standard the Commission names. Cover letter post: "DURIAN Travel client application experience" and the Manila language claims.
+   - **Not dated, no border rule, visa rule or official fee stated:** is-sweden-worth-it, where-to-stay-paris, train-travel-europe, europe-packing-list, travel-health-kit-europe, flights-to-europe-middle-east-conflict-2026, is-it-safe-to-travel-to-europe-2026.
+3. **New posts: not published.** Patricia had not read them. Drafted on `brief/015-new-posts` for her to read. Their `pubDate` must be reset to the real day they merge.
 
 **Could not do, and why:**
 
-- Browser tools cannot switch on reduced motion. Checked by reading the CSS instead: no opacity, transform or transition outside the no-preference block.
+- Item 3 publication, per the gate above.
 
 **For Cowork:**
 
-- **Pharmacist framing still live:** `travel-health-kit-europe.md` tags and keywords, and its line 102.
-- **Consultancy wording still live:** `privacy-policy.astro:36`; terms of service meta description; France, Spain and Croatia `metaDescription` in `countries.json`; `destinations.astro` description and line 80 ("arranged flawlessly").
-- **Homepage still reads like an agency:** "What Our Clients Say" testimonials, "Why Clients Trust Us", "We build your Europe trip", process steps "We Build Your Plan" / "We design your itinerary", "hand you a plan", "See If We're Right For You". Needs its own brief.
-- `how-to-write-visa-cover-letter.md:256` claims "client application experience". `visa-refusal-reasons.md:193` has a sentence close to approval language.
-- `src/components/ServiceCard.astro` is now unused. Not deleted, outside the four files.
-- `vercel.json` still has 40 services rules pointing at `/services/`. Legacy, untouched.
-- Hero titles render at weight 800. The design skill and CLAUDE.md say 400. Left for brief 013.
-- Hero drift left on purpose: homepage, blog posts, destination pages and the four tool pages this brief protects.
-- Contact form still has an "Urgent, travelling" option.
-- `claude/decision-log.md` and `claude/tech-stack.md` are not in this repo.
-- Brief 013 is still unwritten.
+- **Stale, not border rules, not touched:** the flights post says an EASA bulletin is "currently" active "through April 10, 2026". The safety post quotes US advisory levels from April 2026. Also unchecked: the 100 ml liquids rule (packing, timeline, Italy) and EU rail delay thresholds (train travel).
+- **Document lists still live:** the whole checklist post, the cover letter templates and enclosures, the requirements post's 10 item file, and parts of the timeline, insurance, budget and agency posts. This brief barred them only in new posts.
+- **Outcome language still live:** "Top 7 Reasons", "strongest files", "the easier the application" across the requirements, refusal, cover letter and itinerary posts.
+- `how-to-switch-travel-agencies-schengen.md` sends readers to paid agencies for "rescue cases", recommends dummy bookings and giving a pretext to get a passport back. Worth retiring.
+- `destinations.astro` banner: "we'll write back with itinerary ideas".
+- Commission Implementing Regulation (EU) 2026/496 of 6 March 2026 suspends visa free travel for Georgian diplomatic, service and official passports. Not in the consolidated text. Ordinary passports and the visa tool are unaffected.
