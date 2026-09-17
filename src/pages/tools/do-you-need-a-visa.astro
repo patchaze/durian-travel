@@ -28,6 +28,51 @@ const ETIAS = {
 
 const sourceLine = `${source.instrument}, ${source.consolidatedVersionLabel}. Durian last checked it on 12 September 2026.`;
 
+// Which countries the answer above is about. A first time visitor has no way
+// to know that Switzerland is in and Ireland is not, and the answer is
+// meaningless without it. Checked against the European Commission's own page
+// on the date below.
+const SCHENGEN = {
+  eu: ['Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Czechia', 'Denmark', 'Estonia', 'Finland',
+       'France', 'Germany', 'Greece', 'Hungary', 'Italy', 'Latvia', 'Lithuania', 'Luxembourg',
+       'Malta', 'Netherlands', 'Poland', 'Portugal', 'Romania', 'Slovakia', 'Slovenia', 'Spain',
+       'Sweden'],
+  nonEu: ['Iceland', 'Norway', 'Switzerland', 'Liechtenstein'],
+  url: 'https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/schengen-area_en',
+  checkedLabel: '18 September 2026',
+};
+
+// Where each answer sends the reader next. The visa answer is the highest
+// intent moment on the site, and until now it ended in nothing. None of these
+// promise an outcome, and none of them list documents to gather.
+const NEXT_STEPS = {
+  visa_required: [
+    { href: '/blog/schengen-document-checklist/', title: 'What consulates commonly ask for',
+      body: 'The paperwork that comes up again and again. Your own consulate publishes the list that counts, and this is not a promise about any application.' },
+    { href: '/tools/cost-per-country/', title: 'What the trip would cost',
+      body: 'Compare what the same trip costs in each country before you book anything or pay a fee.' },
+    { href: '/blog/europe-trip-planning-timeline/', title: 'When to apply',
+      body: 'Applications can be lodged up to six months before travel and at the latest 15 days before, and appointment waits set the real clock.' },
+  ],
+  exempt: [
+    { href: '/schengen-visa-guide/#ees-etias', title: 'What ETIAS will mean for you',
+      body: 'The travel authorisation for visa exempt travellers, what it will cost, and why nobody can apply for it yet.' },
+    { href: '/schengen-visa-guide/#rule-90-180', title: 'How long you can stay',
+      body: 'The 90 days in any 180 day period limit, and how the rolling count actually works.' },
+    { href: '/tools/cost-per-country/', title: 'What the trip would cost',
+      body: 'Compare what the same trip costs in each of 28 countries, built on Eurostat price levels.' },
+  ],
+  free_movement: [
+    { href: '/tools/cost-per-country/', title: 'What the trip would cost',
+      body: 'Compare what the same trip costs in each of 28 countries, built on Eurostat price levels.' },
+    { href: '/tools/budget/', title: 'Work out your own budget',
+      body: 'Put in your own figures and see the total, the cost per person and the cost per day.' },
+    { href: '/destinations/', title: 'Where to go',
+      body: '29 country guides, with what to see, when to go and how to get around.' },
+  ],
+};
+NEXT_STEPS.exempt_conditional = NEXT_STEPS.exempt;
+
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
@@ -112,6 +157,30 @@ const schema = {
       </form>
 
       <div class="answer" id="answer" hidden aria-live="polite"></div>
+
+      <details class="schengen" id="schengen-countries">
+        <summary class="schengen__summary">Which countries the Schengen area covers</summary>
+        <div class="schengen__body">
+          <p>
+            The Schengen area is <strong>29 countries</strong>: 25 European Union members plus
+            {' '}{SCHENGEN.nonEu.slice(0, -1).join(', ')} and {SCHENGEN.nonEu.at(-1)}.
+          </p>
+          <ul class="schengen__list">
+            {[...SCHENGEN.eu, ...SCHENGEN.nonEu].map(country => (<li>{country}</li>))}
+          </ul>
+          <p>
+            Two countries people expect to find here are not on that list. <strong>Ireland</strong>
+            {' '}has opted out and runs its own visa and border rules. <strong>Cyprus</strong> takes
+            part in Schengen cooperation, but the Council has not yet lifted its internal border
+            controls.
+          </p>
+          <p class="schengen__source">
+            Checked against the European Commission's Schengen area page on
+            {' '}<strong>{SCHENGEN.checkedLabel}</strong>.
+            {' '}<a href={SCHENGEN.url} rel="nofollow noopener" target="_blank">Read it there →</a>
+          </p>
+        </div>
+      </details>
 
       <p class="visa-disclaimer">
         Educational information only. Not legal advice. Always check the official embassy or
@@ -328,6 +397,68 @@ const schema = {
     #answer :global(.answer__card) { break-inside: avoid; }
   }
 
+  /* Injected by the page script, so these need :global to reach it. */
+  #answer :global(.next-steps) {
+    margin-top: var(--space-5);
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-alt);
+  }
+  #answer :global(.next-steps__title) {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    color: var(--color-navy);
+    margin: 0 0 var(--space-3);
+  }
+  #answer :global(.next-steps__list) {
+    margin: 0;
+    padding-left: var(--space-5);
+    display: grid;
+    gap: var(--space-3);
+  }
+  #answer :global(.next-steps__item) { line-height: var(--leading-relaxed); }
+  #answer :global(.next-steps__link) {
+    display: block;
+    font-weight: var(--font-semibold);
+    color: var(--color-primary);
+  }
+  #answer :global(.next-steps__body) {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  #answer :global(.next-steps__aside) {
+    margin: var(--space-4) 0 0;
+    font-size: var(--text-sm);
+  }
+
+  .schengen {
+    margin-top: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: white;
+    padding: var(--space-4) var(--space-5);
+  }
+  .schengen__summary {
+    cursor: pointer;
+    font-weight: var(--font-semibold);
+    color: var(--color-primary);
+  }
+  .schengen__summary:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+  .schengen__body p { font-size: var(--text-sm); line-height: var(--leading-relaxed); }
+  .schengen__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: var(--space-1) var(--space-4);
+    list-style: none;
+    padding: 0;
+    margin: var(--space-3) 0;
+    font-size: var(--text-sm);
+    color: var(--color-heading);
+  }
+  .schengen__source { color: var(--color-text-muted); }
+
   @media (max-width: 720px) {
     .picker { padding: var(--space-4); }
     #answer :global(.answer__card) { padding: var(--space-4); }
@@ -340,6 +471,7 @@ const schema = {
     sourceLine,
     categories,
     consolidatedUrl: visaData._source.consolidatedUrl,
+    NEXT_STEPS,
   }}
 >
   // Scoped to this page's own form and answer node, never the document. Astro
@@ -364,6 +496,29 @@ const schema = {
       '. There is nothing to apply for today. The fee is stated as ' + esc(ETIAS.fee) +
       ' and it will cover ' + ETIAS.countries + ' European countries. ' +
       '<a href="' + esc(ETIAS.url) + '" rel="nofollow noopener" target="_blank">Check the official ETIAS site →</a>'
+    );
+  }
+
+  // Appended under the answer card, never inside it: the verdict and its
+  // sourcing stay exactly as they were, and this only says where to go next.
+  function nextSteps(cat) {
+    const steps = NEXT_STEPS[cat] || [];
+    if (!steps.length) return '';
+    return (
+      '<div class="next-steps">' +
+      '<h3 class="next-steps__title">What to do next</h3>' +
+      '<ol class="next-steps__list">' +
+      steps.map(step =>
+        '<li class="next-steps__item">' +
+        '<a class="next-steps__link" href="' + esc(step.href) + '">' + esc(step.title) + '</a>' +
+        '<span class="next-steps__body">' + esc(step.body) + '</span>' +
+        '</li>'
+      ).join('') +
+      '</ol>' +
+      '<p class="next-steps__aside">' +
+      '<a href="#schengen-countries" data-open-schengen>Which countries the Schengen area covers →</a>' +
+      '</p>' +
+      '</div>'
     );
   }
 
@@ -436,7 +591,16 @@ const schema = {
       '<p class="answer__meta">Read from ' + esc(sourceLine) +
       ' <a href="' + esc(consolidatedUrl) + '" rel="nofollow noopener" target="_blank">See the regulation →</a>' +
       '</p>' +
-      '</div>';
+      '</div>' +
+      nextSteps(cat);
+
+    // The list sits in a collapsed <details>, so opening it is part of
+    // following the link rather than a second thing to find.
+    const opener = answerEl.querySelector('[data-open-schengen]');
+    const details = document.getElementById('schengen-countries');
+    if (opener && details) {
+      opener.addEventListener('click', () => { details.open = true; });
+    }
 
     answerEl.hidden = false;
   }
