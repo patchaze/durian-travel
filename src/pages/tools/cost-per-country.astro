@@ -143,7 +143,7 @@ const schema = {
       </form>
 
       <div class="cpc-head">
-        <h2 class="cpc-head__title">Can you afford Europe?</h2>
+        <h2 class="cpc-head__title">What a week costs, country by country</h2>
         <div class="cpc-head__row">
           <p class="cpc-head__lede">
             Pick how you travel and see what a week costs in all 28 countries, cheapest first.
@@ -168,6 +168,8 @@ const schema = {
         ))}
       </ol>
       <p class="cpc-legend" id="cpc-legend" hidden></p>
+      <p class="cpc-flights">These figures are what you spend once you are there. Flights are not
+      included, and from outside Europe they often decide the total.</p>
     </div>
   </section>
 
@@ -383,6 +385,11 @@ const schema = {
     .cpc-row__trip { grid-area: trip; text-align: right; }
   }
 
+  .cpc-flights {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
   .cpc-legend {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
@@ -639,10 +646,34 @@ const schema = {
     if (legendEl) {
       if (budget > 0) {
         legendEl.hidden = false;
-        legendEl.textContent = under === 0
-          ? 'None of the 28 countries come in at or under ' + money(budget) + ' a day on this style of trip.'
-          : under + ' of 28 ' + (under === 1 ? 'country comes' : 'countries come') +
+        if (under > 0) {
+          legendEl.textContent =
+            under + ' of 28 ' + (under === 1 ? 'country comes' : 'countries come') +
             ' in at or under ' + money(budget) + ' a day. Those rows are marked.';
+        } else {
+          // Nothing fits, so say what would rather than only what does not. The
+          // cheapest country on each style is recomputed here from the same
+          // indices, so the suggestion can never disagree with the list.
+          const perStyle = styleBtns.map(btn => {
+            const typical = parseFloat(btn.dataset.typical ?? '0') || 0;
+            const cheapestRow = rows
+              .map(row => ({ name: row.dataset.name ?? '', day: (typical * parseFloat(row.dataset.pli ?? '100')) / 100 }))
+              .sort((a, b) => a.day - b.day)[0];
+            return {
+              label: btn.querySelector('.style-btn__label')?.textContent?.trim() ?? '',
+              name: cheapestRow?.name ?? '',
+              lowest: cheapestRow?.day ?? 0,
+            };
+          });
+          const fits = perStyle.filter(style => style.lowest <= budget).sort((a, b) => b.lowest - a.lowest)[0];
+          const floor = perStyle.slice().sort((a, b) => a.lowest - b.lowest)[0];
+          legendEl.textContent = fits
+            ? 'No country comes in at or under ' + money(budget) + ' a day on this style. On ' +
+              fits.label + ', ' + fits.name + ' comes in at ' + money(fits.lowest) +
+              ' a day, so that is the style your figure fits.'
+            : 'No country comes in at or under ' + money(budget) + ' a day, even on ' + floor.label +
+              ', where the cheapest is ' + floor.name + ' at ' + money(floor.lowest) + ' a day.';
+        }
       } else {
         legendEl.hidden = true;
         legendEl.textContent = '';

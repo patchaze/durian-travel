@@ -249,9 +249,9 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
         <span class="section-label">Try It Yourself</span>
         <h2 id="cost-strip-heading" class="section-title">Same Trip, Very Different Price Tag</h2>
         <p class="section-subtitle" style="margin-inline:auto">
-          Hover a country. The bars are official Eurostat price levels for restaurants and hotels,
-          where the EU average is 100. The gap between your cheapest and dearest option is the
-          biggest budget lever you have.
+          Each bar is one country's Eurostat price level for restaurants and hotels, where the EU
+          average is 100. Pick a country to open the full comparison. The gap between your cheapest
+          and dearest option is the biggest budget lever you have.
         </p>
       </header>
       <div data-reveal class="cost-strip__row" role="list">
@@ -447,6 +447,55 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
 
 </BaseLayout>
 
+<script>
+  // On a phone the floating chat button sits over the right edge of the price
+  // chart, which is also the tap target for the dearest countries. Fade it out
+  // while the chart is on screen, and only while the chat window is closed.
+  //
+  // A scroll listener rather than an IntersectionObserver: the observer's
+  // callback stopped firing here once its closure went out of scope, and this
+  // runs a rect read at most once per frame, which is cheap enough.
+  function setUpChartSafeArea() {
+    const strip = document.querySelector('.cost-strip');
+    const toggle = document.getElementById('chatbot-toggle');
+    const chatWindow = document.getElementById('chatbot-window');
+    if (!strip || !toggle) return;
+
+    const small = window.matchMedia('(max-width: 640px)');
+    const update = () => {
+      const box = strip.getBoundingClientRect();
+      const onScreen = box.top < window.innerHeight * 0.9 && box.bottom > window.innerHeight * 0.1;
+      const chatClosed = !chatWindow || chatWindow.classList.contains('hidden');
+      toggle.classList.toggle('is-behind-chart', small.matches && onScreen && chatClosed);
+    };
+
+    let queued = false;
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; update(); });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    toggle.addEventListener('click', () => toggle.classList.remove('is-behind-chart'));
+    update();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setUpChartSafeArea);
+  } else {
+    setUpChartSafeArea();
+  }
+</script>
+
+<style is:global>
+  .chatbot-toggle.is-behind-chart { opacity: 0; pointer-events: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    .chatbot-toggle { transition: opacity 200ms ease; }
+  }
+</style>
+
 <style>
 /* ══════════════════════════════════════════
    HERO MOTION — slow Ken Burns zoom on the background.
@@ -530,11 +579,51 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
 .cost-strip__cta { margin-top: var(--space-2); }
 .cost-strip__cta .link { color: var(--color-accent-dark); font-weight: var(--font-semibold); }
 @media (max-width: 640px) {
-  .cost-strip__row { height: 190px; }
-  .cost-chip { flex-basis: 44px; }
-  .cost-chip__name { font-size: 0.62rem; }
-  /* Touch has no hover: keep values visible on small screens */
-  .cost-chip__value { opacity: 1; transform: none; font-size: var(--text-sm); }
+  /* Eight country names cannot fit across a phone, and shrinking the columns
+     truncated them to a single letter while the values collided. The chart
+     turns on its side instead: one country per row, name, bar, then value. */
+  .cost-strip__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    height: auto;
+  }
+  .cost-chip {
+    display: grid;
+    grid-template-columns: 6.25rem 1fr 2.75rem;
+    align-items: center;
+    gap: var(--space-3);
+    height: auto;
+    flex: none;
+    padding: var(--space-2) var(--space-3);
+  }
+  .cost-chip__name {
+    order: 1;
+    font-size: var(--text-sm);
+    text-align: left;
+    overflow: visible;
+    text-overflow: clip;
+    max-width: none;
+  }
+  .cost-chip__bar {
+    order: 2;
+    justify-self: start;
+    width: var(--h);
+    max-width: none;
+    height: 12px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--color-primary-light), var(--color-primary));
+    transform-origin: left;
+  }
+  /* Touch has no hover, so the values stay visible and sit clear of the bars. */
+  .cost-chip__value {
+    order: 3;
+    opacity: 1;
+    transform: none;
+    font-size: var(--text-sm);
+    text-align: right;
+  }
+  .cost-chip:hover .cost-chip__bar, .cost-chip:focus-visible .cost-chip__bar { transform: scaleX(1.02); }
 }
 
 /* ══════════════════════════════════════════
