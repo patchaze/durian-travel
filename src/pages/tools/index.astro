@@ -135,6 +135,7 @@ const schema = {
               hidden
             >What you get</button>
             <a class="btn btn--primary card-x__buy" href={FULL_REPORT_URL}>{offerCta}</a>
+            <a class="card-x__sample" href="/tools/cost-per-country/sample/">See a sample first →</a>
           </div>
           <div class="card-x__reveal" id="reveal-report">
             <div class="card-x__reveal-inner">
@@ -252,6 +253,12 @@ const schema = {
   }
   .card-x__link:hover { text-decoration: underline; text-underline-offset: 3px; }
   .card-x__buy { white-space: normal; }
+  .card-x__sample {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--color-primary);
+    align-self: center;
+  }
   .card-x__toggle {
     font: inherit;
     font-size: var(--text-sm);

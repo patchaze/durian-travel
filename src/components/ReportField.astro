@@ -1,0 +1,65 @@
+---
+// One question on the full report form. Pulled out of the page so the
+// essential questions and the optional ones behind the toggle render through
+// exactly the same markup, rather than two copies that drift apart.
+import type { Field } from '../data/full-report';
+
+interface Props {
+  field: Field;
+}
+
+const { field: f } = Astro.props;
+---
+
+{f.type === 'fare' ? (
+  // Two controls, so a wrapping <label> would be invalid: each gets its own.
+  <div class="field">
+    <label class="field__label" for={`r-${f.id}`}>{f.label}</label>
+    <input
+      type="number"
+      id={`r-${f.id}`}
+      data-answer={f.id}
+      min="0"
+      step="10"
+      placeholder="0"
+      inputmode="decimal"
+    />
+    <label class="fare-unknown">
+      <input type="checkbox" id={`r-${f.id}Unknown`} data-answer={`${f.id}Unknown`} value="yes" />
+      <span>I do not know yet</span>
+    </label>
+    {f.hint && <span class="field__hint">{f.hint}</span>}
+  </div>
+) : (
+  <label class="field">
+    <span class="field__label">{f.label}</span>
+    {f.type === 'number' ? (
+      <input
+        type="number"
+        id={`r-${f.id}`}
+        data-answer={f.id}
+        min={f.min}
+        max={f.max}
+        step="1"
+        value={f.value}
+        inputmode="numeric"
+      />
+    ) : f.type === 'text' ? (
+      <input
+        type="text"
+        id={`r-${f.id}`}
+        data-answer={f.id}
+        placeholder={f.placeholder}
+        maxlength={f.maxlength}
+        autocomplete="off"
+      />
+    ) : (
+      <select id={`r-${f.id}`} data-answer={f.id}>
+        {(f.options ?? []).map(([value, label]) => (
+          <option value={value} selected={value === f.value}>{label}</option>
+        ))}
+      </select>
+    )}
+    {f.hint && <span class="field__hint">{f.hint}</span>}
+  </label>
+)}

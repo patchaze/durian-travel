@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ReportField from '../../../components/ReportField.astro';
 import Breadcrumb from '../../../components/Breadcrumb.astro';
 import costData from '../../../data/country-costs.json';
 import {
@@ -11,6 +12,14 @@ import {
   questions,
   DEFAULT_STYLE,
 } from '../../../data/full-report';
+
+// Thirteen questions before the pay button, eight behind a toggle after it.
+// Everything optional has a default in normalise(), so a buyer who answers
+// nothing extra still gets a whole report.
+const essentialGroups = questions
+  .map((block) => ({ ...block, fields: block.fields.filter((f) => !f.optional) }))
+  .filter((block) => block.fields.length > 0);
+const optionalFields = questions.flatMap((block) => block.fields.filter((f) => f.optional));
 
 const canonical = 'https://www.duriantravel.com/tools/cost-per-country/full-report/';
 const comparisonUrl = '/tools/cost-per-country/';
@@ -82,6 +91,11 @@ const schema = {
 
       <p class="report-status" id="report-status" role="status" aria-live="polite"></p>
 
+      <p class="sample-link">
+        <a href="/tools/cost-per-country/sample/">See a full sample report first →</a>
+        <span>Same sections, one worked example, nothing to pay.</span>
+      </p>
+
       <form
         class="report-form"
         id="report-form"
@@ -103,64 +117,11 @@ const schema = {
           </div>
         </fieldset>
 
-        {questions.map((block) => (
+        {essentialGroups.map((block) => (
           <fieldset class="tool-block">
             <legend class="tool-block__title">{block.group}</legend>
             <div class="field-grid">
-              {block.fields.map((f) =>
-                f.type === 'fare' ? (
-                  // Two controls, so a wrapping <label> would be invalid: each gets its own.
-                  <div class="field">
-                    <label class="field__label" for={`r-${f.id}`}>{f.label}</label>
-                    <input
-                      type="number"
-                      id={`r-${f.id}`}
-                      data-answer={f.id}
-                      min="0"
-                      step="10"
-                      placeholder="0"
-                      inputmode="decimal"
-                    />
-                    <label class="fare-unknown">
-                      <input type="checkbox" id={`r-${f.id}Unknown`} data-answer={`${f.id}Unknown`} value="yes" />
-                      <span>I do not know yet</span>
-                    </label>
-                    {f.hint && <span class="field__hint">{f.hint}</span>}
-                  </div>
-                ) : (
-                  <label class="field">
-                    <span class="field__label">{f.label}</span>
-                    {f.type === 'number' ? (
-                      <input
-                        type="number"
-                        id={`r-${f.id}`}
-                        data-answer={f.id}
-                        min={f.min}
-                        max={f.max}
-                        step="1"
-                        value={f.value}
-                        inputmode="numeric"
-                      />
-                    ) : f.type === 'text' ? (
-                      <input
-                        type="text"
-                        id={`r-${f.id}`}
-                        data-answer={f.id}
-                        placeholder={f.placeholder}
-                        maxlength={f.maxlength}
-                        autocomplete="off"
-                      />
-                    ) : (
-                      <select id={`r-${f.id}`} data-answer={f.id}>
-                        {(f.options ?? []).map(([value, label]) => (
-                          <option value={value} selected={value === f.value}>{label}</option>
-                        ))}
-                      </select>
-                    )}
-                    {f.hint && <span class="field__hint">{f.hint}</span>}
-                  </label>
-                )
-              )}
+              {block.fields.map((f) => <ReportField field={f} />)}
             </div>
           </fieldset>
         ))}
@@ -183,6 +144,20 @@ const schema = {
           </label>
         </fieldset>
 
+        <details class="tool-block optional-block">
+          <summary class="optional-block__summary">
+            Optional detail, if you want the report tuned further
+            <span class="optional-block__count">{optionalFields.length} questions, all with a sensible default</span>
+          </summary>
+          <p class="tool-block__hint">
+            Skip every one of these and the report is still complete. They only change how the
+            daily figures are weighted.
+          </p>
+          <div class="field-grid">
+            {optionalFields.map((f) => <ReportField field={f} />)}
+          </div>
+        </details>
+
         <div class="pay">
           <button type="submit" class="btn btn--primary btn--lg report-submit" id="report-submit">
             {payCta}
@@ -191,6 +166,15 @@ const schema = {
             Payment is handled by Stripe on their own page. The report opens here as soon as it goes
             through. No account needed.
           </p>
+          <ul class="pay__facts" role="list">
+            <li>It arrives as a web page on this site, not as an email or an attachment.</li>
+            <li>It opens on screen the moment payment goes through, so there is nothing to wait for.</li>
+            <li><strong>Save or print it before you close the tab.</strong> There is no account and no
+            login, so the page is not stored anywhere you can log back into. Your browser can print it
+            to PDF from the button at the top of the report.</li>
+            <li>If it does not open, or something in it looks wrong, <a href="/contact/">write to us</a>
+            and we will sort it out.</li>
+          </ul>
 
           <details class="tester">
             <summary class="tester__toggle">Got a code.</summary>
@@ -292,6 +276,43 @@ const schema = {
     min-height: 1.5em;
   }
   .report-status.is-error { color: var(--color-accent-dark); }
+
+  .sample-link {
+    margin: 0 0 var(--space-5);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-alt);
+  }
+  .sample-link a { font-weight: var(--font-semibold); color: var(--color-primary); }
+  .sample-link span { display: block; font-size: var(--text-sm); color: var(--color-text-muted); }
+
+  .optional-block { padding-block: var(--space-4); }
+  .optional-block__summary {
+    cursor: pointer;
+    font-weight: var(--font-semibold);
+    color: var(--color-heading);
+  }
+  .optional-block__summary:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+  .optional-block__count {
+    display: block;
+    font-weight: var(--font-normal);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  .optional-block[open] .field-grid { margin-top: var(--space-4); }
+
+  .pay__facts {
+    margin: var(--space-4) 0 0;
+    padding-left: var(--space-5);
+    display: grid;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    text-align: left;
+  }
 
   .report-form { margin-top: var(--space-2); }
   .report-form input,

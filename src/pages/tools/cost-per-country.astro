@@ -66,37 +66,7 @@ const schema = {
         The same week costs roughly three times as much in Switzerland as in Bulgaria. If your
         route is flexible, that gap is the single biggest lever you have on the budget.
       </p>
-      <div class="cpc-report">
-        <span class="section-label">Full report</span>
-        <h2 class="cpc-report__title">Priced for the way you actually travel</h2>
-        <p class="cpc-report__intro">
-          The free comparison below prices your whole trip with one index, the one for restaurants
-          and hotels. That is the wrong basket for most people. Portugal sits well below the EU
-          average for restaurants and hotels and slightly above it for food from shops, so somebody
-          who cooks saves almost nothing there while somebody who eats out saves a quarter.
-        </p>
-
-        <div class="offer">
-          <p class="offer__heading">What you get</p>
-          <ul class="offer__list" role="list">
-            {reportIncludes.map((item) => (
-              <li class="offer__item">{item}</li>
-            ))}
-          </ul>
-          <p class="offer__price">{REPORT_PRICE}</p>
-          <a class="btn btn--primary cpc-report__cta" href={FULL_REPORT_URL}>{offerCta}</a>
-          <p class="offer__terms">
-            Payment is handled by Stripe on their own page. The report opens as soon as it goes
-            through. No account needed.
-          </p>
-        </div>
-      </div>
-
       <h2 class="cpc-cost-q">How much does a trip to Europe cost?</h2>
-      <p class="cpc-cue">
-        <a class="cpc-cue__link" href="#cpc-compare">Rather skip the questions? The free comparison
-        below ranks all 28 countries straight away.</a>
-      </p>
     </div>
   </section>
 
@@ -170,6 +140,41 @@ const schema = {
       <p class="cpc-legend" id="cpc-legend" hidden></p>
       <p class="cpc-flights">These figures are what you spend once you are there. Flights are not
       included, and from outside Europe they often decide the total.</p>
+    </div>
+  </section>
+
+  <section class="section section--sm">
+    <div class="container container--narrow">
+      <div class="cpc-report">
+        <span class="section-label">Full report</span>
+        <h2 class="cpc-report__title">Priced for the way you actually travel</h2>
+        <p class="cpc-report__intro">
+          The comparison above uses one index, the one for restaurants and hotels. That is the
+          right basket if you sleep in hotels and eat out, and a blunt one if you cook, move around
+          a lot or travel with children. Portugal, for instance, sits well below the EU average for
+          restaurants and hotels and slightly above it for food from shops. The full report reads
+          seven Eurostat categories instead of one, and prices each country against your own budget.
+        </p>
+
+        <div class="offer">
+          <p class="offer__heading">What you get</p>
+          <ul class="offer__list" role="list">
+            {reportIncludes.map((item) => (
+              <li class="offer__item">{item}</li>
+            ))}
+          </ul>
+          <p class="offer__price">{REPORT_PRICE}</p>
+          <a class="btn btn--primary cpc-report__cta" href={FULL_REPORT_URL}>{offerCta}</a>
+          <p class="offer__sample">
+            <a href="/tools/cost-per-country/sample/">Read a full sample report first →</a>
+          </p>
+          <p class="offer__terms">
+            Payment is handled by Stripe on their own page. The report opens as soon as it goes
+            through. No account needed.
+          </p>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -471,6 +476,8 @@ const schema = {
     color: var(--color-navy);
     margin-bottom: var(--space-3);
   }
+  .offer__sample { margin: 0 0 var(--space-3); font-size: var(--text-sm); }
+  .offer__sample a { font-weight: var(--font-semibold); color: var(--color-primary); }
   .offer__terms {
     display: block;
     margin-top: var(--space-3);

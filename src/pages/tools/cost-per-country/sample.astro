@@ -1,0 +1,93 @@
+---
+// The sample report, at /tools/cost-per-country/sample/.
+//
+// It is built by the same buildReport() the paid endpoint calls, from one
+// fixed set of answers, so it cannot drift from what a buyer actually gets.
+// Nothing here is written by hand except the banner that says it is a sample.
+//
+// The page renders that document as it stands, with no layout around it: the
+// report is a complete document with its own stylesheet, and the site's CSP
+// forbids frames, so it cannot be embedded inside a normal page.
+import costData from '../../../data/country-costs.json';
+import { buildReport, type CostData } from '../../../lib/report';
+
+// A couple flying long haul, undecided between three countries. Ordinary
+// answers, chosen to exercise every section the report has.
+const SAMPLE_ANSWERS = {
+  countries: ['PT', 'ES', 'IT'],
+  nights: 12,
+  party: 'couple',
+  adults: 2,
+  children: 0,
+  ceiling: 4000,
+  currency: '€',
+  style: 'mid',
+  combine: 'unsure',
+  flyingFrom: 'Manila',
+  fare: 950,
+  stayType: 'hotel',
+  breakfast: 'yes',
+  mealsOut: '2',
+  snacks: 'daily',
+  dinnerDrinks: 'sometimes',
+  cityTransport: 'public',
+  carHire: 'no',
+  cityMoves: 3,
+  intercityMode: 'train',
+  museums: 'few',
+  tours: 'couple',
+  nightlife: 'occasionally',
+  shopping: 'little',
+  esim: 'yes',
+};
+
+// Fixed, so the sample does not restate its own date every time the site is
+// built. Update it when the answers or the report change.
+const GENERATED_ON = '2026-09-18';
+
+const BANNER = `
+<div class="sample-note">
+  <p><strong>This is a sample report.</strong> It was built from one fixed set of answers: a couple
+  travelling for 12 nights, flying from Manila, undecided between Portugal, Spain and Italy, with a
+  ceiling of 4,000 euros for the whole trip. Your own report uses your answers and your countries.</p>
+  <p><a href="/tools/cost-per-country/full-report/">Get this report for your trip →</a></p>
+</div>
+<style>
+  .sample-note {
+    border: 2px solid #C44B36;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 0 0 28px;
+    background: #FFF6F4;
+  }
+  .sample-note p { margin: 0 0 8px; }
+  .sample-note p:last-child { margin-bottom: 0; }
+  @media print { .sample-note { border-color: #999; background: transparent; } }
+</style>
+`;
+
+const html = buildReport(SAMPLE_ANSWERS, costData as unknown as CostData, {
+  generatedOn: GENERATED_ON,
+})
+  // The paid report is noindex, because it is somebody's own answers. The
+  // sample is the opposite: it exists to be found and read before paying.
+  .replace('<meta name="robots" content="noindex, nofollow">\n', '')
+  .replace(
+    '<title>Your cost per country report | DURIAN Travel</title>',
+    '<title>Sample cost per country report | DURIAN Travel</title>'
+  )
+  .replace(
+    /<meta name="description" content="[^"]*">/,
+    '<meta name="description" content="A full sample of the DURIAN Travel cost per country report: three countries priced against one budget, the ways to combine them, and what a day costs in each.">'
+  )
+  .replace(
+    '<link rel="canonical" href="https://www.duriantravel.com/tools/cost-per-country/full-report/">',
+    '<link rel="canonical" href="https://www.duriantravel.com/tools/cost-per-country/sample/">'
+  )
+  .replace(
+    '<a href="/tools/cost-per-country/full-report/">Change your answers</a>',
+    '<a href="/tools/cost-per-country/full-report/">Get this report for your trip</a>'
+  )
+  .replace('<div class="wrap">', `<div class="wrap">${BANNER}`);
+---
+<Fragment set:html={html} />

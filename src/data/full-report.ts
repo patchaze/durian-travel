@@ -61,6 +61,9 @@ export interface Field {
   placeholder?: string;
   maxlength?: number;
   hint?: string;
+  // Asked after the essentials, behind a toggle. Every optional field has a
+  // default in normalise(), so skipping it still produces a whole report.
+  optional?: boolean;
 }
 
 export interface QuestionGroup {
@@ -99,7 +102,7 @@ export const questions: QuestionGroup[] = [
     // only when they give one, because Durian has no fare data.
     group: 'Getting there',
     fields: [
-      { id: 'flyingFrom', label: 'Where are you flying from?', type: 'text', placeholder: 'Your city or country', maxlength: 80, hint: 'This is only used to describe your trip back to you in the report.' },
+      { id: 'flyingFrom', label: 'Where are you flying from?', type: 'text', placeholder: 'Your city or country', maxlength: 80, optional: true, hint: 'This is only used to describe your trip back to you in the report.' },
       { id: 'fare', label: 'What return fare are you seeing?', type: 'fare', hint: 'Per person and return, in the same currency as your budget below. Durian has no fare data, so this number stays yours.' },
     ],
   },
@@ -144,8 +147,8 @@ export const questions: QuestionGroup[] = [
   {
     group: 'Between cities',
     fields: [
-      { id: 'cityMoves', label: 'How many times will you move city?', type: 'number', min: 0, max: 100, value: 2 },
-      { id: 'intercityMode', label: 'How do you travel between them?', type: 'select', options: [
+      { id: 'cityMoves', label: 'How many times will you move city?', type: 'number', min: 0, max: 100, value: 2, optional: true },
+      { id: 'intercityMode', label: 'How do you travel between them?', type: 'select', optional: true, options: [
         ['train', 'Train'], ['coach', 'Bus'], ['flight', 'Budget flight'],
       ] },
     ],
@@ -153,16 +156,16 @@ export const questions: QuestionGroup[] = [
   {
     group: 'What you actually do',
     fields: [
-      { id: 'museums', label: 'Museums, galleries, monuments?', type: 'select', options: [
+      { id: 'museums', label: 'Museums, galleries, monuments?', type: 'select', optional: true, options: [
         ['rarely', 'Rarely'], ['few', 'A few'], ['most', 'Most days'],
       ] },
-      { id: 'tours', label: 'Guided tours or day trips?', type: 'select', options: [
+      { id: 'tours', label: 'Guided tours or day trips?', type: 'select', optional: true, options: [
         ['none', 'None'], ['couple', 'One or two'], ['several', 'Several'],
       ] },
-      { id: 'nightlife', label: 'Going out at night?', type: 'select', options: [
+      { id: 'nightlife', label: 'Going out at night?', type: 'select', optional: true, options: [
         ['no', 'No'], ['occasionally', 'Occasionally'], ['often', 'Often'],
       ] },
-      { id: 'shopping', label: 'Planning to shop?', type: 'select', options: [
+      { id: 'shopping', label: 'Planning to shop?', type: 'select', optional: true, options: [
         ['no', 'No'], ['little', 'A little'], ['lot', 'A lot'],
       ] },
     ],
@@ -170,7 +173,7 @@ export const questions: QuestionGroup[] = [
   {
     group: 'Staying connected',
     fields: [
-      { id: 'esim', label: 'Do you need an eSIM or data plan?', type: 'select', options: [
+      { id: 'esim', label: 'Do you need an eSIM or data plan?', type: 'select', optional: true, options: [
         ['no', 'No'], ['yes', 'Yes'],
       ] },
     ],
