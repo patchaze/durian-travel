@@ -3,6 +3,7 @@ title: "Italy Travel Guide: The Complete Guide to Visiting Italy"
 metaTitle: "Italy Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete Italy travel guide for 2026. Rome, Florence, Venice, Amalfi Coast, food guide, best regions, where to stay, and essential tips."
 keywords: "Italy travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 

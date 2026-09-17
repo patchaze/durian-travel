@@ -3,6 +3,7 @@ title: "Czech Republic Travel Guide: The Complete Guide to Visiting Czech Republ
 metaTitle: "Czech Republic Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete Czech Republic travel guide for 2026. Prague, Český Krumlov, Bohemian Paradise, Czech beer culture, where to stay, and practical tips."
 keywords: "Czech Republic travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 

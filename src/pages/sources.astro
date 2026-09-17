@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import costData from '../data/country-costs.json';
 import visaData from '../data/visa-requirements.json';
+import { CHANGES, onDate as onFreshDate } from '../data/freshness';
 
 const canonical = 'https://www.duriantravel.com/sources/';
 
@@ -297,6 +298,28 @@ const schema = {
           not say when it was last read is asking you to trust it blindly.
         </p>
 
+        <h2>What changed here, and when</h2>
+        <p>
+          This site publishes under a company name rather than a person's, so there is no byline to
+          trust. This log is the substitute: what was checked or changed, and the day it happened.
+        </p>
+      </div>
+
+      <ol class="changelog" role="list">
+        {CHANGES.map((entry) => (
+          <li class="changelog__item">
+            <time class="changelog__date" datetime={entry.date}>{onFreshDate(entry.date)}</time>
+            <p class="changelog__what">{entry.what}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="prose">
+        <p>
+          The method behind every figure is set out on the
+          {' '}<a href="/methodology/">methodology page</a>.
+        </p>
+
         <h2>Why this page exists</h2>
         <p>
           Most travel sites ask you to trust an author. We publish under a company name rather
@@ -399,6 +422,32 @@ const schema = {
     padding: var(--space-3) var(--space-4);
     background: var(--color-bg-alt);
     border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+  .changelog {
+    list-style: none;
+    margin: var(--space-6) 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .changelog__item {
+    padding: var(--space-4) var(--space-5);
+    border-left: 3px solid var(--color-accent);
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-md);
+  }
+  .changelog__date {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--color-primary);
+    margin-bottom: var(--space-1);
+  }
+  .changelog__what {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
   }
   .srclist__name { display: block; font-weight: var(--font-semibold); color: var(--color-primary); text-decoration: none; }
   .srclist__name:hover { color: var(--color-accent-dark); }

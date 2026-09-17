@@ -1,0 +1,174 @@
+---
+// How the figures on this site are produced, in one place. Most of this text
+// existed already, scattered across the tool pages. Consolidating it gives
+// something to link to, and something to cite.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import CTABanner from '../components/CTABanner.astro';
+import { SOURCES, onDate } from '../data/freshness';
+import { styles } from '../data/full-report';
+
+const canonical = 'https://www.duriantravel.com/methodology/';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'How Durian Travel produces its figures',
+  url: canonical,
+  description:
+    'The method behind every number on Durian Travel: which datasets are read, what is sourced, what is an editorial estimate, and what the site deliberately does not do.',
+};
+---
+
+<BaseLayout
+  title="Methodology | DURIAN Travel"
+  description="How every figure on Durian Travel is produced: the datasets behind the planners, what is sourced and what is estimated, and what the site deliberately does not do."
+  canonical={canonical}
+  schema={schema}
+  keywords="Durian Travel methodology, how the Europe cost comparison works, Schengen visa data source"
+  breadcrumb={[{ name: 'Methodology', url: canonical }]}
+>
+  <section class="hero-sm hero-gradient">
+    <div class="container">
+      <span class="section-label" style="color:var(--color-accent-light)">Methodology</span>
+      <h1 class="hero-sm__title" style="color:white">How these figures are produced</h1>
+      <p class="hero-sm__subtitle">
+        Which datasets the planners read, what is sourced, what is our own estimate, and what this
+        site will not tell you.
+      </p>
+    </div>
+  </section>
+
+  <div class="container">
+    <Breadcrumb items={[{ name: 'Methodology' }]} />
+  </div>
+
+  <section class="section section--sm">
+    <div class="container container--narrow prose">
+      <h2>The short version</h2>
+      <p>
+        Two datasets do nearly all the work. Whether a passport needs a visa is read from the EU
+        regulation that lists it. What a country costs is read from Eurostat's price levels. Every
+        page that uses either one shows the version it read and the date it was read, and
+        {' '}<a href="/sources/">the sources page</a> lists all of them with what changed and when.
+      </p>
+
+      <h2>Whether a passport needs a visa</h2>
+      <p>
+        The visa check reads the consolidated text of Regulation (EU) 2018/1806, which carries two
+        annexes: the nationalities that need a short stay visa and the nationalities that do not.
+        Nationals of the EU, the EEA and Switzerland appear in neither, because their position comes
+        from free movement rules instead. Where an exemption has a condition attached, the condition
+        is quoted from the regulation's own footnotes rather than summarised.
+      </p>
+      <p>
+        The tool reports whether a rule applies. It does not tell anybody how to apply, it lists no
+        documents, and it says nothing about how an application might go.
+      </p>
+
+      <h2>What a country costs</h2>
+      <p>
+        Country comparisons use Eurostat's price level indices, where the EU average is 100. A
+        country at 120 is about 20 percent dearer than the EU average for that basket, and one at 80
+        about 20 percent cheaper. The free comparison uses one category, restaurants and hotels. The
+        paid report reads seven categories, so eating in shops, moving around and the rest are each
+        priced on their own index rather than on one average.
+      </p>
+
+      <h3>What is sourced, and what is ours</h3>
+      <p>
+        The indices are Eurostat's. <strong>The daily figures they scale are ours</strong>: an
+        editorial estimate for a Western European trip, in three bands
+        {' '}({styles.map((s, i) => (<>{i > 0 ? ', ' : ''}{s.label.toLowerCase()} at {s.low} to {s.high === 380 ? '380 and up' : s.high} a day</>))}),
+        the same bands the budget calculator uses. There is no survey behind them. Any page that
+        shows a figure built on them says so in the same sentence.
+      </p>
+
+      <h3>What the price levels cannot tell you</h3>
+      <ul>
+        <li>They are national averages. Capital cities and tourist districts run above them, sometimes well above.</li>
+        <li>High season and low season can differ by more than two countries do.</li>
+        <li>
+          <strong>Flights are not included anywhere on this site.</strong> We have no fare data, so
+          we never estimate one, and for a trip from outside Europe the fare often decides the total.
+        </li>
+      </ul>
+
+      <h2>What this site does not do</h2>
+      <p>
+        Durian Travel publishes guides and planning tools, and one paid report. It does not book
+        travel, submit visa applications, review anybody's documents or run calls. It publishes no
+        approval rates, no readiness scores and no prediction about any application, because the
+        decision belongs to consular officers and nobody outside the consulate influences it.
+      </p>
+
+      <h2>When something is wrong</h2>
+      <p>
+        Border rules move, and Eurostat republishes. If a figure here disagrees with the official
+        source, the official source is right and we want to know:
+        {' '}<a href="/contact/">write to us</a> and it gets fixed and dated.
+      </p>
+
+      <h2>Every source, with dates</h2>
+      <ul class="src-list">
+        {SOURCES.map((source) => (
+          <li>
+            <a href={source.url} rel="nofollow noopener" target="_blank">{source.name}</a>
+            <span class="src-list__covers">{source.covers}</span>
+            <span class="src-list__meta">
+              {source.version}. Last checked {onDate(source.lastChecked)}
+              {source.lastChanged ? `, last changed ${onDate(source.lastChanged)}` : ''}.
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <p class="visa-disclaimer">
+        Educational information only. Not legal advice. Always check the official embassy or
+        consulate source.
+      </p>
+    </div>
+  </section>
+
+  <CTABanner
+    title="Check the numbers yourself"
+    subtitle="Every planner shows the data it used and the date it was read."
+    cta="Open the planners"
+    ctaHref="/tools/"
+  />
+</BaseLayout>
+
+<style>
+  .hero-sm { padding-block: var(--space-16); }
+  .hero-sm__title {
+    font-family: var(--font-serif);
+    font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+    margin-bottom: var(--space-4);
+  }
+  .hero-sm__subtitle {
+    font-size: var(--text-lg);
+    color: hsla(0, 0%, 100%, 0.85);
+    max-width: 60ch;
+    line-height: var(--leading-relaxed);
+  }
+
+  .src-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-4); }
+  .src-list li {
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: white;
+  }
+  .src-list a { font-weight: var(--font-semibold); color: var(--color-primary); }
+  .src-list__covers,
+  .src-list__meta { display: block; font-size: var(--text-sm); color: var(--color-text-muted); }
+  .src-list__meta { margin-top: var(--space-1); }
+
+  .visa-disclaimer {
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+</style>

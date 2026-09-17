@@ -3,6 +3,7 @@ title: "Luxembourg Travel Guide: The Complete Guide to Visiting Luxembourg"
 metaTitle: "Luxembourg Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete Luxembourg travel guide for 2026. Luxembourg City, the Moselle wine valley, the Ardennes, castles, where to stay, and practical travel tips."
 keywords: "Luxembourg travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 

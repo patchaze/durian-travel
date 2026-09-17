@@ -40,6 +40,13 @@ const pageDescription = destinationEntry?.data.metaDescription || override.metaD
 const pageKeywords = destinationEntry?.data.keywords || country.seoKeywords || `${country.name} travel planning, ${country.name} itinerary, ${country.name} visa requirements, visit ${country.name}, ${country.region.toLowerCase()} destinations`;
 const hasReplacementContent = Boolean(DestinationContent);
 
+// When this guide's text last changed, stamped into the file from the
+// repository. A page that shows nothing reads as abandoned.
+const lastUpdated = destinationEntry?.data.lastUpdated;
+const lastUpdatedLabel = lastUpdated
+  ? new Date(lastUpdated).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+  : null;
+
 const breadcrumb = [
   { name: 'Destinations', url: 'https://www.duriantravel.com/destinations/' },
   { name: country.name, url: `https://www.duriantravel.com/destinations/${country.slug}/` }
@@ -88,6 +95,12 @@ const breadcrumb = [
     <div class="container container--narrow">
       <div class="quick-facts-box">
         <h2 class="section-title">Quick Facts</h2>
+        {lastUpdatedLabel && (
+          <p class="guide-updated">
+            This guide last changed on <time datetime={lastUpdated}>{lastUpdatedLabel}</time>.
+            {' '}<a href="/methodology/">How our figures are produced →</a>
+          </p>
+        )}
         <ul class="facts-list">
           <li><strong>Capital:</strong> {country.facts.capital}</li>
           <li><strong>Currency:</strong> {country.facts.currency}</li>
@@ -205,6 +218,13 @@ const breadcrumb = [
 </BaseLayout>
 
 <style>
+  .guide-updated {
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  .guide-updated a { color: var(--color-primary); font-weight: var(--font-semibold); }
+
 .hero-country-card {
   position: relative;
   min-height: 60vh;

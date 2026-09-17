@@ -3,6 +3,7 @@ title: "Liechtenstein Travel Guide: The Complete Guide to Visiting Liechtenstein
 metaTitle: "Liechtenstein Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete Liechtenstein travel guide for 2026. Vaduz, the Rhine Valley, Alpine hiking, castle visits, where to stay, and practical tips for Europe's 6th smallest country."
 keywords: "Liechtenstein travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 

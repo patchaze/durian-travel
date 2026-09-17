@@ -1,3 +1,5 @@
+/about                                   /about-us/  301
+/about/                                  /about-us/  301
 # Cloudflare Pages redirects. This file is what the live site actually serves.
 # Cloudflare Pages is the only active host. The Vercel project (my-website) is
 # paused, so vercel.json serves nothing and is kept only as a rollback reference.

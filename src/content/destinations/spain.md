@@ -3,6 +3,7 @@ title: "Spain Travel Guide: The Complete Guide to Visiting Spain"
 metaTitle: "Spain Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Plan your perfect Spain trip with our complete travel guide. Top things to do, best regions, food guide, where to stay, and practical tips. Updated 2026."
 keywords: "Spain travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 

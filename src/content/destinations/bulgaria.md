@@ -3,6 +3,7 @@ title: "Bulgaria Travel Guide: The Complete Guide to Visiting Bulgaria"
 metaTitle: "Bulgaria Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete Bulgaria travel guide for 2026. Sofia, Plovdiv, the Bulgarian Black Sea coast, Rila Monastery, Balkan mountains, where to stay, and practical tips."
 keywords: "Bulgaria travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 

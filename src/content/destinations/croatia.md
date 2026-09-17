@@ -3,6 +3,7 @@ title: "Croatia Travel Guide: The Complete Guide to Visiting Croatia"
 metaTitle: "Croatia Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete Croatia travel guide for 2026. Dubrovnik, Split, Plitvice Lakes, island hopping, Dalmatian coast, where to stay, and practical tips."
 keywords: "Croatia travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 

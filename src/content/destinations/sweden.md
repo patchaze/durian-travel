@@ -3,6 +3,7 @@ title: "Sweden Travel Guide: The Complete Guide to Visiting Sweden"
 metaTitle: "Sweden Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete Sweden travel guide for 2026. Stockholm, the Northern Lights, Swedish Lapland, archipelago islands, Midsommar, where to stay, and practical tips."
 keywords: "Sweden travel guide"
+lastUpdated: "2026-09-08"
 ---
 ## Introduction
 

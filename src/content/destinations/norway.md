@@ -3,6 +3,7 @@ title: "Norway Travel Guide: The Complete Guide to Visiting Norway"
 metaTitle: "Norway Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete Norway travel guide for 2026. The Norwegian fjords, Oslo, Northern Lights, midnight sun, Bergen, hiking, where to stay, and practical tips."
 keywords: "Norway travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 

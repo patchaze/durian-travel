@@ -149,6 +149,9 @@ const regionOrder = [
   width: 100%;
   aspect-ratio: 1 / 1; /* perfect square */
   overflow: hidden;
+  /* The images lazy load, so a fast scroll used to leave blank squares.
+     A tinted ground means the card always looks like a card. */
+  background: linear-gradient(160deg, var(--color-primary) 0%, var(--color-navy) 100%);
 }
 
 .tile-image-wrapper img {

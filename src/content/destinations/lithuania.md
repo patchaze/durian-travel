@@ -3,6 +3,7 @@ title: "Lithuania Travel Guide: The Complete Guide to Visiting Lithuania"
 metaTitle: "Lithuania Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete Lithuania travel guide for 2026. Vilnius old town, the Hill of Crosses, Curonian Spit, Kaunas, where to stay, and practical travel tips."
 keywords: "Lithuania travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 

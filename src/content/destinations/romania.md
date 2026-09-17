@@ -3,6 +3,7 @@ title: "Romania Travel Guide: The Complete Guide to Visiting Romania"
 metaTitle: "Romania Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete Romania travel guide for 2026. Transylvania, Bran Castle, painted monasteries, the Carpathians, Bucharest, where to stay, and practical tips."
 keywords: "Romania travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 

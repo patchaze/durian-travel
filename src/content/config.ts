@@ -29,6 +29,8 @@ const destinationsCollection = defineCollection({
         metaTitle: z.string(),
         metaDescription: z.string(),
         keywords: z.string().optional(),
+        // The day this guide's text last changed, stamped from the repository.
+        lastUpdated: z.string().optional(),
     }),
 });
 

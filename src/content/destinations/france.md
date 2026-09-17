@@ -3,6 +3,7 @@ title: "France Travel Guide: The Complete Guide to Visiting France"
 metaTitle: "France Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete France travel guide for 2026. Paris neighborhoods, best regions, food guide, Loire Valley, French Riviera, and practical travel tips."
 keywords: "France travel guide"
+lastUpdated: "2026-04-11"
 ---
 ## Introduction
 

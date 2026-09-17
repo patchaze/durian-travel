@@ -3,6 +3,7 @@ title: "Portugal Travel Guide: The Complete Guide to Visiting Portugal"
 metaTitle: "Portugal Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Plan your perfect Portugal trip with our complete travel guide. Best time to visit, top things to do, where to stay, food tips, and sample itineraries. Updated 2026."
 keywords: "Portugal travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 

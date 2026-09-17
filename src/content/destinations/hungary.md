@@ -3,6 +3,7 @@ title: "Hungary Travel Guide: The Complete Guide to Visiting Hungary"
 metaTitle: "Hungary Travel Guide 2026 | Things to Do, Best Time to Visit & Trip Planning | DURIAN Travel"
 metaDescription: "Your complete Hungary travel guide for 2026. Budapest, thermal baths, Lake Balaton, Hungarian food and wine, where to stay, and practical travel tips."
 keywords: "Hungary travel guide"
+lastUpdated: "2026-04-09"
 ---
 ## Introduction
 
