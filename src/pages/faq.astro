@@ -9,18 +9,18 @@ const faqSchema = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Do you only help with visas, or with the whole trip?",
-      "acceptedAnswer": { "@type": "Answer", "text": "The whole trip. Route and itinerary design, budgets, accommodation logic, travel-health planning and timing are the work. We explain how the Schengen process fits around all of that and where the official requirements are published, but we do not handle anyone's paperwork." }
+      "name": "Do you only cover visas, or the whole trip?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The whole trip, in what we publish. The guides and planners cover routes, budgets, accommodation logic, travel health and timing, and they explain where the Schengen process fits around all of that and where the official requirements are published. You use them yourself, and we do not handle anyone's paperwork." }
     },
     {
       "@type": "Question",
       "name": "Which parts of Europe do you cover?",
-      "acceptedAnswer": { "@type": "Answer", "text": "The Schengen area and its neighbours. We publish 29 country guides spanning Western, Northern, Central, Southern and Eastern Europe, and build multi-country routes across them. If a route crosses outside the Schengen area, we plan around the border implications rather than pretending they are not there." }
+      "acceptedAnswer": { "@type": "Answer", "text": "The Schengen area and its neighbours. We publish 29 country guides spanning Western, Northern, Central, Southern and Eastern Europe, and route guides that cross several of them. Where a route leaves the Schengen area, the guides say what that means at the border rather than pretending it does not." }
     },
     {
       "@type": "Question",
       "name": "What are the free planners?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Three self-serve planners, free to use and with no sign-up: a trip budget calculator, a cost-per-country comparison built on official Eurostat price data, and a Schengen document checklist that adapts to your situation. Everything you type stays in your browser. The cost-per-country page also offers a fuller report that weights seven Eurostat categories instead of one." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Three self-serve planners, free to use and with no sign-up: a visa check that tells you whether the passport you hold needs a Schengen short stay visa, a cost-per-country comparison built on official Eurostat price data, and a trip budget calculator. Everything you type stays in your browser. The cost-per-country page also offers a fuller report that weights seven Eurostat categories instead of one." }
     },
     {
       "@type": "Question",
@@ -30,7 +30,7 @@ const faqSchema = {
     {
       "@type": "Question",
       "name": "Is DURIAN a law firm or immigration lawyer?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No. Durian Travel publishes educational travel guides and plans trips. We do not provide legal advice, legal representation, or any service that constitutes the practice of immigration law. For legal advice, consult a qualified immigration attorney." }
+      "acceptedAnswer": { "@type": "Answer", "text": "No. Durian Travel publishes educational travel guides and planning tools. We do not provide legal advice, legal representation, or any service that constitutes the practice of immigration law. For legal advice, consult a qualified immigration attorney." }
     },
     {
       "@type": "Question",
@@ -55,27 +55,27 @@ const faqSchema = {
     {
       "@type": "Question",
       "name": "I was refused a visa before. Can you help?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Not with the refusal itself. A refusal letter names a reason from a standard list, and our published guide explains what each one refers to. What happens next is between you and the consulate: the letter sets out the appeal route and the deadline. We can still help you plan the trip." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Not with the refusal itself. A refusal letter names a ground from a standard list, and our published guide explains what each one refers to. What happens next is between you and the consulate: the letter names the ground and tells you how to appeal, and the procedure and any time limit follow that country's own law. The planning guides still apply to the trip itself." }
     },
     {
       "@type": "Question",
-      "name": "Do you work with self-employed or freelance applicants?",
-      "acceptedAnswer": { "@type": "Answer", "text": "For planning the trip, yes. On the paperwork, financial proof works differently without an employment contract, and our guides explain what consulates generally ask for and where each one publishes its own list. We do not gather, structure or look at anyone's financial documents." }
+      "name": "Do the guides work for self-employed or freelance applicants?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes, the planning side is the same for everybody. On the paperwork, financial proof works differently without an employment contract, and the guides explain what consulates generally ask for and where each one publishes its own list. We do not gather, structure or look at anyone's financial documents." }
     },
     {
       "@type": "Question",
       "name": "How do you differ from a visa agency?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Visa agencies typically submit applications on your behalf and may have formal relationships with embassies. We are a purely educational service. We explain how the process works and point you at the official sources, and you do the rest yourself. That means lower cost, more transparency, and your paperwork never leaves your hands." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Visa agencies typically submit applications on your behalf and may have formal relationships with embassies. We are not an agency. Durian Travel publishes guides and planning tools that explain how the process works and point you at the official sources, and you do the rest yourself. That means lower cost, more transparency, and your paperwork never leaves your hands." }
     },
     {
       "@type": "Question",
-      "name": "What language is the service available in?",
-      "acceptedAnswer": { "@type": "Answer", "text": "We provide services in English, Portuguese, Spanish, and French. Please let us know your preferred language when booking." }
+      "name": "What language is the site published in?",
+      "acceptedAnswer": { "@type": "Answer", "text": "English. Every guide, planner and country page on the site is published in English." }
     },
     {
       "@type": "Question",
       "name": "Where are you located? How does the work happen?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Durian Travel is online only and works with people all over the world. Everything happens in writing, by email. We do not run calls or meetings." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Durian Travel is published online and read all over the world. Anything we answer, we answer in writing by email. We do not run calls or meetings." }
     }
   ]
 };
@@ -83,7 +83,7 @@ const faqSchema = {
 
 <BaseLayout
   title="Frequently Asked Questions | DURIAN Travel"
-  description="Common questions about Durian Travel: how the planning work runs, what is covered, what we do not do, and how we can help plan your Europe trip."
+  description="Common questions about Durian Travel: what the site publishes, what it does not do, and how the free planners and the paid report work."
   breadcrumb={[{ name: 'FAQ', url: 'https://www.duriantravel.com/faq/' }]}
   schema={faqSchema}
   keywords="DURIAN travel FAQ, Europe trip planning questions, Schengen visa FAQ, Europe travel planning FAQ, how DURIAN travel works"
