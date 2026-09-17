@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ReportField from '../../../components/ReportField.astro';
+import rateData from '../../../data/exchange-rates.json';
+import { onDate } from '../../../data/freshness';
 import Breadcrumb from '../../../components/Breadcrumb.astro';
 import costData from '../../../data/country-costs.json';
 import {
@@ -129,15 +131,25 @@ const schema = {
         <fieldset class="tool-block">
           <legend class="tool-block__title">The number you will not go over</legend>
           <p class="tool-block__hint">For the whole trip, everyone included.</p>
+          <p class="tool-block__hint">
+            Figures are converted from euros at the European Central Bank reference rates of {onDate(rateData._source.rateDate)}.
+          </p>
           <label class="field">
             <span class="field__label">Your ceiling</span>
             <div class="field-inline">
-              <select id="r-currency" aria-label="Currency">
-                <option value="€" selected>€</option>
-                <option value="$">$</option>
-                <option value="£">£</option>
-                <option value="₱">₱</option>
-                <option value="R$">R$</option>
+              <select
+                id="r-currency"
+                aria-label="Currency"
+                data-rates={JSON.stringify(Object.fromEntries(rateData.currencies.map((c) => [c.symbol, c.perEuro])))}
+              >
+                <option value="€" selected>€ EUR</option>
+                <option value="$">$ USD</option>
+                <option value="£">£ GBP</option>
+                <option value="₱">₱ PHP</option>
+                <option value="R$">R$ BRL</option>
+                <option value="₹">₹ INR</option>
+                <option value="Rp">Rp IDR</option>
+                <option value="RM">RM MYR</option>
               </select>
               <input type="number" id="r-ceiling" data-answer="ceiling" min="0" step="50" placeholder="0" inputmode="decimal" />
             </div>
@@ -172,8 +184,9 @@ const schema = {
             <li><strong>Save or print it before you close the tab.</strong> There is no account and no
             login, so the page is not stored anywhere you can log back into. Your browser can print it
             to PDF from the button at the top of the report.</li>
-            <li>If it does not open, or something in it looks wrong, <a href="/contact/">write to us</a>
-            and we will sort it out.</li>
+            <li>Because it is generated and opened the moment you pay, it cannot be returned once
+            it exists. If it does not open, or something in it looks wrong,
+            <a href="/contact/">write to us</a> and we will sort it out.</li>
           </ul>
 
           <details class="tester">
@@ -535,7 +548,17 @@ const schema = {
       out.currency = currencyEl?.value ?? '€';
       const style = chosenStyle();
       out.style = style;
-      out.base = Number(styleBases[style]) || 0;
+      // The style bands are euro figures. The whole report is arithmetic on
+      // this one number, so converting it here means every figure in the
+      // report comes out in the currency the buyer chose, rather than a euro
+      // amount wearing somebody else's symbol.
+      let rate = 1;
+      try {
+        const table = JSON.parse(currencyEl?.dataset.rates ?? '{}');
+        const value = table[out.currency as string];
+        if (typeof value === 'number' && value > 0) rate = value;
+      } catch (e) { /* euros */ }
+      out.base = (Number(styleBases[style]) || 0) * rate;
       return out;
     }
 

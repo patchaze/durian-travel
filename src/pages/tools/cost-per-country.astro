@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import costData from '../../data/country-costs.json';
 import { REPORT_PRICE, offerCta, reportIncludes, styles, FULL_REPORT_URL } from '../../data/full-report';
+import rateData from '../../data/exchange-rates.json';
+import { onDate } from '../../data/freshness';
 
 const canonical = 'https://www.duriantravel.com/tools/cost-per-country/';
 
@@ -98,12 +100,19 @@ const schema = {
         <label class="field">
           <span class="field__label">Your daily budget, per person</span>
           <div class="field-inline">
-            <select id="cpc-currency" aria-label="Currency">
-              <option value="€" selected>€</option>
-              <option value="$">$</option>
-              <option value="£">£</option>
-              <option value="₱">₱</option>
-              <option value="R$">R$</option>
+            <select
+              id="cpc-currency"
+              aria-label="Currency"
+              data-rates={JSON.stringify(Object.fromEntries(rateData.currencies.map((c) => [c.symbol, c.perEuro])))}
+            >
+              <option value="€" selected>€ EUR</option>
+              <option value="$">$ USD</option>
+              <option value="£">£ GBP</option>
+              <option value="₱">₱ PHP</option>
+              <option value="R$">R$ BRL</option>
+              <option value="₹">₹ INR</option>
+              <option value="Rp">Rp IDR</option>
+              <option value="RM">RM MYR</option>
             </select>
             <input type="number" id="cpc-budget" min="0" step="5" placeholder="optional" inputmode="decimal" />
           </div>
@@ -140,6 +149,9 @@ const schema = {
       <p class="cpc-legend" id="cpc-legend" hidden></p>
       <p class="cpc-flights">These figures are what you spend once you are there. Flights are not
       included, and from outside Europe they often decide the total.</p>
+      <p class="cpc-rates">
+        Figures are converted from euros at the <a href={rateData._source.url} rel="nofollow noopener" target="_blank">European Central Bank</a> reference rates of {onDate(rateData._source.rateDate)}.
+      </p>
     </div>
   </section>
 
@@ -390,6 +402,11 @@ const schema = {
     .cpc-row__trip { grid-area: trip; text-align: right; }
   }
 
+  .cpc-rates {
+    margin: var(--space-1) 0 0;
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+  }
   .cpc-flights {
     margin: var(--space-2) 0 0;
     font-size: var(--text-sm);
@@ -595,15 +612,30 @@ const schema = {
     styleBtns.forEach(b => b.classList.toggle('is-active', b === wanted));
   }
 
+  // The figures are built in euros, so anything shown in another currency is
+  // converted at the ECB reference rate published with this page, never by
+  // swapping the symbol and leaving the number alone.
+  let RATES: Record<string, number> = {};
+  try {
+    RATES = JSON.parse(currencyEl?.dataset.rates ?? '{}');
+  } catch (e) { /* euros only */ }
+
+  function rate(): number {
+    const r = RATES[currencyEl?.value ?? '€'];
+    return typeof r === 'number' && r > 0 ? r : 1;
+  }
+
   function money(v: number): string {
-    return (currencyEl?.value ?? '') + Math.round(v).toLocaleString('en-GB');
+    return (currencyEl?.value ?? '') + Math.round(v * rate()).toLocaleString('en-GB');
   }
 
   function update() {
     const base = parseFloat(activeStyle()?.dataset.typical ?? '0') || 0;
     const nights = Math.max(1, Math.round(parseFloat(nightsEl?.value ?? '1') || 1));
     const rawBudget = parseFloat(budgetEl?.value ?? '');
-    const budget = Number.isFinite(rawBudget) && rawBudget > 0 ? rawBudget : 0;
+    // Typed in the visitor's currency, compared against euro figures, so it is
+    // converted back before anything is measured against it.
+    const budget = Number.isFinite(rawBudget) && rawBudget > 0 ? rawBudget / rate() : 0;
 
     const computed = rows.map(row => {
       const pli = parseFloat(row.dataset.pli ?? '100');

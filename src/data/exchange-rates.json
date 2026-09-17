@@ -1,0 +1,62 @@
+{
+  "_source": {
+    "publisher": "European Central Bank",
+    "dataset": "Euro foreign exchange reference rates",
+    "url": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+    "rateDate": "2026-09-17",
+    "retrieved": "2026-09-18",
+    "meaning": "Units of the currency for one euro, as published by the ECB on the rate date above.",
+    "note": "The ECB does not publish a rate for the UAE dirham or the Nigerian naira, so neither is offered here rather than converted from an unsourced rate.",
+    "refreshHint": "The ECB publishes these every working day at about 16:00 CET. Re-run the fetch and replace this file; no code changes needed."
+  },
+  "currencies": [
+    {
+      "iso": "EUR",
+      "symbol": "€",
+      "name": "Euro",
+      "perEuro": 1.0
+    },
+    {
+      "iso": "USD",
+      "symbol": "$",
+      "name": "US dollar",
+      "perEuro": 1.1481
+    },
+    {
+      "iso": "GBP",
+      "symbol": "£",
+      "name": "Pound sterling",
+      "perEuro": 0.8583
+    },
+    {
+      "iso": "PHP",
+      "symbol": "₱",
+      "name": "Philippine peso",
+      "perEuro": 72.006
+    },
+    {
+      "iso": "BRL",
+      "symbol": "R$",
+      "name": "Brazilian real",
+      "perEuro": 5.8905
+    },
+    {
+      "iso": "INR",
+      "symbol": "₹",
+      "name": "Indian rupee",
+      "perEuro": 110.1475
+    },
+    {
+      "iso": "IDR",
+      "symbol": "Rp",
+      "name": "Indonesian rupiah",
+      "perEuro": 20352.48
+    },
+    {
+      "iso": "MYR",
+      "symbol": "RM",
+      "name": "Malaysian ringgit",
+      "perEuro": 4.7061
+    }
+  ]
+}

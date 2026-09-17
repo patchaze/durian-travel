@@ -7,6 +7,7 @@
 // than copied, for the same reason.
 import visaData from './visa-requirements.json';
 import costData from './country-costs.json';
+import rateData from './exchange-rates.json';
 
 export interface SourceRecord {
   id: string;
@@ -42,6 +43,15 @@ export const SOURCES: SourceRecord[] = [
     lastChecked: cost.retrieved,
     lastChanged: cost.eurostatLastUpdated,
     url: cost.url,
+  },
+  {
+    id: 'exchange-rates',
+    name: `${rateData._source.publisher}, ${rateData._source.dataset}`,
+    covers: 'Converting the euro figures in the planners into the other currencies they offer.',
+    version: `Reference rates of ${rateData._source.rateDate}`,
+    lastChecked: rateData._source.retrieved,
+    lastChanged: rateData._source.rateDate,
+    url: rateData._source.url,
   },
   {
     id: 'visa-code',
