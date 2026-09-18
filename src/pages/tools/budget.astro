@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import costData from '../../data/country-costs.json';
+import { PROVENANCE } from '../../data/freshness';
 
 const canonical = 'https://www.duriantravel.com/tools/budget/';
 
@@ -15,7 +16,7 @@ const canonical = 'https://www.duriantravel.com/tools/budget/';
 // The destination list and the price index behind it are the same Eurostat data
 // the cost-per-country planner reads. Nothing is hand typed here, so refreshing
 // src/data/country-costs.json updates this tool with it.
-const costSource = costData._source;
+const costSource = PROVENANCE.eurostat;
 const countries = costData.countries;
 
 const styles = [
@@ -241,7 +242,7 @@ const schema = {
             <p>
               The <a href="/blog/europe-trip-budget/">Europe budget guide</a> explains the method
               behind this calculator. <a href="/blog/train-travel-europe/">Train travel</a> is
-              usually where a route gets cheaper, and <a href="/sources/">our sources page</a>
+              usually where a route gets cheaper, the <a href="/methodology/">methodology page</a> explains how the figures are produced, and <a href="/sources/">our sources page</a>
               lists where every figure on this site comes from.
             </p>
           </div>

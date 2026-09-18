@@ -3,8 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import costData from '../../data/country-costs.json';
 import { REPORT_PRICE, offerCta, reportIncludes, styles, FULL_REPORT_URL } from '../../data/full-report';
-import rateData from '../../data/exchange-rates.json';
-import { onDate } from '../../data/freshness';
+import { PROVENANCE, CURRENCIES, onDate } from '../../data/freshness';
 
 const canonical = 'https://www.duriantravel.com/tools/cost-per-country/';
 
@@ -22,7 +21,11 @@ const canonical = 'https://www.duriantravel.com/tools/cost-per-country/';
 // /tools/cost-per-country/full-report/, is generated server side by
 // /api/report, and is never built into this page. This page only shows the
 // offer and links to it.
-const source = costData._source;
+// Provenance comes from the freshness file; the countries are data.
+const source = PROVENANCE.eurostat;
+
+// Units of each currency per euro, keyed by the symbol the select uses.
+const rateTable = JSON.stringify(Object.fromEntries(CURRENCIES.map((c) => [c.symbol, c.perEuro])));
 const countries = costData.countries;
 
 // The price, the offer copy and the styles come from src/data/full-report.ts,
@@ -103,16 +106,11 @@ const schema = {
             <select
               id="cpc-currency"
               aria-label="Currency"
-              data-rates={JSON.stringify(Object.fromEntries(rateData.currencies.map((c) => [c.symbol, c.perEuro])))}
+              data-rates={rateTable}
             >
-              <option value="€" selected>€ EUR</option>
-              <option value="$">$ USD</option>
-              <option value="£">£ GBP</option>
-              <option value="₱">₱ PHP</option>
-              <option value="R$">R$ BRL</option>
-              <option value="₹">₹ INR</option>
-              <option value="Rp">Rp IDR</option>
-              <option value="RM">RM MYR</option>
+              {CURRENCIES.map((c) => (
+                <option value={c.symbol} selected={c.iso === 'EUR'}>{c.symbol.trim() === c.iso ? c.iso : `${c.symbol.trim()} ${c.iso}`}</option>
+              ))}
             </select>
             <input type="number" id="cpc-budget" min="0" step="5" placeholder="optional" inputmode="decimal" />
           </div>
@@ -150,7 +148,7 @@ const schema = {
       <p class="cpc-flights">These figures are what you spend once you are there. Flights are not
       included, and from outside Europe they often decide the total.</p>
       <p class="cpc-rates">
-        Figures are converted from euros at the <a href={rateData._source.url} rel="nofollow noopener" target="_blank">European Central Bank</a> reference rates of {onDate(rateData._source.rateDate)}.
+        Figures are converted from euros at the <a href={PROVENANCE.rates.url} rel="nofollow noopener" target="_blank">European Central Bank</a> reference rates of {onDate(PROVENANCE.rates.rateDate)}, and the naira and the dirham at the <a href={PROVENANCE.ratesSecondary.url} rel="nofollow noopener" target="_blank">Central Bank of Nigeria</a> central rates of {onDate(PROVENANCE.ratesSecondary.rateDate)}, because the ECB does not publish either.
       </p>
     </div>
   </section>
@@ -218,6 +216,7 @@ const schema = {
           {' '}{source.categoriesRetrieved}.
           {' '}<a href={source.url} rel="nofollow noopener" target="_blank">View the dataset on Eurostat →</a>
           {' '}<a href="/sources/">See all sources and how often they are checked →</a>
+          {' '}<a href="/methodology/">How these figures are produced →</a>
         </p>
         <p class="cpc-notes__src">{source.note}</p>
       </div>

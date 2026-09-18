@@ -2,45 +2,33 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import visaData from '../../data/visa-requirements.json';
+import { PROVENANCE, ETIAS_STATUS, SCHENGEN_MEMBERS, onDate } from '../../data/freshness';
 
 const canonical = 'https://www.duriantravel.com/tools/do-you-need-a-visa/';
 
 // One question, four possible answers, every one of them traceable to a
 // consolidated legal instrument. The tool reports whether a rule applies. It
 // never comments on an application, and it lists no documents.
-const source = visaData._source;
+//
+// Provenance (the version read and the dates) comes from src/data/freshness.ts,
+// the one place every page reads it from. The entries themselves are data and
+// are still read from the data file.
+const source = PROVENANCE.visa;
+const checkedLabel = onDate(source.retrieved);
 const categories = visaData.categories;
 const entries = visaData.entries;
 
-// ETIAS status, in one place. Verified against the official ETIAS site on the
-// date below. Nobody can apply: applications are not being collected, so
-// nothing on this page may tell somebody to apply.
-const ETIAS = {
-  operational: false,
-  statement:
-    'ETIAS is currently not in operation and no applications for travel authorisations are collected at this point.',
-  fee: 'EUR 20',
-  countries: 30,
-  url: 'https://travel-europe.europa.eu/etias_en',
-  checked: '2026-09-12',
-  checkedLabel: '12 September 2026',
-};
+// ETIAS status, read from the freshness file with the date it was last
+// checked. Nobody can apply: applications are not being collected, so nothing
+// on this page may tell somebody to apply.
+const ETIAS = { ...ETIAS_STATUS, checkedLabel: onDate(ETIAS_STATUS.checked) };
 
-const sourceLine = `${source.instrument}, ${source.consolidatedVersionLabel}. Durian last checked it on 12 September 2026.`;
+const sourceLine = `${source.instrument}, ${source.consolidatedVersionLabel}. Durian last checked it on ${checkedLabel}.`;
 
 // Which countries the answer above is about. A first time visitor has no way
 // to know that Switzerland is in and Ireland is not, and the answer is
-// meaningless without it. Checked against the European Commission's own page
-// on the date below.
-const SCHENGEN = {
-  eu: ['Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Czechia', 'Denmark', 'Estonia', 'Finland',
-       'France', 'Germany', 'Greece', 'Hungary', 'Italy', 'Latvia', 'Lithuania', 'Luxembourg',
-       'Malta', 'Netherlands', 'Poland', 'Portugal', 'Romania', 'Slovakia', 'Slovenia', 'Spain',
-       'Sweden'],
-  nonEu: ['Iceland', 'Norway', 'Switzerland', 'Liechtenstein'],
-  url: 'https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/schengen-area_en',
-  checkedLabel: '18 September 2026',
-};
+// meaningless without it. The list and its check date live in the freshness file.
+const SCHENGEN = { ...SCHENGEN_MEMBERS, checkedLabel: onDate(SCHENGEN_MEMBERS.checked) };
 
 // Where each answer sends the reader next. The visa answer is the highest
 // intent moment on the site, and until now it ended in nothing. None of these
@@ -198,7 +186,7 @@ const schema = {
           listing the countries whose nationals need a visa for a short stay and the countries whose
           nationals do not. The version used is the
           {' '}<strong>{source.consolidatedVersionLabel}</strong>, and Durian last checked it
-          against EUR-Lex on <strong>{ETIAS.checkedLabel}</strong>.
+          against EUR-Lex on <strong>{checkedLabel}</strong>.
           {' '}<a href={source.consolidatedUrl} rel="nofollow noopener" target="_blank">Read the consolidated regulation on EUR-Lex →</a>
         </p>
         <p>
@@ -215,6 +203,7 @@ const schema = {
         </p>
         <p class="notes__src">
           <a href="/sources/">See all sources and how often they are checked →</a>
+          {' '}<a href="/methodology/">How these figures are produced →</a>
         </p>
       </div>
     </div>
@@ -470,7 +459,7 @@ const schema = {
     ETIAS,
     sourceLine,
     categories,
-    consolidatedUrl: visaData._source.consolidatedUrl,
+    consolidatedUrl: source.consolidatedUrl,
     NEXT_STEPS,
   }}
 >

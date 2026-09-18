@@ -1,8 +1,10 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ReportField from '../../../components/ReportField.astro';
-import rateData from '../../../data/exchange-rates.json';
-import { onDate } from '../../../data/freshness';
+import { PROVENANCE, CURRENCIES, onDate } from '../../../data/freshness';
+
+// Units of each currency per euro, keyed by the symbol the select uses.
+const rateTable = JSON.stringify(Object.fromEntries(CURRENCIES.map((c) => [c.symbol, c.perEuro])));
 import Breadcrumb from '../../../components/Breadcrumb.astro';
 import costData from '../../../data/country-costs.json';
 import {
@@ -132,7 +134,7 @@ const schema = {
           <legend class="tool-block__title">The number you will not go over</legend>
           <p class="tool-block__hint">For the whole trip, everyone included.</p>
           <p class="tool-block__hint">
-            Figures are converted from euros at the European Central Bank reference rates of {onDate(rateData._source.rateDate)}.
+            Figures are converted from euros at the <a href={PROVENANCE.rates.url} rel="nofollow noopener" target="_blank">European Central Bank</a> reference rates of {onDate(PROVENANCE.rates.rateDate)}, and the naira and the dirham at the <a href={PROVENANCE.ratesSecondary.url} rel="nofollow noopener" target="_blank">Central Bank of Nigeria</a> central rates of {onDate(PROVENANCE.ratesSecondary.rateDate)}, because the ECB does not publish either.
           </p>
           <label class="field">
             <span class="field__label">Your ceiling</span>
@@ -140,16 +142,11 @@ const schema = {
               <select
                 id="r-currency"
                 aria-label="Currency"
-                data-rates={JSON.stringify(Object.fromEntries(rateData.currencies.map((c) => [c.symbol, c.perEuro])))}
+                data-rates={rateTable}
               >
-                <option value="€" selected>€ EUR</option>
-                <option value="$">$ USD</option>
-                <option value="£">£ GBP</option>
-                <option value="₱">₱ PHP</option>
-                <option value="R$">R$ BRL</option>
-                <option value="₹">₹ INR</option>
-                <option value="Rp">Rp IDR</option>
-                <option value="RM">RM MYR</option>
+                {CURRENCIES.map((c) => (
+                  <option value={c.symbol} selected={c.iso === 'EUR'}>{c.symbol.trim() === c.iso ? c.iso : `${c.symbol.trim()} ${c.iso}`}</option>
+                ))}
               </select>
               <input type="number" id="r-ceiling" data-answer="ceiling" min="0" step="50" placeholder="0" inputmode="decimal" />
             </div>
@@ -181,9 +178,10 @@ const schema = {
           <ul class="pay__facts" role="list">
             <li>It arrives as a web page on this site, not as an email or an attachment.</li>
             <li>It opens on screen the moment payment goes through, so there is nothing to wait for.</li>
-            <li><strong>Save or print it before you close the tab.</strong> There is no account and no
-            login, so the page is not stored anywhere you can log back into. Your browser can print it
-            to PDF from the button at the top of the report.</li>
+            <li><strong>Save or print it before you close the tab.</strong> While that tab stays open
+            you can go back to this form and generate it again, for up to 24 hours after paying. Once
+            the tab is closed it cannot be reopened, because there is no account to log back into. The
+            button at the top of the report prints it or saves it as a PDF.</li>
             <li>Because it is generated and opened the moment you pay, it cannot be returned once
             it exists. If it does not open, or something in it looks wrong,
             <a href="/contact/">write to us</a> and we will sort it out.</li>

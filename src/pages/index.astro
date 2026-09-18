@@ -20,15 +20,13 @@ const costSample = costPick
   .filter(Boolean)
   .sort((a, b) => a.pli - b.pli);
 
-import visaData from '../data/visa-requirements.json';
-import countries from '../data/countries.json';
+import { PROVENANCE, countryGuideFreshness, onDate } from '../data/freshness';
 
-const visaSource = visaData._source;
-const costSource = costData._source;
-
-// One date format for every date this page states.
-const onDate = (value: string | Date) =>
-  new Date(value).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+// Provenance and the country guide count both come from the freshness file,
+// the one place every page reads them from.
+const visaSource = PROVENANCE.visa;
+const costSource = PROVENANCE.eurostat;
+const countryGuides = await countryGuideFreshness();
 
 // What Durian Travel offers: three free planners and one paid report. Each
 // card links to the tool itself, and the report's price comes from its constant.
@@ -71,17 +69,15 @@ const recentPosts = allPosts
     description: post.data.description,
     slug: post.slug,
     pubDate: post.data.pubDate.toISOString(),
+    modDate: post.data.modDate?.toISOString(),
     tags: post.data.tags,
     readTime: post.data.readTime
   }));
 
 // The stat row and the sources block both read from here.
-const countryGuideCount = countries.length;
+const countryGuideCount = countryGuides.count;
 const planningGuideCount = allPosts.length;
 const freePlannerCount = serviceCards.filter(card => !card.paid).length;
-const lastGuideReview = new Date(
-  Math.max(...allPosts.map(post => (post.data.modDate ?? post.data.pubDate).valueOf()))
-);
 
 const trustStats = [
   { value: String(countryGuideCount), label: 'Country guides', href: '/destinations/' },
@@ -339,7 +335,7 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
         </li>
         <li class="built-on__item">
           <h3 class="built-on__title">Guides</h3>
-          <p class="built-on__body">{countryGuideCount} country guides and {planningGuideCount} planning guides, the most recent of them reviewed on {onDate(lastGuideReview)}.</p>
+          <p class="built-on__body">{countryGuideCount} country guides{countryGuides.lastUpdated ? `, the most recent change made on ${onDate(countryGuides.lastUpdated)}` : ''}. Each guide shows the day its own text last changed.</p>
           <a class="built-on__link" href="/sources/">See every source →</a>
         </li>
       </ul>
@@ -578,10 +574,11 @@ const lcpAvifSrcset = `${heroAvif480.src} 480w, ${heroAvif800.src} 800w, ${heroA
 .cost-chip:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 .cost-strip__cta { margin-top: var(--space-2); }
 .cost-strip__cta .link { color: var(--color-accent-dark); font-weight: var(--font-semibold); }
-@media (max-width: 640px) {
-  /* Eight country names cannot fit across a phone, and shrinking the columns
-     truncated them to a single letter while the values collided. The chart
-     turns on its side instead: one country per row, name, bar, then value. */
+@media (max-width: 899px) {
+  /* Eight country names cannot fit across a phone or a narrow tablet, and
+     shrinking the columns truncated them (to a single letter on a phone) while
+     the values collided. Below 900px the chart turns on its side instead: one
+     country per row, name, bar, then value. */
   .cost-strip__row {
     display: grid;
     grid-template-columns: 1fr;

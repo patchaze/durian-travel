@@ -40,6 +40,7 @@ const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
               description={post.data.description}
               slug={post.slug}
               pubDate={post.data.pubDate.toISOString()}
+              modDate={post.data.modDate?.toISOString()}
               tags={post.data.tags}
               readTime={post.data.readTime}
             />

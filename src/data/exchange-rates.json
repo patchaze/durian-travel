@@ -6,7 +6,7 @@
     "rateDate": "2026-09-17",
     "retrieved": "2026-09-18",
     "meaning": "Units of the currency for one euro, as published by the ECB on the rate date above.",
-    "note": "The ECB does not publish a rate for the UAE dirham or the Nigerian naira, so neither is offered here rather than converted from an unsourced rate.",
+    "note": "The ECB does not publish the UAE dirham or the Nigerian naira. Both come from the Central Bank of Nigeria instead, recorded in _secondarySource.",
     "refreshHint": "The ECB publishes these every working day at about 16:00 CET. Re-run the fetch and replace this file; no code changes needed."
   },
   "currencies": [
@@ -14,49 +14,84 @@
       "iso": "EUR",
       "symbol": "€",
       "name": "Euro",
-      "perEuro": 1.0
+      "perEuro": 1.0,
+      "source": "ecb"
     },
     {
       "iso": "USD",
       "symbol": "$",
       "name": "US dollar",
-      "perEuro": 1.1481
+      "perEuro": 1.1481,
+      "source": "ecb"
     },
     {
       "iso": "GBP",
       "symbol": "£",
       "name": "Pound sterling",
-      "perEuro": 0.8583
+      "perEuro": 0.8583,
+      "source": "ecb"
     },
     {
       "iso": "PHP",
       "symbol": "₱",
       "name": "Philippine peso",
-      "perEuro": 72.006
+      "perEuro": 72.006,
+      "source": "ecb"
     },
     {
       "iso": "BRL",
       "symbol": "R$",
       "name": "Brazilian real",
-      "perEuro": 5.8905
+      "perEuro": 5.8905,
+      "source": "ecb"
     },
     {
       "iso": "INR",
       "symbol": "₹",
       "name": "Indian rupee",
-      "perEuro": 110.1475
+      "perEuro": 110.1475,
+      "source": "ecb"
     },
     {
       "iso": "IDR",
       "symbol": "Rp",
       "name": "Indonesian rupiah",
-      "perEuro": 20352.48
+      "perEuro": 20352.48,
+      "source": "ecb"
     },
     {
       "iso": "MYR",
       "symbol": "RM",
       "name": "Malaysian ringgit",
-      "perEuro": 4.7061
+      "perEuro": 4.7061,
+      "source": "ecb"
+    },
+    {
+      "iso": "AED",
+      "symbol": "AED ",
+      "name": "UAE dirham",
+      "perEuro": 4.211691,
+      "source": "cbn"
+    },
+    {
+      "iso": "NGN",
+      "symbol": "₦",
+      "name": "Nigerian naira",
+      "perEuro": 1525.7837,
+      "source": "cbn"
     }
-  ]
+  ],
+  "_secondarySource": {
+    "publisher": "Central Bank of Nigeria",
+    "dataset": "Exchange rates, central rate",
+    "url": "https://www.cbn.gov.ng/rates/ExchRateByCurrency.html",
+    "rateDate": "2026-09-18",
+    "retrieved": "2026-09-19",
+    "covers": "The Nigerian naira and the UAE dirham, which the ECB does not publish.",
+    "method": "Naira per euro is the CBN central rate for the euro. Dirham per euro is the CBN central rate for the euro divided by its central rate for the dirham, both from the same day.",
+    "inputs": {
+      "ngnPerEur": 1525.7837,
+      "ngnPerAed": 362.2734
+    }
+  }
 }

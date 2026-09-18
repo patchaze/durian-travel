@@ -1,13 +1,55 @@
-// Every source this site leans on, in one place, with the date it was last
-// checked and the date the source itself last changed.
+// Every source this site leans on, in one place: what it is, the version read,
+// the date Durian last checked it, the date the source itself last changed,
+// and where it lives.
 //
-// Pages read from here instead of restating dates in their own copy, so a
-// figure and the date beside it can never drift apart. The two datasets that
-// already carry their own provenance are read from their own files rather
-// than copied, for the same reason.
+// Pages read their provenance from here and nowhere else, so a figure and the
+// date beside it can never drift apart. The datasets that already carry their
+// own provenance block are re-exported from their own files rather than copied,
+// for the same reason. The data itself (the countries, the visa entries, the
+// rates) is still read from the data files: this module owns only the
+// provenance.
+import { getCollection } from 'astro:content';
 import visaData from './visa-requirements.json';
 import costData from './country-costs.json';
 import rateData from './exchange-rates.json';
+
+/** The provenance blocks of the three datasets, exactly as their files hold them. */
+export const PROVENANCE = {
+  visa: visaData._source,
+  eurostat: costData._source,
+  rates: rateData._source,
+  ratesSecondary: rateData._secondarySource,
+};
+
+/** Every currency the planners convert into, with its rate and its source. */
+export const CURRENCIES = rateData.currencies;
+
+/** 18 September 2026, from 2026-09-18. */
+export const onDate = (value: string | Date): string =>
+  new Date(value).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+// ETIAS, as the official site stated it on the date below. Nobody can apply:
+// applications are not being collected, so no page may tell anybody to apply.
+export const ETIAS_STATUS = {
+  operational: false,
+  statement:
+    'ETIAS is currently not in operation and no applications for travel authorisations are collected at this point.',
+  fee: 'EUR 20',
+  countries: 30,
+  url: 'https://travel-europe.europa.eu/etias_en',
+  checked: '2026-09-17',
+};
+
+// The Schengen area, as the European Commission lists it on the date below.
+export const SCHENGEN_MEMBERS = {
+  eu: ['Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Czechia', 'Denmark', 'Estonia', 'Finland',
+       'France', 'Germany', 'Greece', 'Hungary', 'Italy', 'Latvia', 'Lithuania', 'Luxembourg',
+       'Malta', 'Netherlands', 'Poland', 'Portugal', 'Romania', 'Slovakia', 'Slovenia', 'Spain',
+       'Sweden'],
+  nonEu: ['Iceland', 'Norway', 'Switzerland', 'Liechtenstein'],
+  url: 'https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/schengen-area_en',
+  checked: '2026-09-18',
+};
 
 export interface SourceRecord {
   id: string;
@@ -19,11 +61,15 @@ export interface SourceRecord {
   lastChecked: string;
   /** When the source itself last changed, where the source says so. */
   lastChanged?: string;
+  /** Anything a reader needs to know about how the source is used. */
+  note?: string;
   url: string;
 }
 
-const visa = visaData._source;
-const cost = costData._source;
+const visa = PROVENANCE.visa;
+const cost = PROVENANCE.eurostat;
+const rates = PROVENANCE.rates;
+const ratesNg = PROVENANCE.ratesSecondary;
 
 export const SOURCES: SourceRecord[] = [
   {
@@ -39,19 +85,30 @@ export const SOURCES: SourceRecord[] = [
     id: 'eurostat-prices',
     name: `Eurostat, dataset ${cost.dataset}`,
     covers: 'What a day costs in each country, and every figure in the paid report.',
-    version: `Indicator ${cost.indicator}, reference year ${cost.referenceYear}`,
+    version: `Indicator ${cost.indicator}, ${cost.category.replace('A0111, ', '')}, reference year ${cost.referenceYear}`,
     lastChecked: cost.retrieved,
     lastChanged: cost.eurostatLastUpdated,
+    note: cost.note,
     url: cost.url,
   },
   {
     id: 'exchange-rates',
-    name: `${rateData._source.publisher}, ${rateData._source.dataset}`,
+    name: `${rates.publisher}, ${rates.dataset}`,
     covers: 'Converting the euro figures in the planners into the other currencies they offer.',
-    version: `Reference rates of ${rateData._source.rateDate}`,
-    lastChecked: rateData._source.retrieved,
-    lastChanged: rateData._source.rateDate,
-    url: rateData._source.url,
+    version: `Reference rates of ${onDate(rates.rateDate)}`,
+    lastChecked: rates.retrieved,
+    lastChanged: rates.rateDate,
+    url: rates.url,
+  },
+  {
+    id: 'exchange-rates-cbn',
+    name: `${ratesNg.publisher}, ${ratesNg.dataset}`,
+    covers: ratesNg.covers,
+    version: `Central rates of ${onDate(ratesNg.rateDate)}`,
+    lastChecked: ratesNg.retrieved,
+    lastChanged: ratesNg.rateDate,
+    note: ratesNg.method,
+    url: ratesNg.url,
   },
   {
     id: 'visa-code',
@@ -76,8 +133,8 @@ export const SOURCES: SourceRecord[] = [
     name: 'European Commission, Schengen area',
     covers: 'Which countries are in the Schengen area, and the position of Cyprus and Ireland.',
     version: '29 countries: 25 EU members plus Iceland, Norway, Switzerland and Liechtenstein',
-    lastChecked: '2026-09-18',
-    url: 'https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/schengen-area_en',
+    lastChecked: SCHENGEN_MEMBERS.checked,
+    url: SCHENGEN_MEMBERS.url,
   },
   {
     id: 'ees',
@@ -92,14 +149,28 @@ export const SOURCES: SourceRecord[] = [
     id: 'etias',
     name: 'The official ETIAS website',
     covers: 'What ETIAS will be, what it will cost, and that it is not running yet.',
-    version: 'Not in operation, no applications collected, fee stated as EUR 20',
-    lastChecked: '2026-09-17',
-    url: 'https://travel-europe.europa.eu/etias_en',
+    version: `Not in operation, no applications collected, fee stated as ${ETIAS_STATUS.fee}`,
+    lastChecked: ETIAS_STATUS.checked,
+    url: ETIAS_STATUS.url,
   },
 ];
 
 export const byId = (id: string): SourceRecord | undefined =>
   SOURCES.find((source) => source.id === id);
+
+/**
+ * The country guides, counted from the content collection rather than typed,
+ * with the most recent day any of them changed. Each guide carries its own
+ * lastUpdated in its frontmatter, stamped from the repository.
+ */
+export async function countryGuideFreshness(): Promise<{ count: number; lastUpdated: string | null }> {
+  const guides = await getCollection('destinations');
+  const dates = guides
+    .map((guide) => guide.data.lastUpdated)
+    .filter((date): date is string => typeof date === 'string')
+    .sort();
+  return { count: guides.length, lastUpdated: dates.length ? dates[dates.length - 1] : null };
+}
 
 /** What changed on this site, and when. The public half of the work log. */
 export interface ChangeRecord {
@@ -109,8 +180,12 @@ export interface ChangeRecord {
 
 export const CHANGES: ChangeRecord[] = [
   {
+    date: '2026-09-19',
+    what: 'Added the UAE dirham and the Nigerian naira to the planners, converted at the Central Bank of Nigeria\'s published central rates because the European Central Bank does not publish either.',
+  },
+  {
     date: '2026-09-18',
-    what: 'Published a sample of the paid report, cut the questions asked before payment from 21 to 13, and added the list of the 29 Schengen countries to the visa check.',
+    what: 'Published a sample of the paid report, cut the questions asked before payment from 21 to 13, added the list of the 29 Schengen countries to the visa check, and started converting prices at the European Central Bank\'s reference rates instead of relabelling euro figures.',
   },
   {
     date: '2026-09-17',
@@ -125,7 +200,3 @@ export const CHANGES: ChangeRecord[] = [
     what: 'Rebuilt the visa check on the consolidated text of Regulation (EU) 2018/1806, with the version and the date it was read shown on every answer.',
   },
 ];
-
-/** 18 September 2026, from 2026-09-18. */
-export const onDate = (value: string): string =>
-  new Date(value).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });

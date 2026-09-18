@@ -4,18 +4,31 @@ export interface Props {
   description: string;
   slug: string;
   pubDate: string;
+  /** When the post was last updated, if it has been since publication. */
+  modDate?: string;
   tags?: string[];
   readTime?: number;
 }
-const { title, description, slug, pubDate, tags = [], readTime = 5 } = Astro.props;
-const formattedDate = new Date(pubDate).toLocaleDateString('en-US', {
+const { title, description, slug, pubDate, modDate, tags = [], readTime = 5 } = Astro.props;
+const format = (value: string) => new Date(value).toLocaleDateString('en-US', {
   year: 'numeric', month: 'long', day: 'numeric'
 });
+const formattedDate = format(pubDate);
+// A post published in April and checked in September should say so. Only
+// shown when the update is on a later day than the publication.
+const showUpdated = Boolean(modDate) && modDate!.slice(0, 10) > pubDate.slice(0, 10);
+const formattedUpdated = showUpdated ? format(modDate!) : '';
 ---
 
 <article class="blog-card">
   <div class="blog-card__meta">
     <time datetime={pubDate} class="blog-card__date">{formattedDate}</time>
+    {showUpdated && (
+      <>
+        <span class="blog-card__sep" aria-hidden="true">·</span>
+        <span class="blog-card__updated">Updated <time datetime={modDate}>{formattedUpdated}</time></span>
+      </>
+    )}
     <span class="blog-card__sep" aria-hidden="true">·</span>
     <span class="blog-card__read">{readTime} min read</span>
   </div>

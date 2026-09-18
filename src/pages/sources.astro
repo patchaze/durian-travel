@@ -3,19 +3,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import costData from '../data/country-costs.json';
 import visaData from '../data/visa-requirements.json';
-import { CHANGES, onDate as onFreshDate } from '../data/freshness';
+import { CHANGES, PROVENANCE, onDate as onFreshDate } from '../data/freshness';
 
 const canonical = 'https://www.duriantravel.com/sources/';
 
 // Provenance is read from the same file that feeds the estimator, so this page
 // cannot drift from the data it describes. Update country-costs.json and this
 // page updates with it.
-const cost = costData._source;
+const cost = PROVENANCE.eurostat;
 const countryCount = costData.countries.length;
 
 // Same discipline for the visa tool: the provenance is read from the file that
 // feeds it, so this page cannot drift from the data it describes.
-const visa = visaData._source;
+const visa = PROVENANCE.visa;
 const visaEntryCount = visaData.entries.length;
 
 const borderSources = [
@@ -253,8 +253,8 @@ const schema = {
         <p>
           <strong>Resolved, as far as we can resolve it.</strong> On 12 September 2026 we checked
           the official ETIAS site itself, and it states the fee as EUR 20. That is the same figure
-          the Commission announced, now on the site travellers are sent to, so we plan around EUR
-          20. Both figures stay above with their dates, because the EEAS page still said EUR 7 when
+          the Commission announced, now on the site travellers are sent to, so we treat EUR 20
+          as the fee. Both figures stay above with their dates, because the EEAS page still said EUR 7 when
           we last looked on 2 September 2026 and we would rather show you the disagreement than
           tidy it away.
         </p>

@@ -347,7 +347,7 @@ export interface ReportInput {
 
 // The currency labels the page offers, plus the empty string. An allowlist
 // rather than a passthrough, so no posted currency reaches the HTML unmapped.
-const CURRENCIES = ['€', '$', '£', '₱', 'R$', '₹', 'Rp', 'RM', ''];
+const CURRENCIES = ['€', '$', '£', '₱', 'R$', '₹', 'Rp', 'RM', 'AED ', '₦', ''];
 
 // Every answer label the report prints, keyed by the value posted. Nothing a
 // visitor sends is printed directly, except where they typed where they are
