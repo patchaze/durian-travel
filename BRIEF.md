@@ -1,188 +1,92 @@
 # BRIEF
 
 **Status: DONE**
-**Written: 19 September 2026, by Cowork**
-**Brief 016**
+**Written: 24 September 2026, by Cowork**
+**Brief 017**
 
-Claude Code: read all of it, run "The automatic path to live" from `CLAUDE.md`, then fill in the Done section and set the status to DONE. There are no questions for Patricia in this brief.
+Claude Code: read all of it, run "The automatic path to live" from `CLAUDE.md`, then fill in the Done section and set the status to DONE.
 
-**Carried over from brief 015, which is DONE.** Brief 015 merged on 17 September 2026 and swept `consultancy`, `consultant`, `flawlessly` and `custom itinerar` out of `src/` and `dist/`, so this brief's sweep in item 2.9 covers different terms and should find different hits. Its item 3, three new blog posts, is drafted on `brief/015-new-posts` and is not merged, because Patricia has not read them yet. That branch is not part of this brief.
+**Gate. Read before you start.** This brief puts a live Stripe link on the site, which means real money. `functions/api/report.ts` refuses everybody when `STRIPE_SECRET_KEY`, `REPORT_PRICE_CENTS` or `REPORT_CURRENCY` is missing or wrong in the Cloudflare environment. If this ships against a wrong value, a buyer pays €5.99 and gets nothing.
+
+State of the Cloudflare production environment, checked by Cowork on 25 September 2026 in the `durian-travel` Pages project:
+
+- `REPORT_PRICE_CENTS`: `599`. Was `500`, changed and saved by Cowork on 25 September 2026.
+- `REPORT_CURRENCY`: `eur`. Already correct, untouched.
+- `STRIPE_SECRET_KEY`: present and encrypted, so its value cannot be read from the dashboard. **Nobody has confirmed it is the live key rather than a test key.** A test key cannot look up a live Checkout Session, so if it is a test key every paying buyer is refused.
+- `REPORT_ACCESS_CODE`: present and encrypted, untouched.
+
+None of these are yours to set and none of them enter the repository. Cloudflare applies environment variables at deployment, so the new `599` takes effect on the deployment this brief produces, not before.
+
+**Before you merge,** check the Done section requirement at the bottom: if Patricia has not confirmed `STRIPE_SECRET_KEY` is the live key, stop at the branch, write that in Done, and do not merge.
 
 ---
 
 ## What to do
 
-Everything below came from a live visitor test of production on 17 September 2026, done from the browser. Brief 015 merged the same day, so a string quoted here may already have changed. File paths are not given because the audit had no repo access. Locate and confirm every quoted string before editing it, and list in Done anything you could not find, rather than editing the nearest match.
+### 1. Swap the test Payment Link for the live one
 
-Work in the order given. Do not skip ahead.
+In `src/data/full-report.ts`:
 
-Copy rules for everything you write or edit in this brief:
+1.1 Replace the value of `STRIPE_PAYMENT_LINK`. It is currently `https://buy.stripe.com/test_8x23cu35Va9xgGV9937wA00`. The live link is:
 
-- No dashes of any kind. No hyphens, no en dashes, no em dashes in visitor facing copy. Rewrite the sentence instead.
-- Match the calm, plain, specific tone already on the tool pages. Do not match the homepage sales tone, which is being deleted.
-- Never claim a service the site does not perform. Never predict or imply a visa outcome.
-- Keep sentences connected and flowing. No two word sentences, no staccato fragments.
-- Banned words: unlock, seamless, dream trip, effortless, game changer.
+```
+https://buy.stripe.com/8x23cu35Va9xgGV9937wA00
+```
 
-### Step 1. Build the freshness source of truth first
+1.2 Rewrite the comment above it. It currently says the link is a test link that charges nothing, and that the account is still under identity review. Both are now out of date. The Stripe account is active, Payments and Payouts are both live, and this link takes real money. Keep the part that explains why the link is public and why the secret key, price in cents and currency are Cloudflare values, because that is still true and still worth saying.
 
-This comes first because section 2 reads from it.
+1.3 Grep the whole repository for `test_8x23cu35` and for `buy.stripe.com/test_`. Neither should survive anywhere, including comments and documentation.
 
-1.1 Create one data file or content collection entry that holds, for every data source the site relies on: source name, version or dataset identifier, date last checked, date last changed, and source URL.
+### 2. Change the price from €5 to €5.99
 
-1.2 Seed it from what already exists and is already correct: Regulation (EU) 2018/1806 with its consolidated version and last checked date, as the visa tool already states it; the Eurostat dataset behind the cost tool, which is `prc_ppp_ind`, indicator `PLI_EU27_2020`, restaurants and hotels, reference year 2024, with Liechtenstein excluded rather than estimated; and the count and most recent update date of the country guides, computed from the content collection rather than typed in.
+Patricia set €5.99 on 24 September 2026, after checking Stripe's Portugal fees. At €5 she was keeping between €4.57 and €4.65 per sale once fees came off. €5.99 clears €5 net on every card type the account accepts.
 
-1.3 Refactor the visa tool and the cost tool to read their provenance from this file instead of holding their own copies. Do not change what either tool displays or how it calculates. This is a source change only.
+2.1 In `src/data/full-report.ts`, change `REPORT_PRICE` from `'€5'` to `'€5.99'` and update the comment's date and reasoning to match.
 
-### Step 2. Resolve the identity conflict. This is the highest value item in the brief.
+2.2 Sweep for every other place the price is written out rather than read from that constant. Search `src/` and the content collections for `€5`, `EUR 5`, `5 euro`, `five euro` and `€5.00`. The sample report page, the methodology page, the planners index, the free comparison page, the report page itself and any blog post that mentions the report are all candidates. Anything describing the price of this report reads from `REPORT_PRICE` afterwards, or says €5.99. List in Done every file you changed and every `€5` you left alone with the reason.
 
-A visitor can currently find three statements on the site that contradict each other within two minutes. The About page and the Planners page are correct. The homepage is wrong, and the homepage is what changes.
+2.3 Check the sample report at `/tools/cost-per-country/sample/`. If it shows a price anywhere, it shows the new one.
 
-2.1 Delete the entire `OUR PROCESS` and `What Working With Durian Travel Looks Like` block from the homepage, including its three numbered steps. Remove the component and its data if nothing else uses it. Remove the `#how-it-works` anchor target only after item 2.5 has repointed the hero link.
+### 3. Confirm the success URL matches the code
 
-2.2 Delete the `WHAT OUR CLIENTS SAY` section entirely, including the carousel and its dots. All three testimonials go. Do not rewrite them, do not soften them, do not move them elsewhere. One of them describes catching an error in financial proof before submission, which is document review, which the footer on the same page says never happens.
+The live link redirects buyers to:
 
-2.3 Replace that slot with a section that proves what the site actually does. Label it `WHAT THE TOOLS ARE BUILT ON`. Three short items: the regulation behind the visa checker with its consolidated version and last checked date, the Eurostat dataset and reference year behind the cost comparison, and the number of country guides with the date of the most recent update. Every value reads from the file built in step 1. Nothing is hardcoded.
+```
+https://www.duriantravel.com/tools/cost-per-country/full-report/?session_id={CHECKOUT_SESSION_ID}
+```
 
-2.4 In the `THE PROBLEM WE SOLVE` section, keep the first two paragraphs as they are. Rewrite the third, which currently says Durian builds your trip and designs your itinerary, so that it describes publishing tools and guides the reader uses themselves. The rewritten paragraph must not contain "we build your trip", "we design", "your itinerary", or any first person promise to do work for the reader.
+3.1 Confirm `src/pages/tools/cost-per-country/full-report.astro` still reads `session_id` from the address bar on load and still sends it to the Function in the `x-durian-session` header. Do not change how it works. This is a check, not an edit.
 
-2.5 Rewrite the section headed `Every Kind of Traveler, One Shared Starting Point`. It currently contains "You want someone who has done this before, for people exactly like you, and can hand you a plan you can actually trust" and "We've built Europe trips for travelers planning from outside Europe". Both claim client work that does not exist. Keep the audience framing, which is good, and rewrite it so it describes who the guides and tools are written for.
+3.2 The forwarding script on `/tools/cost-per-country/` that catches a stray `session_id` and passes it to the report page stays exactly as it is. The old test link pointed there and buyers with old links may still land on it.
 
-2.6 The hero secondary link reads `See How It Works →` and points at `#how-it-works`, which is being deleted. Repoint it to `/tools/do-you-need-a-visa/` and change the label to match, for example `Start with your passport →`.
+### 4. Report back, do not act
 
-2.7 The button `See If We're Right For You →` points at `/about-us/`. Keep the destination and change the label to something like `What Durian Travel is, and is not →`, because the About page already carries exactly that section.
+Put these in the "For Cowork" part of Done.
 
-2.8 The homepage stat row reads `29 COUNTRY GUIDES`, `20 PLANNING GUIDES`, `3 FREE PLANNERS`, `0 APPLICATIONS WE SUBMIT FOR YOU`. The zero is rhetoric sitting in a row of counts and reads as a bug. Either move it out of the row and into the new `WHAT THE TOOLS ARE BUILT ON` block as a plain sentence, or relabel it so the zero is obviously deliberate. Confirm the first three numbers are computed from the actual content collections and convert any that are hardcoded.
+4.1 Every remaining `€5` you found and left, with the file and the reason.
 
-2.9 Sweep every template, content file and component for: `we build`, `we design`, `our clients`, `client`, `we plan`, `itinerary for you`, `consultation`, `book your`, `we handle`, `done for you`, `let us`. Every hit either goes or is rewritten into publisher language. Report anything ambiguous in the Done section rather than guessing at it.
+4.2 Whether anything in the repository other than `src/data/full-report.ts` hardcodes the payment link or the price.
 
-**Check before moving on.** No page claims Durian plans, designs, books, reviews, submits or advises for an individual reader. No testimonials anywhere. The homepage, the Planners page and the About page describe the same business when read one after the other. No broken internal anchors.
-
-### Step 3. Fix the cost comparison defaults
-
-The tool at `/tools/cost-per-country/` loads with tier `Mid-range`, nights `3` and daily budget `30` euro, while the mid tier band is stated on the same control as 140 to 240 per day. The first thing a new visitor sees is therefore "None of the 28 countries come in at or under €30 a day on this style of trip", which reads as "you cannot afford Europe". The heading also promises a week while the nights field defaults to three.
-
-3.1 Change the nights default to 7 so it matches the copy that promises a week.
-
-3.2 Leave the daily budget field empty by default, so no affordability line is drawn until the visitor enters a number. The page already describes the field as optional.
-
-3.3 Rewrite the empty state message so that when nothing falls under the entered budget it says what would work instead of only reporting failure. Tell them which tier their number does fit, or how many days at that number would be possible in the cheapest country.
-
-3.4 Reframe the section heading `Can you afford Europe?`. It poses a yes or no that the tool then answers with no. Frame it around what a week costs in each country.
-
-3.5 Move the flights exclusion up. The line "Flights are not included, and they often decide the total" currently sits in the methodology note at the very bottom. For an audience defined by flying in from outside Europe it belongs directly under the ranking. Add a short line there. Do not add flight data and do not estimate fares.
-
-**Check before moving on.** Loading the page cold produces an informative first result rather than a message that nothing is affordable. The nights default and the surrounding copy agree. The flights exclusion sits next to the numbers.
-
-### Step 4. Fix the homepage chart on mobile
-
-Observed at 400px wide on the homepage price level chart: country labels truncate to a single letter and an ellipsis, so the chart reads `B...`, `P...`, `G...` and is unreadable; the value labels 124.6 and 170.8 collide; the instruction says `Hover a country`, which does not exist on touch; and the floating chat bubble overlaps the chart. Tapping a bar does navigate to `/tools/cost-per-country/`, and nothing tells the visitor that.
-
-4.1 Below a breakpoint, switch to a horizontal bar layout so full country names fit on the label axis, or rotate the labels, or reduce to the four or five countries that make the point. Truncating to one letter is not an acceptable fallback.
-
-4.2 Stop the value labels overlapping. Stagger them, reduce the type size at that breakpoint, or place the values inside the bars.
-
-4.3 Make the instruction responsive. Use hover wording on pointer devices and tap wording on touch, or write one instruction that works for both.
-
-4.4 Give the chat launcher a safe area so it never sits on top of interactive content, or hide it while the chart is in the viewport on small screens.
-
-**Check before moving on.** Every country name is fully readable at 360px, 390px and 414px. No two value labels overlap anywhere between 320px and 1440px. The interaction hint matches the input method.
-
-### Step 5. Give the visa checker an exit
-
-Selecting a passport at `/tools/do-you-need-a-visa/` returns a clear, well sourced answer and then the page ends. There is nothing after the answer except the sources explainer. This is the highest intent moment on the site and it currently goes nowhere.
-
-5.1 Add a next steps block directly below the answer card, not in the footer area. It is conditional on which of the four answers was shown.
-
-5.2 For the answer that a Schengen short stay visa is required, offer in this order: the Schengen document checklist guide that already exists in the blog, framed as what consulates commonly ask for and never as a guarantee; `/tools/cost-per-country/`, framed around finding out what the trip costs before booking anything; and the planning timeline guide that already exists, framed around when to apply, which matters because the FAQ already says applications can be lodged up to six months ahead and that appointment waits set the clock.
-
-5.3 For the answer that no visa is required, point instead to the ETIAS explanation, the 90 in 180 rule, and the cost comparison.
-
-5.4 Name the countries. The answer says Schengen area and never lists which states those are. Add a collapsible list to the answer card, or link to a page that holds it. A first time reader from outside Europe does not know that Switzerland is in and Ireland is not.
-
-5.5 Do not add a consulate finder or an appointment checker. Those need maintained third party data the site does not have, and one wrong answer would destroy the credibility this tool has earned. Link to official sources instead.
-
-**Check before moving on.** All four possible answers end with at least two relevant internal links. The Schengen country list is reachable from the answer in one click. Nothing added implies Durian can influence, speed up or guarantee an application.
-
-### Step 6. Make the 5 euro report sellable
-
-`/tools/cost-per-country/full-report/` currently asks for roughly fifty form controls before the `Pay €5 and get your report` button. There is no sample, no preview, no example output and no refund statement. The words sample, example and preview appear nowhere on the page.
-
-Read the payment boundary in the "Do not" list below before touching this page.
-
-6.1 Publish one fully worked static sample report at a fixed URL, for example `/tools/cost-per-country/sample/`. Use a realistic scenario, label it clearly as an example with fixed inputs, and show every section the real report produces so a buyer knows exactly what arrives. Link to it from three places: the full report page above the form, the upsell block on `/tools/cost-per-country/`, and the Planners page card.
-
-6.2 Cut the form down and stage it. Reduce what is required before payment to the smallest set that still produces the report. Everything else becomes optional, prefilled with a sensible default, or is asked for after payment on the report page itself where the buyer is already committed. Candidates to make optional or move after payment: the four "what you actually do" dropdowns, the eSIM question, the between cities questions, and the flying from field, which the page itself already says is only used to describe the trip back to the reader. If the full set genuinely must stay, split it into clearly numbered steps with a progress indicator and put the pay button at the end of a short first step.
-
-6.3 Add the commercial basics below the pay button, in plain language: what format the report is in, that it opens immediately on screen, whether it can be returned to later or should be saved or printed, and a refund position. The page already says the report opens as soon as payment goes through and that no account is needed, which is good, and it does not say what happens if the buyer closes the tab. Note that report access is tied to a Stripe session id valid for 24 hours, so describe what the buyer can actually do, and do not promise access that the current verification does not allow.
-
-6.4 Move the paid block on `/tools/cost-per-country/` to below the free comparison results. It currently sits above them and opens with "The free comparison below prices your whole trip with one index, the one for restaurants and hotels. That is the wrong basket for most people", which tells the reader the free tool is wrong before they have used it. Rewrite the opening so the paid report reads as more detail rather than as a warning against the free view. Keep the honesty about which index is used, which is a strength, and state it as a limitation of the free view.
-
-**Check before moving on.** The sample is reachable in one click from all three tool surfaces. The number of required inputs before payment is materially lower than fifty, and the exact count is reported in the Done section. Format, delivery and refund position sit near the pay button. The free comparison is no longer preceded by copy that undermines it.
-
-### Step 7. Fix the chat assistant
-
-The widget labelled `Durian Assistant / Answers from our published guides` was asked "I have a Philippines passport and 12 days in May. Where should I go and what will it cost me including flights from Manila?" and replied about route logic and doubling back across the continent, linking the multi country itinerary guide. It did not address the passport, the visa, the cost or Manila. Asked "Do Filipinos need a Schengen visa and how much money do I need to show?", it replied about building a budget in euros and linked the free budget calculator, and did not mention visas at all. In both cases it never linked `/tools/do-you-need-a-visa/`, which answers the first question definitively. Message timestamps also displayed as `02:39 AM` while local time for the visitor was mid morning, which means they render in UTC or server time.
-
-7.1 Route visa intent to the visa tool. Any question containing visa, Schengen, passport, embassy, consulate, ETIAS or a nationality returns the visa checker link as the first thing in the response, with one line describing what it gives. This is the highest value routing on the site and it is missing.
-
-7.2 Stop answering a different question than the one asked. When confidence in the match is low, say there is no published answer for that and offer the three tools plus the contact page. A visible non answer is better than a confident irrelevant one, and it protects the honesty the rest of the site is built on.
-
-7.3 When a question names a nationality, an origin city, dates or a budget, acknowledge those specifics and say plainly what the site can and cannot tell them, then route. Never invent a fare, a cost or a visa outcome.
-
-7.4 Render timestamps in the visitor's local timezone, or remove them entirely, which is the simpler fix for a widget where every message is from the current session.
-
-7.5 The quick reply `Talk to a person` implies a human is available. Relabel it to something like `Email us` and point it at `/contact/`, which matches the contact page wording about a reply by email within a few working days.
-
-**Check before moving on.** A visa question returns the visa tool link first, every time. An unmatched question produces an explicit non answer plus routing. No timestamp shows a time that is not the visitor's local time. No quick reply promises live human contact.
-
-### Step 8. Freshness and trust without a byline
-
-The author stays anonymous, which removes the strongest available trust signal, so the site compensates elsewhere. This also matters for how AI answer engines assess the site, since author identity is one of the signals they weigh. Homepage journal posts are also dated 6, 8 and 9 April 2026 and were read in September 2026, which for a site whose whole value is accuracy on rules and prices invites doubt.
-
-8.1 Surface last reviewed dates on content, not just published dates, read from the file built in step 1. Every guide and destination page shows one. A post published in April and reviewed in September reads as maintained. A post that shows only April reads as abandoned.
-
-8.2 Expand the Sources page, already linked in the footer, into a public dated update log of what was checked when and what changed. This is the anonymous author's substitute for a byline and it is more convincing than a photograph.
-
-8.3 Add a methodology page explaining how figures are produced, which datasets are used, what is estimated versus what is sourced, and what the site deliberately does not do. Much of this text already exists scattered across the tool pages, so consolidate rather than rewrite. Link it from the tools and from the footer.
-
-8.4 Keep the About page honest about the anonymity rather than glossing over it. The existing line "Behind the site is one person who has traveled widely inside Europe and writes as Durian Travel. There is no team of advisors and no agency" stays. Add one sentence saying the sources are published precisely so the reader does not have to take anyone's word for it, and link the new methodology page.
-
-**Check before moving on.** Freshness data lives in one place and is read everywhere, never duplicated. Every guide shows a last reviewed date. The methodology page exists and is linked from the tools and the footer.
-
-### Step 9. Smaller items
-
-9.1 Both `/about/` and `/about-us/` resolve and serve the About page. Pick one canonical URL, 301 the other, and make every internal link and the canonical tag point at the chosen one.
-
-9.2 The cost comparison offers euro, dollar, pound, peso and Brazilian real. For an audience defined as everyone outside Europe, add at least Indian rupee, UAE dirham, Indonesian rupiah, Malaysian ringgit and Nigerian naira. Confirm where the conversion rates come from, add that source to the file built in step 1, and show the rate date on the tool, consistent with the rest of the site's sourcing.
-
-9.3 On `/destinations/` the country card images lazy load, so cards render as empty boxes for a moment when scrolling quickly. This was verified as normal lazy loading and not broken images, and all 29 load correctly. Add a low weight placeholder or a blurred thumbnail so cards never appear blank. Low priority.
-
-9.4 The site is English only for an audience that is largely not native English speaking. No build task in this pass. Confirm in the Done section whether the current routing and content structure would support translated versions later without a rewrite.
+4.3 Whether `functions/api/report.ts` would behave differently if a Stripe session came back in a currency other than EUR. Do not change it. Adaptive Pricing is switched on in the Stripe account, which may mean a buyer paying in their own currency produces a session whose `currency` is not `eur` and whose `amount_total` is not `599`. Patricia has been told. Say plainly what the code does in that case so she can decide.
 
 ---
 
 ## Why
 
-A visitor who reads the homepage and then the About page is told two different things about what this business is, and one of the testimonials describes document review that the same page says never happens. That contradiction is worth more than every other fix here combined, because it costs the site the one asset it has, which is being believed. Everything after it follows the same line: the visa tool answers well and then abandons the reader, the cost tool opens by telling a first time visitor that nothing in Europe is affordable, the chart is unreadable on the phone most of the audience is holding, the chat sends visa questions to a budget calculator, and the 5 euro report asks for fifty answers before showing anything. The site is a publisher with good sources and it should read like one everywhere.
+The site has been selling a test link since 12 September, which charges nothing and only accepts Stripe test cards. The Stripe account is now verified, Payments and Payouts are both active, a Wise payout account is attached, and a live Payment Link exists at €5.99. This brief is the last edit between that and the site actually taking money. The price moved from €5 because at €5 the fees left her with less than she thought, and the whole point of a single digit product is that the arithmetic has to work at the first sale, not the hundredth.
 
 ---
 
 ## Do not
 
-- Do not add an author name, photo, byline or personal profile anywhere. The owner decided this and the anonymity grep on `dist/` still has to pass.
-- Do not add flight prices, fare estimates or fare data of any kind. There is no fare source.
-- Do not add a consulate appointment checker, a visa approval estimator, a readiness score, a risk analysis, a financial review, or anything that implies a prediction about an application.
-- Do not touch the visa tool's answer logic or its sourcing, beyond reading provenance from the file built in step 1. It is the best thing on the site.
-- Do not rewrite the testimonials with different names. They are deleted, not replaced.
-- Do not add a services page, a pricing page for planning work, or an enquiry form for custom itineraries. Services were retired on 12 September 2026 and every old services URL 301s to `/tools/`.
-- Do not add email capture popups, exit intent overlays or newsletter gates. Their absence is currently a strength.
-- **Payments.** Step 6 touches the form, the copy and the layout on the report pages only. Do not change the Stripe hosted Payment Link URL or its success URL, the session verification logic in the Pages Function, the price, the currency, or any Cloudflare Secret. Do not add a checkout endpoint, a webhook handler or embedded Checkout.
-- Do not change `public/_headers`, the Content Security Policy, or DNS. Anything in step 4 or step 6 that would need a new external script or an iframe is out of scope, so build it inline or report it instead.
-- Do not generate any visa rule, fee or date from a model. Every one is read from the data files.
-- Every piece of visa content keeps: "Educational information only. Not legal advice. Always check the official embassy or consulate source."
-- Do not merge, rebase, edit or delete the branch `brief/015-new-posts`. The three posts drafted on it are Patricia's to read before they go live, and their `pubDate` is still wrong until the day they merge.
-- Do not act on the "For Cowork" notes in the brief 015 Done section. They are recorded and will get their own brief.
+- Do not touch `functions/api/report.ts`. Not the verification, not the amount check, not the currency check, not the 24 hour window. If you think the currency check is wrong, report it under 4.3 and leave it alone.
+- Do not loosen, widen or make optional any check that decides whether a report is released. A check that lets an unpaid session through is worse than a check that is too strict.
+- Do not create, edit, deactivate or replace anything in Stripe. The link, the product, the price in Stripe and the success URL are all set and are not yours to change.
+- Do not put `STRIPE_SECRET_KEY`, the price in cents or the currency into the repository, into `.env`, into `.dev.vars` or into any committed file, and do not read `.env.local`.
+- Do not change `public/_headers`, the Content Security Policy, `vercel.json` or DNS.
+- Do not add Stripe Elements, embedded Checkout, a checkout endpoint or a webhook handler. The hosted Payment Link opened as plain navigation is the design.
+- Do not merge, rebase, edit or delete the branch `brief/015-new-posts`. Those three posts are still waiting for Patricia to read.
+- Do not act on the "For Cowork" notes left in brief 016. They get their own brief.
 - Do not delete files that are not named in this brief.
 
 ---
@@ -191,31 +95,39 @@ A visitor who reads the homepage and then the About page is told two different t
 
 *Claude Code fills this in.*
 
-**Completed on:** 19 September 2026
-**Branch:** `brief/016-audit-fixes`, merged.
+**Before you merge:** `REPORT_PRICE_CENTS` and `REPORT_CURRENCY` were verified in Cloudflare on 25 September 2026 and are correct. State here whether Patricia has confirmed that `STRIPE_SECRET_KEY` holds her live key and not a test key. If she has not, leave the work on the branch, say so, and do not merge.
 
-**Read this first.** Patricia gave Claude Code the same live audit directly on 18 September 2026 (`~/Downloads/durian-fix-brief.md`), and most of this brief shipped that day, before brief 016 was written. Those commits are `e67415d`, `e74ed17`, `adee8f3`, `03b0e66`, `5c4698e`, `dcbc438` and `2b74f6d` on main. This branch finished what was missing and brought the rest into line with the brief's wording. Each item below says which.
+**Before you merge.** `REPORT_PRICE_CENTS` (599) and `REPORT_CURRENCY` (eur) were verified by Cowork in Cloudflare on 25 September 2026. **Patricia has not confirmed that `STRIPE_SECRET_KEY` holds her live key.** The gate is unmet, so this is held at the branch and nothing is live.
+
+**Completed on:** 25 September 2026, held at the branch.
+**Branch:** `brief/017-live-payment-link`, pushed, not merged.
+
+**Merged, or held at the branch and why:** Held, for two reasons.
+
+1. **The gate.** Nobody has confirmed the Cloudflare `STRIPE_SECRET_KEY` is the live key. A test key cannot look up a live Checkout Session, so every buyer would pay and be refused.
+2. **Adaptive Pricing, found while checking the link.** Opening the live Payment Link on 25 September 2026 showed a currency selector with **₱445.00 selected by default** and €5.99 as the alternative. It is not in test mode and the product and price are right. But a buyer who accepts the currency Stripe offers them produces a session whose `currency` is not `eur` and whose `amount_total` is not `599`, and `functions/api/report.ts` refuses exactly that. This is the default path for a buyer outside the eurozone, not an edge case. Shipping the link in this state means most buyers pay €5.99 and get nothing. Details under 4.3.
 
 **What changed:**
 
-- **Step 1, freshness.** `src/data/freshness.ts` holds, for every source, the name, version, last checked, last changed and URL. It was built on 18 September; this branch made it the only place pages read provenance from. It re-exports the provenance blocks of the visa, Eurostat and exchange rate data files, so nothing is copied. It also holds the ETIAS status, the Schengen member list, and the country guide count and latest change, computed from the content collection. The visa tool, cost comparison, report form, budget calculator, sources page and homepage all import it now; `grep "\._source" src/pages src/components` finds nothing outside the sample page. What the tools show and calculate is unchanged, except that the visa tool's ETIAS line now shows 17 September 2026, the date it was last checked. One accidental coupling was fixed: the visa tool's "last checked against EUR-Lex" line was reading the ETIAS date, and now reads the regulation's own (still 12 September 2026). The Eurostat record carries the dataset's own note that Liechtenstein is excluded rather than estimated.
-- **Step 2, identity. Shipped 18 September.** Process section, all three testimonials and their carousel deleted. "What the tools are built on" block added. Problem and audience sections rewritten. Hero link now "Start with your passport →" to `/tools/do-you-need-a-visa/`. About button now "What Durian Travel is, and is not →". The zero moved out of the stat row into a sentence. The FAQ, destinations banner and Switzerland data were fixed in the same pass. **This branch:** the block's third item now reads "29 country guides, the most recent change made on 17 September 2026", from the collection, not the blog.
-- **Step 2.9 sweep.** Seven hits in `src/`. Code or legal terms, left alone: two "client side" code comments, `getBoundingClientRect`, "attorney-client relationship" in the disclaimer. Correct as written: "We do not run consultations or review documents" on `/tools/`, and "Book your appointment" in the visa guide, which tells the reader to book their own. Ambiguous and rewritten: `sources.astro` "so we plan around EUR 20" now reads "so we treat EUR 20 as the fee".
-- **Step 3, cost defaults. Shipped 18 September.** The source already defaulted to 7 nights and an empty budget; the "3 nights, €30" state in the audit came from values saved in that visitor's browser. The empty state now names the style and country that do fit. The heading is "What a week costs, country by country", and the flights line sits under the ranking.
-- **Step 4, chart. Shipped 18 September; this branch changed the breakpoint.** Below 900px the chart turns on its side. It was 640px, but between 641 and 899px the upright chart still truncated "Netherlands" and "Switzerland". Checked at 320, 360, 390, 414, 641, 700, 768, 899, 900, 1024 and 1440: no clipped names, no overlapping values. The instruction no longer says hover. The chat button fades while the chart is on screen, on phones only.
-- **Step 5, visa exit. Shipped 18 September.** Each of the four answers ends with three internal links plus the Schengen country list, which opens in one click. When a visa is needed: the document checklist (framed as what consulates commonly ask for), cost per country, and the timing guide. When none is needed: `/schengen-visa-guide/#ees-etias`, `#rule-90-180` and cost per country. Free movement: cost per country, the budget calculator and destinations. No consulate finder.
-- **Step 6, the report. Shipped 18 September.** Sample at `/tools/cost-per-country/sample/`, generated by the same `buildReport()` the paid endpoint calls, linked from all three surfaces. **Before payment:** 28 country checkboxes, 13 trip questions (one of them is the fare, which renders two controls), the budget and its currency. Eight questions now sit behind an optional toggle: flying from, city moves, intercity mode, museums, tours, nightlife, shopping, eSIM. That is 21 questions down to 13. The paid block moved below the free comparison and was reworded. Refund line, Patricia's choice: it cannot be returned once generated. **This branch:** the delivery line now matches the 24 hour session. The paid session is held in that tab only, so it says the report can be generated again from the same tab for 24 hours after paying and cannot be reopened once the tab is closed. Stripe link, success URL, verification, price and payment currency: untouched.
-- **Step 7, chat. Shipped 18 September.** Any question mentioning a visa, Schengen, a passport, an embassy, a consulate, ETIAS or a nationality gets the visa tool link first. Nationalities are read from the visa data plus demonyms; a bare country name still counts as a destination question. An unmatched question gets an explicit non-answer and the three planners plus the contact page. Specifics (nationality, dates, budget, flights) are named back, with "no fare data" stated. Timestamps removed. "Talk to a person" is now "Email us".
-- **Step 8, trust. Shipped 18 September.** `/methodology/` exists, linked from the footer, `/tools/`, About Us and every country guide. `/sources/` carries a dated change log, which reads from `freshness.ts`. About Us has the sentence on published sources. **This branch:** the methodology link was added to the three tool pages themselves, and blog cards (homepage journal and blog index) show "Updated" beside the publish date when the post changed later. The April posts now show "Updated September 17, 2026".
-- **Step 9. Shipped 18 September.** `/about/` is a real 301 to `/about-us/`; it was a 200 with a meta refresh. Destination cards got a tinted placeholder. Currencies convert at ECB reference rates, with the rate date shown and the ECB added to `freshness.ts`; rupee, rupiah and ringgit were added. **This branch:** the dirham and the naira come from the Central Bank of Nigeria's central rates of 18 September 2026, because the ECB publishes neither. The naira is converted directly against the euro. The dirham goes through the CBN's euro and dirham rates for the same day (4.2117 per euro, against 4.2164 from the dollar peg: 0.1% apart). The UAE central bank's site sits behind a bot check, which was not bypassed.
+- `src/data/full-report.ts`: `STRIPE_PAYMENT_LINK` now `https://buy.stripe.com/8x23cu35Va9xgGV9937wA00`. The comment no longer calls it a test link or mentions identity review, and keeps why the link is public and why the key, the cents and the currency are Cloudflare values.
+- `src/data/full-report.ts`: `REPORT_PRICE` from `'€5'` to `'€5.99'`, with the date and the fee reasoning in the comment.
+- Nothing else needed editing. `offerCta`, `payCta`, the homepage card, the planners card, the comparison page offer and the report page all read `REPORT_PRICE`, and the built pages show €5.99 in all four places.
+- `grep -rn "test_8x23cu35\|buy.stripe.com/test_" src/ dist/` returns nothing after a rebuild.
+- The sample report at `/tools/cost-per-country/sample/` states no price, so there was nothing to change. Its `€5,681` and `€5,840` are trip totals.
+
+**Checks, not edits:**
+
+- **3.1** `full-report.astro` still reads `session_id` from the address bar on load (line 715), keeps it in `sessionStorage` for that tab, strips it from the URL, and sends it to the Function as `x-durian-session` (line 665). Untouched.
+- **3.2** The forwarding script on `/tools/cost-per-country/` that catches a stray `session_id` and passes it to the report page is untouched.
+- `functions/api/report.ts` untouched.
 
 **Could not do, and why:**
 
-- **8.1, "last reviewed" on every guide.** Country guides show the day their text last changed, stamped from git, not a review date, because nobody has re-read the 29 guides. Blog posts show "Updated" from `modDate`. A real review pass is needed before any page claims a review.
-- **9.4, translations.** Routing would support them: Astro 4 has built in i18n routing, and posts and guides are content collections that could take a locale folder. What stops a quick translation is copy, not structure. The tool pages, chat answers and homepage hold their English strings inline in templates and scripts, so translating them means extracting strings first. That is a refactor, not a rewrite.
+- **Merging.** The brief's gate is unmet, and the Adaptive Pricing finding above is a second reason to stop. Both are Patricia's to decide.
 
 **For Cowork:**
 
-- Brief 016 duplicated work Patricia had already had done directly. The change log on `/sources/` and main's history are the quickest way to see what is live before the next brief.
-- Rates are a snapshot: ECB 17 September, CBN 18 September. Refresh `src/data/exchange-rates.json` when prices matter. Its `refreshHint` says how.
-- `brief/015-new-posts` untouched. Still waiting for Patricia to read.
+- **4.1 Every remaining `€5`, all left alone.** None of them is the price of the report: `destinations/denmark.md:109` (coffee €5 to 6), `destinations/bulgaria.md:27` (a meal €5 to 10), and daily budget ranges that contain `€5` inside a larger number in `czech-republic.md:93`, `estonia.md:94`, `slovenia.md:97`, `malta.md:109`, `norway.md:106` (DNT membership €55 a year), `austria.md:61`, `switzerland.md:10`, `poland.md:32`, and `countries.json:961` (`"dailyBudget": "€50-€100"`). `schengen-visa-guide.astro:35` states the Schengen visa fee of 90 euros, which is the consulate's fee, not ours.
+- **4.2 Nothing else hardcodes the link or the price.** The link exists once, in `src/data/full-report.ts`, and reaches the form as `data-payment-link`. Two historical copies of the old test link remain and were deliberately not edited: `briefs/2026-09-12-010-stripe-layer.md`, because `briefs/` is the archive and CLAUDE.md says it is read only, and item 1.1 of this brief, which quotes it as the thing to replace.
+- **4.3 What the code does with a non euro session.** `hasPaidSession` reads `REPORT_PRICE_CENTS` and `REPORT_CURRENCY` from the environment, then refuses unless `session.amount_total === 599` **and** `session.currency === 'eur'` (lines 148 and 149). A session paid in pesos comes back as `currency: 'php'` with `amount_total` in centavos, so both comparisons fail, `isPaidRequest` returns false, and the endpoint answers `402` with "This report is not available". The buyer has already paid. When Adaptive Pricing converts, Stripe puts the original euro figures in the session's `currency_conversion` object (`amount_total`, `amount_subtotal`, `fx_rate`, `source_currency`); the code never reads it, so the euro amount that was actually charged in Durian's own currency is available but unused. Two ways out, both Patricia's call: switch Adaptive Pricing off in Stripe so every buyer is charged €5.99 in euros and the existing check passes untouched, or write a brief that authorises reading `currency_conversion` in the Function. Nothing here was changed, per the "Do not" list.
+- `brief/015-new-posts` untouched. The three posts are still waiting for Patricia to read.
