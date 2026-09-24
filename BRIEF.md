@@ -101,7 +101,7 @@ So the premise of item 3 is out of date. On any API version from 2025-03-31 onwa
 
 **What changed:** nothing in this repository on this branch. `functions/api/report.ts` is byte for byte as it was. The merge carries brief 017's two commits: the live Payment Link and the price at €5.99.
 
-**Merged, with the deployment id and time:** see the line added below after the merge.
+**Merged, with the deployment id and time:** merged to `main` as `6aeb2e9` and deployed by Cloudflare Pages as deployment `0f3e4332-3a35-4ebb-89af-8c0cc3ee9a4e`, which finished at 23:21 UTC on 24 September 2026. That deployment is the moment the site started taking real money: it carries the live Payment Link and the €5.99 price, and Cloudflare applied `REPORT_PRICE_CENTS=599` to it. Confirmed on the live domain: the report page opens the live link and every page states €5.99.
 
 **Could not do, and why:**
 
