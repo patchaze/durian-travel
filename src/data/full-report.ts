@@ -7,17 +7,21 @@
 // Keeping all of it here means the price and the link are each defined exactly
 // once, however many pages show them.
 
-// The price of the full report. Patricia set it on 12 September 2026.
-export const REPORT_PRICE = '€5';
+// The price of the full report. Patricia set it on 24 September 2026, after
+// checking Stripe's fees in Portugal. At €5 a sale left her between €4.57 and
+// €4.65 once fees came off. €5.99 clears €5 net on every card type the account
+// accepts. The amount Stripe actually charges lives in the Payment Link and in
+// REPORT_PRICE_CENTS in Cloudflare; this constant is what the site says.
+export const REPORT_PRICE = '€5.99';
 
-// The hosted Stripe Payment Link. A test link today: it charges nothing and
-// takes only Stripe test cards, because the account is still under identity
-// review. Swapping it for the live link is this one edit.
+// The hosted Stripe Payment Link. Live since 25 September 2026: the account is
+// verified, payments and payouts are both active, and this link takes real
+// money at the price above.
 //
 // It is a public navigation target, not a secret. It has to reach the browser
 // for the button to work. The secret key, the price in cents and the currency
 // are Cloudflare values and are never in this repository.
-export const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_8x23cu35Va9xgGV9937wA00';
+export const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/8x23cu35Va9xgGV9937wA00';
 
 export const FULL_REPORT_URL = '/tools/cost-per-country/full-report/';
 
