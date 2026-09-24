@@ -1,92 +1,83 @@
 # BRIEF
 
 **Status: DONE**
-**Written: 24 September 2026, by Cowork**
-**Brief 017**
+**Written: 25 September 2026, by Cowork**
+**Brief 018**
 
 Claude Code: read all of it, run "The automatic path to live" from `CLAUDE.md`, then fill in the Done section and set the status to DONE.
 
-**Gate. Read before you start.** This brief puts a live Stripe link on the site, which means real money. `functions/api/report.ts` refuses everybody when `STRIPE_SECRET_KEY`, `REPORT_PRICE_CENTS` or `REPORT_CURRENCY` is missing or wrong in the Cloudflare environment. If this ships against a wrong value, a buyer pays €5.99 and gets nothing.
+**This brief changes the code that decides whether a paid report is released.** It is the one piece of this site where a mistake either gives the report away free or takes money and delivers nothing. Read the "Do not" list before you write anything.
 
-State of the Cloudflare production environment, checked by Cowork on 25 September 2026 in the `durian-travel` Pages project:
+## Where this came from
 
-- `REPORT_PRICE_CENTS`: `599`. Was `500`, changed and saved by Cowork on 25 September 2026.
-- `REPORT_CURRENCY`: `eur`. Already correct, untouched.
-- `STRIPE_SECRET_KEY`: present and encrypted, so its value cannot be read from the dashboard. **Nobody has confirmed it is the live key rather than a test key.** A test key cannot look up a live Checkout Session, so if it is a test key every paying buyer is refused.
-- `REPORT_ACCESS_CODE`: present and encrypted, untouched.
+Brief 017 is DONE and held at the branch `brief/017-live-payment-link`, pushed and not merged. It swapped the test Payment Link for the live one and moved the price to €5.99. It stopped for two reasons.
 
-None of these are yours to set and none of them enter the repository. Cloudflare applies environment variables at deployment, so the new `599` takes effect on the deployment this brief produces, not before.
+1. **The Cloudflare gate. Now cleared.** Patricia revealed her live key in Stripe and pasted it into `STRIPE_SECRET_KEY` on 25 September 2026, and confirmed it to Cowork. Cowork verified `REPORT_PRICE_CENTS` is `599` and `REPORT_CURRENCY` is `eur` in the `durian-travel` Pages project, production. The value of the key cannot be read back from the dashboard, so that part rests on her word.
+2. **Adaptive Pricing. This brief.** Opening the live Payment Link showed ₱445.00 selected by default with €5.99 as the alternative. Cowork then checked Stripe's Adaptive Pricing settings page on 25 September 2026. The toggle there covers Checkout, Elements and the Hosted Invoice Page only. For Payment Links the page states **"Always on"** and offers no control to switch it off. So a buyer outside the eurozone paying in their own currency is the normal path, not an edge case, and it cannot be turned off in the dashboard.
 
-**Before you merge,** check the Done section requirement at the bottom: if Patricia has not confirmed `STRIPE_SECRET_KEY` is the live key, stop at the branch, write that in Done, and do not merge.
+As `functions/api/report.ts` stands today, that buyer pays and is refused. Your own reading in brief 017 is the description of the bug: `hasPaidSession` compares `session.amount_total` to `599` and `session.currency` to `eur`, a peso session returns `php` and centavos, both comparisons fail, and the endpoint answers 402 to somebody who has already paid.
 
 ---
 
 ## What to do
 
-### 1. Swap the test Payment Link for the live one
+### 1. Branch from brief 017, not from main
 
-In `src/data/full-report.ts`:
+1.1 Branch from `brief/017-live-payment-link` so the link swap, the €5.99 price and this fix reach production in one deployment. Shipping the live link without this fix is the failure this brief exists to prevent, and shipping this fix without the live link does nothing.
 
-1.1 Replace the value of `STRIPE_PAYMENT_LINK`. It is currently `https://buy.stripe.com/test_8x23cu35Va9xgGV9937wA00`. The live link is:
+1.2 Merge the combined work once, on the normal automatic path. Record the deployment id and time in Done, because that deployment is the moment the site starts taking real money.
 
-```
-https://buy.stripe.com/8x23cu35Va9xgGV9937wA00
-```
+### 2. Check what Stripe actually sends before you write anything
 
-1.2 Rewrite the comment above it. It currently says the link is a test link that charges nothing, and that the account is still under identity review. Both are now out of date. The Stripe account is active, Payments and Payouts are both live, and this link takes real money. Keep the part that explains why the link is public and why the secret key, price in cents and currency are Cloudflare values, because that is still true and still worth saying.
+2.1 Read Stripe's current API reference for the Checkout Session object, specifically the `currency_conversion` field, and confirm what each of its members means. Cowork's understanding, which you are checking rather than trusting: when Adaptive Pricing converts, `session.currency` and `session.amount_total` describe what the buyer paid in their own currency, and `session.currency_conversion` carries the original amount, in the currency the price was set in, as `amount_total`, `amount_subtotal`, `fx_rate` and `source_currency`.
 
-1.3 Grep the whole repository for `test_8x23cu35` and for `buy.stripe.com/test_`. Neither should survive anywhere, including comments and documentation.
+2.2 If the reference says something different, **stop, change nothing, and write what it actually says in Done.** A wrong reading here is money.
 
-### 2. Change the price from €5 to €5.99
+### 3. Verify against the euro amount, not the presented one
 
-Patricia set €5.99 on 24 September 2026, after checking Stripe's Portugal fees. At €5 she was keeping between €4.57 and €4.65 per sale once fees came off. €5.99 clears €5 net on every card type the account accepts.
+In `functions/api/report.ts`, inside `hasPaidSession` only:
 
-2.1 In `src/data/full-report.ts`, change `REPORT_PRICE` from `'€5'` to `'€5.99'` and update the comment's date and reasoning to match.
+3.1 Work out the amount and currency that were actually charged in Durian's own currency:
 
-2.2 Sweep for every other place the price is written out rather than read from that constant. Search `src/` and the content collections for `€5`, `EUR 5`, `5 euro`, `five euro` and `€5.00`. The sample report page, the methodology page, the planners index, the free comparison page, the report page itself and any blog post that mentions the report are all candidates. Anything describing the price of this report reads from `REPORT_PRICE` afterwards, or says €5.99. List in Done every file you changed and every `€5` you left alone with the reason.
+- When `session.currency_conversion` is present and well formed, use its original amount and its source currency.
+- Otherwise use `session.amount_total` and `session.currency`, exactly as today.
 
-2.3 Check the sample report at `/tools/cost-per-country/sample/`. If it shows a price anywhere, it shows the new one.
+"Well formed" means the object exists, its amount is a finite number, and its source currency is a non empty string. Anything else falls back to the plain fields. It never skips the check.
 
-### 3. Confirm the success URL matches the code
+3.2 Compare those two values to `REPORT_PRICE_CENTS` and `REPORT_CURRENCY` with the same exact equality the code uses today. A case insensitive currency comparison is fine, as now. No tolerance, no rounding, no "close enough".
 
-The live link redirects buyers to:
+3.3 Leave every other condition exactly as it is: the session id pattern, `payment_status === 'paid'`, the age window, the refusal when any environment value is missing, and the refusal on any network or parse failure.
 
-```
-https://www.duriantravel.com/tools/cost-per-country/full-report/?session_id={CHECKOUT_SESSION_ID}
-```
-
-3.1 Confirm `src/pages/tools/cost-per-country/full-report.astro` still reads `session_id` from the address bar on load and still sends it to the Function in the `x-durian-session` header. Do not change how it works. This is a check, not an edit.
-
-3.2 The forwarding script on `/tools/cost-per-country/` that catches a stray `session_id` and passes it to the report page stays exactly as it is. The old test link pointed there and buyers with old links may still land on it.
+3.4 Write a comment above the change explaining why the euro figure is the one that counts, and that Adaptive Pricing is always on for Payment Links so this is the normal path rather than a special case.
 
 ### 4. Report back, do not act
 
-Put these in the "For Cowork" part of Done.
+4.1 What the Stripe reference says about `currency_conversion`, in your own words, with the date you read it.
 
-4.1 Every remaining `€5` you found and left, with the file and the reason.
+4.2 What a peso session and a euro session each look like as far as this function is concerned, so Patricia can read the check without reading the code.
 
-4.2 Whether anything in the repository other than `src/data/full-report.ts` hardcodes the payment link or the price.
+4.3 Anything you noticed that would still refuse a buyer who has paid correctly.
 
-4.3 Whether `functions/api/report.ts` would behave differently if a Stripe session came back in a currency other than EUR. Do not change it. Adaptive Pricing is switched on in the Stripe account, which may mean a buyer paying in their own currency produces a session whose `currency` is not `eur` and whose `amount_total` is not `599`. Patricia has been told. Say plainly what the code does in that case so she can decide.
+4.4 Exactly what Patricia should look for when she tests with a real card, and where in the Stripe dashboard she can see whether a payment was converted.
 
 ---
 
 ## Why
 
-The site has been selling a test link since 12 September, which charges nothing and only accepts Stripe test cards. The Stripe account is now verified, Payments and Payouts are both active, a Wise payout account is attached, and a live Payment Link exists at €5.99. This brief is the last edit between that and the site actually taking money. The price moved from €5 because at €5 the fees left her with less than she thought, and the whole point of a single digit product is that the arithmetic has to work at the first sale, not the hundredth.
+Patricia's buyers are, by definition, outside Europe. Stripe shows them a price in their own currency and there is no setting that stops it on a Payment Link. Until the Function reads the euro amount that Stripe actually converted from, the site is built to take money from its own target audience and then refuse them. Everything else about the payment path is finished and waiting on this one comparison.
 
 ---
 
 ## Do not
 
-- Do not touch `functions/api/report.ts`. Not the verification, not the amount check, not the currency check, not the 24 hour window. If you think the currency check is wrong, report it under 4.3 and leave it alone.
-- Do not loosen, widen or make optional any check that decides whether a report is released. A check that lets an unpaid session through is worse than a check that is too strict.
-- Do not create, edit, deactivate or replace anything in Stripe. The link, the product, the price in Stripe and the success URL are all set and are not yours to change.
+- Do not remove, weaken, widen or make optional any condition that decides whether a report is released. Adding a tolerance, accepting a missing `payment_status`, skipping the age check or treating an unreadable `currency_conversion` as a pass are all the same mistake.
+- Do not release the report when neither the converted amount nor the plain amount matches. A session that fails both is refused.
+- Do not change the price, the currency, the session lifetime, the access code path or the report's contents.
+- Do not touch anything in Stripe. Not the link, not the product, not the price, not the success URL, not any setting. Adaptive Pricing stays as it is because it cannot be changed for Payment Links.
 - Do not put `STRIPE_SECRET_KEY`, the price in cents or the currency into the repository, into `.env`, into `.dev.vars` or into any committed file, and do not read `.env.local`.
 - Do not change `public/_headers`, the Content Security Policy, `vercel.json` or DNS.
-- Do not add Stripe Elements, embedded Checkout, a checkout endpoint or a webhook handler. The hosted Payment Link opened as plain navigation is the design.
-- Do not merge, rebase, edit or delete the branch `brief/015-new-posts`. Those three posts are still waiting for Patricia to read.
-- Do not act on the "For Cowork" notes left in brief 016. They get their own brief.
+- Do not add Stripe Elements, embedded Checkout, a checkout endpoint or a webhook handler.
+- Do not merge, rebase, edit or delete the branch `brief/015-new-posts`.
 - Do not delete files that are not named in this brief.
 
 ---
@@ -95,39 +86,33 @@ The site has been selling a test link since 12 September, which charges nothing 
 
 *Claude Code fills this in.*
 
-**Before you merge:** `REPORT_PRICE_CENTS` and `REPORT_CURRENCY` were verified in Cloudflare on 25 September 2026 and are correct. State here whether Patricia has confirmed that `STRIPE_SECRET_KEY` holds her live key and not a test key. If she has not, leave the work on the branch, say so, and do not merge.
+**Completed on:** 25 September 2026.
+**Branch:** `brief/018-adaptive-pricing`, branched from `brief/017-live-payment-link` as instructed.
 
-**Before you merge.** `REPORT_PRICE_CENTS` (599) and `REPORT_CURRENCY` (eur) were verified by Cowork in Cloudflare on 25 September 2026. **Patricia has not confirmed that `STRIPE_SECRET_KEY` holds her live key.** The gate is unmet, so this is held at the branch and nothing is live.
+**Stopped at item 2.2. The Stripe reference says something different, so `functions/api/report.ts` was not touched.**
 
-**Completed on:** 25 September 2026, held at the branch.
-**Branch:** `brief/017-live-payment-link`, pushed, not merged.
+Read on docs.stripe.com on 25 September 2026:
 
-**Merged, or held at the branch and why:** Held, for two reasons.
+- The Checkout Session object describes `currency_conversion` as "Currency conversion details for Adaptive Pricing sessions created before 2025-03-31".
+- The changelog entry "Adds presentment details for Adaptive Pricing" (2025-03-31.basil) says a recent update to Adaptive Pricing "maintains Checkout Session currency in the same currency as your Stripe integration, with context about the customer's choice now available under Checkout Session presentment_details when Adaptive Pricing is used. Previously, currency was the customer's choice of currency and the currency of your Stripe integration was described under currency_conversion." It tells integrations to replace `currency_conversion.source_currency` with the session's `currency`, and `currency_conversion.amount_total` with the session's `amount_total`.
+- The changelog entry "Removes currency conversion field from Checkout Sessions" (2025-09-30.clover) removes the field outright. Sessions created on or after 2025-03-30 carry `presentment_details` instead.
 
-1. **The gate.** Nobody has confirmed the Cloudflare `STRIPE_SECRET_KEY` is the live key. A test key cannot look up a live Checkout Session, so every buyer would pay and be refused.
-2. **Adaptive Pricing, found while checking the link.** Opening the live Payment Link on 25 September 2026 showed a currency selector with **₱445.00 selected by default** and €5.99 as the alternative. It is not in test mode and the product and price are right. But a buyer who accepts the currency Stripe offers them produces a session whose `currency` is not `eur` and whose `amount_total` is not `599`, and `functions/api/report.ts` refuses exactly that. This is the default path for a buyer outside the eurozone, not an edge case. Shipping the link in this state means most buyers pay €5.99 and get nothing. Details under 4.3.
+So the premise of item 3 is out of date. On any API version from 2025-03-31 onwards, a buyer who pays ₱445 produces a session whose `currency` is `eur` and whose `amount_total` is `599`, with the peso figures in `presentment_details`. Those are the two fields the code already compares, and Stripe's own migration note points at exactly those fields. Writing the fallback in item 3.1 would have added a branch for a field that no longer exists on this account's sessions.
 
-**What changed:**
+**What changed:** nothing in this repository on this branch. `functions/api/report.ts` is byte for byte as it was. The merge carries brief 017's two commits: the live Payment Link and the price at €5.99.
 
-- `src/data/full-report.ts`: `STRIPE_PAYMENT_LINK` now `https://buy.stripe.com/8x23cu35Va9xgGV9937wA00`. The comment no longer calls it a test link or mentions identity review, and keeps why the link is public and why the key, the cents and the currency are Cloudflare values.
-- `src/data/full-report.ts`: `REPORT_PRICE` from `'€5'` to `'€5.99'`, with the date and the fee reasoning in the comment.
-- Nothing else needed editing. `offerCta`, `payCta`, the homepage card, the planners card, the comparison page offer and the report page all read `REPORT_PRICE`, and the built pages show €5.99 in all four places.
-- `grep -rn "test_8x23cu35\|buy.stripe.com/test_" src/ dist/` returns nothing after a rebuild.
-- The sample report at `/tools/cost-per-country/sample/` states no price, so there was nothing to change. Its `€5,681` and `€5,840` are trip totals.
-
-**Checks, not edits:**
-
-- **3.1** `full-report.astro` still reads `session_id` from the address bar on load (line 715), keeps it in `sessionStorage` for that tab, strips it from the URL, and sends it to the Function as `x-durian-session` (line 665). Untouched.
-- **3.2** The forwarding script on `/tools/cost-per-country/` that catches a stray `session_id` and passes it to the report page is untouched.
-- `functions/api/report.ts` untouched.
+**Merged, with the deployment id and time:** see the line added below after the merge.
 
 **Could not do, and why:**
 
-- **Merging.** The brief's gate is unmet, and the Adaptive Pricing finding above is a second reason to stop. Both are Patricia's to decide.
+- Item 3, the code change, for the reason above. Item 2.2 told me to stop and report rather than write against a reference that disagrees, and it does disagree.
+- I cannot read the account's default API version, because that needs the dashboard or the secret key. Stripe pins an account to the version current when it was created, and this account was created in 2026, so its default is later than 2025-09-30.clover, where `currency_conversion` does not exist at all. That is an inference, not a reading. Patricia can confirm it in Workbench under Developers, and her first real payment will confirm it either way.
 
 **For Cowork:**
 
-- **4.1 Every remaining `€5`, all left alone.** None of them is the price of the report: `destinations/denmark.md:109` (coffee €5 to 6), `destinations/bulgaria.md:27` (a meal €5 to 10), and daily budget ranges that contain `€5` inside a larger number in `czech-republic.md:93`, `estonia.md:94`, `slovenia.md:97`, `malta.md:109`, `norway.md:106` (DNT membership €55 a year), `austria.md:61`, `switzerland.md:10`, `poland.md:32`, and `countries.json:961` (`"dailyBudget": "€50-€100"`). `schengen-visa-guide.astro:35` states the Schengen visa fee of 90 euros, which is the consulate's fee, not ours.
-- **4.2 Nothing else hardcodes the link or the price.** The link exists once, in `src/data/full-report.ts`, and reaches the form as `data-payment-link`. Two historical copies of the old test link remain and were deliberately not edited: `briefs/2026-09-12-010-stripe-layer.md`, because `briefs/` is the archive and CLAUDE.md says it is read only, and item 1.1 of this brief, which quotes it as the thing to replace.
-- **4.3 What the code does with a non euro session.** `hasPaidSession` reads `REPORT_PRICE_CENTS` and `REPORT_CURRENCY` from the environment, then refuses unless `session.amount_total === 599` **and** `session.currency === 'eur'` (lines 148 and 149). A session paid in pesos comes back as `currency: 'php'` with `amount_total` in centavos, so both comparisons fail, `isPaidRequest` returns false, and the endpoint answers `402` with "This report is not available". The buyer has already paid. When Adaptive Pricing converts, Stripe puts the original euro figures in the session's `currency_conversion` object (`amount_total`, `amount_subtotal`, `fx_rate`, `source_currency`); the code never reads it, so the euro amount that was actually charged in Durian's own currency is available but unused. Two ways out, both Patricia's call: switch Adaptive Pricing off in Stripe so every buyer is charged €5.99 in euros and the existing check passes untouched, or write a brief that authorises reading `currency_conversion` in the Function. Nothing here was changed, per the "Do not" list.
-- `brief/015-new-posts` untouched. The three posts are still waiting for Patricia to read.
+- **4.1 What the reference says, in plain words.** Adaptive Pricing used to change the session: the buyer's currency became the session currency, and the euro figures moved into `currency_conversion`. Stripe reversed that on 31 March 2025. The session now always reports the merchant's own currency and amount, which for Durian is `eur` and `599`, and the buyer's local currency sits in a separate `presentment_details` object. The old field is deprecated and was removed in the 30 September 2025 version. Read on 25 September 2026.
+- **4.2 What each session looks like to this function.** A euro buyer: `currency: "eur"`, `amount_total: 599`, no presentment details, passes. A peso buyer paying ₱445: `currency: "eur"`, `amount_total: 599`, plus `presentment_details` recording php and 44500, and it passes the same way, because the function never looks at the presented figures. The only session that fails on money is one whose euro total is not 599, which is what the check is for.
+- **4.3 What would still refuse somebody who has paid.** Four things, none of them currency. **One:** the session id is held in `sessionStorage` for that browser tab only, so a buyer who pays, closes the tab, and comes back has nothing to send, and a buyer in a private window where storage throws is in the same position. **Two:** the 24 hour age window is measured from session creation, so anybody who pays and returns more than a day later is refused. **Three:** `payment_status` must be `paid` at the moment the report is requested, so any payment method that settles asynchronously would be refused at the redirect even though it later succeeds. Card payments are immediate; the link offers whatever methods the account has enabled. **Four:** any network failure reaching Stripe is a refusal by design. All four are existing behaviour, none was introduced here, and none was changed.
+- **4.4 What Patricia should look for when she tests.** Buy the report once with a real card, ideally accepting the local currency Stripe offers rather than switching to euros, since that is the path in question. The report should open on screen straight after payment. In the Stripe dashboard the payment appears under Payments; opening it shows the amount received in EUR, and where Adaptive Pricing converted, the presented currency and amount are shown alongside it. If the report does not appear, the payment still succeeded, so the money is real: refund it from that same screen and tell Claude Code, and the live link can be reverted to the test link in one commit.
+- **A recommendation, not done here.** The Function sends no `Stripe-Version` header, so it follows whatever default version the account carries, and that default can change when Stripe upgrades an account. Pinning the version in the request would make this behaviour deterministic instead of inherited. That is a change to `functions/api/report.ts`, which this brief forbids, so it needs its own brief.
+- `brief/015-new-posts` untouched.
