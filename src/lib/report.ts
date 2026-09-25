@@ -210,6 +210,18 @@ export const EDITORIAL_WEIGHTS = {
     '3': { restaurantFood: 16, groceryFood: -4 },
   } as Record<string, Points>,
 
+  // How often the eating happens from a shop rather than in a restaurant. It
+  // moves spend between the two Eurostat categories that price food, so the
+  // same trip prices differently in a country where restaurants are cheap and
+  // groceries are not. Deliberately smaller than mealsOut, which asks a
+  // different question: how many meals, not where the food comes from.
+  cookOften: {
+    never: { restaurantFood: 4, groceryFood: -3 },
+    sometimes: { groceryFood: 2 },
+    often: { restaurantFood: -5, groceryFood: 6 },
+    mostly: { restaurantFood: -10, groceryFood: 11 },
+  } as Record<string, Points>,
+
   snacks: {
     rarely: { restaurantFood: -1 },
     daily: { restaurantFood: 3 },
@@ -329,9 +341,19 @@ export interface ReportInput {
   combine: string; // one, combining or unsure
   flyingFrom: string; // the reader's own words, trimmed and capped, printed escaped
   fare: number; // return fare per person, the reader's own figure, 0 when not known
+  // Two more of the reader's own figures, per person, treated exactly as the
+  // fare is: added to every total when given, never looked up, never estimated.
+  insurance: number;
+  transfers: number;
   stayType: string;
+  // How many rooms the party needs. The room is the bill, not the head: two
+  // people in one room pay once for it. Defaults to one room a head, which is
+  // what this report assumed before the question existed.
+  rooms: number;
   breakfast: string;
   mealsOut: string;
+  // How much of the eating is done from a shop rather than in a restaurant.
+  cookOften: string;
   snacks: string;
   dinnerDrinks: string;
   cityTransport: string;
@@ -514,9 +536,15 @@ export function normalise(raw: unknown, data: CostData): ReportInput {
     flyingFrom: cleanText(src.flyingFrom, 80),
     // "I do not know yet" wins over any number left in the fare field.
     fare: src.fareUnknown === 'yes' ? 0 : money(src.fare),
+    insurance: money(src.insurance),
+    transfers: money(src.transfers),
     stayType: pick(src.stayType, EDITORIAL_WEIGHTS.stayType, 'hotel'),
+    // Zero means the question was never asked, so fall back to a room a head,
+    // which is what every report produced before this question existed.
+    rooms: count(src.rooms, 0, 20, 0) || Math.max(1, adults + children),
     breakfast: pick(src.breakfast, EDITORIAL_WEIGHTS.breakfast, 'no'),
     mealsOut: pick(src.mealsOut, EDITORIAL_WEIGHTS.mealsOut, '1'),
+    cookOften: pick(src.cookOften, EDITORIAL_WEIGHTS.cookOften, 'sometimes'),
     snacks: pick(src.snacks, EDITORIAL_WEIGHTS.snacks, 'daily'),
     dinnerDrinks: pick(src.dinnerDrinks, EDITORIAL_WEIGHTS.dinnerDrinks, 'sometimes'),
     cityTransport: pick(src.cityTransport, EDITORIAL_WEIGHTS.cityTransport, 'public'),
@@ -552,6 +580,7 @@ export function computeWeights(input: ReportInput): Weights {
   addPoints(w, E.stayType[input.stayType]);
   addPoints(w, E.breakfast[input.breakfast]);
   addPoints(w, E.mealsOut[input.mealsOut]);
+  addPoints(w, E.cookOften[input.cookOften]);
   addPoints(w, E.snacks[input.snacks]);
   addPoints(w, E.dinnerDrinks[input.dinnerDrinks]);
   addPoints(w, E.cityTransport[input.cityTransport]);
@@ -613,13 +642,20 @@ function headsOf(input: ReportInput): number {
 // category that prices it, over 100. A full day is the sum of the parts.
 // Countries come back in alphabetical order, which is neutral.
 export function priceCountries(input: ReportInput, data: CostData, weights: Weights): CountryPrice[] {
+  // Every other part of a day is charged to each person. A room is charged to
+  // the room, so the accommodation share is scaled by rooms over heads: two
+  // people sharing one room pay half of it each, and one room a head leaves
+  // the figure exactly where it was.
+  const roomShare = input.rooms / headsOf(input);
   return data.countries
     .filter((c) => input.countries.includes(c.iso))
     .map((c) => {
       const parts = COMPONENTS.map((component) => ({
         component,
         label: COMPONENT_LABELS[component],
-        perDay: (input.base * weights[component] * c[COMPONENT_CATEGORY[component]]) / 100,
+        perDay:
+          ((input.base * weights[component] * c[COMPONENT_CATEGORY[component]]) / 100) *
+          (component === 'accommodation' ? roomShare : 1),
       }));
       const perDay = parts.reduce((sum, p) => sum + p.perDay, 0);
       return { name: c.name, iso: c.iso, transport: c.transport, perDay, parts };
@@ -639,6 +675,7 @@ export interface Scenario {
   groundPerPerson: number; // everything except flights and border journeys, whole trip, per person
   travelPerPerson: number; // every journey between countries, per person
   flightsPerPerson: number; // the reader's own fare, or 0
+  extrasPerPerson: number; // the reader's own insurance and airport transfers, or 0
   perPersonPerDay: number; // ground plus border journeys, per day, before flights
   total: number; // everyone, whole trip, flights included only when the reader gave a fare
   gap: number; // ceiling minus total; only read when there is a ceiling
@@ -687,7 +724,10 @@ function makeScenario(input: ReportInput, countries: CountryPrice[]): Scenario {
   const journeyPerPerson = journeys > 0 ? journeyCost(input, countries) : 0;
   const travelPerPerson = journeyPerPerson * journeys;
   const flightsPerPerson = input.fare;
-  const total = (groundPerPerson + travelPerPerson + flightsPerPerson) * heads;
+  // Insurance and airport transfers are the reader's own figures, like the
+  // fare, so they are added to the total and never estimated.
+  const extrasPerPerson = input.insurance + input.transfers;
+  const total = (groundPerPerson + travelPerPerson + flightsPerPerson + extrasPerPerson) * heads;
   return {
     kind: k === 1 ? 'single' : 'combination',
     countries,
@@ -698,6 +738,7 @@ function makeScenario(input: ReportInput, countries: CountryPrice[]): Scenario {
     groundPerPerson,
     travelPerPerson,
     flightsPerPerson,
+    extrasPerPerson,
     perPersonPerDay: (groundPerPerson + travelPerPerson) / input.nights,
     total,
     gap: input.ceiling - total,
@@ -1023,6 +1064,7 @@ function renderCover(input: ReportInput, prices: CountryPrice[], set: ScenarioSe
       ? `This report prices a trip of ${nights} in ${names}.`
       : `You are comparing ${names} for a trip of ${nights}.`;
 
+  const heads = headsOf(input);
   const a = input.adults;
   const ch = input.children;
   const adultsText = `${numberWord(a)} ${plural(a, 'adult', 'adults')}`;
@@ -1052,6 +1094,20 @@ function renderCover(input: ReportInput, prices: CountryPrice[], set: ScenarioSe
       ? `You told us you are seeing return fares of about ${fmt(input.fare, c)} per person, and that fare is included in every total below. It is your figure, not ours, because Durian has no fare data of its own.`
       : 'You have not given us a fare yet, so no total in this report includes flights.';
 
+  // Both are the reader's own numbers, so they are named separately rather
+  // than folded into a figure that looks like ours.
+  const extraParts: string[] = [];
+  if (input.insurance > 0) extraParts.push(`${fmt(input.insurance, c)} for travel insurance`);
+  if (input.transfers > 0) extraParts.push(`${fmt(input.transfers, c)} for airport transfers`);
+  const extras = extraParts.length
+    ? ` You also gave us ${extraParts.join(' and ')} per person, and both are in every total. They are your figures too: Durian prices neither.`
+    : '';
+
+  const roomsLine =
+    heads > 1
+      ? ` The nightly cost is for ${input.rooms === 1 ? 'one room' : `${input.rooms} rooms`} between ${heads}.`
+      : '';
+
   let lead = '';
   if (prices.length > 1) {
     const hasCombos = set.combinations.length > 0;
@@ -1073,8 +1129,8 @@ function renderCover(input: ReportInput, prices: CountryPrice[], set: ScenarioSe
   return `
   <p class="eyebrow">Durian Travel</p>
   <h1>Your cost per country report</h1>
-  <p class="lede">${comparing} ${party}${origin} This report was generated on ${esc(prettyDate(generatedOn))}.</p>
-  <p>${fare}</p>
+  <p class="lede">${comparing} ${party}${origin}${roomsLine} This report was generated on ${esc(prettyDate(generatedOn))}.</p>
+  <p>${fare}${extras}</p>
   ${lead ? `<p>${lead}</p>` : ''}
   <p class="muted">Every figure is built from Eurostat's price levels for seven kinds of spending, so a room, a meal out and a week of groceries are each priced at what they actually cost in each country, rather than with one average for everything.</p>`;
 }
@@ -1310,6 +1366,11 @@ function renderParts(source: CostSource): string {
 
 function renderLimits(input: ReportInput): string {
   const c = input.currency;
+  const extrasLimit =
+    input.insurance > 0 || input.transfers > 0
+      ? `Your travel insurance and airport transfers are in every total at the figures you gave us, per person. Durian prices neither and has no data for either, so those two numbers are yours.`
+      : 'You gave us no figure for travel insurance or airport transfers, so no total here includes either.';
+
   const flights =
     input.fare > 0
       ? `The flights in every total are the return fare you gave us, ${fmt(input.fare, c)} per person. Durian has no fare data of its own, so that number is yours and not ours, and it will change as you search.`
@@ -1319,6 +1380,7 @@ function renderLimits(input: ReportInput): string {
   <h2>What this report does not cover</h2>
   <ul class="plain">
     <li>${flights}</li>
+    <li>${extrasLimit}</li>
     <li>Every price level is a yearly average, and this report does not know when you are going. A week in August and a week in February can differ by more than two countries do.</li>
     <li>Capital cities, and the streets around the famous sights, cost more than the national figure. Sometimes they cost a lot more.</li>
     <li>Each price level is an average of what residents pay across the whole country. As a visitor, you will mostly buy in the places that charge the most.</li>

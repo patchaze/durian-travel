@@ -56,7 +56,7 @@ export const DEFAULT_STYLE = 'mid';
 export interface Field {
   id: string;
   label: string;
-  type: 'number' | 'select' | 'text' | 'fare';
+  type: 'number' | 'select' | 'text' | 'fare' | 'money';
   min?: number;
   max?: number;
   // For a number, the starting value. For a select, the option chosen by default.
@@ -65,9 +65,6 @@ export interface Field {
   placeholder?: string;
   maxlength?: number;
   hint?: string;
-  // Asked after the essentials, behind a toggle. Every optional field has a
-  // default in normalise(), so skipping it still produces a whole report.
-  optional?: boolean;
 }
 
 export interface QuestionGroup {
@@ -106,8 +103,10 @@ export const questions: QuestionGroup[] = [
     // only when they give one, because Durian has no fare data.
     group: 'Getting there',
     fields: [
-      { id: 'flyingFrom', label: 'Where are you flying from?', type: 'text', placeholder: 'Your city or country', maxlength: 80, optional: true, hint: 'This is only used to describe your trip back to you in the report.' },
+      { id: 'flyingFrom', label: 'Where are you flying from?', type: 'text', placeholder: 'Your city or country', maxlength: 80, hint: 'This is only used to describe your trip back to you in the report.' },
       { id: 'fare', label: 'What return fare are you seeing?', type: 'fare', hint: 'Per person and return, in the same currency as your budget below. Durian has no fare data, so this number stays yours.' },
+      { id: 'insurance', label: 'What will travel insurance cost?', type: 'money', hint: 'Per person, for the whole trip. Leave it at 0 if you have not priced one yet. Durian has no insurance data, so this number stays yours.' },
+      { id: 'transfers', label: 'What will airport transfers cost?', type: 'money', hint: 'Per person, both ways. Leave it at 0 if you do not know yet. Durian has no fare data for these either.' },
     ],
   },
   {
@@ -117,6 +116,7 @@ export const questions: QuestionGroup[] = [
         ['hotel', 'Hotel'], ['apartment', 'Apartment or rental'],
         ['hostel', 'Hostel dorm'], ['friends', 'With friends or family'],
       ] },
+      { id: 'rooms', label: 'How many rooms do you need?', type: 'number', min: 1, max: 20, value: 1, hint: 'A room is charged once however many of you are in it, so this changes the largest line in the report.' },
       { id: 'breakfast', label: 'Is breakfast usually included?', type: 'select', options: [
         ['no', 'No'], ['yes', 'Yes'],
       ] },
@@ -128,6 +128,9 @@ export const questions: QuestionGroup[] = [
       { id: 'mealsOut', label: 'How many meals a day do you eat out?', type: 'select', options: [
         ['0', 'None'], ['1', 'One'], ['2', 'Two'], ['3', 'Three'],
       ] },
+      { id: 'cookOften', label: 'How often do you cook or eat from a shop?', type: 'select', value: 'sometimes', options: [
+        ['never', 'Never'], ['sometimes', 'Sometimes'], ['often', 'Often'], ['mostly', 'Mostly'],
+      ], hint: 'Groceries and restaurants are priced on different Eurostat categories, so this changes which countries come out cheapest for you.' },
       { id: 'snacks', label: 'Coffee, pastries, snacks out?', type: 'select', options: [
         ['rarely', 'Rarely'], ['daily', 'Once a day'], ['several', 'Several a day'],
       ] },
@@ -151,8 +154,8 @@ export const questions: QuestionGroup[] = [
   {
     group: 'Between cities',
     fields: [
-      { id: 'cityMoves', label: 'How many times will you move city?', type: 'number', min: 0, max: 100, value: 2, optional: true },
-      { id: 'intercityMode', label: 'How do you travel between them?', type: 'select', optional: true, options: [
+      { id: 'cityMoves', label: 'How many times will you move city?', type: 'number', min: 0, max: 100, value: 2 },
+      { id: 'intercityMode', label: 'How do you travel between them?', type: 'select', options: [
         ['train', 'Train'], ['coach', 'Bus'], ['flight', 'Budget flight'],
       ] },
     ],
@@ -160,16 +163,16 @@ export const questions: QuestionGroup[] = [
   {
     group: 'What you actually do',
     fields: [
-      { id: 'museums', label: 'Museums, galleries, monuments?', type: 'select', optional: true, options: [
+      { id: 'museums', label: 'Museums, galleries, monuments?', type: 'select', options: [
         ['rarely', 'Rarely'], ['few', 'A few'], ['most', 'Most days'],
       ] },
-      { id: 'tours', label: 'Guided tours or day trips?', type: 'select', optional: true, options: [
+      { id: 'tours', label: 'Guided tours or day trips?', type: 'select', options: [
         ['none', 'None'], ['couple', 'One or two'], ['several', 'Several'],
       ] },
-      { id: 'nightlife', label: 'Going out at night?', type: 'select', optional: true, options: [
+      { id: 'nightlife', label: 'Going out at night?', type: 'select', options: [
         ['no', 'No'], ['occasionally', 'Occasionally'], ['often', 'Often'],
       ] },
-      { id: 'shopping', label: 'Planning to shop?', type: 'select', optional: true, options: [
+      { id: 'shopping', label: 'Planning to shop?', type: 'select', options: [
         ['no', 'No'], ['little', 'A little'], ['lot', 'A lot'],
       ] },
     ],
@@ -177,7 +180,7 @@ export const questions: QuestionGroup[] = [
   {
     group: 'Staying connected',
     fields: [
-      { id: 'esim', label: 'Do you need an eSIM or data plan?', type: 'select', optional: true, options: [
+      { id: 'esim', label: 'Do you need an eSIM or data plan?', type: 'select', options: [
         ['no', 'No'], ['yes', 'Yes'],
       ] },
     ],

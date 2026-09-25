@@ -5,74 +5,88 @@ import { REPORT_PRICE, offerCta, FULL_REPORT_URL } from '../../data/full-report'
 
 const canonical = 'https://www.duriantravel.com/tools/';
 
-// Everything Durian Travel sells lives on this page: three free planners and
-// one paid report. Each card stays short when closed and opens on hover, on
-// keyboard focus, or on tap, so the page reads in under half a minute with
-// every card closed. Without JavaScript every card simply shows everything.
-const freeTools = [
+// Everything Durian Travel publishes for planning a trip sits on this page,
+// in the order somebody needs it rather than in order of what it costs. The
+// report comes first because it is the one thing here that answers the whole
+// question, and its price sits on its own card rather than in a section label.
+const tools = [
   {
-    name: 'Do you need a visa?',
+    id: 'report',
+    heading: 'The full cost per country report',
+    href: FULL_REPORT_URL,
+    line: 'Every country you are weighing up, priced against your own budget, and the realistic ways to combine them.',
+    detail: [
+      'Seven Eurostat price categories instead of one, so a room, a meal out and a week of groceries are each priced where you are going.',
+      'It opens on screen as soon as you pay, with every figure sourced and dated.',
+    ],
+    sections: [
+      'Each country on its own, against your budget',
+      'The realistic ways to combine those countries',
+      'What a day costs in every country',
+      'Where every figure comes from, with dates',
+    ],
+    cta: offerCta,
+    paid: true,
+  },
+  {
+    id: 'visa',
+    heading: 'Do you need a Schengen visa for your passport?',
     href: '/tools/do-you-need-a-visa/',
-    line: 'Find out whether your passport needs one for a short trip.',
-    more: [
-      'Pick the passport you will travel on and get one of four answers, read straight from Regulation (EU) 2018/1806.',
-      'Each answer shows the version of the regulation used and the date we last checked it.',
+    line: 'Pick the passport you will travel on and get a yes or no, read straight from EU law.',
+    detail: [
+      'One of four answers, with the condition spelled out where an exemption has one.',
+      'Every answer shows the version of the regulation used and the date we last checked it.',
     ],
     cta: 'Check your passport',
   },
   {
-    name: 'Cost per country',
+    id: 'cost',
+    heading: 'Cheapest countries in Europe to visit, compared',
     href: '/tools/cost-per-country/',
-    line: 'What does the same trip cost in 28 countries?',
-    more: [
-      'Choose how you travel and see every country ranked from cheapest to most expensive, per day and for the length of your trip.',
-      'The figures are built on Eurostat price levels, with the dataset and the date shown on the page.',
+    line: 'See what the same trip costs in 28 countries, cheapest first.',
+    detail: [
+      'Choose how you travel and how long for, and every country is priced per day and for the whole trip.',
+      'Built on Eurostat price levels, with the dataset and the date shown on the page.',
     ],
     cta: 'Compare countries',
   },
   {
-    name: 'Budget calculator',
+    id: 'budget',
+    heading: 'Work out your Europe trip budget',
     href: '/tools/budget/',
-    line: 'What will your whole trip cost?',
-    more: [
-      'Enter your own figures and see the total, the cost per person and the cost per day.',
+    line: 'Put in your own figures and see the total, the cost per person and the cost per day.',
+    detail: [
       'It keeps the costs you pay once apart from the ones that repeat every night.',
+      'Nothing you type leaves your browser.',
     ],
     cta: 'Work out your budget',
   },
 ];
 
-// The sections of the paid report, in the order the report shows them.
-const reportSections = [
-  'Each country on its own, against your budget',
-  'The realistic ways to combine those countries',
-  'What a day costs in every country',
-  'Where every figure comes from, with dates',
-];
-
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Europe trip planners',
+  name: 'How much a trip to Europe costs',
   url: canonical,
-  description: 'Three free planners and one paid report for planning a trip to Europe from outside it.',
+  description:
+    'The cost per country report, plus free planners for visa requirements, country costs and your own trip budget.',
 };
 ---
 
 <BaseLayout
-  title="Europe Trip Planners | DURIAN Travel"
-  description="Three free planners for a trip to Europe: a visa requirement check read from EU law, a cost per country comparison built on Eurostat data and a budget calculator. Plus one paid report priced against your own budget."
+  title="How Much a Trip to Europe Costs | DURIAN Travel"
+  description="What a trip to Europe costs before you book: a report priced against your own budget, plus free planners for visa rules, country costs and your trip budget."
   canonical={canonical}
   schema={schema}
-  keywords="europe trip planner, do i need a visa for europe, europe cost comparison by country, europe trip budget calculator"
+  keywords="how much does a trip to europe cost, cheapest countries in europe to visit, do i need a schengen visa, europe trip budget calculator"
   breadcrumb={[{ name: 'Planners', url: canonical }]}
 >
   <section class="hero-sm hero-gradient">
     <div class="container">
       <span class="section-label" style="color:var(--color-accent-light)">Planners</span>
-      <h1 class="hero-sm__title" style="color:white">Plan the trip with real numbers, not guesses</h1>
+      <h1 class="hero-sm__title" style="color:white">How much a trip to Europe costs, before you book anything</h1>
       <p class="hero-sm__subtitle">
-        Three free planners and one paid report for a trip to Europe.
+        One report and three planners, built on published price data and EU law rather than on guesses.
       </p>
       <p class="hero-sm__note">
         We do not run consultations or review documents. Everything here is a tool you use yourself.
@@ -86,72 +100,42 @@ const schema = {
 
   <section class="section section--sm">
     <div class="container container--narrow" id="tools-directory">
-      <div class="group">
-        <div class="group__head">
-          <h2 class="group__title">Free</h2>
-          <p class="group__lede">Nothing you type leaves your browser.</p>
-        </div>
-        <ul class="cards" role="list">
-          {freeTools.map((tool, i) => (
-            <li class="card-x" data-card>
-              <h3 class="card-x__name"><a href={tool.href}>{tool.name}</a></h3>
-              <p class="card-x__line">{tool.line}</p>
-              <div class="card-x__actions">
-                <button
-                  type="button"
-                  class="card-x__toggle"
-                  aria-expanded="false"
-                  aria-controls={`reveal-${i}`}
-                  hidden
-                >What it does</button>
-                <a class="card-x__link" href={tool.href}>{tool.cta} →</a>
-              </div>
-              <div class="card-x__reveal" id={`reveal-${i}`}>
-                <div class="card-x__reveal-inner">
-                  {tool.more.map((text) => <p>{text}</p>)}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div class="group">
-        <div class="group__head">
-          <h2 class="group__title">Paid</h2>
-        </div>
-        <div class="card-x card-x--paid" data-card>
-          <h3 class="card-x__name"><a href={FULL_REPORT_URL}>The full cost per country report</a></h3>
-          <p class="card-x__line">
-            Each country you are comparing, priced against your budget. It opens on screen as soon as you pay.
-          </p>
-          <p class="paid__price">{REPORT_PRICE}</p>
-          <div class="card-x__actions">
-            <button
-              type="button"
-              class="card-x__toggle"
-              aria-expanded="false"
-              aria-controls="reveal-report"
-              hidden
-            >What you get</button>
-            <a class="btn btn--primary card-x__buy" href={FULL_REPORT_URL}>{offerCta}</a>
-            <a class="card-x__sample" href="/tools/cost-per-country/sample/">See a sample first →</a>
-          </div>
-          <div class="card-x__reveal" id="reveal-report">
-            <div class="card-x__reveal-inner">
-              <ol class="sequence" role="list">
-                {reportSections.map((section, i) => (
-                  <li style={`--i:${i}`}>{section}</li>
-                ))}
+      {tools.map((tool) => (
+        <article class={`tool${tool.paid ? ' tool--paid' : ''}`} id={tool.id}>
+          <h2 class="tool__heading"><a href={tool.href}>{tool.heading}</a></h2>
+          <p class="tool__line">{tool.line}</p>
+          {tool.paid && <p class="tool__price">{REPORT_PRICE}</p>}
+          <ul class="tool__detail" role="list">
+            {tool.detail.map((line) => <li>{line}</li>)}
+          </ul>
+          {tool.sections && (
+            <>
+              <p class="tool__sections-title">What is in it</p>
+              <ol class="tool__sections" role="list">
+                {tool.sections.map((section) => <li>{section}</li>)}
               </ol>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="tools-method">
-        Every planner shows the data it used and the date it was read.
-        <a href="/methodology/">How these figures are produced →</a>
-      </p>
+            </>
+          )}
+          <p class="tool__actions">
+            <a class={tool.paid ? 'btn btn--primary' : 'tool__link'} href={tool.href}>
+              {tool.cta}{tool.paid ? '' : ' →'}
+            </a>
+          </p>
+        </article>
+      ))}
+
+      <section class="sources" aria-labelledby="sources-heading">
+        <h2 class="tool__heading" id="sources-heading">Where these figures come from</h2>
+        <p class="tool__line">
+          Every planner shows the data it used and the date it was read. Nothing here is generated,
+          estimated in secret, or left undated.
+        </p>
+        <p class="sources__links">
+          <a href="/methodology/">How these figures are produced →</a>
+          <a href="/sources/">Every source, with the date it was checked →</a>
+        </p>
+      </section>
+
       <p class="tools-disclaimer">
         Educational information only. Not legal advice. Always check the official embassy or
         consulate source.
@@ -166,6 +150,7 @@ const schema = {
     font-family: var(--font-serif);
     font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
     margin-bottom: var(--space-4);
+    max-width: 22ch;
   }
   .hero-sm__subtitle {
     font-size: var(--text-lg);
@@ -181,12 +166,78 @@ const schema = {
     line-height: var(--leading-relaxed);
   }
 
-  .tools-method {
-    margin-top: var(--space-8);
+  /* One block per thing, in the order a reader needs them. No grouping by
+     price: the price belongs to the report's own block. */
+  .tool {
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .tool--paid {
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    background: var(--color-bg-alt);
+    margin-bottom: var(--space-6);
+  }
+  .tool__heading {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: var(--text-2xl);
+    color: var(--color-navy);
+    margin: 0 0 var(--space-2);
+    line-height: 1.25;
+  }
+  .tool__heading a { color: inherit; text-decoration: none; }
+  .tool__heading a:hover { color: var(--color-primary); }
+  .tool__line {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text);
+  }
+  .tool__price {
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    color: var(--color-primary);
+    margin: 0 0 var(--space-3);
+  }
+  .tool__detail {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-4);
+    display: grid;
+    gap: var(--space-2);
     font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
     color: var(--color-text-muted);
   }
-  .tools-method a { font-weight: var(--font-semibold); color: var(--color-primary); }
+  .tool__sections-title {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--color-heading);
+  }
+  .tool__sections {
+    margin: 0 0 var(--space-4);
+    padding-left: var(--space-5);
+    display: grid;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+  }
+  .tool__actions { margin: 0; }
+  .tool__link { font-weight: var(--font-semibold); color: var(--color-primary); }
+
+  .sources { padding: var(--space-6) 0; }
+  .sources__links {
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+  }
+  .sources__links a { font-weight: var(--font-semibold); color: var(--color-primary); }
+
   .tools-disclaimer {
     margin-top: var(--space-8);
     padding-top: var(--space-4);
@@ -195,184 +246,4 @@ const schema = {
     color: var(--color-text-muted);
     line-height: var(--leading-relaxed);
   }
-
-  .group + .group { margin-top: var(--space-10); }
-  .group__head { margin-bottom: var(--space-4); }
-  .group__title {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: var(--text-2xl);
-    color: var(--color-navy);
-  }
-  .group__lede {
-    margin-top: var(--space-1);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-  }
-
-  .cards {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .card-x {
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5);
-    background: var(--color-surface);
-  }
-  .card-x--paid { border: 2px solid var(--color-primary); }
-  .card-x__name {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: var(--text-xl);
-    color: var(--color-navy);
-    margin: 0;
-  }
-  .card-x__name a { color: inherit; text-decoration: none; }
-  .card-x__name a:hover { text-decoration: underline; text-underline-offset: 3px; }
-  .card-x__line {
-    margin: var(--space-2) 0 0;
-    color: var(--color-text-muted);
-    line-height: var(--leading-relaxed);
-    max-width: 60ch;
-  }
-  .paid__price {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: var(--text-4xl, 2.25rem);
-    line-height: 1.1;
-    color: var(--color-navy);
-    margin: var(--space-3) 0 0;
-  }
-  .card-x__actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-3) var(--space-5);
-    margin-top: var(--space-4);
-  }
-  .card-x__link {
-    font-weight: var(--font-semibold);
-    color: var(--color-primary);
-    text-decoration: none;
-  }
-  .card-x__link:hover { text-decoration: underline; text-underline-offset: 3px; }
-  .card-x__buy { white-space: normal; }
-  .card-x__sample {
-    font-size: var(--text-sm);
-    font-weight: var(--font-semibold);
-    color: var(--color-primary);
-    align-self: center;
-  }
-  .card-x__toggle {
-    font: inherit;
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    background: none;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
-    padding: 4px 12px;
-    cursor: pointer;
-  }
-  .card-x__toggle:hover { border-color: var(--color-primary); color: var(--color-primary); }
-  .card-x__toggle:focus-visible,
-  .card-x a:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
-
-  /* The reveal. Open by default, so the page works with JavaScript off. */
-  .card-x__reveal { display: grid; grid-template-rows: 1fr; }
-  .card-x__reveal-inner { min-height: 0; overflow: hidden; }
-  .card-x__reveal-inner > :first-child { margin-top: var(--space-4); }
-  .card-x__reveal p {
-    margin: 0 0 var(--space-2);
-    font-size: var(--text-sm);
-    color: var(--color-text);
-    line-height: var(--leading-relaxed);
-    max-width: 60ch;
-  }
-
-  .sequence { list-style: none; padding: 0; margin: 0; counter-reset: step; }
-  .sequence li {
-    position: relative;
-    padding-left: var(--space-8);
-    margin-bottom: var(--space-2);
-    font-size: var(--text-sm);
-    line-height: 1.5rem;
-    color: var(--color-text);
-    counter-increment: step;
-  }
-  .sequence li::before {
-    content: counter(step);
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 50%;
-    background: var(--color-primary-bg);
-    color: var(--color-primary);
-    font-size: var(--text-xs);
-    font-weight: var(--font-semibold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* With script, a card stays closed until it is opened by a tap on the
-     button, by keyboard focus anywhere inside it, or by a mouse hover. Focus
-     covers the button as well as the links, so tabbing through a card never
-     closes it halfway. */
-  .is-enhanced .card-x__reveal { grid-template-rows: 0fr; }
-  .is-enhanced .card-x.is-open .card-x__reveal,
-  .is-enhanced .card-x:has(:focus-visible) .card-x__reveal { grid-template-rows: 1fr; }
-  @media (hover: hover) and (pointer: fine) {
-    .card-x:hover { border-color: var(--color-primary); }
-    .card-x--paid:hover { border-color: var(--color-primary); }
-    .is-enhanced .card-x:hover .card-x__reveal { grid-template-rows: 1fr; }
-  }
-
-  /* Movement only for people who have not asked for less of it. With reduced
-     motion the same cards open and close instantly, and nothing is ever left
-     invisible waiting for an animation. */
-  @media (prefers-reduced-motion: no-preference) {
-    .card-x { transition: border-color 150ms ease; }
-    .card-x__reveal { transition: grid-template-rows 240ms ease; }
-    .is-enhanced .card-x__reveal-inner { opacity: 0; transition: opacity 200ms ease; }
-    .is-enhanced .card-x.is-open .card-x__reveal-inner,
-    .is-enhanced .card-x:has(:focus-visible) .card-x__reveal-inner { opacity: 1; }
-    .is-enhanced .sequence li {
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 220ms ease, transform 220ms ease;
-      transition-delay: calc(var(--i, 0) * 90ms + 60ms);
-    }
-    .is-enhanced .card-x.is-open .sequence li,
-    .is-enhanced .card-x:has(:focus-visible) .sequence li { opacity: 1; transform: none; }
-    @media (hover: hover) and (pointer: fine) {
-      .is-enhanced .card-x:hover .card-x__reveal-inner { opacity: 1; }
-      .is-enhanced .card-x:hover .sequence li { opacity: 1; transform: none; }
-    }
-  }
 </style>
-
-<script>
-  // Scoped to this page's own root. Astro bundles page scripts together, so
-  // without this check the script would run on every other page too.
-  const root = document.getElementById('tools-directory');
-  if (root) {
-    root.classList.add('is-enhanced');
-    root.querySelectorAll<HTMLElement>('[data-card]').forEach((card) => {
-      const toggle = card.querySelector<HTMLButtonElement>('.card-x__toggle');
-      if (!toggle) return;
-      toggle.hidden = false;
-      toggle.addEventListener('click', () => {
-        const open = card.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', String(open));
-      });
-    });
-  }
-</script>

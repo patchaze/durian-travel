@@ -1,7 +1,12 @@
 ---
-// One question on the full report form. Pulled out of the page so the
-// essential questions and the optional ones behind the toggle render through
-// exactly the same markup, rather than two copies that drift apart.
+// One question on the full report form.
+//
+// The styles live here, with the markup. They used to live in the page, and
+// when this component was split out of it every one of them stopped matching:
+// Astro scopes a page's CSS to that page's own elements, and these elements
+// now belong to this file. That is why the labels sat flush against their
+// inputs and the selects rendered as browser defaults. Styles for a field go
+// in this file; styles for the blocks that hold the fields stay in the page.
 import type { Field } from '../data/full-report';
 
 interface Props {
@@ -11,8 +16,8 @@ interface Props {
 const { field: f } = Astro.props;
 ---
 
-{f.type === 'fare' ? (
-  // Two controls, so a wrapping <label> would be invalid: each gets its own.
+{f.type === 'fare' || f.type === 'money' ? (
+  // More than one control, so a wrapping <label> would be invalid: each gets its own.
   <div class="field">
     <label class="field__label" for={`r-${f.id}`}>{f.label}</label>
     <input
@@ -20,14 +25,17 @@ const { field: f } = Astro.props;
       id={`r-${f.id}`}
       data-answer={f.id}
       min="0"
-      step="10"
+      step={f.type === 'fare' ? '10' : '5'}
+      value={f.type === 'money' ? '0' : undefined}
       placeholder="0"
       inputmode="decimal"
     />
-    <label class="fare-unknown">
-      <input type="checkbox" id={`r-${f.id}Unknown`} data-answer={`${f.id}Unknown`} value="yes" />
-      <span>I do not know yet</span>
-    </label>
+    {f.type === 'fare' && (
+      <label class="fare-unknown">
+        <input type="checkbox" id={`r-${f.id}Unknown`} data-answer={`${f.id}Unknown`} value="yes" />
+        <span>I do not know yet</span>
+      </label>
+    )}
     {f.hint && <span class="field__hint">{f.hint}</span>}
   </div>
 ) : (
@@ -63,3 +71,89 @@ const { field: f } = Astro.props;
     {f.hint && <span class="field__hint">{f.hint}</span>}
   </label>
 )}
+
+<style>
+  /* One question: its label on its own line, then its control, then its hint.
+     Nothing sits beside anything else, so every row reads the same way. */
+  .field {
+    display: block;
+    margin: 0;
+    padding-bottom: var(--space-2);
+  }
+
+  .field__label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    margin-bottom: var(--space-2);
+    color: var(--color-text);
+    line-height: var(--leading-relaxed);
+  }
+
+  .field input,
+  .field select {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    font-family: inherit;
+    font-size: var(--text-base);
+    color: var(--color-text);
+  }
+
+  /* A select is a browser control until it is told otherwise: the arrow is
+     drawn here so it matches the inputs beside it rather than the operating
+     system it happens to be opened on. */
+  .field select {
+    appearance: none;
+    padding-right: 2.25rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%231B3A5C' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+  }
+
+  .field input:focus,
+  .field select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  }
+
+  .field input:disabled {
+    background: var(--color-bg-alt);
+    color: var(--color-text-light);
+  }
+
+  /* The question is wrong, and the page said which one. */
+  .field.is-missing input,
+  .field.is-missing select { border-color: var(--color-accent); }
+
+  .field__hint {
+    display: block;
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-light);
+  }
+
+  /* Its own line, under the fare it belongs to, never beside it. */
+  .fare-unknown {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+  .fare-unknown input {
+    width: auto;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--color-primary);
+  }
+</style>

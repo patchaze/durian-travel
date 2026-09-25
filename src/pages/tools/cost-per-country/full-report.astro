@@ -17,13 +17,10 @@ import {
   DEFAULT_STYLE,
 } from '../../../data/full-report';
 
-// Thirteen questions before the pay button, eight behind a toggle after it.
-// Everything optional has a default in normalise(), so a buyer who answers
-// nothing extra still gets a whole report.
-const essentialGroups = questions
-  .map((block) => ({ ...block, fields: block.fields.filter((f) => !f.optional) }))
-  .filter((block) => block.fields.length > 0);
-const optionalFields = questions.flatMap((block) => block.fields.filter((f) => f.optional));
+// Every question is answered before the pay button. None of them is optional
+// detail: each one moves a number in the report, and a buyer who has paid
+// should never find out afterwards that the form was half filled in.
+const questionCount = questions.reduce((n, block) => n + block.fields.length, 0);
 
 const canonical = 'https://www.duriantravel.com/tools/cost-per-country/full-report/';
 const comparisonUrl = '/tools/cost-per-country/';
@@ -95,11 +92,6 @@ const schema = {
 
       <p class="report-status" id="report-status" role="status" aria-live="polite"></p>
 
-      <p class="sample-link">
-        <a href="/tools/cost-per-country/sample/">See a full sample report first →</a>
-        <span>Same sections, one worked example, nothing to pay.</span>
-      </p>
-
       <form
         class="report-form"
         id="report-form"
@@ -121,7 +113,7 @@ const schema = {
           </div>
         </fieldset>
 
-        {essentialGroups.map((block) => (
+        {questions.map((block) => (
           <fieldset class="tool-block">
             <legend class="tool-block__title">{block.group}</legend>
             <div class="field-grid">
@@ -136,9 +128,9 @@ const schema = {
           <p class="tool-block__hint">
             Figures are converted from euros at the <a href={PROVENANCE.rates.url} rel="nofollow noopener" target="_blank">European Central Bank</a> reference rates of {onDate(PROVENANCE.rates.rateDate)}, and the naira and the dirham at the <a href={PROVENANCE.ratesSecondary.url} rel="nofollow noopener" target="_blank">Central Bank of Nigeria</a> central rates of {onDate(PROVENANCE.ratesSecondary.rateDate)}, because the ECB does not publish either.
           </p>
-          <label class="field">
-            <span class="field__label">Your ceiling</span>
-            <div class="field-inline">
+          <label class="ceiling">
+            <span class="ceiling__label">Your ceiling</span>
+            <div class="ceiling__row">
               <select
                 id="r-currency"
                 aria-label="Currency"
@@ -152,20 +144,6 @@ const schema = {
             </div>
           </label>
         </fieldset>
-
-        <details class="tool-block optional-block">
-          <summary class="optional-block__summary">
-            Optional detail, if you want the report tuned further
-            <span class="optional-block__count">{optionalFields.length} questions, all with a sensible default</span>
-          </summary>
-          <p class="tool-block__hint">
-            Skip every one of these and the report is still complete. They only change how the
-            daily figures are weighted.
-          </p>
-          <div class="field-grid">
-            {optionalFields.map((f) => <ReportField field={f} />)}
-          </div>
-        </details>
 
         <div class="pay">
           <button type="submit" class="btn btn--primary btn--lg report-submit" id="report-submit">
@@ -189,8 +167,8 @@ const schema = {
 
           <details class="tester">
             <summary class="tester__toggle">Got a code.</summary>
-            <label class="field tester__field">
-              <span class="field__label">Code</span>
+            <label class="ceiling tester__field">
+              <span class="ceiling__label">Code</span>
               <input type="text" id="r-access" autocomplete="off" spellcheck="false" />
             </label>
             <button type="button" class="btn btn--secondary btn--sm" id="report-code-submit">
@@ -288,71 +266,37 @@ const schema = {
   }
   .report-status.is-error { color: var(--color-accent-dark); }
 
-  .sample-link {
-    margin: 0 0 var(--space-5);
-    padding: var(--space-4);
-    border: 1px solid var(--color-border);
-    border-left: 3px solid var(--color-accent);
-    border-radius: var(--radius-md);
-    background: var(--color-bg-alt);
-  }
-  .sample-link a { font-weight: var(--font-semibold); color: var(--color-primary); }
-  .sample-link span { display: block; font-size: var(--text-sm); color: var(--color-text-muted); }
-
-  .optional-block { padding-block: var(--space-4); }
-  .optional-block__summary {
-    cursor: pointer;
-    font-weight: var(--font-semibold);
-    color: var(--color-heading);
-  }
-  .optional-block__summary:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
-  .optional-block__count {
-    display: block;
-    font-weight: var(--font-normal);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-  }
-  .optional-block[open] .field-grid { margin-top: var(--space-4); }
-
-  .pay__facts {
-    margin: var(--space-4) 0 0;
-    padding-left: var(--space-5);
-    display: grid;
-    gap: var(--space-2);
-    font-size: var(--text-sm);
-    line-height: var(--leading-relaxed);
-    color: var(--color-text-muted);
-    text-align: left;
-  }
-
   .report-form { margin-top: var(--space-2); }
-  .report-form input,
-  .report-form select {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-surface);
-    font-size: var(--text-base);
-    color: var(--color-text);
-  }
-  .report-form input:focus,
-  .report-form select:focus { outline: none; border-color: var(--color-primary); }
-
-  /* After the shared rule above on purpose: same specificity, so source order
-     decides. Without this the currency select takes the full width. */
-  .field-inline { display: flex; gap: var(--space-2); align-items: stretch; }
-  .report-form .field-inline select { width: 4.75rem; flex: 0 0 auto; padding-inline: 8px; }
-  .report-form .field-inline input { flex: 1 1 auto; width: auto; min-width: 0; }
-
-  .field { display: block; margin: 0; }
-  .field__label {
+  /* The ceiling row is this page's own markup, so it is styled here. The
+     questions are ReportField's markup and are styled in that component: a
+     page's scoped CSS does not reach a component's elements, which is what
+     broke this form when the fields were split out. */
+  .ceiling { display: block; margin: 0; }
+  .ceiling__label {
     display: block;
     font-size: var(--text-sm);
     font-weight: var(--font-medium);
     margin-bottom: var(--space-2);
     color: var(--color-text);
   }
+  .ceiling__row { display: flex; gap: var(--space-2); align-items: stretch; }
+  .ceiling__row select,
+  .ceiling__row input,
+  .tester__field input {
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    font-family: inherit;
+    font-size: var(--text-base);
+    color: var(--color-text);
+  }
+  .ceiling__row select { width: 6.5rem; flex: 0 0 auto; padding-inline: 8px; cursor: pointer; }
+  .ceiling__row input { flex: 1 1 auto; width: auto; min-width: 0; }
+  .tester__field input { width: 100%; }
+  .ceiling__row select:focus,
+  .ceiling__row input:focus,
+  .tester__field input:focus { outline: none; border-color: var(--color-primary); }
 
   .tool-block {
     border: 1px solid var(--color-border);
@@ -375,8 +319,11 @@ const schema = {
 
   .field-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: var(--space-3) var(--space-4);
+    grid-template-columns: 1fr;
+    gap: var(--space-5) var(--space-5);
+  }
+  @media (min-width: 720px) {
+    .field-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
   .country-grid {
@@ -727,6 +674,62 @@ const schema = {
       submitEl.textContent = 'Generate my report';
     }
 
+    // Nobody pays with a question unanswered. The labels come off the page
+    // itself, so a question added to the data file is covered without anything
+    // here being kept in step by hand.
+    function labelFor(el: HTMLElement): string {
+      const field = el.closest('.field');
+      const label = field?.querySelector('.field__label');
+      return (label?.textContent ?? '').trim().replace(/\s+/g, ' ');
+    }
+
+    function firstUnanswered(): HTMLElement | null {
+      const controls = Array.from(
+        reportForm.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-answer]')
+      );
+      for (const el of controls) {
+        if (el instanceof HTMLInputElement && el.type === 'checkbox') continue;
+        if (el.id === 'r-ceiling') continue; // the ceiling is optional, and says so
+        if (el.disabled) continue; // the fare when "I do not know yet" is ticked
+        const value = el.value.trim();
+        if (value === '') return el;
+        if (el instanceof HTMLInputElement && el.type === 'number') {
+          const n = Number(value);
+          if (!Number.isFinite(n)) return el;
+          if (el.min !== '' && n < Number(el.min)) return el;
+          if (el.max !== '' && n > Number(el.max)) return el;
+        }
+      }
+      return null;
+    }
+
+    function blocked(): boolean {
+      reportForm.querySelectorAll('.field.is-missing').forEach((f) => f.classList.remove('is-missing'));
+
+      const countries = countryBoxes.filter((b) => b.checked);
+      if (countries.length === 0) {
+        say('Pick at least one country first, then continue to payment.', true);
+        reportForm.querySelector('.country-grid')?.scrollIntoView({ block: 'center' });
+        return true;
+      }
+
+      const missing = firstUnanswered();
+      if (missing) {
+        const name = labelFor(missing);
+        missing.closest('.field')?.classList.add('is-missing');
+        say(
+          name
+            ? `Answer "${name}" before you pay. Every question changes a number in the report.`
+            : 'One question is still unanswered. Fill it in before you pay.',
+          true
+        );
+        missing.scrollIntoView({ block: 'center' });
+        missing.focus();
+        return true;
+      }
+      return false;
+    }
+
     reportForm.addEventListener('submit', (event) => {
       event.preventDefault();
 
@@ -735,15 +738,11 @@ const schema = {
         return;
       }
 
+      if (blocked()) return;
+
       // Save before leaving the page, because the answers have to survive the
       // round trip to Stripe and back.
       saveReport();
-
-      const payload = answers();
-      if (!Array.isArray(payload.countries) || payload.countries.length === 0) {
-        say('Pick at least one country first, then continue to payment.', true);
-        return;
-      }
 
       if (!PAYMENT_LINK) {
         say('Payment is not set up yet. Send us a message through the contact page.', true);
