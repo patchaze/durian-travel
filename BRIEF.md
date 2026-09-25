@@ -123,7 +123,7 @@ Two pages carry every sale this site will make. The planners page buries the rep
 
 **Completed on:** 25 September 2026.
 **Branch:** `brief/019-planners-and-form`.
-**Merged, with the deployment id and time:** recorded below, after the merge.
+**Merged, with the deployment id and time:** merged to `main` as `f9e944b` and deployed by Cloudflare Pages as deployment `2924793d-5595-4b17-aa2f-72c827f1d338`, which finished at 14:38 UTC on 25 September 2026.
 
 **What changed:**
 
